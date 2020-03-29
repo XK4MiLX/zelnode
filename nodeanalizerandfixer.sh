@@ -289,7 +289,20 @@ echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 node_ip="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your node IP" 8 72 3>&1 1>&2 2>&3)"
-zel_id="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID) " 8 72 3>&1 1>&2 2>&3)"
+
+while true
+do
+zel_id="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+if [ "$zel_id" -eq "34" ]
+then
+echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
+break
+else
+echo -e "${X_MARK} ${CYAN}Zel ID is not valid try again...${NC}"
+sleep 4
+fi
+done
+
 touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
