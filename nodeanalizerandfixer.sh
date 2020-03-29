@@ -154,18 +154,6 @@ fi
 check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
 
-## ddwrite=$(zelbench-cli getbenchmarks | jq '.ddwrite')
-## ddwritelimit=159.99
-## if [[ $(echo "$ddwritelimit>$ddwrite" | bc) == "1" ]]
-## then
-##  echo -e "${X_MARK} ${CYAN}Disk write speed $ddwrite < 160 MB/s${NC}"
-## fi
-## eps=$(zelbench-cli getbenchmarks | jq '.eps')
-## epslimit=89.99
-## if [[ $(echo "$epslimit>$eps" | bc) == "1" ]]
-## then
-## echo -e "${X_MARK} ${CYAN}CPU speed $eps < 90 events per second${NC}"
-## fi
 fi
 
 if [ "$good_zelback" == "$zelback" ]
