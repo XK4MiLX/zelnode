@@ -59,9 +59,9 @@ fi
 
 if [[ $(getent group docker | grep "$usernew") ]] 
 then
-	echo -e "${CHECK_MARK} ${CYAN}User $usernew belongs to docker group${NC}"
+	echo -e "${CHECK_MARK} ${CYAN}User $usernew is member of 'docker'${NC}"
 else
-	echo -e "${X_MARK} ${CYAN}User $usernew was not added to docker group${NC}"
+	echo -e "${X_MARK} ${CYAN}User $usernew is not member of 'docker'${NC}"
 fi
 
 echo -e "${YELLOW}=====================================================${NC}"
