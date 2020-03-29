@@ -23,8 +23,6 @@ then
     sleep 2
     exit
 fi
-
-
 	usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 
 	adduser $usernew
 	usermod -aG sudo $usernew
