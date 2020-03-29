@@ -23,12 +23,12 @@ then
     exit
 fi
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 
-adduser $usernew
-usermod -aG sudo $usernew
+adduser "$usernew"
+usermod -aG sudo "$usernew"
 apt update && apt install snapd -y
 snap install docker
 groupadd docker
-adduser $usernew docker
+adduser "$usernew" docker
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "$${YELLOW}Running through some checks...${NC}"
