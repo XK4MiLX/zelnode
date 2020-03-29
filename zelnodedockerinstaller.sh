@@ -23,37 +23,38 @@ then
     sleep 2
     exit
 fi
-	usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 
-	adduser $usernew
-	usermod -aG sudo $usernew
-	apt update && apt install snapd -y
-	snap install docker
-	groupadd docker
-	adduser $usernew docker
+usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 
+adduser $usernew
+usermod -aG sudo $usernew
+apt update && apt install snapd -y
+snap install docker
+groupadd docker
+adduser $usernew docker
+echo -e "${NC}"
+echo -e "${YELLOW}=====================================================${NC}"
+echo -e "$${YELLOW}Running through some checks...${NC}"
+echo -e "${YELLOW}=====================================================${NC}"
 
-	echo -e "$${YELLOW}Running through some checks...${NC}"
-	echo -e "${YELLOW}=====================================================${NC}"
+if [[ $(docker -v) == *"Docker"* ]]
+then
+	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
+else
+	echo -e "${X_MARK} ${CYAN}Docker did not installed${NC}"
+fi
 
-	if [[ $(docker -v) == *"Docker"* ]]
-	then
-		echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
-	else
-		echo -e "${X_MARK} ${CYAN}Docker did not installed${NC}"
-	fi
-
-	if [[ $(groups | grep docker) && $(groups | grep "$usernew")  ]] 
-	then
+if [[ $(groups | grep docker) && $(groups | grep "$usernew")  ]] 
+then
 	echo -e "${CHECK_MARK} ${CYAN}User $usernew belongs to docker group${NC}"
-	else
+else
 	echo -e "${X_MARK} ${CYAN}User $usernew was not added to docker group${NC}"
-	fi
+fi
 
-	echo -e "${YELLOW}=====================================================${NC}"
-	echo -e "${NC}"
-	read -p "Would you like to reboot pc Y/N?" -n 1 -r
-	echo -e "${NC}"
+echo -e "${YELLOW}=====================================================${NC}"
+echo -e "${NC}"
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e "${NC}"
 
-	if [[ $REPLY =~ ^[Yy]$ ]]
-	then
-	sudo reboot -n
-	fi
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo reboot -n
+fi
