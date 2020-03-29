@@ -20,7 +20,6 @@ then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${CYAN}, please switch to the root accont.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
-    sleep 2
     exit
 fi
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 
