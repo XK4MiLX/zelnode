@@ -26,12 +26,16 @@ usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter yo
 adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${YELLOW}Installing snap...${NC}"
+echo -e "${NC}"
 apt update && apt install snapd -y
 echo -e "${YELLOW}Installing docker...${NC}"
+echo -e "${NC}"
 snap install docker
 echo -e "${YELLOW}Creating docker group..${NC}"
+echo -e "${NC}"
 groupadd docker
 echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
+echo -e "${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
