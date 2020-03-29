@@ -38,7 +38,7 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ $(snapr version) == *"snap"* ]]
+if [[ $(snap version) == *"snap"* ]]
 then
 	echo -e "${CHECK_MARK} ${CYAN}Snap is installed${NC}"
 else
