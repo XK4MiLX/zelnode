@@ -172,7 +172,7 @@ if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}ZelFront is working${NC}"
 else
-echo -e "$${X_MARK} ${CYAN}ZelFront is not working${NC}"
+echo -e "${X_MARK} ${CYAN}ZelFront is not working${NC}"
 fi
 
 if [ -d ~/zelflux ]
