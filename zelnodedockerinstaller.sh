@@ -25,14 +25,25 @@ fi
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
+echo -e "${YELLOW}Installing snap...${NC}"
 apt update && apt install snapd -y
+echo -e "${YELLOW}Installing docker...${NC}"
 snap install docker
+echo -e "${YELLOW}Creating docker group..${NC}"
 groupadd docker
+echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
-echo -e "$${YELLOW}Running through some checks...${NC}"
+echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
+
+if [[ $(snapr version) == *"snap"* ]]
+then
+	echo -e "${CHECK_MARK} ${CYAN}Snap is installed${NC}"
+else
+	echo -e "${X_MARK} ${CYAN}Snap did not installed${NC}"
+fi
 
 if [[ $(docker -v) == *"Docker"* ]]
 then
