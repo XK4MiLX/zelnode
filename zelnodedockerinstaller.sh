@@ -13,11 +13,12 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}ZelNode Docker Installer v1.0 for Ubuntu by XK4MiLX${NC}"
+echo -e "${GREEN}	ZelNode Docker Installer v1.0 for Ubuntu by XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ "$USER" != "root" ]]
 then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${CYAN}, please switch to the root accont.${NC}"
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the root accont.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
