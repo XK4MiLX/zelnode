@@ -23,19 +23,20 @@ then
     exit
 fi
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
+echo -e "${NC}"
 echo -e "${YELLOW}Installing snap...${NC}"
-echo -e "${NC}"
 apt update && apt install snapd -y
+echo -e "${NC}"
 echo -e "${YELLOW}Installing docker...${NC}"
-echo -e "${NC}"
 snap install docker
+echo -e "${NC}"
 echo -e "${YELLOW}Creating docker group..${NC}"
-echo -e "${NC}"
 groupadd docker
-echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 echo -e "${NC}"
+echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
@@ -56,7 +57,7 @@ else
 	echo -e "${X_MARK} ${CYAN}Docker did not installed${NC}"
 fi
 
-if [[ $(groups | grep docker) && $(groups | grep "$usernew")  ]] 
+if [[ $(getent group docker | grep "$usernew") ]] 
 then
 	echo -e "${CHECK_MARK} ${CYAN}User $usernew belongs to docker group${NC}"
 else
