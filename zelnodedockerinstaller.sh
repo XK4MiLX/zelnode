@@ -7,7 +7,6 @@ BLUE="\\033[38;5;27m"
 GREEN='\033[1;32m'
 NC='\033[0m'
 CYAN='\033[1;36m'
-
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
