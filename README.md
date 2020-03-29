@@ -1,1 +1,1 @@
-# Zelnode Analizer and Fixer v 2.8 for Ubuntu
+# Zelnode Analizer and Fixer v2.8 for Ubuntu
