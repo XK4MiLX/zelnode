@@ -36,6 +36,14 @@ echo -e "${YELLOW}==============================================================
 echo -e "${BLUE}            ZelNode ANALIZER/FiXER v2.8 for Ubuntu by XK4MiLX${NC}"
 echo -e "${BLUE}            Special thanks to dk808 and jriggs28"
 echo -e "${YELLOW}================================================================${NC}"
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
 ### cat  ~/.zelcash/debug.log | egrep -i "benchmarking" | grep -v Ping | grep -v "benchmarking" | grep -v "znw - invalid" | tee parse-zelcash_debug-log.txt
 echo -e "${NC}"
 echo -e "${YELLOW}Installing bc...${NC}"
