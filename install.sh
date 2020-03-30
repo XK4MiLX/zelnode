@@ -192,7 +192,7 @@ function create_conf() {
     fi
     sudo mkdir ~/$CONFIG_DIR > /dev/null 2>&1
     sudo touch ~/$CONFIG_DIR/$CONFIG_FILE
-    sudo bash -c 'cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    sudo bash -c "cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -214,7 +214,7 @@ addnode=explorer2.zel.cash
 addnode=explorer.zel.zelcore.io
 addnode=blockbook.zel.network
 maxconnections=256
-EOF'
+EOF"
     sleep 2
 }
 
