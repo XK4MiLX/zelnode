@@ -73,13 +73,6 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ $(snap version) == *"snap"* ]]
-then
-	echo -e "${CHECK_MARK} ${CYAN}Snap is installed${NC}"
-else
-	echo -e "${X_MARK} ${CYAN}Snap did not installed${NC}"
-fi
-
 if [[ $(docker -v) == *"Docker"* ]]
 then
 	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
