@@ -42,6 +42,10 @@ apt install snapd -y
 echo -e "${NC}"
 echo -e "${YELLOW}Installing docker...${NC}"
 snap install docker
+if [[ $(docker -v) == *"Docker"* ]]
+then
+snap install docker
+fi
 echo -e "${NC}"
 echo -e "${YELLOW}Creating docker group..${NC}"
 groupadd docker
