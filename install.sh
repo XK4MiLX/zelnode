@@ -192,7 +192,7 @@ function create_conf() {
     fi
     sudo mkdir ~/$CONFIG_DIR > /dev/null 2>&1
     sudo touch ~/$CONFIG_DIR/$CONFIG_FILE
-    sudo cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
