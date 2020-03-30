@@ -11,7 +11,8 @@ if this way not working you can try:
   - Private Key    
   - Output TX ID  
   - Output Index  
-
+  
+You can get that date from ZelCore 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03.jpg) 
 
 If everything was fine u will see  
