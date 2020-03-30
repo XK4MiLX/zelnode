@@ -236,17 +236,6 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ "$LC_CHECK" == "1" ]]
-then
-read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
-echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
-echo -e "${YELLOW}=====================================================${NC}"
-fi
-fi
-
 if [[ "$REPLACE" == "1" ]]
 then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
@@ -326,21 +315,6 @@ then
 else
     echo -e "${X_MARK} ${CYAN}File ~/zelflux/config/userconfig.js file create failed${NC}"
 fi
-echo -e "${YELLOW}=====================================================${NC}"
-fi
-fi
-
-if [[ "$BTEST" == "1" ]]
-then
-read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-zelbench-cli restartnodebenchmarks
-sleep 50
-echo -e "${NC}"
-echo -e "${YELLOW}Checking benchmarks details...${NC}"
-zelbench-cli getbenchmarks
 fi
 fi
 
@@ -366,5 +340,33 @@ else
 echo -e "${X_MARK} ${CYAN}Zelflux auto-update installation has failed${NC}"
 fi
 
+fi
+fi
+
+if [[ "$LC_CHECK" == "1" ]]
+then
+echo -e "${YELLOW}=====================================================${NC}"
+read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
+echo -e ""
+echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
+exit
+fi
+fi
+
+if [[ "$BTEST" == "1" ]]
+then
+echo -e "${YELLOW}=====================================================${NC}"
+read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+zelbench-cli restartnodebenchmarks
+sleep 50
+echo -e "${NC}"
+echo -e "${YELLOW}Checking benchmarks details...${NC}"
+zelbench-cli getbenchmarks
 fi
 fi
