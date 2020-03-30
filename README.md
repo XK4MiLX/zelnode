@@ -11,6 +11,7 @@ if this way not working you can try:
   - Private Key    
   - Output TX ID  
   - Output Index  
+
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03.jpg)  
 * If everything was fine u will see   
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic02.jpg)  
