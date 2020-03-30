@@ -180,7 +180,7 @@ function create_conf() {
     echo -e "${YELLOW}Creating Conf File...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
     	echo -e "${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
-	mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
+	sudo mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
     fi
     RPCUSER=$(pwgen -1 8 -n)
     PASSWORD=$(pwgen -1 20 -n)
@@ -258,7 +258,7 @@ function install_zel() {
 
 function zk_params() {
     echo -e "${YELLOW}Installing zkSNARK params...${NC}"
-    bash zelcash-fetch-params.sh
+    sudo bash zelcash-fetch-params.sh
     sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 }
 
@@ -281,7 +281,7 @@ function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
     sudo chown "$USERNAME":"$USERNAME" /etc/systemd/system/$COIN_NAME.service
-    cat << EOF > /etc/systemd/system/$COIN_NAME.service
+    sudo cat << EOF > /etc/systemd/system/$COIN_NAME.service
 [Unit]
 Description=$COIN_NAME service
 After=network.target
