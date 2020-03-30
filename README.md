@@ -24,6 +24,6 @@ if this way not working you can try:
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh)```  
 
 if this way not working you can try:  
-```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh && chmod +x zelnodedockerinstaller.sh && ./zelnodedockerinstaller.sh```  
-<b>2) What you need input:</b> 
+```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh && chmod +x zelnodedockerinstaller.sh && ./zelnodedockerinstaller.sh```    
+<b>2) What you need input:</b>
 - Yours non-root username
