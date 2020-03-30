@@ -227,28 +227,28 @@ function zel_package() {
 function install_zel() {
     echo -e "${YELLOW}Installing Zel apt packages...${NC}"
     echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
-    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
-    gpg --export 4B69CA27A986265D | sudo apt-key add -
+    sudo gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
+    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
     zel_package && sleep 2
     if ! gpg --list-keys Zel > /dev/null; then
     	echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-	gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
-	gpg --export 4B69CA27A986265D | sudo apt-key add -
+	sudo gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
+	sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
 	zel_package && sleep 2
 	if ! gpg --list-keys Zel > /dev/null; then
 	    echo -e "${YELLOW}Second keyserver also failed will try a different keyserver.${NC}"
-	    gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
-	    gpg --export 4B69CA27A986265D | sudo apt-key add -
+	    sudo gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
+	    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
 	    zel_package && sleep 2
 	    if ! gpg --list-keys Zel > /dev/null; then
 	    	echo -e "${YELLOW}Third keyserver also failed will try a different keyserver.${NC}"
-		gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
-		gpg --export 4B69CA27A986265D | sudo apt-key add -
+		sudo gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
+		sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
 		zel_package && sleep 2
 		if ! gpg --list-keys Zel > /dev/null; then
 		    echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-		    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
-		    gpg --export 4B69CA27A986265D | sudo apt-key add -
+		    sudo gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
+		    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
 		    zel_package && sleep 2
 		fi
 	    fi
