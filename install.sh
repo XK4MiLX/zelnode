@@ -192,7 +192,7 @@ function create_conf() {
     fi
     sudo mkdir ~/$CONFIG_DIR > /dev/null 2>&1
     sudo touch ~/$CONFIG_DIR/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    sudo bash -c 'cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -214,7 +214,7 @@ addnode=explorer2.zel.cash
 addnode=explorer.zel.zelcore.io
 addnode=blockbook.zel.network
 maxconnections=256
-EOF
+EOF'
     sleep 2
 }
 
@@ -281,7 +281,7 @@ function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
     sudo chown "$USERNAME":"$USERNAME" /etc/systemd/system/$COIN_NAME.service
-    sudo cat << EOF > /etc/systemd/system/$COIN_NAME.service
+    sudo bash -c 'cat << EOF > /etc/systemd/system/$COIN_NAME.service
 [Unit]
 Description=$COIN_NAME service
 After=network.target
@@ -301,7 +301,7 @@ StartLimitInterval=120s
 StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF'
     sudo chown root:root /etc/systemd/system/$COIN_NAME.service
     sudo systemctl daemon-reload
     sleep 4
@@ -349,7 +349,7 @@ function log_rotate() {
     fi
     sudo touch /etc/logrotate.d/zeldebuglog
     sudo chown "$USERNAME":"$USERNAME" /etc/logrotate.d/zeldebuglog
-    sudo cat << EOF > /etc/logrotate.d/zeldebuglog
+    sudo bash -c 'cat << EOF > /etc/logrotate.d/zeldebuglog
 /home/$USERNAME/.zelcash/debug.log {
   compress
   copytruncate
@@ -365,7 +365,7 @@ function log_rotate() {
   monthly
   rotate 2
 }
-EOF
+EOF'
     sudo chown root:root /etc/logrotate.d/zeldebuglog
 }
 
@@ -500,7 +500,7 @@ function status_loop() {
 function update_script() {
     echo -e "${YELLOW}Creating a script to update binaries for future updates...${NC}"
     sudo touch /home/"$USERNAME"/update.sh
-    sudo cat << EOF > /home/"$USERNAME"/update.sh
+    sudo bash -c 'cat << EOF > /home/"$USERNAME"/update.sh
 #!/bin/bash
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
@@ -512,19 +512,19 @@ sudo apt-get update
 sudo apt-get install --only-upgrade \$COIN_NAME -y
 sudo chmod 755 \${COIN_PATH}/\${COIN_NAME}*
 \$COIN_DAEMON > /dev/null 2>&1
-EOF
+EOF'
     sudo chmod +x update.sh
 }
 
 function restart_script() {
     echo -e "${YELLOW}Creating a script to restart Zelflux in case server reboots...${NC}"
     sudo touch /home/"$USERNAME"/restart_zelflux.sh
-    sudo cat << EOF > /home/"$USERNAME"/restart_zelflux.sh
+    sudo bash -c 'cat << EOF > /home/"$USERNAME"/restart_zelflux.sh
 #!/bin/bash
 sudo service mongod start && sleep 5
 tmux new-session -d -s ${SESSION_NAME}
 tmux send-keys -t ${SESSION_NAME} "cd zelflux && npm start" C-m
-EOF
+EOF'
     sudo chmod +x restart_zelflux.sh
     sudo crontab -l | grep -v "SHELL=/bin/bash" | crontab -
     sudo crontab -l | grep -v "pgrep mongod > /dev/null || /home/$USERNAME/restart_zelflux.sh" | crontab -
