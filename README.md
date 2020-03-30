@@ -19,3 +19,9 @@ if this way not working you can try:
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic011.jpg)  
 
 # Zelnode Docker installer for Ubuntu
+
+<b>1) How run script</b>  
+```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh)```  
+
+if this way not working you can try:  
+```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh && chmod +x zelnodedockerinstaller.sh && ./zelnodedockerinstaller.sh```  
