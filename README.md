@@ -1,7 +1,6 @@
 # Zelnode Analizer and Fixer for Ubuntu
 
-What u need to now  
-1) How run scripts  
+1) <b>How run scripts </b>
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)```
 
 * If everything was fine u will see   
