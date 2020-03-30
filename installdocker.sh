@@ -89,7 +89,7 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-su -u "$usernew" bash -i <(curl -s https://raw.githubusercontent.com/dk808/deterministic-zelnode-script/master/install.sh)
+su - "$usernew"
 ## read -p "Would you like to reboot pc Y/N?" -n 1 -r
 ## echo -e "${NC}"
 ##
