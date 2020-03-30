@@ -47,7 +47,7 @@ apt update && apt upgrade -y
 ## snap install docker
 ## fi
 echo -e "${YELLOW}Installing docker...${NC}"
-sudo install curl -y
+sudo apt install curl -y
 sudo apt-get update
 sudo apt-get install \
     apt-transport-https \
@@ -60,6 +60,8 @@ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
+   sudo apt-get update
+   sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
 echo -e "${NC}"
 echo -e "${YELLOW}Creating docker group..${NC}"
