@@ -118,9 +118,9 @@ fi
 
 if [[ $(groups | grep docker) && $(groups | grep "$USER")  ]] 
 then
-echo -e "${CHECK_MARK} ${CYAN}User $USER belongs to docker group${NC}"
+echo -e "${CHECK_MARK} ${CYAN}User $USER is member of 'docker'${NC}"
 else
-echo -e "${X_MARK} ${CYAN}User $USER was not added to docker group${NC}"
+echo -e "${X_MARK} ${CYAN}User $USER is not member of 'docker'${NC}"
 fi
 
 b_status=$(zelbench-cli getstatus | jq '.benchmarking')
