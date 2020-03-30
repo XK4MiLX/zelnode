@@ -28,5 +28,5 @@ if this way not working you can try:
 
 <b>2) What you need input:</b>
 - Yours non-root username  
-* If everything was fine u will see   
+If everything was fine u will see   
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic04.jpg)
