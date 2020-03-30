@@ -42,7 +42,7 @@ apt install snapd -y
 echo -e "${NC}"
 echo -e "${YELLOW}Installing docker...${NC}"
 snap install docker
-if [[ $(docker -v) == *"Docker"* ]]
+if [[ $(docker -v) != *"Docker"* ]]
 then
 snap install docker
 fi
