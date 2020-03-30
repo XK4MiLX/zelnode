@@ -22,13 +22,23 @@ then
     echo -e "${NC}"
     exit
 fi
+
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
+echo -e "${YELLOW}Update and upgrade system...${NC}"
+apt update && apt upgrade -y
+if [[ $(cat /proc/1/mountinfo | egrep '/proc/.+lxcfs') ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}LXC container detected${NC}"		
+echo -e "${YELLOW}Installing squashfuse...${NC}"	
+apt install squashfuse -y	
+fi
+echo -e "${NC}"
 echo -e "${YELLOW}Installing snap...${NC}"
-apt update && apt install snapd -y
+apt install snapd -y
 echo -e "${NC}"
 echo -e "${YELLOW}Installing docker...${NC}"
 snap install docker
