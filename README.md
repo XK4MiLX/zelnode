@@ -6,6 +6,12 @@
 if this way not working you can try:  
 ```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh && chmod +x nodeanalizerandfixer.sh.sh && ./nodeanalizerandfixer.sh.sh```   
 
+<b>2) What u need input:</b>    
+  - IP  
+  - Private Key    
+  - Output TX ID  
+  - Output Index    
+
 * If everything was fine u will see   
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic02.jpg)  
   
