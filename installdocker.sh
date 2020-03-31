@@ -154,7 +154,7 @@ then
     echo -e "${NC}"
     exit
 fi
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/dk808/deterministic-zelnode-script/master/install.sh)
  exit
  ;;
 
