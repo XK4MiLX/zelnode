@@ -308,7 +308,6 @@ module.exports = {
     }
 EOF
 FILE1=~/zelflux/config/userconfig.js
-echo -e "${YELLOW}=====================================================${NC}"
 if [ -f "$FILE1" ]
 then
     echo -e "${CHECK_MARK} ${CYAN}File ~/zelflux/config/userconfig.js created successful${NC}${NC}"
