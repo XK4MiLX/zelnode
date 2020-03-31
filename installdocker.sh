@@ -25,7 +25,7 @@ fi
 
 
 prompt="Pick an option:"
-options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Exit")
+options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host")
 
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do 
@@ -37,7 +37,7 @@ select opt in "${options[@]}" "Quit"; do
     3 ) echo "You picked $opt which is option $REPLY";;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
-    *) echo "Invalid option. Try another one.";continue;;
+    *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
 
     esac
 
