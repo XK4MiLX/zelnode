@@ -82,14 +82,14 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ $(sudo docker run hello-world) == *"Hello from Docker"* ]]
+if [[ $(sudo docker run hello-world 2>&1 >/dev/null) == *"Hello from Docker"* ]]
 then
 	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
 	echo -e "${X_MARK} ${CYAN}Docker did not installed${NC}"
 fi
 
-if [[ $(getent group docker | grep "$usernew") ]] 
+if [[ $(getent group docker 2>&1 >/dev/null | grep "$usernew") ]] 
 then
 	echo -e "${CHECK_MARK} ${CYAN}User $usernew is member of 'docker'${NC}"
 else
