@@ -113,7 +113,7 @@ continer_name="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbo
 echo -e "${YELLOW}================================================================${NC}"
 if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
 then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name [OK]${NC}"
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [OK]${NC}"
 exit
 fi
 
