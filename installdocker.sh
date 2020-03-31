@@ -18,7 +18,7 @@ echo -e "${YELLOW}==============================================================
 
 
 prompt="Pick an option:"
-options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode")
+options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode" "Zelnode analizer and fixer")
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do 
 
@@ -155,6 +155,19 @@ then
     exit
 fi
 bash -i <(curl -s https://raw.githubusercontent.com/dk808/deterministic-zelnode-script/master/install.sh)
+ exit
+ ;;
+ 
+  4 ) 
+ if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
  exit
  ;;
 
