@@ -142,9 +142,8 @@ fi
     
     
  ;;
- 
  3 ) 
- bash -i <(curl -s https://github.com/XK4MiLX/zelnode/blob/master/install.sh)
+sudo curl -o- https://github.com/XK4MiLX/zelnode/blob/master/install.sh
  exit
  ;;
 
