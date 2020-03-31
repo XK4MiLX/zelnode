@@ -98,7 +98,13 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-exit
+read -p "Would you like install zelnode Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+su $usernew "-c bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)"
+fi
+
 
 ;;
     2 ) 
