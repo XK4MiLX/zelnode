@@ -15,14 +15,7 @@ dversion="v2.0"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}	ZelNode Docker Installer $dversion for Ubuntu by XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-if [[ "$USER" != "root" ]]
-then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the root accont.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
-fi
+
 
 prompt="Pick an option:"
 options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode")
@@ -32,6 +25,16 @@ select opt in "${options[@]}" "Quit"; do
     case "$REPLY" in
 
     1 ) 
+    
+    if [[ "$USER" != "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the root accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
 usernew="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
@@ -143,6 +146,14 @@ fi
     
  ;;
  3 ) 
+ if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
 sudo curl -o- https://github.com/XK4MiLX/zelnode/blob/master/install.sh | sudo bash
  exit
  ;;
