@@ -424,7 +424,7 @@ function install_mongod() {
 
 function install_nodejs() {
     if ! node -v > /dev/null 2>&1; then
-    	sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
+    	sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | sudo bash
 	. ~/.profile
 	sudo nvm install --lts
     else
