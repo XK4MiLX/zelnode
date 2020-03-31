@@ -379,7 +379,7 @@ function kill_sessions() {
 	    tmux kill-sess -t "$line"
 	fi
     done
-    rm tempfile
+    sudo rm tempfile
 }
 
 function install_zelflux() {
@@ -426,7 +426,7 @@ function install_nodejs() {
     if ! node -v > /dev/null 2>&1; then
     	sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 	. ~/.profile
-	nvm install --lts
+	sudo nvm install --lts
     else
     	echo -e "${YELLOW}Nodejs already installed will skip installing it.${NC}"
     fi
@@ -489,7 +489,7 @@ function status_loop() {
 	MSG1="${CYAN}Refreshes every 30 seconds while syncing to chain. Refresh loop will stop automatically once it's fully synced.${NC}"
 	MSG2=''
 	spinning_timer
-	if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+	if [[ $(sudo wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 	    break
 	fi
     done
