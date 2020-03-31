@@ -282,8 +282,6 @@ read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-node_ip="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your node IP" 8 72 3>&1 1>&2 2>&3)"
-
 while true
 do
 zel_id="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
@@ -301,7 +299,7 @@ touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
       initial: {
-        ipaddress: '$node_ip',
+        ipaddress: '$WANIP',
         zelid: '$zel_id',
         testnet: false
       }
