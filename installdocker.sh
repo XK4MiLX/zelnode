@@ -23,6 +23,16 @@ then
     exit
 fi
 
+echo -e "${YELLOW}1) Installation for KVM VPS${NC}"
+echo -e "${YELLOW}2) Installation for LXC continer${NC}"
+echo -e "${YELLOW}Please enter your choice: ${NC}"
+
+options=("1" "2" "3" "Quit")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "1")
+	
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
@@ -89,7 +99,27 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-su - "$usernew"
+	
+            
+            ;;
+        "2")
+	
+	
+	echo -e "${YELLOW}OPTION 2${NC}"
+           
+            ;;
+        "3")
+          echo -e "${YELLOW}OPTION 3${NC}"
+            ;;
+        "Quit")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
+
+
 ## read -p "Would you like to reboot pc Y/N?" -n 1 -r
 ## echo -e "${NC}"
 ##
