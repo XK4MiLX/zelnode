@@ -13,7 +13,7 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 dversion="v2.0"
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}	ZelNode Docker Installer $dversion for Ubuntu by XK4MiLX${NC}"
+echo -e "${GREEN}	ZELNODE MULTITOOLBOX $dversion FOR UBUNTU BY XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 
