@@ -10,9 +10,10 @@ CYAN='\033[1;36m'
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
+dversion="v2.0"
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}	ZelNode Docker Installer v2.0 for Ubuntu by XK4MiLX${NC}"
+echo -e "${GREEN}	ZelNode Docker Installer $dversion for Ubuntu by XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ "$USER" != "root" ]]
 then
@@ -31,55 +32,7 @@ select opt in "${options[@]}" "Quit"; do
     case "$REPLY" in
 
     1 ) 
-
-
-
-;;
-    2 ) 
-    
- function insertAfter
-{
-   local file="$1" line="$2" newText="$3"
-   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
-}
-
-continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
-echo -e "${YELLOW}================================================================${NC}"
-if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name [OK]${NC}"
-exit
-fi
-
-insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
-sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
-if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
-exit
-else
-echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf fix [Failed]${NC}"
-exit
-fi    
-    
-    
- ;;
-
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
-    *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
-
-    esac
-
-done
-
-exit
-
-usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+usernew="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
@@ -145,6 +98,54 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
+
+
+;;
+    2 ) 
+    
+ function insertAfter
+{
+   local file="$1" line="$2" newText="$3"
+   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
+}
+
+continer_name="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
+echo -e "${YELLOW}================================================================${NC}"
+if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+then
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name [OK]${NC}"
+exit
+fi
+
+insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
+sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
+if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+then
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
+exit
+else
+echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf fix [Failed]${NC}"
+exit
+fi    
+    
+    
+ ;;
+
+    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
+
+    esac
+
+done
+
+exit
+
+
 ## read -p "Would you like to reboot pc Y/N?" -n 1 -r
 ## echo -e "${NC}"
 ##
