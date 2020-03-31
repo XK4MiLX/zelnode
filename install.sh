@@ -442,7 +442,7 @@ function zelflux() {
     else
     	ZELID='132hG26CFTNhLM3MRsLEJhp9DpBrK6vg5N'
     fi
-    TMUX=$(whiptail --inputbox "Enter a name for your tmux session to run Zelflux" 8 53 3>&1 1>&2 2>&3)
+    TMUX="zelflux"
     if ! tmux ls | grep -q "$TMUX"; then
     	sudo tmux new-session -d -s "$TMUX"
 	sudo tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
@@ -489,7 +489,7 @@ function status_loop() {
 	MSG1="${CYAN}Refreshes every 30 seconds while syncing to chain. Refresh loop will stop automatically once it's fully synced.${NC}"
 	MSG2=''
 	spinning_timer
-	if [[ $(sudo wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+	if [[ $(sudo wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(sudo ${COIN_CLI} getinfo | jq '.blocks') ]]; then
 	    break
 	fi
     done
