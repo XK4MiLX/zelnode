@@ -376,7 +376,7 @@ function kill_sessions() {
     grep -v '^ *#' < tempfile | while IFS= read -r line
     do
         if whiptail --yesno "Would you like to kill session ${line}?" 8 43; then
-	    tmux kill-sess -t "$line"
+	    sudo tmux kill-sess -t "$line"
 	fi
     done
     sudo rm tempfile
@@ -444,29 +444,29 @@ function zelflux() {
     fi
     TMUX=$(whiptail --inputbox "Enter a name for your tmux session to run Zelflux" 8 53 3>&1 1>&2 2>&3)
     if ! tmux ls | grep -q "$TMUX"; then
-    	tmux new-session -d -s "$TMUX"
-	tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
+    	sudo tmux new-session -d -s "$TMUX"
+	sudo tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
 	NUM='300'
 	MSG1="Cloning and installing Zelflux. Please be patient this will take 5 min..."
 	MSG2="${CHECK_MARK}${CHECK_MARK}${CHECK_MARK}${GREEN} installation has completed${NC}"
 	echo && spinning_timer
 	sleep 2
-	tmux send-keys "$WANIP" C-m
+	sudo tmux send-keys "$WANIP" C-m
 	sleep 2
-	tmux send-keys "$ZELID" C-m
+	sudo tmux send-keys "$ZELID" C-m
 	sleep 1
 	SESSION_NAME="$TMUX"
     else
-    	tmux new-session -d -s ${COIN_NAME^}
-	tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
+    	sudo tmux new-session -d -s ${COIN_NAME^}
+	sudo tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
 	NUM='300'
 	MSG1="Cloning and installing Zelflux. Please be patient this will take 5 min..."
 	MSG2="${CHECK_MARK}${CHECK_MARK}${CHECK_MARK}${GREEN} installation has completed${NC}"
 	echo && spinning_timer
 	sleep 2
-	tmux send-keys "$WANIP" C-m
+	sudo tmux send-keys "$WANIP" C-m
 	sleep 2
-	tmux send-keys "$ZELID" C-m
+	sudo tmux send-keys "$ZELID" C-m
 	sleep 1
 	SESSION_NAME="${COIN_NAME^}"
     fi
@@ -522,12 +522,12 @@ function restart_script() {
     sudo bash -c "cat << EOF > /home/"$USERNAME"/restart_zelflux.sh
 #!/bin/bash
 sudo service mongod start && sleep 5
-tmux new-session -d -s ${SESSION_NAME}
-tmux send-keys -t ${SESSION_NAME} "cd zelflux && npm start" C-m
+sudo tmux new-session -d -s ${SESSION_NAME}
+sudo tmux send-keys -t ${SESSION_NAME} "cd zelflux && npm start" C-m
 EOF"
     sudo chmod +x restart_zelflux.sh
-    sudo crontab -l | grep -v "SHELL=/bin/bash" | crontab -
-    sudo crontab -l | grep -v "pgrep mongod > /dev/null || /home/$USERNAME/restart_zelflux.sh" | crontab -
+    sudo crontab -l | grep -v "SHELL=/bin/bash" | sudo crontab -
+    sudo crontab -l | grep -v "pgrep mongod > /dev/null || /home/$USERNAME/restart_zelflux.sh" | sudo crontab -
     sleep 1
     sudo crontab -l > tempcron
     echo "SHELL=/bin/bash" >> tempcron
