@@ -25,7 +25,7 @@ then
 fi
 
 prompt="Pick an option:"
-options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host")
+options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode")
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do 
 
@@ -98,11 +98,12 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-read -p "Would you like install zelnode Y/N?" -n 1 -r
+read -p "Would you like switch to $usernew accont Y/N?" -n 1 -r
 echo -e "${NC}"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-su $usernew "-c bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)"
+su - $usernew
+exit
 fi
 
 
@@ -140,6 +141,11 @@ exit
 fi    
     
     
+ ;;
+ 
+ 3 ) 
+ bash -i <(curl -s https://github.com/XK4MiLX/zelnode/blob/master/install.sh)"
+ exit
  ;;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
