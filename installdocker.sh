@@ -23,15 +23,29 @@ then
     exit
 fi
 
+title="Select example"
+prompt="Pick an option:"
+options=("A" "B" "C")
 
-echo -e "${YELLOW}Please enter your choice${NC}"
-   echo -e "${YELLOW}================================================================${NC}"
-options=("Installation on VPS/Inside LCX Continer" "Installation outside LXC continer" "Exit" )
-select opt in "${options[@]}"
-do
-    case $opt in
-        "1")
-	
+echo "$title"
+PS3="$prompt "
+select opt in "${options[@]}" "Quit"; do 
+
+    case "$REPLY" in
+
+    1 ) echo "You picked $opt which is option $REPLY";;
+    2 ) echo "You picked $opt which is option $REPLY";;
+    3 ) echo "You picked $opt which is option $REPLY";;
+
+    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    *) echo "Invalid option. Try another one.";continue;;
+
+    esac
+
+done
+
+exit
+
 usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
@@ -98,27 +112,6 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-	
-            
-            ;;
-        "2")
-	
-	
-	echo -e "${YELLOW}OPTION 2${NC}"
-           
-            ;;
-        "3")
-          echo -e "${YELLOW}OPTION 3${NC}"
-            ;;
-        "Quit")
-            break
-            ;;
-        *) echo -e "${X_MARK} ${CYAN}Invalid option $REPLY${NC}";;
-    esac
-done
-
-
-
 ## read -p "Would you like to reboot pc Y/N?" -n 1 -r
 ## echo -e "${NC}"
 ##
