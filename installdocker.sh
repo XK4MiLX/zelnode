@@ -25,7 +25,7 @@ fi
 
 
 echo -e "${YELLOW}Please enter your choice: ${NC}"
-options=("echo -e ${YELLOW}1) Installation on VPS${NC}" 'echo -e "${YELLOW}2) Installation outside LXC continer${NC}"' 'echo -e "${YELLOW}3) Installation inside LXC continer${NC}"' )
+options=("1) Installation on VPS/Inside LCX Continer${NC}" "2) Installation outside LXC continer${NC}" "3) Exit" )
 select opt in "${options[@]}"
 do
     case $opt in
@@ -112,7 +112,7 @@ echo -e "${NC}"
         "Quit")
             break
             ;;
-        *) echo "invalid option $REPLY";;
+        *) echo -e "${X_MARK} ${CYAN}Invalid option $REPLY${NC}";;
     esac
 done
 
