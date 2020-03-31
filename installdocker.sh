@@ -34,7 +34,6 @@ select opt in "${options[@]}" "Quit"; do
 
     1 ) echo "You picked $opt which is option $REPLY";;
     2 ) echo "You picked $opt which is option $REPLY";;
-    3 ) echo "You picked $opt which is option $REPLY";;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
     *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
