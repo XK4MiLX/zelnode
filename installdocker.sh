@@ -82,7 +82,7 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ $(docker -v) == *"Docker"* ]]
+if [[ $(sudo docker run hello-world) == *"Hello from Docker"* ]]
 then
 	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
