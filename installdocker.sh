@@ -154,7 +154,7 @@ then
     echo -e "${NC}"
     exit
 fi
-sudo curl -o- https://github.com/XK4MiLX/zelnode/blob/master/install.sh | sudo bash
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
  exit
  ;;
 
