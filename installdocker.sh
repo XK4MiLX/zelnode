@@ -23,10 +23,8 @@ then
     exit
 fi
 
-
 prompt="Pick an option:"
 options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host")
-
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do 
 
@@ -42,8 +40,15 @@ select opt in "${options[@]}" "Quit"; do
  function insertAfter
 {
    local file="$1" line="$2" newText="$3"
-   sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
+   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
+
+
+if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+then
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file is [OK]${NC}"
+exit
+fi
 
 continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
