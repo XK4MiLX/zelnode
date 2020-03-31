@@ -98,7 +98,7 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-
+exit
 
 ;;
     2 ) 
@@ -143,7 +143,7 @@ fi
 
 done
 
-exit
+
 
 
 ## read -p "Would you like to reboot pc Y/N?" -n 1 -r
