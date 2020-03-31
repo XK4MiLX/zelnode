@@ -287,7 +287,7 @@ node_ip="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your
 while true
 do
 zel_id="$(whiptail --title "ZelNode ANALIZER/FiXER v2.8" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-if [ "$zel_id" -eq "34" ]
+if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
 break
