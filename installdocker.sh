@@ -101,11 +101,11 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-read -p "Would you like switch to $usernew accont Y/N?" -n 1 -r
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
 echo -e "${NC}"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-su - $usernew
+sudo reboot -n
 exit
 fi
 
@@ -121,20 +121,20 @@ fi
 
 continer_name="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}================================================================${NC}"
-if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
 then
 echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [OK]${NC}"
 exit
 fi
 
-insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
-sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
-if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+insertAfter "/etc/pve/lxc/$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
+sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"   
+if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
 then
 echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
 exit
