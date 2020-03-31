@@ -43,6 +43,7 @@ select opt in "${options[@]}" "Quit"; do
    sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
 
+continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 
 if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
 then
@@ -50,7 +51,6 @@ echo -e "${CHECK_MARK} ${CYAN}LXC configurate file is [OK]${NC}"
 exit
 fi
 
-continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
 sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
@@ -61,6 +61,7 @@ sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
 if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
 then
 echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf was fixed${NC}"
+exit
 else
 echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf was not fixed${NC}"
 exit
