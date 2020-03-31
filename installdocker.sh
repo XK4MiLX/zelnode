@@ -46,11 +46,9 @@ select opt in "${options[@]}" "Quit"; do
 }
 
 continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
-echo "$continer_name".conf
-echo "$continer_name.conf"
 insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
 sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
