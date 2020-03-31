@@ -350,7 +350,15 @@ then
 sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
 echo -e ""
 echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
-exit
+echo -e "${YELLOW}=====================================================${NC}"
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e "${NC}"
+
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo reboot -n
+fi
+
 fi
 fi
 
