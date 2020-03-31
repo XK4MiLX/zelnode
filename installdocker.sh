@@ -24,9 +24,8 @@ then
 fi
 
 
-
 echo -e "${YELLOW}Please enter your choice: ${NC}"
-options=("echo -e "${YELLOW}1) Installation for KVM VPS${NC}"" "echo -e "${YELLOW}2) Installation outside LXC continer${NC}"" "echo -e "${YELLOW}2) Installation inside LXC continer${NC}"" "Quit")
+options=('echo -e "${YELLOW}2) Installation on VPS${NC}"' 'echo -e "${YELLOW}2) Installation outside LXC continer${NC}"' 'echo -e "${YELLOW}2) Installation inside LXC continer${NC}"' )
 select opt in "${options[@]}"
 do
     case $opt in
