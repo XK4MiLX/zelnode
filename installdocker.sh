@@ -23,11 +23,10 @@ then
     exit
 fi
 
-title="Select example"
-prompt="Pick an option:"
-options=("A" "B" "C")
 
-echo "$title"
+prompt="Pick an option:"
+options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Exit")
+
 PS3="$prompt "
 select opt in "${options[@]}" "Quit"; do 
 
