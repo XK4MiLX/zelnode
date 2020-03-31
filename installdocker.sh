@@ -42,10 +42,12 @@ select opt in "${options[@]}" "Quit"; do
  function insertAfter
 {
    local file="$1" line="$2" newText="$3"
-   sed -i -e "/^$line$/a"$'\\\n'"$newText"$'\n' "$file"
+   sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
 
 continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
+echo "$continer_name".conf
+echo "$continer_name.conf"
 insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
 sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
