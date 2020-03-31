@@ -32,8 +32,29 @@ select opt in "${options[@]}" "Quit"; do
 
     case "$REPLY" in
 
-    1 ) echo "You picked $opt which is option $REPLY";;
-    2 ) echo "You picked $opt which is option $REPLY";;
+    1 ) 
+
+
+
+;;
+    2 ) 
+    
+ function insertAfter
+{
+   local file="$1" line="$2" newText="$3"
+   sed -i -e "/^$line$/a"$'\\\n'"$newText"$'\n' "$file"
+}
+
+continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
+insertAfter "$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
+sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
+sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
+     
+ ;;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
     *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
