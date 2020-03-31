@@ -35,7 +35,7 @@ then
     exit
 fi
 
-usernew="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+usernew="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
@@ -119,7 +119,7 @@ fi
    sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
 
-continer_name="$(whiptail --title "ZelNode Docker Installer $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
+continer_name="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
 then
