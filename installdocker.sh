@@ -58,7 +58,15 @@ sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>
 sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
-     
+if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
+then
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf was fixed${NC}"
+else
+echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf was not fixed${NC}"
+exit
+fi    
+    
+    
  ;;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
