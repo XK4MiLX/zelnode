@@ -24,8 +24,9 @@ then
 fi
 
 
-echo -e "${YELLOW}Please enter your choice: ${NC}"
-options=("1) Installation on VPS/Inside LCX Continer${NC}" "2) Installation outside LXC continer${NC}" "3) Exit" )
+echo -e "${YELLOW}Please enter your choice${NC}"
+   echo -e "${YELLOW}================================================================${NC}"
+options=("Installation on VPS/Inside LCX Continer" "Installation outside LXC continer" "Exit" )
 select opt in "${options[@]}"
 do
     case $opt in
