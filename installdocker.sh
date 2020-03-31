@@ -44,10 +44,10 @@ select opt in "${options[@]}" "Quit"; do
 }
 
 continer_name="$(whiptail --title "ZelNode Docker Installer v2.0" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
-
+echo -e "${YELLOW}================================================================${NC}"
 if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
 then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file is [OK]${NC}"
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name [OK]${NC}"
 exit
 fi
 
@@ -60,10 +60,10 @@ sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>$continer_name.conf"
 sudo bash -c "echo 'lxc.cap.drop:' >>$continer_name.conf"   
 if [[ $(grep -w "features: mount=fuse,nesting=1" ~/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" ~/$continer_name.conf) ]] 
 then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf was fixed${NC}"
+echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
 exit
 else
-echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf was not fixed${NC}"
+echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf fix [Failed]${NC}"
 exit
 fi    
     
