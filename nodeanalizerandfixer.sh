@@ -34,8 +34,8 @@ function check_benchmarks() {
 }
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}            ZelNode ANALIZER/FiXER $SCVESION for Ubuntu by XK4MiLX${NC}"
-echo -e "${GREEN}            Special thanks to dk808 and jriggs28"
+echo -e "${GREEN}ZelNode ANALIZER/FiXER $SCVESION for Ubuntu by XK4MiLX"
+echo -e "${GREEN}Special thanks to dk808 and jriggs28"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ "$USER" == "root" ]]
 then
