@@ -611,6 +611,36 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
 }
+
+
+function auto_start(){
+
+UPDATE_FILE="/home/$USER/update-zelflux.sh"
+if [ -f "$UPDATE_FILE" ]
+then
+echo -e "\c"
+else
+echo -e "${YELLOW}=====================================================${NC}"
+read -p "Would you like to add auto-update zelflux via crontab Y/N" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
+echo "git pull" >> "/home/$USER/update-zelflux.sh"
+chmod +x "/home/$USER/update-zelflux.sh"
+(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
+
+if [[ $(crontab -l | grep -i update-zelflux) ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}Zelflux auto-update was installed successfully${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelflux auto-update installation has failed${NC}"
+fi
+fi
+fi
+
+}
+
 #
 #end of functions
 
@@ -631,5 +661,7 @@ function display_banner() {
     install_zelflux
     log_rotate
     update_script
+    auto_start
     status_loop
+    
     
