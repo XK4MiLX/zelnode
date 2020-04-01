@@ -95,6 +95,7 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh  > /dev/null 2>&1
+    tmux kill-server
 }
 
 function spinning_timer() {
