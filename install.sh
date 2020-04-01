@@ -269,13 +269,13 @@ function zk_params() {
 function bootstrap() {
 
 echo -e "${NC}"
-
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
- echo -e "${YELLOW}Cleaning...${NC}"
- rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate	
- fi 
- 
+echo -e "${YELLOW}Cleaning...${NC}"
+rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate	
+fi 
+
 LOCAL="/home/$USER/$BOOTSTRAP_ZIP"
+then
 if [ -f "$LOCAL" ]
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
@@ -284,7 +284,6 @@ echo -e "${YELLOW}Downloading and installing wallet bootstrap please be patient.
 wget $BOOTSTRAP_ZIP
 unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
 fi
-
 echo -e "${NC}"
 read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
 echo -e "${NC}"
