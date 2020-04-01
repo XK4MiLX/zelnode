@@ -229,6 +229,7 @@ else
 fi
  
 if [[ $(tmux ls) == *"created"* ]]
+then
 echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Tmux session does not exists (if you using tmux zelflux will not working)${NC}"
