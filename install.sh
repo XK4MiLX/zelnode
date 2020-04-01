@@ -89,10 +89,10 @@ function wipe_clean() {
     sudo rm -rf zelflux && sleep 1
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 1
     sudo rm -rf .zelbenchmark && sleep 1
-    sudo rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
-    sudo rm $UPDATE_FILE > /dev/null 2>&1
-    sudo rm restart_zelflux.sh > /dev/null 2>&1
-    sudo rm zelnodeupdate.sh > /dev/null 2>&1
+    rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
+    rm $UPDATE_FILE > /dev/null 2>&1
+    rm restart_zelflux.sh > /dev/null 2>&1
+    rm zelnodeupdate.sh > /dev/null 2>&1
 }
 
 function spinning_timer() {
@@ -180,7 +180,7 @@ function create_conf() {
     echo -e "${YELLOW}Creating Conf File...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
     	echo -e "${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
-	sudo mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
+	mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
     fi
     RPCUSER=$(pwgen -1 8 -n)
     PASSWORD=$(pwgen -1 20 -n)
@@ -190,9 +190,9 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
     	PASSWORD=${WANIP}-$(date +%s)
     fi
-    sudo mkdir ~/$CONFIG_DIR > /dev/null 2>&1
-    sudo touch ~/$CONFIG_DIR/$CONFIG_FILE
-    sudo bash -c "cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    mkdir ~/$CONFIG_DIR > /dev/null 2>&1
+    touch ~/$CONFIG_DIR/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -214,7 +214,7 @@ addnode=explorer2.zel.cash
 addnode=explorer.zel.zelcore.io
 addnode=blockbook.zel.network
 maxconnections=256
-EOF"
+EOF
     sleep 2
 }
 
@@ -227,28 +227,32 @@ function zel_package() {
 function install_zel() {
     echo -e "${YELLOW}Installing Zel apt packages...${NC}"
     echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
-    sudo gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
-    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
+    sleep 1
+    if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
+    	echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list
+    fi
+    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
+    gpg --export 4B69CA27A986265D | sudo apt-key add -
     zel_package && sleep 2
     if ! gpg --list-keys Zel > /dev/null; then
     	echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-	sudo gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
-	sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
+	gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
+	gpg --export 4B69CA27A986265D | sudo apt-key add -
 	zel_package && sleep 2
 	if ! gpg --list-keys Zel > /dev/null; then
 	    echo -e "${YELLOW}Second keyserver also failed will try a different keyserver.${NC}"
-	    sudo gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
-	    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
+	    gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
+	    gpg --export 4B69CA27A986265D | sudo apt-key add -
 	    zel_package && sleep 2
 	    if ! gpg --list-keys Zel > /dev/null; then
 	    	echo -e "${YELLOW}Third keyserver also failed will try a different keyserver.${NC}"
-		sudo gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
-		sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
+		gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
+		gpg --export 4B69CA27A986265D | sudo apt-key add -
 		zel_package && sleep 2
 		if ! gpg --list-keys Zel > /dev/null; then
 		    echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-		    sudo gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
-		    sudo gpg --export 4B69CA27A986265D | sudo apt-key add -
+		    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
+		    gpg --export 4B69CA27A986265D | sudo apt-key add -
 		    zel_package && sleep 2
 		fi
 	    fi
@@ -258,22 +262,22 @@ function install_zel() {
 
 function zk_params() {
     echo -e "${YELLOW}Installing zkSNARK params...${NC}"
-    sudo bash zelcash-fetch-params.sh
+    bash zelcash-fetch-params.sh
     sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 }
 
 function bootstrap() {
     if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-    	sudo rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
+    	rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
 	echo -e "${YELLOW}Downloading and installing wallet bootstrap please be patient...${NC}"
-	sudo wget $BOOTSTRAP_ZIP
-	sudo unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
-	sudo rm -rf $BOOTSTRAP_ZIPFILE
+	wget $BOOTSTRAP_ZIP
+	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
+	rm -rf $BOOTSTRAP_ZIPFILE
     else
     	echo -e "${YELLOW}Downloading and installing wallet bootstrap please be patient...${NC}"
-	sudo wget $BOOTSTRAP_ZIP
-	sudo unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
-	sudo rm -rf $BOOTSTRAP_ZIPFILE
+	wget $BOOTSTRAP_ZIP
+	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
+	rm -rf $BOOTSTRAP_ZIPFILE
     fi
 }
 
@@ -281,7 +285,7 @@ function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
     sudo chown "$USERNAME":"$USERNAME" /etc/systemd/system/$COIN_NAME.service
-    sudo bash -c "cat << EOF > /etc/systemd/system/$COIN_NAME.service
+    cat << EOF > /etc/systemd/system/$COIN_NAME.service
 [Unit]
 Description=$COIN_NAME service
 After=network.target
@@ -301,11 +305,15 @@ StartLimitInterval=120s
 StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
-EOF"
+EOF
     sudo chown root:root /etc/systemd/system/$COIN_NAME.service
     sudo systemctl daemon-reload
     sleep 4
     sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
+    sudo systemctl stop zelcash
+    sleep 4
+    sudo systemctl start zelcash
+    
 }
 
 function basic_security() {
@@ -331,7 +339,7 @@ function start_daemon() {
 	MSG2="${CHECK_MARK}"
 	echo && spinning_timer
 	echo
-	sudo $COIN_CLI getinfo
+	$COIN_CLI getinfo
 	sleep 5
     else
     	echo -e "${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
@@ -349,7 +357,7 @@ function log_rotate() {
     fi
     sudo touch /etc/logrotate.d/zeldebuglog
     sudo chown "$USERNAME":"$USERNAME" /etc/logrotate.d/zeldebuglog
-    sudo bash -c "cat << EOF > /etc/logrotate.d/zeldebuglog
+    cat << EOF > /etc/logrotate.d/zeldebuglog
 /home/$USERNAME/.zelcash/debug.log {
   compress
   copytruncate
@@ -365,21 +373,21 @@ function log_rotate() {
   monthly
   rotate 2
 }
-EOF"
+EOF
     sudo chown root:root /etc/logrotate.d/zeldebuglog
 }
 
 function kill_sessions() {
     echo -e "${YELLOW}If you have made a previous run of the script and have a session running for Zelflux it must be removed before starting a new one."
     echo -e "${YELLOW}Detecting sessions please remove any that is running Zelflux...${NC}" && sleep 5
-    sudo tmux ls | sed -e 's/://g' | cut -d' ' -f 1 | sudo tee tempfile > /dev/null 2>&1
+    tmux ls | sed -e 's/://g' | cut -d' ' -f 1 | tee tempfile > /dev/null 2>&1
     grep -v '^ *#' < tempfile | while IFS= read -r line
     do
         if whiptail --yesno "Would you like to kill session ${line}?" 8 43; then
-	    sudo tmux kill-sess -t "$line"
+	    tmux kill-sess -t "$line"
 	fi
     done
-    sudo rm tempfile
+    rm tempfile
 }
 
 function install_zelflux() {
@@ -389,25 +397,25 @@ function install_zelflux() {
     sudo ufw allow $ZELNODEPORT/tcp
     sudo ufw allow $MDBPORT/tcp
     if [[ $(lsb_release -r) = *16.04* ]]; then
-    	sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+    	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 	install_mongod
 	install_nodejs
 	zelflux
     elif [[ $(lsb_release -r) = *18.04* ]]; then
-    	sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+    	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 	install_mongod
 	install_nodejs
 	zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-    	sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+    	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 	install_mongod
 	install_nodejs
 	zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-    	sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+    	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
 	install_mongod
 	install_nodejs
@@ -420,11 +428,12 @@ function install_mongod() {
     sudo apt-get update
     sudo apt-get install mongodb-org -y
     sudo service mongod start
+    sudo systemctl enable mongod
 }
 
 function install_nodejs() {
     if ! node -v > /dev/null 2>&1; then
-    	sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | sudo bash
+    	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 	. ~/.profile
 	nvm install --lts
     else
@@ -436,40 +445,27 @@ function zelflux() {
     if [ -d "./zelflux" ]; then
     	sudo rm -rf zelflux
     fi
-    kill_sessions
     if whiptail --yesno "If you would like admin privileges to Zelflux select <Yes>(Recommended) and prepare to enter your ZelID. If you don't have one or don't want to have admin privileges to Zelflux select <No>." 9 108; then
     	ZELID=$(whiptail --inputbox "Enter your ZelID found in the Zelcore+/Apps section of your Zelcore" 8 71 3>&1 1>&2 2>&3)
     else
     	ZELID='132hG26CFTNhLM3MRsLEJhp9DpBrK6vg5N'
     fi
-    TMUX="zelflux"
-    if ! tmux ls | grep -q "$TMUX"; then
-    	sudo tmux new-session -d -s "$TMUX"
-	sudo tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
-	NUM='300'
-	MSG1="Cloning and installing Zelflux. Please be patient this will take 5 min..."
-	MSG2="${CHECK_MARK}${CHECK_MARK}${CHECK_MARK}${GREEN} installation has completed${NC}"
-	echo && spinning_timer
-	sleep 2
-	sudo tmux send-keys "$WANIP" C-m
-	sleep 2
-	sudo tmux send-keys "$ZELID" C-m
-	sleep 1
-	SESSION_NAME="$TMUX"
-    else
-    	sudo tmux new-session -d -s ${COIN_NAME^}
-	sudo tmux send-keys 'git clone https://github.com/zelcash/zelflux.git && cd zelflux && npm start' C-m
-	NUM='300'
-	MSG1="Cloning and installing Zelflux. Please be patient this will take 5 min..."
-	MSG2="${CHECK_MARK}${CHECK_MARK}${CHECK_MARK}${GREEN} installation has completed${NC}"
-	echo && spinning_timer
-	sleep 2
-	sudo tmux send-keys "$WANIP" C-m
-	sleep 2
-	sudo tmux send-keys "$ZELID" C-m
-	sleep 1
-	SESSION_NAME="${COIN_NAME^}"
-    fi
+    git clone https://github.com/zelcash/zelflux.git
+    touch ~/zelflux/config/userconfig.js
+    cat << EOF > ~/zelflux/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '${WANIP}',
+	zelid: '${ZELID}',
+	testnet: false
+      }
+    }
+EOF
+    npm i -g pm2
+    pm2 startup systemd -u $USERNAME
+    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    pm2 start start.sh --name zelflux
+    pm2 save
 }
 	
 function status_loop() {
@@ -489,7 +485,7 @@ function status_loop() {
 	MSG1="${CYAN}Refreshes every 30 seconds while syncing to chain. Refresh loop will stop automatically once it's fully synced.${NC}"
 	MSG2=''
 	spinning_timer
-	if [[ $(sudo wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(sudo ${COIN_CLI} getinfo | jq '.blocks') ]]; then
+	if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 	    break
 	fi
     done
@@ -499,8 +495,8 @@ function status_loop() {
 
 function update_script() {
     echo -e "${YELLOW}Creating a script to update binaries for future updates...${NC}"
-    sudo touch /home/"$USERNAME"/update.sh
-    sudo bash -c "cat << EOF > /home/"$USERNAME"/update.sh
+    touch /home/"$USERNAME"/update.sh
+    cat << EOF > /home/"$USERNAME"/update.sh
 #!/bin/bash
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
@@ -512,28 +508,18 @@ sudo apt-get update
 sudo apt-get install --only-upgrade \$COIN_NAME -y
 sudo chmod 755 \${COIN_PATH}/\${COIN_NAME}*
 \$COIN_DAEMON > /dev/null 2>&1
-EOF"
+EOF
     sudo chmod +x update.sh
 }
 
 function restart_script() {
     echo -e "${YELLOW}Creating a script to restart Zelflux in case server reboots...${NC}"
-    sudo touch /home/"$USERNAME"/restart_zelflux.sh
-    sudo bash -c "cat << EOF > /home/"$USERNAME"/restart_zelflux.sh
+    touch /home/"$USERNAME"/start.sh
+    cat << EOF > /home/"$USERNAME"/start.sh
 #!/bin/bash
-sudo service mongod start && sleep 5
-sudo tmux new-session -d -s ${SESSION_NAME}
-sudo tmux send-keys -t ${SESSION_NAME} "cd zelflux && npm start" C-m
-EOF"
-    sudo chmod +x restart_zelflux.sh
-    sudo crontab -l | grep -v "SHELL=/bin/bash" | sudo crontab -
-    sudo crontab -l | grep -v "pgrep mongod > /dev/null || /home/$USERNAME/restart_zelflux.sh" | sudo crontab -
-    sleep 1
-    sudo crontab -l > tempcron
-    echo "SHELL=/bin/bash" >> tempcron
-    echo "* * * * * pgrep mongod > /dev/null || /home/$USERNAME/restart_zelflux.sh >/dev/null 2>&1" >> tempcron
-    sudo crontab tempcron
-    sudo rm tempcron
+cd zelflux && npm start
+EOF
+    sudo chmod +x start.sh
 }
 
 function check() {
@@ -569,7 +555,7 @@ function check() {
     else
     	echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 3
     fi
-    if [ -f "/home/$USERNAME/restart_zelflux.sh" ]; then
+    if [ -f "/home/$USERNAME/start.sh" ]; then
     	echo -e "${CHECK_MARK} ${CYAN}Restart script for Zelflux created${NC}" && sleep 3
     else
     	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 3
@@ -592,10 +578,12 @@ function display_banner() {
     echo
     echo -e "${PIN} ${YELLOW}To update binaries wait for announcement that update is ready then enter:${NC} ${SEA}./${UPDATE_FILE}${NC}"
     echo
-    echo -e "${YELLOW}   Your tmux session running Zelflux is named ${SESSION_NAME}${NC}"
-    echo -e "${PIN} ${CYAN}To attach to zelflux session enter: ${SEA}tmux a -t ${SESSION_NAME}${NC}"
-    echo -e "${PIN} ${CYAN}To detach zelflux session enter: ${SEA}Ctrl+b, d${NC}"
-    echo -e "${PIN} ${CYAN}To kill zelflux session enter: ${SEA}tmux kill-session -t ${SESSION_NAME}${NC}"
+    echo -e "${YELLOW}   PM2 is now managing Zelflux to start up on reboots.${NC}"
+    echo -e "${YELLOW}   Commands to manage PM2.${NC}"
+    echo -e "${PIN} ${CYAN}TO START: ${SEA}pm2 start zelflux${NC}"
+    echo -e "${PIN} ${CYAN}TO STOP : ${SEA}pm2 stop zelflux{NC}"
+    echo -e "${PIN} ${CYAN}LOGS: ${SEA}pm2 monit${NC}"
+    echo -e "${PIN} ${CYAN}STATUS: ${SEA}pm2 list${NC}"
     echo
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
@@ -617,9 +605,9 @@ function display_banner() {
     create_service
     basic_security
     start_daemon
+    restart_script
     install_zelflux
     log_rotate
-    restart_script
     update_script
     status_loop
     
