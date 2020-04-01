@@ -232,7 +232,7 @@ if [[ $(tmux ls)2>/dev/null == *"created"* ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
+echo -e "${X_MARK} ${CYAN}Tmux session does not exists (problem with ZelFlux)${NC}"
 fi
 
 echo -e "${YELLOW}=====================================================${NC}"
