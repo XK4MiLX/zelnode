@@ -470,7 +470,20 @@ function zelflux() {
     	sudo rm -rf zelflux
     fi
     if whiptail --yesno "If you would like admin privileges to Zelflux select <Yes>(Recommended) and prepare to enter your ZelID. If you don't have one or don't want to have admin privileges to Zelflux select <No>." 9 108; then
-    	ZELID=$(whiptail --inputbox "Enter your ZelID found in the Zelcore+/Apps section of your Zelcore" 8 71 3>&1 1>&2 2>&3)
+	
+	while true
+		do
+		ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+		if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ]
+		then
+		echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
+		break
+		else
+		echo -e "${X_MARK} ${CYAN}Zel ID is not valid try again...${NC}"
+		sleep 4
+		fi
+	done
+		
     else
     	ZELID='132hG26CFTNhLM3MRsLEJhp9DpBrK6vg5N'
     fi
