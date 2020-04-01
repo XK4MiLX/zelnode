@@ -189,7 +189,7 @@ if [ -f "$FILE" ]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zelflux config  ~/zelflux/config/userconfig.js exists${NC}"
 
-ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/        zelid: .//') | wc -m`
+ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
 if [ "$ZELIDLG" -eq "36" ]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
