@@ -276,8 +276,8 @@ echo -e "${YELLOW}Cleaning...${NC}"
 rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate	
 fi 
 
-BOOTFILE="/home/$USER/$BOOTSTRAP_ZIP"
-if [ -f "$BOOTFILE" ]
+
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
