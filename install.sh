@@ -613,7 +613,7 @@ function display_banner() {
 }
 
 
-function auto_start(){
+function flux_update(){
 
 UPDATE_FILE="/home/$USER/update-zelflux.sh"
 if [ -f "$UPDATE_FILE" ]
@@ -661,7 +661,7 @@ fi
     install_zelflux
     log_rotate
     update_script
-    auto_start
+    flux_update
     status_loop
     
     
