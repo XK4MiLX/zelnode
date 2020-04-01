@@ -93,6 +93,8 @@ function wipe_clean() {
     rm $UPDATE_FILE > /dev/null 2>&1
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
+    rm start.sh > /dev/null 2>&1
+    rm update-zelflux.sh  > /dev/null 2>&1
 }
 
 function spinning_timer() {
