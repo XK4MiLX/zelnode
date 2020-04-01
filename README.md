@@ -21,7 +21,7 @@ If everything was fine u will see
 Sometimes first benchmarks failed   
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic011.jpg)  
 
-# Zelnode Docker installer for Ubuntu
+# Zelnode Docker installer via snap for Ubuntu
 
 <b>1) How run script</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh)```  
