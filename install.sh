@@ -652,9 +652,7 @@ function display_banner() {
 
 
 
-#
 #end of functions
-
 #run functions
     wipe_clean
     ssh_port
