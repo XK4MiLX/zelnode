@@ -15,12 +15,19 @@ dversion="v2.0"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}	ZELNODE MULTITOOLBOX $dversion FOR UBUNTU BY XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
+echo -e "${YELLOW}1 - Install docker on VPS/Inside LXC continer${NC}"
+echo -e "${YELLOW}2 - Fix your lxc.conf file on host${NC}"
+echo -e "${YELLOW}3 - Install ZelNode${NC}"
+echo -e "${YELLOW}4 - ZelNode analizer and fixer${NC}"
+echo -e "${YELLOW}================================================================${NC}"
 
 
-prompt="Pick an option:"
-options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode" "Zelnode analizer and fixer")
-PS3="$prompt "
-select opt in "${options[@]}" "Quit"; do 
+read -p "Pick an option: " -n 1 -r
+echo -e "${NC}"
+#prompt="Pick an option:"
+#options=("Install docker on VPS/Inside LXC Continer" "Fix your lxc.conf file on host" "Install zelnode" "Zelnode analizer and fixer")
+#PS3="$prompt "
+#select opt in "${options[@]}" "Quit"; do 
 
     case "$REPLY" in
 
@@ -171,12 +178,12 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
  exit
  ;;
 
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
-    *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
+    # $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    # *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
 
     esac
 
-done
+
 
 
 
