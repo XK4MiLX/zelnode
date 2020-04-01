@@ -275,8 +275,8 @@ rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
 fi 
 
 LOCAL="/home/$USER/$BOOTSTRAP_ZIP"
-then
 if [ -f "$LOCAL" ]
+then
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
 else
