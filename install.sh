@@ -267,6 +267,12 @@ function zk_params() {
 }
 
 function bootstrap() {
+
+echo -e "${NC}"
+read -p "Would you like to download bootstrap Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
     if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
     	rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
 	echo -e "${YELLOW}Downloading and installing wallet bootstrap please be patient...${NC}"
@@ -279,6 +285,7 @@ function bootstrap() {
 	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
 	rm -rf $BOOTSTRAP_ZIPFILE
     fi
+fi
 }
 
 function create_service() {
