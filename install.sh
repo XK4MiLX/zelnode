@@ -621,8 +621,6 @@ function display_banner() {
     echo
     echo -e "${YELLOW}   PM2 is now managing Zelflux to start up on reboots.${NC}"
     echo -e "${YELLOW}   Commands to manage PM2.${NC}"
-    echo -e "${PIN} ${CYAN}TO START: ${SEA}pm2 start zelflux${NC}"
-    echo -e "${PIN} ${CYAN}TO STOP : ${SEA}pm2 stop zelflux${NC}"
     echo -e "${PIN} ${CYAN}LOGS: ${SEA}pm2 monit${NC}"
     echo -e "${PIN} ${CYAN}STATUS: ${SEA}pm2 list${NC}"
     echo
