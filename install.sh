@@ -449,6 +449,14 @@ function install_nodejs() {
 }
 
 function zelflux() {
+    
+    
+   if [[ $(pm2 -v) ]]
+   then
+   echo -e "${YELLOW}Deleting old pm2 settings.${NC}"
+   pm2 del zelflux
+   fi
+    
     if [ -d "./zelflux" ]; then
     	sudo rm -rf zelflux
     fi
