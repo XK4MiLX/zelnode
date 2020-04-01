@@ -189,7 +189,7 @@ if [ -f "$FILE" ]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zelflux config  ~/zelflux/config/userconfig.js exists${NC}"
 
-ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
+ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/        zelid: .//') | wc -m`
 if [ "$ZELIDLG" -eq "36" ]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
@@ -227,12 +227,11 @@ then
 else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
-
+ 
 if [[ $(tmux ls) == *"created"* ]]
-then
 echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Tmux session does not exists (prabobly zelflux is not correctly installed)${NC}"
+echo -e "${X_MARK} ${CYAN}Tmux session does not exists (if you using tmux zelflux prabobly not working)${NC}"
 fi
 
 echo -e "${YELLOW}=====================================================${NC}"
