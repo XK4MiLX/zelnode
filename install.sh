@@ -532,7 +532,13 @@ sudo apt-get install --only-upgrade \$COIN_NAME -y
 sudo chmod 755 \${COIN_PATH}/\${COIN_NAME}*
 \$COIN_DAEMON > /dev/null 2>&1
 EOF
-    sudo chmod +x update.sh
+
+sudo chmod +x update.sh 
+echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
+echo "git pull" >> "/home/$USER/update-zelflux.sh"
+chmod +x "/home/$USER/update-zelflux.sh"
+(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
+ 
 }
 
 function restart_script() {
@@ -583,6 +589,17 @@ function check() {
     else
     	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 3
     fi
+    if [ -f "/home/$USERNAME/update-zelflux.sh" ]; then
+    	echo -e "${CHECK_MARK} ${CYAN}Update script for Zelflux created${NC}" && sleep 3
+    else
+    	echo -e "${X_MARK} ${CYAN}Update script for Zelflux not installed${NC}" && sleep 3
+    fi
+    if [[ $(crontab -l | grep -i update-zelflux) ]]
+    then
+ 	echo -e "${CHECK_MARK} ${CYAN}Zelflux auto-update via Crontab installed${NC}"
+    else
+	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
+    fi
     echo && echo && echo
 }
 
@@ -615,33 +632,6 @@ function display_banner() {
 }
 
 
-function flux_update(){
-
-UPDATE_FILE="/home/$USER/update-zelflux.sh"
-if [ -f "$UPDATE_FILE" ]
-then
-echo -e "\c"
-else
-echo -e "${YELLOW}=====================================================${NC}"
-read -p "Would you like to add auto-update zelflux via crontab Y/N" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
-echo "git pull" >> "/home/$USER/update-zelflux.sh"
-chmod +x "/home/$USER/update-zelflux.sh"
-(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
-
-if [[ $(crontab -l | grep -i update-zelflux) ]]
-then
-echo -e "${CHECK_MARK} ${CYAN}Zelflux auto-update was installed successfully${NC}"
-else
-echo -e "${X_MARK} ${CYAN}Zelflux auto-update installation has failed${NC}"
-fi
-fi
-fi
-
-}
 
 #
 #end of functions
@@ -663,7 +653,6 @@ fi
     install_zelflux
     log_rotate
     update_script
-    flux_update
     status_loop
     
     
