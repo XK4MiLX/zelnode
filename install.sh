@@ -189,7 +189,7 @@ function create_conf() {
     PASSWORD=$(pwgen -1 20 -n)
     
      if whiptail --yesno "Is your device behind a NAT?" 9 108; then
-	 INTERNAL_IP=$(whiptail --title "ZELNODE BIND IP(INTERNAL)" --inputbox "Enter your Zelnode internal ip" 8 72 3>&1 1>&2 2>&3)
+	 INTERNAL_IP=$(whiptail --title "ZELNODE BIND" --inputbox "Enter your Zelnode internal ip" 8 72 3>&1 1>&2 2>&3)
      else
 	 INTERNAL_IP="$WANIP"	
      fi
