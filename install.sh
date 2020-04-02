@@ -79,9 +79,9 @@ fi
 #functions
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
-    $COIN_CLI stop > /dev/null 2>&1 && sleep 2
-    sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
-    sudo killall $COIN_DAEMON > /dev/null 2>&1
+    "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
+    sudo systemctl stop "$COIN_NAME" > /dev/null 2>&1 && sleep 2
+    sudo killall "$COIN_DAEMON" > /dev/null 2>&1
     sudo rm ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
@@ -94,8 +94,10 @@ function wipe_clean() {
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm update-zelflux.sh  > /dev/null 2>&1
-    echo -e "${YELLOW}Killing all tmux sessions${NC}"
     tmux kill-server > /dev/null 2>&1 && sleep 1
+    pm2 unstartup > /dev/null 2>&1
+    pm2 del zelflux > /dev/null 2>&1
+    pm2 flush > /dev/null 2>&1
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
