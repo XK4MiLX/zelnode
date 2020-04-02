@@ -300,12 +300,48 @@ fi
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
+echo -e "${YELLOW}Local bootstrap file detected...${NC}"
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
 else
-echo -e "${YELLOW}Downloading and installing wallet bootstrap please be patient...${NC}"
-wget $BOOTSTRAP_ZIP
-unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
+
+echo -e ""
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN} Choose a method how get bootstrap file${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${YELLOW}1 - Download from surce build in script${NC}"
+echo -e "${YELLOW}2 - Download from own source${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+do
+    case "$REPLY" in
+
+    1 ) 
+
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIPFIL ${NC}"
+	wget $BOOTSTRAP_ZIP
+	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
+	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DI
+	break
+;;
+    2 )
+    
+	BOOTSTRAP_ZIP="$(whiptail --title "ZelNode Installer" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+	BOOTSTRAP_ZIPFIL=$(printf -- "%s" "${BOOTSTRAP_ZIP##*/}")
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIPFIL ${NC}"
+	wget $BOOTSTRAP_ZIP
+	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
+	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
+	break
+;;
+
+     *) echo "Invalid option $REPLY try again...";;
+
+    esac
+
+done
+
+
 fi
 echo -e "${NC}"
 read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
