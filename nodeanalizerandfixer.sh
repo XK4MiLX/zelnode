@@ -45,6 +45,7 @@ then
     echo -e "${NC}"
     exit
 fi
+sleep 2
 ### cat  ~/.zelcash/debug.log | egrep -i "benchmarking" | grep -v Ping | grep -v "benchmarking" | grep -v "znw - invalid" | tee parse-zelcash_debug-log.txt
 echo -e "${NC}"
 echo -e "${YELLOW}Installing bc...${NC}"
