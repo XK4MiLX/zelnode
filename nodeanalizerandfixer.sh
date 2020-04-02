@@ -221,13 +221,6 @@ else
 echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 
-if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
-then
-        echo -e "${CHECK_MARK} ${CYAN}IP detected successful ${NC}"
-else
-        echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
-fi
- 
  if [ -d ~/.pm2 ] 
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
@@ -240,6 +233,12 @@ fi
    fi
 fi
 
+if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
+then
+        echo -e "${CHECK_MARK} ${CYAN}IP detected successful ${NC}"
+else
+        echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
+fi
 echo -e "${YELLOW}=====================================================${NC}"
 if [[ "$REPLACE" == "1" ]]
 then
