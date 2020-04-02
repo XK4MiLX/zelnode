@@ -617,7 +617,7 @@ chmod +x "/home/$USER/update-zelflux.sh"
 
 function restart_script() {
 
-if [ -f "/home/"$USERNAME"/zelflux/start.sh" ]
+if [ -f /home/"$USERNAME"/zelflux/start.sh ]
 then
 echo "${YELLOW}Restart script already exist...${NC}"
 else
