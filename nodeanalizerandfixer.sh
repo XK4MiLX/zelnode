@@ -228,7 +228,7 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
  
-if tmux ls | grep created 2>&1 >/dev/null; then
+if tmux ls | grep created &> /dev/null; then
 echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
@@ -241,7 +241,7 @@ then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
-echo -e "${CHECK_MARK} ${CYAN}Stopping Zelcash serivce...${NC}"
+echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
 then
 
@@ -274,12 +274,14 @@ echo -e "\c"
                 then
                         echo -e "${GREEN}Zelnodeindex replaced successful!!!${NC}"
                 fi
+
+fi
+fi
 echo -e "${YELLOW}=====================================================${NC}"
-fi
-fi
-echo -e "${CHECK_MARK} ${CYAN}Starting Zelcash serivce...${NC}"
+echo -e "${YELLOW}Starting Zelcash serivce...${NC}"
 sudo systemctl start zelcash
-echo -e "${CHECK_MARK} ${CYAN}Waiting...${NC}"
+echo -e "${YELLOW}Waiting...${NC}"
+echo
 sleep 30
 fi
 if [[ "$FLUXCONF" == "1" ]]
