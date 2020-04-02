@@ -348,13 +348,13 @@ EOF
 }
 
 function basic_security() {
-    echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
-    echo "y" | sudo ufw enable > /dev/null 2>&1   
+    echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}" 
     sudo ufw allow "$SSHPORT"/tcp
     sudo ufw allow "$PORT"/tcp
     sudo ufw logging on
     sudo ufw default deny incoming
     sudo ufw limit OpenSSH    
+    echo "y" | sudo ufw enable > /dev/null 2>&1  
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
 }
