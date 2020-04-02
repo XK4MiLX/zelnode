@@ -25,7 +25,7 @@ COIN_NAME='zelcash'
 
 UPDATE_FILE='update.sh'
 BOOTSTRAP_ZIP='http://95.217.155.210:16127/zelapps/zelshare/getfile/zel-bootstrap2.zip'
-BOOTSTRAP_ZIPFILE='zel-bootstrap2.zip'
+BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 RPCPORT='16124'
@@ -321,8 +321,8 @@ do
 
     1 ) 
 
-	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIPFILE ${NC}"
-	wget $BOOTSTRAP_ZIP
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
 	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
 	break
@@ -330,7 +330,7 @@ do
     2 )
     
 	BOOTSTRAP_ZIP="$(whiptail --title "ZelNode Installer" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIPFILE ${NC}"
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
 	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
