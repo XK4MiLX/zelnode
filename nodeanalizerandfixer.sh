@@ -241,6 +241,8 @@ then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
+echo -e "${CHECK_MARK} ${CYAN}Stopping Zelcash serivce...${NC}"
+sudo systemctl stop zelcash
 then
 
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
@@ -275,6 +277,10 @@ echo -e "\c"
 echo -e "${YELLOW}=====================================================${NC}"
 fi
 fi
+echo -e "${CHECK_MARK} ${CYAN}Starting Zelcash serivce...${NC}"
+sudo systemctl start zelcash
+echo -e "${CHECK_MARK} ${CYAN}Waiting...${NC}"
+sleep 30
 fi
 if [[ "$FLUXCONF" == "1" ]]
 then
