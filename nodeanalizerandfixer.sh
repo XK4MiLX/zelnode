@@ -228,10 +228,16 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
  
-if tmux ls | grep created &> /dev/null; then
-echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
-else
-echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
+ if [ -d "~/.pm2" ] 
+ then
+ echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
+ else
+ echo -e "${X_MARK} ${CYAN}Pm2 is not installed${NC}"
+   if tmux ls | grep created &> /dev/null; then
+     echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
+    else
+     echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
+   fi
 fi
 
 echo -e "${YELLOW}=====================================================${NC}"
@@ -277,11 +283,10 @@ echo -e "\c"
 
 fi
 fi
-echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Starting Zelcash serivce...${NC}"
 sudo systemctl start zelcash
 echo -e "${YELLOW}Waiting...${NC}"
-echo
+echo -e ""
 sleep 30
 fi
 if [[ "$FLUXCONF" == "1" ]]
