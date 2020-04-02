@@ -313,6 +313,8 @@ echo -e "${YELLOW}1 - Download from surce build in script${NC}"
 echo -e "${YELLOW}2 - Download from own source${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
+while true
+
 do
     case "$REPLY" in
 
