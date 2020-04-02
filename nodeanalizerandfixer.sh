@@ -247,10 +247,9 @@ then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
+then
 echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
-then
-
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
 then
 echo -e "\c"
