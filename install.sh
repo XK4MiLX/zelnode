@@ -96,17 +96,13 @@ function wipe_clean() {
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh  > /dev/null 2>&1
     echo -e "${YELLOW}Killing all tmux sessions${NC}"
-    did you want disable firewall during install process
     tmux kill-server
-    
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
     if ! whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?" 8 60; then
     	 sudo ufw disable
-    fi
-    
-       
+    fi    
 }
 
 function spinning_timer() {
