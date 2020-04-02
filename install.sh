@@ -512,12 +512,12 @@ module.exports = {
       }
     }
 EOF
-    cd zelflux && npm i -g pm2 && pm2 startup systemd -u $USERNAME
+    npm i -g pm2
+    pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
-    pm2 start start.sh --name zelflux
+    pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
-    cd
 }
 	
 function status_loop() {
@@ -571,12 +571,18 @@ chmod +x "/home/$USER/update-zelflux.sh"
 }
 
 function restart_script() {
+
+if [ -f "/home/"$USERNAME"/zelflux/start.sh" ]
+then
+echo "${YELLOW}Restart script already exist...${NC}"
+else
     echo -e "${YELLOW}Creating a script to restart Zelflux in case server reboots...${NC}"
     touch /home/"$USERNAME"/zelflux/start.sh
     cat << EOF > /home/"$USERNAME"/zelflux/start.sh
 #!/bin/bash
-npm start
+cd zelflux && npm start
 EOF
+if
     sudo chmod +x /home/"$USERNAME"/zelflux/start.sh
 }
 
