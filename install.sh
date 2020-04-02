@@ -312,8 +312,8 @@ echo -e "${YELLOW}==============================================================
 echo -e "${YELLOW}1 - Download from surce build in script${NC}"
 echo -e "${YELLOW}2 - Download from own source${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
-
+read -p "Pick an option: " -n 1 -r
+echo -e "${NC}"
 while true
 
 do
