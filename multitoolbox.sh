@@ -12,6 +12,8 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 dversion="v2.0"
 
+clear
+sleep 1
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}ZELNODE MULTITOOLBOX $dversion FOR UBUNTU BY XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
