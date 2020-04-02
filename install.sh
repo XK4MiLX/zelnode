@@ -61,7 +61,7 @@ PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 
 #Suppressing password prompts for this user so zelnode can operate
 clear
-sleep 5
+sleep 2
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${YELLOW}====================================================================="
 echo -e " Zelnode & Zelflux Install - XK4MiLX Edition"
@@ -69,7 +69,7 @@ echo -e "=====================================================================${
 echo -e "${CYAN}MAR 2020, created by dk808 from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "Zelnode setup starting, press [CTRL+C] to cancel.${NC}"
-sleep 5
+sleep 3
 if [ "$USERNAME" = "root" ]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
     sleep 4
