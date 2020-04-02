@@ -102,7 +102,8 @@ function wipe_clean() {
     then
     if ! whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?" 8 60; then
     	 sudo ufw disable
-    fi    
+    fi
+    fi
 }
 
 function spinning_timer() {
