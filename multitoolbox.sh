@@ -115,6 +115,12 @@ then
 sudo reboot -n
 exit
 fi
+read -p "Would you like switch to user accont Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+su -$usernew
+fi
 
 
 ;;
