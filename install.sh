@@ -627,7 +627,7 @@ else
 #!/bin/bash
 cd zelflux && npm start
 EOF
-if
+fi
     sudo chmod +x /home/"$USERNAME"/zelflux/start.sh
 }
 
