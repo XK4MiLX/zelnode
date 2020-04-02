@@ -21,7 +21,7 @@ echo -e "${YELLOW}1 - Install docker on VPS/Inside LXC continer${NC}"
 echo -e "${YELLOW}2 - Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}3 - Install ZelNode${NC}"
 echo -e "${YELLOW}4 - ZelNode analizer and fixer${NC}"
-echo -e "${YELLOW}4 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${YELLOW}5 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 
@@ -188,7 +188,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
  ;;
  
  5)
-
+echo -e ""
 echo -e "${YELLOW}Instaling Linux Kernel 5...${NC}"
 sudo apt-get install --install-recommends linux-generic-hwe-18.04
 read -p "Would you like to reboot pc Y/N?" -n 1 -r
