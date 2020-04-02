@@ -324,7 +324,7 @@ do
 	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
 	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-	unzip $BOOTSTRAP_ZIPFILE -d ~/$CONFIG_DIR
+	unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
 	break
 ;;
     2 )
