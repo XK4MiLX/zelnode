@@ -189,7 +189,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
  
  5)
 echo -e ""
-echo -e "${YELLOW}Instaling Linux Kernel 5...${NC}"
+echo -e "${YELLOW}Installing Linux Kernel 5.x...${NC}"
 sudo apt-get install --install-recommends linux-generic-hwe-18.04
 read -p "Would you like to reboot pc Y/N?" -n 1 -r
 echo -e "${NC}"
