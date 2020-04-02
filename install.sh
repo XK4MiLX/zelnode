@@ -79,25 +79,29 @@ fi
 #functions
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
-    "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
-    sudo systemctl stop "$COIN_NAME" > /dev/null 2>&1 && sleep 2
-    sudo killall "$COIN_DAEMON" > /dev/null 2>&1
+    $COIN_CLI stop > /dev/null 2>&1 && sleep 2
+    sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+    sudo killall -s SIGKILL $COIN_DAEMON > /dev/null 2>&1
+    zelbench-cli stop > /dev/null 2>&1
+    sudo killall -s SIGKILL zelbenchd > /dev/null 2>&1
     sudo rm ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
+    sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
-    sudo rm -rf zelflux && sleep 1
-    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 1
-    sudo rm -rf .zelbenchmark && sleep 1
-    ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
-    rm $UPDATE_FILE > /dev/null 2>&1
-    rm restart_zelflux.sh > /dev/null 2>&1
-    rm zelnodeupdate.sh > /dev/null 2>&1
-    rm update-zelflux.sh  > /dev/null 2>&1
-    tmux kill-server > /dev/null 2>&1 && sleep 1
+    tmux kill-server > /dev/null 2>&1
     pm2 unstartup > /dev/null 2>&1
     pm2 del zelflux > /dev/null 2>&1
     pm2 flush > /dev/null 2>&1
+    sudo rm -rf zelflux && sleep 1
+    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 1
+    sudo rm -rf .zelbenchmark && sleep 1
+    rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
+    rm $UPDATE_FILE > /dev/null 2>&1
+    rm restart_zelflux.sh > /dev/null 2>&1
+    rm zelnodeupdate.sh > /dev/null 2>&1
+    rm start.sh > /dev/null 2>&1
+    
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
