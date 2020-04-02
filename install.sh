@@ -93,7 +93,6 @@ function wipe_clean() {
     rm $UPDATE_FILE > /dev/null 2>&1
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
-    rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh  > /dev/null 2>&1
     echo -e "${YELLOW}Killing all tmux sessions${NC}"
     tmux kill-server > /dev/null 2>&1 && sleep 1
