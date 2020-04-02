@@ -21,6 +21,7 @@ echo -e "${YELLOW}1 - Install docker on VPS/Inside LXC continer${NC}"
 echo -e "${YELLOW}2 - Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}3 - Install ZelNode${NC}"
 echo -e "${YELLOW}4 - ZelNode analizer and fixer${NC}"
+echo -e "${YELLOW}4 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 
@@ -184,6 +185,19 @@ then
 fi
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
  exit
+ ;;
+ 
+ 5)
+
+echo -e "${YELLOW}Instaling Linux Kernel 5...${NC}"
+sudo apt-get install --install-recommends linux-generic-hwe-18.04
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo reboot -n
+fi
+ 
  ;;
 
     # $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
