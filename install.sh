@@ -519,11 +519,7 @@ function install_nodejs() {
 function zelflux() {
     
     
-   if [[ $(pm2 -v) ]]
-   then
-   echo -e "${YELLOW}Deleting old pm2 settings.${NC}"
-   pm2 del zelflux
-   fi
+ 
     
     if [ -d "./zelflux" ]; then
     	sudo rm -rf zelflux
@@ -557,7 +553,14 @@ module.exports = {
       }
     }
 EOF
+
+   if [[ $(pm2 -v) ]]
+   then
+   echo -e "${YELLOW}Pm2 detected installation skipped.${NC}"
+   else
     npm i -g pm2
+   fi
+   
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
