@@ -516,7 +516,7 @@ EOF
     npm i -g pm2
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
-    pm2 start start.sh --name zelflux
+    pm2 start zelflux/start.sh --name zelflux
     pm2 save
 }
 	
@@ -572,12 +572,12 @@ chmod +x "/home/$USER/update-zelflux.sh"
 
 function restart_script() {
     echo -e "${YELLOW}Creating a script to restart Zelflux in case server reboots...${NC}"
-    touch /home/"$USERNAME"/start.sh
-    cat << EOF > /home/"$USERNAME"/start.sh
+    touch /home/"$USERNAME"/zelflux/start.sh
+    cat << EOF > /home/"$USERNAME"/zelflux/start.sh
 #!/bin/bash
-cd zelflux && npm start
+npm start
 EOF
-    sudo chmod +x start.sh
+    sudo chmod +x /home/"$USERNAME"/zelflux/start.sh
 }
 
 function check() {
@@ -674,8 +674,8 @@ function display_banner() {
     create_service
     basic_security
     start_daemon
-    restart_script
     install_zelflux
+    restart_script
     log_rotate
     update_script
     status_loop
