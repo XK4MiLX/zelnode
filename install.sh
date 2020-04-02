@@ -515,6 +515,7 @@ EOF
     npm i -g pm2
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    restart_script
     pm2 start zelflux/start.sh --name zelflux
     pm2 save
 }
@@ -674,7 +675,6 @@ function display_banner() {
     basic_security
     start_daemon
     install_zelflux
-    restart_script
     log_rotate
     update_script
     status_loop
