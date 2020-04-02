@@ -228,7 +228,7 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
  
- if [ -d "home/$USER/.pm2" ] 
+ if [ -d ~/.pm2 ] 
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  else
