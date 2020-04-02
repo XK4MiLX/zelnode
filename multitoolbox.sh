@@ -190,16 +190,3 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
     # *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
 
     esac
-
-
-
-
-
-
-## read -p "Would you like to reboot pc Y/N?" -n 1 -r
-## echo -e "${NC}"
-##
-## if [[ $REPLY =~ ^[Yy]$ ]]
-## then
-## sudo reboot -n
-## fi
