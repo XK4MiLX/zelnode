@@ -613,7 +613,7 @@ function check() {
     else
     	echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 3
     fi
-    if [ -f "/home/$USERNAME/start.sh" ]; then
+    if [ -f "/home/$USERNAME/zelflux/start.sh" ]; then
     	echo -e "${CHECK_MARK} ${CYAN}Restart script for Zelflux created${NC}" && sleep 3
     else
     	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 3
