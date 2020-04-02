@@ -33,6 +33,8 @@ function check_benchmarks() {
 
 }
 
+clear
+sleep 2
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}ZelNode ANALIZER/FiXER $SCVESION for Ubuntu by XK4MiLX"
 echo -e "${GREEN}Special thanks to dk808 and jriggs28"
