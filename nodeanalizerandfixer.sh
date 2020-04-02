@@ -228,7 +228,7 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
  
-if tmux ls | grep created > /dev/null; then
+if tmux ls | grep created 2>&1 >/dev/null; then
 echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
