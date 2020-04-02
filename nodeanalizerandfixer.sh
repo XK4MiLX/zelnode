@@ -228,7 +228,7 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
  
- if [ -d "home/$USERNAME/.pm2" ] 
+ if [ -d "home/$USER/.pm2" ] 
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  else
@@ -243,7 +243,6 @@ fi
 echo -e "${YELLOW}=====================================================${NC}"
 if [[ "$REPLACE" == "1" ]]
 then
-echo -e ""
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -290,7 +289,6 @@ fi
 fi
 if [[ "$FLUXCONF" == "1" ]]
 then
-echo -e ""
 read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -333,7 +331,6 @@ if [ -f "$FILE2" ]
 then
 echo -e "\c"
 else
-echo -e ""
 read -p "Would you like to add auto-update zelflux via crontab Y/N" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -355,7 +352,6 @@ fi
 
 if [[ "$LC_CHECK" == "1" ]]
 then
-echo -e ""
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -375,7 +371,6 @@ fi
 
 if [[ "$BTEST" == "1" ]]
 then
-echo -e ""
 read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
