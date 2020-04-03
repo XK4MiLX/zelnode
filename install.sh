@@ -564,8 +564,8 @@ EOF
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
-    pm2 start ~/zelflux/start.sh --name zelflux /dev/null 2>&1
-    pm2 save /dev/null 2>&1
+    pm2 start ~/zelflux/start.sh --name zelflux
+    pm2 save
 }
 	
 function status_loop() {
