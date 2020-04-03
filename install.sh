@@ -557,14 +557,15 @@ EOF
    then
    echo -e "${YELLOW}Pm2 detected installation skipped.${NC}"
    else
-    npm i -g pm2
+   echo -e "${YELLOW}Installing Pm2...${NC}"
+   npm i -g pm2
    fi
    
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
-    pm2 start ~/zelflux/start.sh --name zelflux
-    pm2 save
+    pm2 start ~/zelflux/start.sh --name zelflux /dev/null 2>&1
+    pm2 save /dev/null 2>&1
 }
 	
 function status_loop() {
