@@ -686,6 +686,7 @@ function check() {
     
     echo && echo
     echo -e "${YELLOW}Restarting benchmarks...${NC}"
+    sleep 5
     zelbench-cli restartnodebenchmarks
     sleep 40
     echo -e ""
