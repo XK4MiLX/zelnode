@@ -662,19 +662,19 @@ function check() {
     	echo -e "${X_MARK} ${CYAN}Zelflux did not install${NC}" && sleep 1
     fi
     if [ -f "/home/$USERNAME/$UPDATE_FILE" ]; then
-    	echo -e "${CHECK_MARK} ${CYAN}Update script created${NC}" && sleep 3
+    	echo -e "${CHECK_MARK} ${CYAN}Update script created${NC}" && sleep 1
     else
-    	echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 3
+    	echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 1
     fi
     if [ -f "/home/$USERNAME/zelflux/start.sh" ]; then
-    	echo -e "${CHECK_MARK} ${CYAN}Restart script for Zelflux created${NC}" && sleep 3
+    	echo -e "${CHECK_MARK} ${CYAN}Restart script for Zelflux created${NC}" && sleep 1
     else
-    	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 3
+    	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 1
     fi
     if [ -f "/home/$USERNAME/update-zelflux.sh" ]; then
-    	echo -e "${CHECK_MARK} ${CYAN}Update script for Zelflux created${NC}" && sleep 3
+    	echo -e "${CHECK_MARK} ${CYAN}Update script for Zelflux created${NC}" && sleep 1
     else
-    	echo -e "${X_MARK} ${CYAN}Update script for Zelflux not installed${NC}" && sleep 3
+    	echo -e "${X_MARK} ${CYAN}Update script for Zelflux not installed${NC}" && sleep 1
     fi
     if [[ $(crontab -l | grep -i update-zelflux) ]]
     then
