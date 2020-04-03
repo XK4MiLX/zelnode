@@ -562,7 +562,7 @@ EOF
    echo -e "${YELLOW}Pm2 detected installation skipped.${NC}"
    else
    echo -e "${YELLOW}Installing Pm2...${NC}"
-   npm i -g pm2
+   sudo npm install pm2 -g
    fi
    
     pm2 startup systemd -u $USERNAME
