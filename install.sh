@@ -101,6 +101,7 @@ function wipe_clean() {
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
+    rm update-zelflux.sh > /dev/null 2>&1
     
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
@@ -499,6 +500,17 @@ function install_zelflux() {
 }
 
 function install_mongod() {
+ 
+  echo -e "${YELLOW}Mongodb cleaning...${NC}"
+    sudo apt remove mongodb-org
+    sudo apt purge mongodb-org
+    sudo apt remove mongodb
+    sudo apt purge mongodb
+    sudo apt autoremove
+  echo -e "${YELLOW}Mongodb installing...${NC}"
+    sudo rm /etc/apt/sources.list.d/mongodb*.list
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E52529D4
+    sudo bash -c 'echo "deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse
     sudo apt-get update
     sudo apt-get install mongodb-org -y
     sudo service mongod start
