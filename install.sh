@@ -694,7 +694,6 @@ function check() {
     MSG1='Restarting benchmarks...'
     MSG2="${CHECK_MARK}"
     echo && spinning_timer
-    echo -e ""
     echo -e "${YELLOW}Checking benchmarks details...${NC}"
     zelbench-cli getbenchmarks
     
