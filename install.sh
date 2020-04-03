@@ -684,7 +684,10 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
-    echo && echo
+  
+    echo
+    echo -e "${YELLOW}Finalizing Installation...${NC}"
+    sleep 90
     echo -e "${YELLOW}Restarting benchmarks...${NC}"
     sleep 5
     zelbench-cli restartnodebenchmarks
