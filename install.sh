@@ -757,5 +757,3 @@ function display_banner() {
     log_rotate
     update_script
     status_loop
-    
-    
