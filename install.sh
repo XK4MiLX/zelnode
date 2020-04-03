@@ -651,7 +651,7 @@ function check() {
     else
     	echo -e "${X_MARK} ${CYAN}zkSNARK params not installed${NC}" && sleep 1
     fi
-    if pgrep mongod > /dev/null; then
+    if mongod --version > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}Mongodb is not running or failed to install${NC}" && sleep 1
