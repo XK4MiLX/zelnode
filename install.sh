@@ -684,12 +684,10 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
-  
-    echo
-    NUM='90'
-    MSG1='Finalizing Installation...'
+    NUM='120'
+    MSG1='Finalizing Installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
-    echo && spinning_timer
+    echo && echo && spinning_timer
     echo -e "${YELLOW}Restarting benchmarks...${NC}"
     zelbench-cli restartnodebenchmarks
     NUM='40'
