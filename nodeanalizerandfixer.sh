@@ -110,7 +110,7 @@ else
     	echo -e "${X_MARK} ${CYAN}Zelcash daemon is not running${NC}"
 fi
 
-if pgrep mongod > /dev/null; then
+if mongod --version > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}"
 else
     	echo -e "${X_MARK} ${CYAN}Mongodb is not running or failed to install${NC}"
