@@ -64,7 +64,7 @@ clear
 sleep 2
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${YELLOW}====================================================================="
-echo -e " Zelnode & Zelflux Install - XK4MiLX Edition"
+echo -e " Zelnode & Zelflux Install - XK4MiLX Edition FiX"
 echo -e "=====================================================================${NC}"
 echo -e "${CYAN}MAR 2020, created by dk808 from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
