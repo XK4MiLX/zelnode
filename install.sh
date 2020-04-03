@@ -686,12 +686,16 @@ function check() {
     
   
     echo
-    echo -e "${YELLOW}Finalizing Installation...${NC}"
-    sleep 90
+    NUM='90'
+    MSG1='Finalizing Installation...'
+    MSG2="${CHECK_MARK}"
+    echo && spinning_timer
     echo -e "${YELLOW}Restarting benchmarks...${NC}"
-    sleep 5
     zelbench-cli restartnodebenchmarks
-    sleep 40
+    NUM='40'
+    MSG1='Restarting benchmarks...'
+    MSG2="${CHECK_MARK}"
+    echo && spinning_timer
     echo -e ""
     echo -e "${YELLOW}Checking benchmarks details...${NC}"
     zelbench-cli getbenchmarks
