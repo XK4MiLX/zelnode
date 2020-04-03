@@ -378,7 +378,7 @@ echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 zelbench-cli restartnodebenchmarks
-sleep 50
+sleep 40
 echo -e ""
 echo -e "${YELLOW}Checking benchmarks details...${NC}"
 zelbench-cli getbenchmarks
