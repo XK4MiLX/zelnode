@@ -247,12 +247,15 @@ else
 fi
 echo -e "${YELLOW}=====================================================${NC}"
 
+
+if [ -d ~/zelflux ]
+then
+
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-if [ -d ~/zelflux ]
-then
+
 echo -e "${YELLOW}ZelFlux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git
 if [ -d ~/zelflux ]
@@ -263,6 +266,7 @@ else
  echo -e "${RED}Zelfux download failed${NC}"
 fi
 fi
+
 fi
 
 if [[ "$REPLACE" == "1" ]]
