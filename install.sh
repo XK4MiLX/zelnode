@@ -729,7 +729,7 @@ function display_banner() {
     echo -e "${NC}"
     echo -e "${YELLOW}================================================================================================================================"
     echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
-    echo -e "${CYAN} COURTESY OF DK808${NC}"
+    echo -e "${CYAN} COURTESY OF DK808/XK4MiLX${NC}"
     echo
     echo -e "${YELLOW}   Commands to manage ${COIN_NAME}. Note that you have to be in the zelcash directory when entering commands.${NC}"
     echo -e "${PIN} ${CYAN}TO START: ${SEA}${COIN_DAEMON}${NC}"
