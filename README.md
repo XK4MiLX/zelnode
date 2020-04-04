@@ -30,7 +30,7 @@ If everything goes well you will see
 ![screen5](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm7.jpg) 
 
 * <b>Step 3</b>  
-1 - visit http://your_node_ip:16126  
+1 - Visit http://your_node_ip:16126  
 
 If everything goes well you will see  
 ![screen6](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm8.jpg)
