@@ -532,6 +532,7 @@ sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
 sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 . ~/.profile
+source ~/.bashrc
 nvm install --lts	
 }
 
