@@ -26,5 +26,5 @@ If everything goes well you will see
 2 - Run scripts again and select option "Install ZelNode" nr 3  
 
 If everything goes well you will see  
-![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm6.jpg)
- 
+![screen4](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm6.jpg)  
+![screen5](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm7.jpg) 
