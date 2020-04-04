@@ -246,6 +246,25 @@ else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
 echo -e "${YELLOW}=====================================================${NC}"
+
+read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+if [ -d ~/zelflux ]
+then
+echo -e "${YELLOW}ZelFlux downloading...${NC}"
+git clone https://github.com/zelcash/zelflux.git
+if [ -d ~/zelflux ]
+then
+ echo -e "${GREEN}Zelfux was downloaded successfully${NC}"
+FLUXCONF= "1"
+else
+ echo -e "${RED}Zelfux download failed${NC}"
+fi
+fi
+fi
+
 if [[ "$REPLACE" == "1" ]]
 then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
