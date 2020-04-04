@@ -53,7 +53,7 @@ If everything goes well you will see
 1) Ability to disable firewall diuring installation  
 2) Zel ID veryfication  
 3) Supporting installation in LXC continer  
-4) Auto-detection bootstrap archive if is in  home user directory   
+4) Auto-detection bootstrap archive if is in user home directory   
 5) Ability to download bootstrap from own source  
 6) ZelFlux auto-update via CronTab
 7) Error controls 
