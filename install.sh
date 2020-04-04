@@ -532,7 +532,6 @@ sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
 sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 . ~/.profile
-source ~/.bashrc
 nvm install --lts	
 }
 
@@ -574,20 +573,17 @@ module.exports = {
     }
 EOF
 
+
    if pm2 -v > /dev/null 2>&1; then
-   echo -e "${YELLOW}Pm2 already installed will skip installing it..${NC}"
+   pm2 kill > /dev/null 2>&1
+   npm remove pm2 -g > /dev/null 2>&1
+   npm i -g pm2 > /dev/null 2>&1
    else
    echo -e "${YELLOW}Installing Pm2...${NC}"
-   npm i -g pm2
+   npm i -g pm2 > /dev/null 2>&1
    fi
-   
-    pm2 unstartup > /dev/null 2>&1
-    pm2 del zelflux > /dev/null 2>&1
-    pm2 save zelflux > /dev/null 2>&1
-    pm2 flush > /dev/null 2>&1
-   
+  
     pm2 startup systemd -u $USERNAME
-    
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
     pm2 start ~/zelflux/start.sh --name zelflux
