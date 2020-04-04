@@ -33,6 +33,8 @@ If everything goes well you will see
 1 - Visit http://your_node_ip:16126  
 
 If everything goes well you will see  
-![screen6](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm8.jpg)
+![screen6](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm8.jpg)  
+
+# Troubleshooting
 
 
