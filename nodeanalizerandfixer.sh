@@ -246,7 +246,7 @@ fi
 echo -e "${YELLOW}=====================================================${NC}"
 
 
-if [ -d ~/zelflux ]
+if [ ! -d ~/zelflux ]
 then
 
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
