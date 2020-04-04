@@ -38,5 +38,5 @@ If everything goes well you will see
 # Troubleshooting
 
 * Step 1  
-1 - If node not working first run script again and select option "ZelNode analizer and fixer" nr 4
-
+1 - If node not working first run script again and select option "ZelNode analizer and fixer" nr 4  
+![screen7](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm9.jpg) 
