@@ -11,7 +11,7 @@ REPLACE="0"
 FLUXCONF="0"
 BTEST="0"
 LC_CHECK="0"
-SCVESION=v3.0
+SCVESION=v3.1
 
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
@@ -35,7 +35,6 @@ function check_benchmarks() {
 
 clear
 sleep 2
-echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}ZelNode ANALIZER/FiXER $SCVESION for Ubuntu by XK4MiLX"
 echo -e "${GREEN}Special thanks to dk808 and jriggs28"
 echo -e "${YELLOW}================================================================${NC}"
@@ -48,7 +47,6 @@ then
     exit
 fi
 sleep 2
-### cat  ~/.zelcash/debug.log | egrep -i "benchmarking" | grep -v Ping | grep -v "benchmarking" | grep -v "znw - invalid" | tee parse-zelcash_debug-log.txt
 echo -e "${NC}"
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
