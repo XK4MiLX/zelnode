@@ -35,7 +35,7 @@ function check_benchmarks() {
 
 clear
 sleep 2
-echo -e "${GREEN}ZelNode ANALIZER/FiXER $SCVESION for Ubuntu by XK4MiLX"
+echo -e "${GREEN}ZELNODE ANALIZER/FiXER $SCVESION FOR UBUNTU BY XK4MiLX"
 echo -e "${GREEN}Special thanks to dk808 and jriggs28"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ "$USER" == "root" ]]
