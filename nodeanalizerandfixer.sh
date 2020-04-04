@@ -69,7 +69,7 @@ echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
 echo -e "${NC}"
 echo -e "${YELLOW}Checking ports...${NC}"
-echo -e "$(sudo netstat -tulpn | grep zel)"
+echo -e "$(sudo lsof -i -P -n | grep LISTEN)"
 echo -e "${NC}"
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
