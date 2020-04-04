@@ -227,7 +227,7 @@ else
 echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 
- if [ -d ~/.pm2 && pm2 -v] 
+ if [[ -d ~/.pm2 && pm2 -v ]] 
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  else
