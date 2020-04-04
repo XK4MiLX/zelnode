@@ -1,10 +1,13 @@
-# Zelnode Analizer and Fixer for Ubuntu
+# ZELNODE MULTITOOLBOX
 
 <b>1) How run script</b>  
-```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)```  
+```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
 if this way not working you can try:  
-```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh && chmod +x nodeanalizerandfixer.sh.sh && ./nodeanalizerandfixer.sh.sh```   
+```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh && chmod +x multitoolbox.sh && ./multitoolbox.sh```   
+
+<b>1) Menu:</b>    
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm1.jpg) 
 
 <b>2) What you need input:</b>    
   - IP  
