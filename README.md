@@ -45,11 +45,11 @@ If everything goes well you will see
 
 # WHY ZELNODE MULTITOOLBOX?  
   
-* Docker installation  
+* <b>Docker installation</b>  
 1) You need put username only  
 2) Error controls  
   
-* Node installation  
+* <b>Node installation</b>  
 1) Ability to disable firewall diuring installation  
 2) Zel ID veryfication  
 3) Supporting installation in LXC continer  
@@ -58,7 +58,7 @@ If everything goes well you will see
 6) Auto-update via CronTab
 7) Error controls 
   
-* ZelNode analizer and fixer  
+* <b>ZelNode analizer and fixer</b>  
 1) veryfication errors  
 2) fix build in script 
 
