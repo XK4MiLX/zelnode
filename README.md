@@ -12,10 +12,10 @@ if this way not working you can try:
 <b>2) How use multitoolbox to setup node:</b>    
  
 * <b>Step 1</b>  
-1 - Log on to your root accont  
+1 - Log to your root accont  
 2 - Select option "Install docker on VPS/Inside LXC continer"  
 3 - When u will see window put your username  and hit enter  
 
-![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm3.jpg)
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm2.jpg)
 
 <b>If all will be good you will see</b>
