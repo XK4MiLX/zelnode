@@ -57,7 +57,7 @@ If everything goes well you will see
 5) Ability to download bootstrap from own source  
   
 * ZelNode analizer and fixer  
-- veryfication errors  
-- fix build in script 
+1) veryfication errors  
+2) fix build in script 
 
 
