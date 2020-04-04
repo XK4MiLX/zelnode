@@ -43,6 +43,9 @@ If everything goes well you will see
  - Data mismatch is a common case  
 ![screen7](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm9.jpg) 
 
+You can found you correct settings here (ZelCore)
+![screen8](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03.jpg) 
+
 # WHY ZELNODE MULTITOOLBOX?  
   
 * <b>Docker installation</b>  
