@@ -44,7 +44,7 @@ If everything goes well you will see
 ![screen7](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm9.jpg) 
 
 You can found you correct settings here (ZelCore)
-![screen8](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03.jpg) 
+![screen8](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03v2.jpg) 
 
 # WHY ZELNODE MULTITOOLBOX?  
   
