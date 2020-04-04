@@ -58,7 +58,6 @@ PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 
 #end of required details
 #
-
 #Suppressing password prompts for this user so zelnode can operate
 clear
 sleep 2
@@ -89,13 +88,7 @@ function wipe_clean() {
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
-    
     tmux kill-server > /dev/null 2>&1
-    pm2 unstartup > /dev/null 2>&1
-    pm2 del zelflux > /dev/null 2>&1
-    pm2 save > /dev/null 2>&1
-    pm2 flush > /dev/null 2>&1
-    
     sudo rm -rf zelflux && sleep 1
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 1
     sudo rm -rf .zelbenchmark && sleep 1
@@ -109,9 +102,14 @@ function wipe_clean() {
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
+    
+    echo -e "${YELLOW}Firewall enabled...${NC}" 
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?" 8 60; then
-    	 sudo ufw disable
+    	 sudo ufw disable	
     fi
+    
+    else
+    	echo -e "${YELLOW}Firewall disabled...${NC}"	
     fi
 }
 
@@ -311,9 +309,9 @@ else
 
 echo -e ""
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN} Choose a method how get bootstrap file${NC}"
+echo -e "${GREEN}Choose a method how to get bootstrap file${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${YELLOW}1 - Download from surce build in script${NC}"
+echo -e "${YELLOW}1 - Download from source build in script${NC}"
 echo -e "${YELLOW}2 - Download from own source${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 read -p "Pick an option: " -n 1 -r
@@ -474,6 +472,7 @@ function install_zelflux() {
     sudo ufw allow $LOCPORT/tcp
     sudo ufw allow $ZELNODEPORT/tcp
     sudo ufw allow $MDBPORT/tcp
+    sudo rm /etc/apt/sources.list.d/mongodb*.list
     if [[ $(lsb_release -r) = *16.04* ]]; then
     	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
@@ -503,20 +502,50 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-    sudo apt-get update
-    sudo apt-get install mongodb-org -y
-    sudo service mongod start
-    sudo systemctl enable mongod
+
+##if ! mongod --version > /dev/null; then
+echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
+sudo apt remove mongodb-org -y > /dev/null 2>&1 && sleep 1
+sudo apt purge mongodb-org -y > /dev/null 2>&1 && sleep 1
+sudo apt remove mongodb -y > /dev/null 2>&1 && sleep 1
+sudo apt purge mongodb -y > /dev/null 2>&1 && sleep 1
+sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
+echo -e "${YELLOW}Mongodb installing...${NC}"
+sudo apt-get update -y
+sudo apt-get install mongodb-org -y
+sudo service mongod start
+sudo systemctl enable mongod
+##else
+##echo -e "${YELLOW}Mongodb already installed will skip installing it.${NC}"
+##fi
+
+
 }
 
 function install_nodejs() {
-    if ! node -v > /dev/null 2>&1; then
-    	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
-	. ~/.profile
-	nvm install --lts
-    else
-    	echo -e "${YELLOW}Nodejs already installed will skip installing it.${NC}"
-    fi
+   
+echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
+n-uninstall -y > /dev/null 2>&1 && sleep 1
+rm -rf ~/n
+sudo apt-get remove nodejs npm nvm -y > /dev/null 2>&1 && sleep 1
+sudo apt-get purge nodejs nvm -y > /dev/null 2>&1 && sleep 1
+sudo rm -rf /usr/local/bin/npm
+sudo rm -rf /usr/local/share/man/man1/node*
+sudo rm -rf /usr/local/lib/dtrace/node.d
+sudo rm -rf ~/.npm
+sudo rm -rf ~/.nvm
+sudo rm -rf ~/.pm2
+sudo rm -rf ~/.node-gyp
+sudo rm -rf /opt/local/bin/node
+sudo rm -rf opt/local/include/node
+sudo rm -rf /opt/local/lib/node_modules
+sudo rm -rf /usr/local/lib/node*
+sudo rm -rf /usr/local/include/node*
+sudo rm -rf /usr/local/bin/node*
+echo -e "${YELLOW}Nodejs installing...${NC}"
+sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
+. ~/.profile
+nvm install --lts	
 }
 
 function zelflux() {
@@ -557,15 +586,20 @@ module.exports = {
     }
 EOF
 
-   if [[ $(pm2 -v) ]]
-   then
-   echo -e "${YELLOW}Pm2 detected installation skipped.${NC}"
+   if pm2 -v > /dev/null 2>&1; then
+   echo -e "${YELLOW}Pm2 already installed will skip installing it..${NC}"
    else
    echo -e "${YELLOW}Installing Pm2...${NC}"
-   sudo npm install pm2 -g
+   npm i -g pm2
    fi
    
+    pm2 unstartup > /dev/null 2>&1
+    pm2 del zelflux > /dev/null 2>&1
+    pm2 save zelflux > /dev/null 2>&1
+    pm2 flush > /dev/null 2>&1
+   
     pm2 startup systemd -u $USERNAME
+    
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
     pm2 start ~/zelflux/start.sh --name zelflux
@@ -688,13 +722,13 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
-    NUM='120'
+    NUM='130'
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
     echo -e "${YELLOW}Restarting benchmarks...${NC}"
     zelbench-cli restartnodebenchmarks
-    NUM='40'
+    NUM='35'
     MSG1='Restarting benchmarks...'
     MSG2="${CHECK_MARK}"
     echo && spinning_timer
@@ -743,9 +777,9 @@ function display_banner() {
     zk_params
     bootstrap
     create_service
-    basic_security
     start_daemon
     install_zelflux
     log_rotate
     update_script
+    basic_security
     status_loop
