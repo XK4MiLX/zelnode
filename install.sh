@@ -490,8 +490,6 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-
-##if ! mongod --version > /dev/null; then
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongodb-org -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongodb-org -y > /dev/null 2>&1 && sleep 1
@@ -503,15 +501,9 @@ sudo apt-get update -y
 sudo apt-get install mongodb-org -y
 sudo service mongod start
 sudo systemctl enable mongod
-##else
-##echo -e "${YELLOW}Mongodb already installed will skip installing it.${NC}"
-##fi
-
-
 }
 
 function install_nodejs() {
-   
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -537,9 +529,6 @@ nvm install --lts
 }
 
 function zelflux() {
-    
-    
- 
     
     if [ -d "./zelflux" ]; then
     	sudo rm -rf zelflux
