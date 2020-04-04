@@ -499,8 +499,8 @@ sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
 echo -e "${YELLOW}Mongodb installing...${NC}"
 sudo apt-get update -y
 sudo apt-get install mongodb-org -y
-sudo service mongod start
 sudo systemctl enable mongod
+sudo systemctl start  mongod
 }
 
 function install_nodejs() {
