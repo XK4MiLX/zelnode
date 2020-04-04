@@ -9,7 +9,7 @@ if this way not working you can try:
 <b>1) Menu:</b>    
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm1.jpg) 
 
-<b>2) How use multitoolbox to setup node:</b>    
+<b>2) HOW USE MULTITOOLBOX TO SETUP ZELNODE:</b>    
  
 * <b>Step 1</b>  
 1 - Log to your root accont  
