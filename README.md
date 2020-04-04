@@ -9,31 +9,13 @@ if this way not working you can try:
 <b>1) Menu:</b>    
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm1.jpg) 
 
-<b>2) What you need input:</b>    
-  - IP  
-  - Private Key    
-  - Output TX ID  
-  - Output Index  
-  
-You can get that dates from ZelCore 
-![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03.jpg) 
+<b>2) How use multitoolbox to setup node:</b>    
+ 
+* <b>Step 1</b>  
+1 - Log on to your root accont  
+2 - Select option "Install docker on VPS/Inside LXC continer"  
+3 - When u will see window put your username  and hit enter  
 
-If everything was fine u will see  
-![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic02.jpg)  
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm3.jpg)
 
-Sometimes first benchmarks failed   
-![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic011.jpg)  
-
-# Zelnode Docker installer via snap for Ubuntu
-
-<b>1) How run script</b>  
-```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh)```  
-
-if this way not working you can try:  
-```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/zelnodedockerinstaller.sh && chmod +x zelnodedockerinstaller.sh && ./zelnodedockerinstaller.sh```  
-
-<b>2) What you need input:</b>
-- Yours non-root username  
-
-If everything was fine u will see   
-![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic04.jpg)
+<b>If all will be good you will see</b>
