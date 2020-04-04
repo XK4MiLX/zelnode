@@ -28,3 +28,9 @@ If everything goes well you will see
 If everything goes well you will see  
 ![screen4](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm6.jpg)  
 ![screen5](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm7.jpg) 
+
+Now visit <b>http://your_node_ip:16126</b>  
+If everything goes well you will see  
+![screen6](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm8.jpg)
+
+
