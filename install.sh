@@ -104,7 +104,7 @@ function wipe_clean() {
     then
     
     echo -e "${YELLOW}Firewall enabled...${NC}" 
-    if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?" 8 60; then
+    if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
     	 sudo ufw disable	
     fi
     
