@@ -260,10 +260,10 @@ echo -e "${YELLOW}ZelFlux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git
 if [ -d ~/zelflux ]
 then
- echo -e "${GREEN}Zelfux was downloaded successfully${NC}"
+echo -e "${CHECK_MARK} ${GREEN}Zelfux was downloaded successfully${NC}"
 FLUXCONF= "1"
 else
- echo -e "${RED}Zelfux download failed${NC}"
+ echo -e "${X_MARK} {RED}Zelfux download failed${NC}"
 fi
 fi
 
