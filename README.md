@@ -18,6 +18,6 @@ if this way not working you can try:
 
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm2.jpg)
 
-If all will be good you will see  
+If everything goes well you will see
 ![screen3](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm3.png)
 
