@@ -43,21 +43,21 @@ If everything goes well you will see
  - Data mismatch is a common case  
 ![screen7](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm9.jpg) 
 
-# Why ZELNODE MULTITOOLBOX  
-
-* Docker installation
-- u need put username only  
-- error controls  
-
+# WHY ZELNODE MULTITOOLBOX?  
+  
+* Docker installation  
+1) u need put username only  
+2) error controls  
+  
 * Node installation  
-- Ability to disable firewall diuring installation  
-- Zel ID veryfication  
-- Supporting installation in LXC continer  
-- Auto-detection bootstrap archive if is in  home user directory   
-- Ability to download bootstrap from own source  
-
+1) Ability to disable firewall diuring installation  
+2) Zel ID veryfication  
+3) Supporting installation in LXC continer  
+4) Auto-detection bootstrap archive if is in  home user directory   
+5) Ability to download bootstrap from own source  
+  
 * ZelNode analizer and fixer  
 - veryfication errors  
-- fix build in scripts  
+- fix build in script 
 
 
