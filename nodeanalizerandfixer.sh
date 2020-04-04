@@ -122,7 +122,7 @@ else
     	echo -e "${X_MARK} ${CYAN}Nodejs did not install${NC}"
 fi
 
-if sudo docker run hello-world > /dev/null
+if sudo docker run hello-world > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
@@ -225,7 +225,7 @@ else
 echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 
- if pm2 -v > /dev/null
+ if pm2 -v > /dev/null 2>&1
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  else
