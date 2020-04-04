@@ -39,4 +39,6 @@ If everything goes well you will see
 
 * Step 1  
 1 - If node not working first run script again and select option "ZelNode analizer and fixer" nr 4  
+
+ - Data mismatch is a common case
 ![screen7](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm9.jpg) 
