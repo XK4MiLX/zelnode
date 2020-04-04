@@ -453,19 +453,6 @@ EOF
     sudo chown root:root /etc/logrotate.d/zeldebuglog
 }
 
-function kill_sessions() {
-    echo -e "${YELLOW}If you have made a previous run of the script and have a session running for Zelflux it must be removed before starting a new one."
-    echo -e "${YELLOW}Detecting sessions please remove any that is running Zelflux...${NC}" && sleep 5
-    tmux ls | sed -e 's/://g' | cut -d' ' -f 1 | tee tempfile > /dev/null 2>&1
-    grep -v '^ *#' < tempfile | while IFS= read -r line
-    do
-        if whiptail --yesno "Would you like to kill session ${line}?" 8 43; then
-	    tmux kill-sess -t "$line"
-	fi
-    done
-    rm tempfile
-}
-
 function install_zelflux() {
     echo -e "${YELLOW}Detect OS version to install Mongodb, Nodejs, and updating firewall to install Zelflux...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp
