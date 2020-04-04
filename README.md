@@ -57,8 +57,10 @@ If everything goes well you will see
 5) Ability to download bootstrap from own source  
 6) Auto-update via CronTab
 7) Error controls 
-6) Supporting NAT configuration
-6) Supporting PM2
+8) Supporting NAT configuration
+9) Supporting PM2
+10) Improvement package installation
+11) Restarting benchmark after zelflux installation
   
 * <b>ZelNode analizer and fixer</b>  
 1) Veryfication errors  
