@@ -18,4 +18,5 @@ if this way not working you can try:
 
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm2.jpg)
 
-<b>If all will be good you will see</b>
+If all will be good you will see
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm3.jpg)
