@@ -47,7 +47,7 @@ If everything goes well you will see
   
 * Docker installation  
 1) You need put username only  
-2) error controls  
+2) Error controls  
   
 * Node installation  
 1) Ability to disable firewall diuring installation  
@@ -55,6 +55,8 @@ If everything goes well you will see
 3) Supporting installation in LXC continer  
 4) Auto-detection bootstrap archive if is in  home user directory   
 5) Ability to download bootstrap from own source  
+6) Auto-update via CronTab
+7) Error controls 
   
 * ZelNode analizer and fixer  
 1) veryfication errors  
