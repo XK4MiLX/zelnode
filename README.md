@@ -46,7 +46,7 @@ If everything goes well you will see
 # WHY ZELNODE MULTITOOLBOX?  
   
 * Docker installation  
-1) u need put username only  
+1) You need put username only  
 2) error controls  
   
 * Node installation  
