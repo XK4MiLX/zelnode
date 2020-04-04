@@ -50,11 +50,14 @@ fi
 sleep 2
 ### cat  ~/.zelcash/debug.log | egrep -i "benchmarking" | grep -v Ping | grep -v "benchmarking" | grep -v "znw - invalid" | tee parse-zelcash_debug-log.txt
 echo -e "${NC}"
-echo -e "${YELLOW}Installing bc...${NC}"
 sudo apt install bc > /dev/null 2>&1
-echo -e "${NC}"
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
-cat  ~/.zelbenchmark/debug.log | egrep -i "failed" | grep -v Ping | grep -v "Got bad" | grep -v "error" | tee parse-zelbenchmark-debug-log.txt
+if [ -f ~/.zelbenchmark/debug.log ]
+then
+egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
+else
+echo -e "${RED}Debug file not exists${NC}"
+fi
 echo -e "${NC}"
 echo -e "${YELLOW}Checking benchmark status...${NC}"
 zelbench-cli getstatus
