@@ -37,4 +37,6 @@ If everything goes well you will see
 
 # Troubleshooting
 
+* Step 1
+1 - If node not working first run script again and select option "ZelNode analizer and fixer" nr 4
 
