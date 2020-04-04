@@ -58,6 +58,7 @@ If everything goes well you will see
 6) Auto-update via CronTab
 7) Error controls 
 6) Supporting NAT configuration
+6) Supporting PM2
   
 * <b>ZelNode analizer and fixer</b>  
 1) Veryfication errors  
