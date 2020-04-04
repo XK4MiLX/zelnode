@@ -124,7 +124,7 @@ else
     	echo -e "${X_MARK} ${CYAN}Nodejs did not install${NC}"
 fi
 
-if [[ $(sudo docker run hello-world) == *"Hello from Docker"* ]]
+if sudo docker run hello-world > /dev/null
 then
 echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
