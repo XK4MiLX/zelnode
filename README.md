@@ -29,7 +29,9 @@ If everything goes well you will see
 ![screen4](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm6.jpg)  
 ![screen5](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm7.jpg) 
 
-Now visit <b>http://your_node_ip:16126</b>  
+* <b>Step 3</b>  
+1 - Now visit http://your_node_ip:16126  
+
 If everything goes well you will see  
 ![screen6](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm8.jpg)
 
