@@ -23,32 +23,31 @@ then
     exit
 fi
 
-usernew="$(whiptail --title "ZelNode Docker Installer v1.0" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+usernew="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
 apt update && apt upgrade -y
-if [[ $(cat /proc/1/mountinfo | egrep '/proc/.+lxcfs') ]]
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC container detected${NC}"		
-echo -e "${YELLOW}Installing squashfuse...${NC}"	
-apt install squashfuse -y	
-fi
-echo -e "${NC}"
-echo -e "${YELLOW}Installing snap...${NC}"
-apt install snapd -y
-echo -e "${NC}"
 echo -e "${YELLOW}Installing docker...${NC}"
-snap install docker
-if [[ $(docker -v) != *"Docker"* ]]
-then
-snap install docker
-fi
-echo -e "${NC}"
-echo -e "${YELLOW}Creating docker group..${NC}"
-groupadd docker
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+   sudo apt-get update
+   sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+
+# echo -e "${YELLOW}Creating docker group..${NC}"
+# groupadd docker
 echo -e "${NC}"
 echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
@@ -57,14 +56,7 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ $(snap version) == *"snap"* ]]
-then
-	echo -e "${CHECK_MARK} ${CYAN}Snap is installed${NC}"
-else
-	echo -e "${X_MARK} ${CYAN}Snap did not installed${NC}"
-fi
-
-if [[ $(docker -v) == *"Docker"* ]]
+if sudo docker run hello-world > /dev/null 2>&1
 then
 	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
@@ -77,7 +69,6 @@ then
 else
 	echo -e "${X_MARK} ${CYAN}User $usernew is not member of 'docker'${NC}"
 fi
-
 echo -e "${YELLOW}=====================================================${NC}"
 read -p "Would you like to reboot pc Y/N?" -n 1 -r
 echo -e "${NC}"
