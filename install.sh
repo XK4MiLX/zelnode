@@ -63,7 +63,7 @@ clear
 sleep 2
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${YELLOW}====================================================================="
-echo -e " Zelnode & Zelflux Install - XK4MiLX Final Edition (04.04.2020)"
+echo -e " Zelnode & Zelflux Install - XK4MiLX Final Edition (05.04.2020)"
 echo -e "=====================================================================${NC}"
 echo -e "${CYAN}MAR 2020, created by dk808 from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
@@ -251,7 +251,9 @@ function zel_package() {
 }
 
 function install_zel() {
-    echo -e "${YELLOW}Installing Zel apt packages...${NC}"
+    echo -e "${YELLOW}==========================================================================${NC}"
+    echo -e "${GREEN}ZELCASH DAEMON INSTALLATION${NC}"
+    echo -e "${YELLOW}==========================================================================${NC}"
     echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
@@ -456,7 +458,7 @@ EOF
 
 function install_zelflux() {
     echo -e "${YELLOW}==========================================================================${NC}"
-    echo -e "${GREEN}PREPERING FOR MONGDB, NODEJS, ZELFLUX INSTALLATION${NC}"
+    echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
     echo -e "${YELLOW}==========================================================================${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp 
     sudo ufw allow $LOCPORT/tcp
@@ -534,6 +536,7 @@ echo -e "${YELLOW}Nodejs installing...${NC}"
 sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
 . ~/.profile
 nvm install --lts
+echo -e "${YELLOW}Updating nmp...${NC}"
 npm install -g npm
 }
 
