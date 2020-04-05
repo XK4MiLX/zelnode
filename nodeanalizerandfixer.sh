@@ -322,7 +322,7 @@ fi
 fi
 
 
-if [[ "$FLUXRESTART"="1" ]]
+if [[ "$FLUXRESTART" == "1" ]]
 then
 read -p "Would you like to create zelflux start script Y/N?" -n 1 -r
 echo -e ""
