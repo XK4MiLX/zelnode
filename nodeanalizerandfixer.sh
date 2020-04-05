@@ -284,7 +284,7 @@ echo -e "\c"
         sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
                 then
-                        echo -e "${GREEN}Zelnodeprivkey replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeprivkey replaced successful!!!${NC}"
                 fi
 fi
 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]
@@ -294,7 +294,7 @@ echo -e "\c"
         sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]
                 then
-                        echo -e "${GREEN}Zelnodeoutpoint replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeoutpoint replaced successful!!!${NC}"
                 fi
 fi
 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]
@@ -304,7 +304,7 @@ echo -e "\c"
         sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]
                 then
-                        echo -e "${GREEN}Zelnodeindex replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeindex replaced successful!!!${NC}"
                 fi
 
 fi
@@ -326,10 +326,10 @@ do
 zel_id="$(whiptail --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
 if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ]
 then
-echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
+echo -e "${CHECK_MARK} ${GREEN}Zel ID is valid${NC}"
 break
 else
-echo -e "${X_MARK} ${CYAN}Zel ID is not valid try again...${NC}"
+echo -e "${X_MARK} ${RED}Zel ID is not valid try again...${NC}"
 sleep 4
 fi
 done
@@ -347,9 +347,9 @@ EOF
 FILE1=~/zelflux/config/userconfig.js
 if [ -f "$FILE1" ]
 then
-    echo -e "${CHECK_MARK} ${CYAN}File ~/zelflux/config/userconfig.js created successful${NC}${NC}"
+    echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/config/userconfig.js created successful${NC}${NC}"
 else
-    echo -e "${X_MARK} ${CYAN}File ~/zelflux/config/userconfig.js file create failed${NC}"
+    echo -e "${X_MARK} ${RED}File ~/zelflux/config/userconfig.js file create failed${NC}"
 fi
 fi
 fi
@@ -370,9 +370,9 @@ chmod +x "/home/$USER/update-zelflux.sh"
 
 if [[ $(crontab -l | grep -i update-zelflux) ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}Zelflux auto-update was installed successfully${NC}"
+echo -e "${CHECK_MARK} ${GREEN}Zelflux auto-update was installed successfully${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Zelflux auto-update installation has failed${NC}"
+echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
 fi
 
 fi
