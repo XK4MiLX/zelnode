@@ -35,6 +35,7 @@ function check_benchmarks() {
 
 clear
 sleep 2
+echo -e "${NC}"
 echo -e "${GREEN}ZELNODE ANALIZER/FiXER $SCVESION FOR UBUNTU BY XK4MiLX"
 echo -e "${GREEN}Special thanks to dk808 and jriggs28"
 echo -e "${YELLOW}================================================================${NC}"
