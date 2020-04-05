@@ -378,8 +378,8 @@ touch /home/"$USER"/zelflux/start.sh
 #!/bin/bash
 cd zelflux && npm start
 EOF
-fi
-    sudo chmod +x /home/"$USER"/zelflux/start.sh
+
+sudo chmod +x /home/"$USER"/zelflux/start.sh
 FILER=~/zelflux/start.sh
 if [ -f "$FILER" ]
 then
@@ -387,6 +387,8 @@ then
     
     if pm2 -v > /dev/null 2>&1; then  
    echo -e "${YELLOW}Cleaning old installation....${NC}"
+   pm2 del zelflux /dev/null 2>&1
+   pm2 save > /dev/null 2>&1
    pm2 kill > /dev/null 2>&1
    npm remove pm2 -g > /dev/null 2>&1
    echo -e "${YELLOW}Installing...${NC}"
@@ -394,12 +396,12 @@ then
    else
    echo -e "${YELLOW}Installing...${NC}"
    npm i -g pm2 > /dev/null 2>&1
-   fi  
+ fi  
     echo -e "${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USERNAME
-    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USER --hp /home/$USER
     pm2 start ~/zelflux/start.sh --name zelflux
-    pm2 save
+    pm2 save > /dev/null 2>&1
     pm2 install pm2-logrotate
     pm2 set pm2-logrotate:max_size 5K >/dev/null
     pm2 set pm2-logrotate:retain 6 >/dev/null
