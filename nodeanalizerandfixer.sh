@@ -383,7 +383,7 @@ sudo chmod +x /home/"$USER"/zelflux/start.sh
 FILER=~/zelflux/start.sh
 if [ -f "$FILER" ]
 then
-    echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/start.sh created successful${NC}${NC}"
+    echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/start.sh created successful${NC}"
     
     if pm2 -v > /dev/null 2>&1; then  
    echo -e "${YELLOW}Cleaning....${NC}"
@@ -401,13 +401,13 @@ then
     pm2 startup systemd -u $USER > /dev/null 2>&1
     sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USER --hp /home/$USER
     pm2 start ~/zelflux/start.sh --name zelflux
-    pm2 save > /dev/null 2>&1
-    pm2 install pm2-logrotate
-    pm2 set pm2-logrotate:max_size 5K >/dev/null
-    pm2 set pm2-logrotate:retain 6 >/dev/null
-    pm2 set pm2-logrotate:compress true >/dev/null
-    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
-    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    pm2 save  > /dev/null 2>&1
+    pm2 install pm2-logrotate  > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 5K  > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6  > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true  > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600  > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0  > /dev/null 2>&1
     sleep 1 
 else
     echo -e "${X_MARK} ${RED}File ~/zelflux/start.sh file create failed${NC}"
