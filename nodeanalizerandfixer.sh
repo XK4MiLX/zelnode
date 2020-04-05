@@ -82,7 +82,7 @@ zelnodeoutpoint="$(whiptail --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbo
 zelnodeindex="$(whiptail --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "Enter your zelnode Output Index" 8 60 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${GREEN}SUMMARY RAPORT${NC}"
-echo -e "${YELLOW}=====================================================${NC}
+echo -e "${YELLOW}=====================================================${NC}"
 if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Zelnodeprivkey matches${NC}"
