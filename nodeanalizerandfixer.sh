@@ -261,7 +261,7 @@ git clone https://github.com/zelcash/zelflux.git
 if [ -d ~/zelflux ]
 then
 echo -e "${CHECK_MARK} ${GREEN}Zelfux was downloaded successfully${NC}"
-FLUXCONF= "1"
+FLUXCONF="1"
 else
  echo -e "${X_MARK} {RED}Zelfux download failed${NC}"
 fi
