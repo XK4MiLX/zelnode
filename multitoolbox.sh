@@ -70,7 +70,7 @@ sudo add-apt-repository \
 
 # echo -e "${YELLOW}Creating docker group..${NC}"
 # groupadd docker
-# echo -e "${NC}"
+echo -e "${NC}"
 echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
