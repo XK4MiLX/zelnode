@@ -310,10 +310,10 @@ else
 
 echo -e ""
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}Choose a method how to get bootstrap file${NC}"
+echo -e "${RED}Choose a method how to get bootstrap file${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${YELLOW}1 - Download from source build in script${NC}"
-echo -e "${YELLOW}2 - Download from own source${NC}"
+echo -e "${NC}1 - Download from source build in script${NC}"
+echo -e "${NC}2 - Download from own source${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 read -p "Pick an option: " -n 1 -r
 echo -e "${NC}"
@@ -456,6 +456,9 @@ EOF
 
 function install_zelflux() {
     echo -e "${YELLOW}Detect OS version to install Mongodb, Nodejs, and updating firewall to install Zelflux...${NC}"
+    echo -e "${RED}==========================================================================${NC}"
+    echo -e "${YELLOW}===> PREPERING FOR MONGDB, NODEJS, ZELFLUX INSTALLATION${NC}"
+    echo -e "${RED}}==========================================================================${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp
     sudo ufw allow $LOCPORT/tcp
     sudo ufw allow $ZELNODEPORT/tcp
@@ -490,6 +493,9 @@ function install_zelflux() {
 }
 
 function install_mongod() {
+echo -e "${RED}==========================================================================${NC}"
+echo -e "${YELLOW}===> MONGODB INSTALLATION${NC}"
+echo -e "${RED}}==========================================================================${NC}"
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongodb-org -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongodb-org -y > /dev/null 2>&1 && sleep 1
@@ -504,6 +510,9 @@ sudo systemctl start  mongod
 }
 
 function install_nodejs() {
+echo -e "${RED}==========================================================================${NC}"
+echo -e "${YELLOW}===> NODEJS AND NPM INSTALLATION${NC}"
+echo -e "${RED}}==========================================================================${NC}"
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -529,8 +538,12 @@ nvm install --lts
 }
 
 function zelflux() {
-    
+
+   echo -e "${RED}==========================================================================${NC}"
+   echo -e "${YELLOW}===> ZELFLUX INSTALLATION${NC}"
+   echo -e "${RED}}==========================================================================${NC}" 
     if [ -d "./zelflux" ]; then
+    	 echo -e "${YELLOW}Cleaning old installation....${NC}"
     	sudo rm -rf zelflux
     fi
     if whiptail --yesno "If you would like admin privileges to Zelflux select <Yes>(Recommended) and prepare to enter your ZelID. If you don't have one or don't want to have admin privileges to Zelflux select <No>." 9 108; then
@@ -551,7 +564,10 @@ function zelflux() {
     else
     	ZELID='132hG26CFTNhLM3MRsLEJhp9DpBrK6vg5N'
     fi
+    
+    echo -e "${YELLOW}Downloading....${NC}"
     git clone https://github.com/zelcash/zelflux.git
+    echo -e "${YELLOW}Cleaning old installation....${NC}"
     touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
@@ -563,21 +579,34 @@ module.exports = {
     }
 EOF
 
+   echo -e "${RED}==========================================================================${NC}"
+   echo -e "${YELLOW}===> PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
+   echo -e "${RED}==========================================================================${NC}"
 
-   if pm2 -v > /dev/null 2>&1; then
+   if pm2 -v > /dev/null 2>&1; then  
+   echo -e "${YELLOW}Cleaning old installation....${NC}"
    pm2 kill > /dev/null 2>&1
    npm remove pm2 -g > /dev/null 2>&1
+   echo -e "${YELLOW}Installing...${NC}"
    npm i -g pm2 > /dev/null 2>&1
    else
-   echo -e "${YELLOW}Installing Pm2...${NC}"
+   echo -e "${YELLOW}Installing...${NC}"
    npm i -g pm2 > /dev/null 2>&1
    fi
   
+    echo -e "${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USERNAME
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     restart_script
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
+    pm2 install pm2-logrotate
+    pm2 set pm2-logrotate:max_size 5K >/dev/null
+    pm2 set pm2-logrotate:retain 6 >/dev/null
+    pm2 set pm2-logrotate:compress true >/dev/null
+    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    sleep 3
 }
 	
 function status_loop() {
