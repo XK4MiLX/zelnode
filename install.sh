@@ -567,7 +567,7 @@ function zelflux() {
     
     echo -e "${YELLOW}Downloading....${NC}"
     git clone https://github.com/zelcash/zelflux.git
-    echo -e "${YELLOW}Cleaning old installation....${NC}"
+    echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
     touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
