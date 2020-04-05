@@ -52,22 +52,6 @@ usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
 apt update && apt upgrade -y
-## if [[ $(cat /proc/1/mountinfo | egrep '/proc/.+lxcfs') ]]
-## then
-## echo -e "${CHECK_MARK} ${CYAN}LXC container detected${NC}"		
-## echo -e "${YELLOW}Installing squashfuse...${NC}"	
-## apt install squashfuse -y	
-## fi
-## echo -e "${NC}"
-## echo -e "${YELLOW}Installing snap...${NC}"
-## apt install snapd -y
-## echo -e "${NC}"
-## echo -e "${YELLOW}Installing docker...${NC}"
-## snap install docker
-## if [[ $(docker -v) != *"Docker"* ]]
-## then
-## snap install docker
-## fi
 echo -e "${YELLOW}Installing docker...${NC}"
 sudo apt-get update
 sudo apt-get install \
@@ -84,10 +68,9 @@ sudo add-apt-repository \
    sudo apt-get update
    sudo apt-get install docker-ce docker-ce-cli containerd.io -y
 
-echo -e "${NC}"
-echo -e "${YELLOW}Creating docker group..${NC}"
-groupadd docker
-echo -e "${NC}"
+# echo -e "${YELLOW}Creating docker group..${NC}"
+# groupadd docker
+# echo -e "${NC}"
 echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
