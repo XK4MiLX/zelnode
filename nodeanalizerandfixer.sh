@@ -232,11 +232,11 @@ fi
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  
-if [ -f /home/"$USER"/zelflux/start.sh ]
+if [ -f /home/$USER/zelflux/start.sh ]
 then
-echo -e "${CHECK_MARK} ${CYAN}Restart zelflux script /home/"$USER"/zelflux/start.sh exists${NC}"
+echo -e "${CHECK_MARK} ${CYAN}Restart zelflux script /home/$USER/zelflux/start.sh exists${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Restart zelflux script /home/"$USER"/zelflux/start.sh does not exists${NC}"
+echo -e "${X_MARK} ${CYAN}Restart zelflux script /home/$USER/zelflux/start.sh does not exists${NC}"
 FLUXRESTART="1"
 fi
  
