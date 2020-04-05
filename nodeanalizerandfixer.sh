@@ -361,7 +361,6 @@ then
     pm2 set pm2-logrotate:compress true  > /dev/null 2>&1
     pm2 set pm2-logrotate:workerInterval 3600  > /dev/null 2>&1
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0  > /dev/null 2>&1
-    sleep 1 
 else
     echo -e "${X_MARK} ${RED}File ~/zelflux/start.sh file create failed${NC}"
 fi
