@@ -213,6 +213,28 @@ else
     echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
 fi
 
+if pm2 -v > /dev/null 2>&1
+ then
+ echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
+ 
+if [ -f /home/$USER/zelflux/start.sh ]
+then
+echo -e "${CHECK_MARK} ${CYAN}ZelFlux start script /home/$USER/zelflux/start.sh exists${NC}"
+else
+echo -e "${X_MARK} ${CYAN}ZelFlux start script /home/$USER/zelflux/start.sh does not exists${NC}"
+FLUXRESTART="1"
+fi
+ 
+ else
+ echo -e "${X_MARK} ${CYAN}Pm2 is not installed${NC}"
+   if tmux ls | grep created &> /dev/null; then
+     echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
+    else
+     echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
+   fi
+fi
+
+
 url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
 conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
@@ -228,26 +250,7 @@ else
 echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 
- if pm2 -v > /dev/null 2>&1
- then
- echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  
-if [ -f /home/$USER/zelflux/start.sh ]
-then
-echo -e "${CHECK_MARK} ${CYAN}Restart zelflux script /home/$USER/zelflux/start.sh exists${NC}"
-else
-echo -e "${X_MARK} ${CYAN}Restart zelflux script /home/$USER/zelflux/start.sh does not exists${NC}"
-FLUXRESTART="1"
-fi
- 
- else
- echo -e "${X_MARK} ${CYAN}Pm2 is not installed${NC}"
-   if tmux ls | grep created &> /dev/null; then
-     echo -e "${CHECK_MARK} ${CYAN}Tmux session exists${NC}"
-    else
-     echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
-   fi
-fi
 
 if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
 then
@@ -319,9 +322,9 @@ fi
 fi
 
 
-if [[ FLUXRESTART="1" ]]
+if [[ "$FLUXRESTART"="1" ]]
 then
-read -p "Would you like to create zelflux restart script Y/N?" -n 1 -r
+read -p "Would you like to create zelflux start script Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
