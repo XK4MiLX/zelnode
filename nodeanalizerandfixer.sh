@@ -386,11 +386,11 @@ then
     echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/start.sh created successful${NC}${NC}"
     
     if pm2 -v > /dev/null 2>&1; then  
-   echo -e "${YELLOW}Cleaning old installation....${NC}"
-   pm2 del zelflux /dev/null 2>&1
-   pm2 save > /dev/null 2>&1
-   pm2 kill > /dev/null 2>&1
-   npm remove pm2 -g > /dev/null 2>&1
+   echo -e "${YELLOW}Cleaning....${NC}"
+    pm2 unstartup > /dev/null 2>&1
+    pm2 del zelflux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+    pm2 flush > /dev/null 2>&1
    echo -e "${YELLOW}Installing...${NC}"
    npm i -g pm2 > /dev/null 2>&1
    else
@@ -398,7 +398,7 @@ then
    npm i -g pm2 > /dev/null 2>&1
  fi  
     echo -e "${YELLOW}Configuring PM2...${NC}"
-    pm2 startup systemd -u $USERNAME
+    pm2 startup systemd -u $USER > /dev/null 2>&1
     sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USER --hp /home/$USER
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save > /dev/null 2>&1
