@@ -276,9 +276,7 @@ else
  echo -e "${X_MARK} {RED}Zelfux download failed${NC}"
 fi
 fi
-
 fi
-
 
 
 if [[ "$FLUXCONF" == "1" ]]
@@ -367,7 +365,6 @@ then
 else
     echo -e "${X_MARK} ${RED}File ~/zelflux/start.sh file create failed${NC}"
 fi
-
 fi
 fi
 
@@ -391,7 +388,6 @@ echo -e "${CHECK_MARK} ${GREEN}Zelflux auto-update was installed successfully${N
 else
 echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
 fi
-
 fi
 fi
 
@@ -410,7 +406,6 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 sudo reboot -n
 fi
-
 fi
 fi
 
