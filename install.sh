@@ -455,11 +455,10 @@ EOF
 }
 
 function install_zelflux() {
-    echo -e "${YELLOW}Detect OS version to install Mongodb, Nodejs, and updating firewall to install Zelflux...${NC}"
-    echo -e "${RED}==========================================================================${NC}"
-    echo -e "${YELLOW}===> PREPERING FOR MONGDB, NODEJS, ZELFLUX INSTALLATION${NC}"
-    echo -e "${RED}}==========================================================================${NC}"
-    sudo ufw allow $ZELFRONTPORT/tcp
+    echo -e "${YELLOW}==========================================================================${NC}"
+    echo -e "${GREEN}PREPERING FOR MONGDB, NODEJS, ZELFLUX INSTALLATION${NC}"
+    echo -e "${YELLOW}==========================================================================${NC}"
+    sudo ufw allow $ZELFRONTPORT/tcp 
     sudo ufw allow $LOCPORT/tcp
     sudo ufw allow $ZELNODEPORT/tcp
     sudo ufw allow $MDBPORT/tcp
@@ -493,9 +492,9 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-echo -e "${RED}==========================================================================${NC}"
-echo -e "${YELLOW}===> MONGODB INSTALLATION${NC}"
-echo -e "${RED}}==========================================================================${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
+echo -e "${GREEN}MONGODB INSTALLATION${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongodb-org -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongodb-org -y > /dev/null 2>&1 && sleep 1
@@ -510,9 +509,9 @@ sudo systemctl start  mongod
 }
 
 function install_nodejs() {
-echo -e "${RED}==========================================================================${NC}"
-echo -e "${YELLOW}===> NODEJS AND NPM INSTALLATION${NC}"
-echo -e "${RED}}==========================================================================${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
+echo -e "${GREEN}NODEJS AND NPM INSTALLATION${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -539,9 +538,9 @@ nvm install --lts
 
 function zelflux() {
 
-   echo -e "${RED}==========================================================================${NC}"
-   echo -e "${YELLOW}===> ZELFLUX INSTALLATION${NC}"
-   echo -e "${RED}}==========================================================================${NC}" 
+   echo -e "${YELLOW}==========================================================================${NC}"
+   echo -e "${GREEN}ZELFLUX INSTALLATION${NC}"
+   echo -e "${YELLOW}==========================================================================${NC}" 
     if [ -d "./zelflux" ]; then
     	 echo -e "${YELLOW}Cleaning old installation....${NC}"
     	sudo rm -rf zelflux
@@ -579,9 +578,9 @@ module.exports = {
     }
 EOF
 
-   echo -e "${RED}==========================================================================${NC}"
-   echo -e "${YELLOW}===> PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
-   echo -e "${RED}==========================================================================${NC}"
+   echo -e "${YELLOW}==========================================================================${NC}"
+   echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
+   echo -e "${YELLOW}==========================================================================${NC}"
 
    if pm2 -v > /dev/null 2>&1; then  
    echo -e "${YELLOW}Cleaning old installation....${NC}"
