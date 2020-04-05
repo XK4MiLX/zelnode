@@ -9,6 +9,7 @@ NC='\033[0m'
 CYAN='\033[1;36m'
 REPLACE="0"
 FLUXCONF="0"
+FLUXRESTART="0"
 BTEST="0"
 LC_CHECK="0"
 SCVESION=v3.1
@@ -209,7 +210,7 @@ FLUXCONF="1"
 fi
 
 else
-    echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
+    echo -e "${X_MARK} ${CYAN}Directory ~/zelflux q${CYAN}"
 fi
 
 url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
@@ -230,6 +231,15 @@ fi
  if pm2 -v > /dev/null 2>&1
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
+ 
+if [ -f /home/"$USER"/zelflux/start.sh ]
+then
+echo -e "${CHECK_MARK} ${CYAN}Restart zelflux script /home/"$USER"/zelflux/start.sh exists${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Restart zelflux script /home/"$USER"/zelflux/start.sh does not exists${NC}"
+FLUXRESTART="1"
+fi
+ 
  else
  echo -e "${X_MARK} ${CYAN}Pm2 is not installed${NC}"
    if tmux ls | grep created &> /dev/null; then
@@ -315,6 +325,7 @@ echo -e ""
 sleep 30
 fi
 fi
+
 if [[ "$FLUXCONF" == "1" ]]
 then
 read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
@@ -351,6 +362,55 @@ then
 else
     echo -e "${X_MARK} ${RED}File ~/zelflux/config/userconfig.js file create failed${NC}"
 fi
+fi
+fi
+
+
+if [[ FLUXRESTART="1" ]]
+then
+read -p "Would you like to create zelflux restart script Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+
+touch /home/"$USER"/zelflux/start.sh
+    cat << EOF > /home/"$USER"/zelflux/start.sh
+#!/bin/bash
+cd zelflux && npm start
+EOF
+fi
+    sudo chmod +x /home/"$USER"/zelflux/start.sh
+FILER=~/zelflux/start.sh
+if [ -f "$FILER" ]
+then
+    echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/start.sh created successful${NC}${NC}"
+    
+    if pm2 -v > /dev/null 2>&1; then  
+   echo -e "${YELLOW}Cleaning old installation....${NC}"
+   pm2 kill > /dev/null 2>&1
+   npm remove pm2 -g > /dev/null 2>&1
+   echo -e "${YELLOW}Installing...${NC}"
+   npm i -g pm2 > /dev/null 2>&1
+   else
+   echo -e "${YELLOW}Installing...${NC}"
+   npm i -g pm2 > /dev/null 2>&1
+   fi  
+    echo -e "${YELLOW}Configuring PM2...${NC}"
+    pm2 startup systemd -u $USERNAME
+    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    pm2 start ~/zelflux/start.sh --name zelflux
+    pm2 save
+    pm2 install pm2-logrotate
+    pm2 set pm2-logrotate:max_size 5K >/dev/null
+    pm2 set pm2-logrotate:retain 6 >/dev/null
+    pm2 set pm2-logrotate:compress true >/dev/null
+    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    sleep 1 
+else
+    echo -e "${X_MARK} ${RED}File ~/zelflux/start.sh file create failed${NC}"
+fi
+
 fi
 fi
 
