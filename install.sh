@@ -665,9 +665,9 @@ function restart_script() {
 
 if [ -f /home/"$USERNAME"/zelflux/start.sh ]
 then
-echo "${YELLOW}Restart script already exist...${NC}"
+echo "${YELLOW}Run script already exist...${NC}"
 else
-    echo -e "${YELLOW}Creating a script to restart Zelflux in case server reboots...${NC}"
+    echo -e "${YELLOW}Creating a script to run zelflux...${NC}"
     touch /home/"$USERNAME"/zelflux/start.sh
     cat << EOF > /home/"$USERNAME"/zelflux/start.sh
 #!/bin/bash
