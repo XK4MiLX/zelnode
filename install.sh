@@ -685,6 +685,7 @@ else
     touch /home/"$USERNAME"/zelflux/start.sh
     cat << EOF > /home/"$USERNAME"/zelflux/start.sh
 #!/bin/bash
+
 cd zelflux && npm start
 EOF
 fi
