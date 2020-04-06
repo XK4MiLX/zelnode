@@ -612,6 +612,22 @@ EOF
 }
 	
 function status_loop() {
+
+if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+
+echo -e "${YELLOW}======================================================================================"
+echo -e "${GREEN} ZELNODE IS SYNCING..."
+echo -e " CHECK BLOCK HEIGHT AT https://explorer.zel.cash/"
+echo -e " YOU COULD START YOUR ZELNODE FROM YOUR CONTROL WALLET WHILE IT SYNCS"
+echo -e "${YELLOW}======================================================================================${NC}"
+echo
+echo -e "${CYAN}ZelNode is already synced. ${CHECK_MARK}${NC}"
+echo
+$COIN_CLI getinfo
+sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
+
+else
+
     while true
     do
     	clear
@@ -632,6 +648,8 @@ function status_loop() {
 	    break
 	fi
     done
+    
+    fi
     check
     display_banner
 }
