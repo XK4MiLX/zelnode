@@ -642,7 +642,7 @@ else
 	sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 	NUM='30'
 	MSG1="${CYAN}Refreshes every 30 seconds while syncing to chain. Refresh loop will stop automatically once it's fully synced.${NC}"
-	MSG2=''
+	MSG2='${CHECK_MARK}'
 	spinning_timer
 	if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 	    break
