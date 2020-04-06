@@ -252,7 +252,7 @@ function zel_package() {
 
 function install_zel() {
     echo -e "${YELLOW}==========================================================================${NC}"
-    echo -e "${GREEN}ZELCASH DAEMON INSTALLATION${NC}"
+    echo -e "${GREEN}ZELCASH, ZELBENCH INSTALLATION${NC}"
     echo -e "${YELLOW}==========================================================================${NC}"
     echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
     sleep 1
