@@ -759,7 +759,7 @@ function display_banner() {
     echo
     echo -e "${PIN} ${YELLOW}To update binaries wait for announcement that update is ready then enter:${NC} ${SEA}./${UPDATE_FILE}${NC}"
     echo
-    echo -e "${YELLOW}   PM2 is now managing Zelflux to start up on reboots.${NC}"
+    echo -e "${YELLOW}   PM2 is now managing Zelflux.${NC}"
     echo -e "${YELLOW}   Commands to manage PM2.${NC}"
     echo -e "${PIN} ${CYAN}Summary Info: ${SEA}pm2 info zelflux${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
