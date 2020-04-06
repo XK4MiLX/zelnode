@@ -624,6 +624,7 @@ echo
 echo -e "${CYAN}ZelNode is already synced. ${CHECK_MARK}${NC}"
 echo
 $COIN_CLI getinfo
+sleep 2
 sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 
 else
