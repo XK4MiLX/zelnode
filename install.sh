@@ -549,8 +549,7 @@ function zelflux() {
     	 echo -e "${YELLOW}Cleaning old installation....${NC}"
     	sudo rm -rf zelflux
     fi
-    if whiptail --yesno "If you would like admin privileges to Zelflux select <Yes>(Recommended) and prepare to enter your ZelID. If you don't have one or don't want to have admin privileges to Zelflux select <No>." 9 108; then
-	
+   	
 	while true
 		do
 		ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
@@ -563,11 +562,7 @@ function zelflux() {
 		sleep 4
 		fi
 	done
-		
-    else
-    	ZELID='132hG26CFTNhLM3MRsLEJhp9DpBrK6vg5N'
-    fi
-    
+		    
     echo -e "${YELLOW}Downloading....${NC}"
     git clone https://github.com/zelcash/zelflux.git
     echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
