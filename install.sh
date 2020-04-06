@@ -609,7 +609,6 @@ EOF
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
-    sleep 3
 }
 	
 function status_loop() {
@@ -728,7 +727,7 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
-    NUM='130'
+    NUM='140'
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
