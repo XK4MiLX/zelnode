@@ -621,7 +621,7 @@ echo -e " CHECK BLOCK HEIGHT AT https://explorer.zel.cash/"
 echo -e " YOU COULD START YOUR ZELNODE FROM YOUR CONTROL WALLET WHILE IT SYNCS"
 echo -e "${YELLOW}======================================================================================${NC}"
 echo
-echo -e "${CYAN}ZelNode is already synced. ${CHECK_MARK}${NC}"
+echo -e "${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 echo
 $COIN_CLI getinfo
 sleep 2
