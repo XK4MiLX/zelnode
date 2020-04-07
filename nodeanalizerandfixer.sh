@@ -451,6 +451,7 @@ fi
 fi
 
 if [[ "$NOT_FOUND" == "1" ]]
+then
 read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
