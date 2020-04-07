@@ -63,9 +63,9 @@ clear
 sleep 2
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${YELLOW}====================================================================="
-echo -e " Zelnode & Zelflux Install - XK4MiLX Final Edition (06.04.2020)"
+echo -e " Zelnode & Zelflux Install - XK4MiLX Final Edition (07.04.2020)"
 echo -e "=====================================================================${NC}"
-echo -e "${CYAN}MAR 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
+echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "Zelnode setup starting, press [CTRL+C] to cancel.${NC}"
 sleep 3
