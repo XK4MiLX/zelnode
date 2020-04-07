@@ -111,14 +111,6 @@ REPLACE="1"
 echo -e "${X_MARK} ${CYAN}Zelnodeindex does not match${NC}"
 fi
 
-
-if ls -la | grep root > /dev/null; then
-echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
-else
-echo -e "${X_MARK} ${CYAN}Zelcash directory root ownership detected${NC}"
-fi
-
-
 if ls -la | grep root > /dev/null; then
 echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
 else
