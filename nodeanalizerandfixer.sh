@@ -450,6 +450,21 @@ fi
 fi
 fi
 
+if [[ "$NOT_FOUND" == "1" ]]
+read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+echo -e "${YELLOW}Installing...${NC}"
+sudo apt-get update && sleep 1
+sudo apt install zelbench -y && sleep 1
+sudo apt install zelcash -y && sleep 1
+echo -e "${YELLOW}Restarting serivce...${NC}"
+sudo systemctl start zelcash && sleep 1
+fi
+fi
+
+
 if [[ "$REPLACE" == "1" ]]
 then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
@@ -496,6 +511,7 @@ echo -e ""
 sleep 30
 fi
 fi
+
 
 if [[ "$LC_CHECK" == "1" ]]
 then
