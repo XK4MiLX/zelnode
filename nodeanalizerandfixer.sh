@@ -72,6 +72,8 @@ echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
 echo -e "${NC}"
+echo -e "${YELLOW}Checking /user/local/bin directory${NC}"
+ls -la /usr/local/bin
 echo -e "${YELLOW}Checking ports...${NC}"
 echo -e "$(sudo lsof -i -P -n | grep LISTEN)"
 echo -e "${NC}"
@@ -107,6 +109,62 @@ echo -e "${CHECK_MARK} ${CYAN}Zelnodeindex matches${NC}"
 else
 REPLACE="1"
 echo -e "${X_MARK} ${CYAN}Zelnodeindex does not match${NC}"
+fi
+################################
+
+PATH_TO_FOLDER=( /usr/local/bin/ ) 
+FILE_ARRAY=( '/usr/local/bin/zelbench-cli' '/usr/local/bin/zelbenchd' '/usr/local/bin/zelcash-cli' '/usr/local/bin/zelcash-fetch-params.sh' '/usr/local/bin/zelcash-fetch-params.sh' '/usr/local/bin/zelcash-fetch-params.sh' '/usr/local/bin/zelcash-tx' '/usr/local/bin/zelcashd') #Files to check for
+ELEMENTS=${#FILE_ARRAY[@]}
+NOT_FOUND=()
+
+function contains() {
+    local n=$#
+    local value=${!n}
+    for ((i=1;i < $#;i++)) {
+        if [ "${!i}" == "${value}" ]; then
+            echo "y"
+            return 0
+        fi
+    }
+    echo "n"
+    return 1
+}
+
+for (( i=0;i<$ELEMENTS;i++)); do
+
+    if [[ ${#PATH_TO_FOLDER[@]} -gt 0 ]] ; then
+        if [ $(contains "${PATH_TO_FOLDER[@]}" "${FILE_ARRAY[${i}]}") == "y" ]; then
+            echo "Contains ${FILE_ARRAY[${i}]}"
+        else
+            echo "Does not contain ${FILE_ARRAY[${i}]}"
+            NOT_FOUND+=("${FILE_ARRAY[${i}]}")
+        fi
+    fi
+done
+
+if [[ ${#NOT_FOUND[@]} -gt 0 ]] ; then
+    echo "FILES NOT FOUND ${NOT_FOUND[@]}" 1>&2
+  
+else
+
+
+fi
+
+}
+
+################################
+
+if ls -la | grep root > /dev/null; then
+echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelcash directory root ownership detected${NC}"
+fi
+
+
+if ls -la | grep root > /dev/null; then
+echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelcash directory root ownership detected${NC}"
 fi
 
 if pgrep zelcashd > /dev/null; then
