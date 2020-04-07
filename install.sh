@@ -533,11 +533,9 @@ sudo rm -rf /usr/local/lib/node*
 sudo rm -rf /usr/local/include/node*
 sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
-sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ~/.profile
 nvm install --lts
-echo -e "${YELLOW}Updating nmp...${NC}"
-npm install -g npm
 }
 
 function zelflux() {
@@ -593,8 +591,10 @@ EOF
    fi
   
     echo -e "${YELLOW}Configuring PM2...${NC}"
-    pm2 startup systemd -u $USERNAME
-    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    # pm2 startup systemd -u $USERNAME
+    # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
+    cmd=$(pm2 startup systemd -u $USER | grep sudo)
+    sudo bash -c "$cmd"
     restart_script
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
