@@ -12,6 +12,7 @@ FLUXCONF="0"
 FLUXRESTART="0"
 BTEST="0"
 LC_CHECK="0"
+OWNER="0"
 SCVESION=v3.1
 
 #emoji codes
@@ -21,6 +22,27 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 #function
 round() {
   printf "%.${2}f" "${1}"
+}
+
+
+function integration(){
+
+PATH_TO_FOLDER=( /usr/local/bin/ ) 
+FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+ELEMENTS=${#FILE_ARRAY[@]}
+NOT_FOUND="0"
+
+for (( i=0;i<$ELEMENTS;i++)); do
+ 
+        if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
+            echo -e "${CHECK_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
+        else
+            echo -e "${X_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
+            NOT_FOUND="1"
+        fi
+  
+done
+
 }
 
 function check_benchmarks() {
@@ -72,11 +94,12 @@ echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
 echo -e "${NC}"
-echo -e "${YELLOW}Checking /user/local/bin directory${NC}"
-ls -la /usr/local/bin
 echo -e "${YELLOW}Checking ports...${NC}"
 echo -e "$(sudo lsof -i -P -n | grep LISTEN)"
 echo -e "${NC}"
+echo -e "${YELLOW}File integration checking...${NC}"
+integration
+echo -e ""
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
@@ -111,11 +134,21 @@ REPLACE="1"
 echo -e "${X_MARK} ${CYAN}Zelnodeindex does not match${NC}"
 fi
 
-if ls -la | grep root > /dev/null; then
-echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
-else
+
+if ls -la ~/.zelcash | grep root > /dev/null; then
 echo -e "${X_MARK} ${CYAN}Zelcash directory root ownership detected${NC}"
+OWNER="1"
+else
+echo -e "${CHECK_MARK} ${CYAN}Zelcash directory ownership correct${NC}"
 fi
+
+if [[ "$NOT_FOUND" == "0" ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}Files integration [OK]${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Checking integration failed missing files${NC}"
+fi
+
 
 if pgrep zelcashd > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}Zelcash daemon is installed and running${NC}"
@@ -270,14 +303,29 @@ fi
 echo -e "${YELLOW}=====================================================${NC}"
 
 
+
+if [[ "$OWNER" = "1" ]]
+then
+read -p "Would you like to fix ownership Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+echo -e "${YELLOW}Stoping Zelcash serivce...${NC}"
+sudo systemctl stop zelcash && sleep 2
+echo -e "${YELLOW}Changing ownerhip${NC}" && sleep 1
+sudo chown -R $USER:$USER ~/.zelcash
+echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
+sudo systemctl start zelcash
+fi
+fi
+
+
 if [ ! -d ~/zelflux ]
 then
-
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-
 echo -e "${YELLOW}ZelFlux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git
 if [ -d ~/zelflux ]
@@ -402,24 +450,6 @@ fi
 fi
 fi
 
-if [[ "$LC_CHECK" == "1" ]]
-then
-read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
-echo -e ""
-echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
-read -p "Would you like to reboot pc Y/N?" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo reboot -n
-fi
-fi
-fi
-
 if [[ "$REPLACE" == "1" ]]
 then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
@@ -464,6 +494,24 @@ sudo systemctl start zelcash
 echo -e "${YELLOW}Waiting...${NC}"
 echo -e ""
 sleep 30
+fi
+fi
+
+if [[ "$LC_CHECK" == "1" ]]
+then
+read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
+echo -e ""
+echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+sudo reboot -n
+fi
 fi
 fi
 
