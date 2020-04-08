@@ -312,6 +312,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 echo -e "${YELLOW}Stoping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash && sleep 2
+sudo killall -s SIGKILL zelcashd > /dev/null 2>&1
 echo -e "${YELLOW}Changing ownerhip${NC}" && sleep 1
 sudo chown -R $USER:$USER ~/.zelcash
 echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
