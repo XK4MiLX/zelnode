@@ -205,14 +205,13 @@ if ! pm2 -v > /dev/null 2>&1; then
     pm2 set pm2-logrotate:retain 6 >/dev/null
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
-    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
-    
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null  
 fi
 
 echo -e "${YELLOW}Downloading db for mongo...${NC}"
 wget http://77.55.218.93/fluxdb_dump.tar.gz
 echo -e "${YELLOW}Unpacking...${NC}"
-tar xvf fluxdb_dump.tar.gz && sleep 1
+tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
 echo -e "${YELLOW}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Importing mongo db...${NC}"
@@ -220,7 +219,7 @@ mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${YELLOW}Starting Zelflux...${NC}"
 pm2 start zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Cleaning...${NC}"
-sudo rm -rf dump && sleep 1
+sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 
 ;;
