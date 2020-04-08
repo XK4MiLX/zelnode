@@ -313,6 +313,7 @@ then
 echo -e "${YELLOW}Stoping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash && sleep 2
 sudo killall -s SIGKILL zelcashd > /dev/null 2>&1
+sudo fuser -k 16125/tcp > /dev/null 2>&1
 echo -e "${YELLOW}Changing ownerhip${NC}" && sleep 1
 sudo chown -R $USER:$USER ~/.zelcash
 echo -e "${YELLOW}Updating zelflux scripts...${NC}" && sleep 1
@@ -464,6 +465,8 @@ sudo apt-get update && sleep 1
 sudo apt install zelbench -y && sleep 1
 sudo apt install zelcash -y && sleep 1
 echo -e "${YELLOW}Restarting serivce...${NC}"
+sudo systemctl stop zelcash && sleep 1
+sudo fuser -k 16125/tcp > /dev/null 2>&1
 sudo systemctl start zelcash && sleep 1
 fi
 fi
@@ -477,6 +480,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
+sudo fuser -k 16125/tcp > /dev/null 2>&1
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
 then
 echo -e "\c"
