@@ -17,11 +17,12 @@ sleep 1
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}ZELNODE MULTITOOLBOX $dversion FOR UBUNTU BY XK4MiLX${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${YELLOW}1 - Install docker on VPS/Inside LXC continer${NC}"
-echo -e "${YELLOW}2 - Fix your lxc.conf file on host${NC}"
-echo -e "${YELLOW}3 - Install ZelNode${NC}"
-echo -e "${YELLOW}4 - ZelNode analizer and fixer${NC}"
-echo -e "${YELLOW}5 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${YELLOW}1 - Install Docker${NC}"
+echo -e "${YELLOW}2 - Install ZelNode${NC}"
+echo -e "${YELLOW}3 - ZelNode analizer and fixer${NC}"
+echo -e "${YELLOW}4 - Install Mongodb datasable && PM2${NC}"
+echo -e "${YELLOW}5 - Fix your lxc.conf file on host${NC}"
+echo -e "${YELLOW}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 
@@ -109,7 +110,7 @@ fi
 
 
 ;;
-    2 ) 
+    5 ) 
     
  function insertAfter
 {
@@ -143,7 +144,7 @@ fi
     
     
  ;;
- 3 ) 
+ 2 ) 
  if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -156,7 +157,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/insta
  exit
  ;;
  
-  4 ) 
+  3 ) 
  if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -169,7 +170,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
  exit
  ;;
  
- 5)
+ 6)
 echo -e ""
 echo -e "${YELLOW}Installing Linux Kernel 5.x...${NC}"
 sudo apt-get install --install-recommends linux-generic-hwe-18.04 -y
@@ -181,7 +182,48 @@ sudo reboot -n
 fi
  
  ;;
+  4)
+clear
+sleep 2
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Install Mongodb datasable && PM2 ${NC}"
+echo -e "${GREEN}Special thx for CryptoWrench :) ${NC}"
+echo -e "${YELLOW}================================================================${NC}"
 
+if ! pm2 -v > /dev/null 2>&1; then 
+    tmux kill-server 
+    echo -e "${YELLOW}Installing PM2...${NC}"
+    npm i -g pm2 > /dev/null 2>&1
+    echo -e "${YELLOW}Configuring PM2...${NC}"
+    cmd=$(pm2 startup systemd -u $USER | grep sudo)
+    sudo bash -c "$cmd"
+    sudo chmod +x /home/$USER/zelflux/start.sh
+    pm2 start ~/zelflux/start.sh --name zelflux
+    pm2 save
+    pm2 install pm2-logrotate
+    pm2 set pm2-logrotate:max_size 5K >/dev/null
+    pm2 set pm2-logrotate:retain 6 >/dev/null
+    pm2 set pm2-logrotate:compress true >/dev/null
+    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    
+fi
+
+echo -e "${YELLOW}Downloading db for mongo...${NC}"
+wget http://77.55.218.93/fluxdb_dump.tar.gz
+echo -e "${YELLOW}Unpacking...${NC}"
+tar xvf fluxdb_dump.tar.gz && sleep 1
+echo -e "${YELLOW}Stoping zelflux...${NC}"
+pm2 stop zelflux > /dev/null 2>&1
+echo -e "${YELLOW}Importing mongo db...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+echo -e "${YELLOW}Starting Zelflux...${NC}"
+pm2 start zelflux > /dev/null 2>&1
+echo -e "${YELLOW}Cleaning...${NC}"
+sudo rm -rf dump && sleep 1
+sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+
+;;
     # $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
     # *) echo -e "${X_MARK} ${CYAN}Invalid option. Try another one.${NC}";continue;;
 
