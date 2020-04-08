@@ -20,7 +20,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${YELLOW}1 - Install Docker${NC}"
 echo -e "${YELLOW}2 - Install ZelNode${NC}"
 echo -e "${YELLOW}3 - ZelNode analizer and fixer${NC}"
-echo -e "${YELLOW}4 - Install Mongodb datasable && PM2${NC}"
+echo -e "${YELLOW}4 - Install Mongodb datatable && PM2${NC}"
 echo -e "${YELLOW}5 - Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -190,6 +190,15 @@ echo -e "${GREEN}Install Mongodb datasable && PM2 ${NC}"
 echo -e "${GREEN}Special thx for CryptoWrench :) ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
+DB_HIGHT=572500
+IP=$(wget http://ipecho.net/plain -O - -q)
+BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo "IP: $IP"
+echo "BLOCK HIGHT: $BLOCKHIGHT"
+
+if [[ $BLOCKHIGHT > 0 && $BLOCKHIGHT < $DB_HIGHT ]]
+then
+
 if ! pm2 -v > /dev/null 2>&1; then 
     tmux kill-server 
     echo -e "${YELLOW}Installing PM2...${NC}"
@@ -221,6 +230,17 @@ pm2 start zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+
+else
+
+echo -e "${X_MARK} ${CYAN}Block Hight $BLOCKHIGHT > $DB_HIGHT datatable is out of date ${NC}"
+echo -e ""
+
+fi
+
+
+
+
 
 ;;
     # $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
