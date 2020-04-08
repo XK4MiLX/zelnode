@@ -315,6 +315,8 @@ sudo systemctl stop zelcash && sleep 2
 sudo killall -s SIGKILL zelcashd > /dev/null 2>&1
 echo -e "${YELLOW}Changing ownerhip${NC}" && sleep 1
 sudo chown -R $USER:$USER ~/.zelcash
+echo -e "${YELLOW}Updating zelflux scripts...${NC}" && sleep 1
+cd zelflux && git pull
 echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
 sudo systemctl start zelcash
 fi
