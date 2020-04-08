@@ -186,7 +186,7 @@ fi
 clear
 sleep 2
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}Install Mongodb datasable && PM2 ${NC}"
+echo -e "${GREEN}Install Mongodb datatable && PM2 ${NC}"
 echo -e "${GREEN}Special thx for CryptoWrench :) ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
