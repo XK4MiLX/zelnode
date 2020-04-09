@@ -18,8 +18,18 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 dversion="v2.5"
 
 function zelcash_bootstrap() {
+
 echo -e "${GREEN}Module: Restore Zelcash blockchain form bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
+
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
 
 echo -e "${NC}"
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
@@ -94,10 +104,19 @@ zelcashd -daemon
 
 function mongodb_bootstrap(){
 
-
 echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
+echo -e "${NC}"
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -162,9 +181,20 @@ fi
 
 function install_kernel(){
 
+
 echo -e "${GREEN}Module: Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
+
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
+echo -e "${NC}"
 echo -e "${YELLOW}Installing Linux Kernel 5.x${NC}"
 sudo apt-get install --install-recommends linux-generic-hwe-18.04 -y
 read -p "Would you like to reboot pc Y/N?" -n 1 -r
@@ -181,7 +211,6 @@ function analyzer_and_fixer(){
 
 echo -e "${GREEN}Module: ZelNode analyzer and fixer${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
 
 if [[ "$USER" == "root" ]]
 then
@@ -191,7 +220,7 @@ then
     echo -e "${NC}"
     exit
 fi
-
+echo -e "${NC}"
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
 
 }
@@ -237,7 +266,6 @@ function install_zelnode(){
 echo -e "${GREEN}Module: Install ZelNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -246,7 +274,7 @@ then
     echo -e "${NC}"
     exit
 fi
-
+echo -e "${NC}"
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
 
 }
@@ -265,6 +293,7 @@ then
     exit
 fi
 
+echo -e "${NC}"
 usernew="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
