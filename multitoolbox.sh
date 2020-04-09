@@ -6,6 +6,7 @@ CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 
 #color codes
+PINK='\033[1;95m'
 RED='\033[1;31m'
 YELLOW='\033[1;33m'
 BLUE="\\033[38;5;27m"
@@ -120,8 +121,9 @@ echo -e "${NC}"
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e "IP: $IP"
-echo -e "BLOCK HIGHT: $BLOCKHIGHT"
+echo -e "${CYAN}IP: ${PINK}$IP"
+echo -e "${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 PM2_INTALL="0"
 DB_INTALL="0"
@@ -165,7 +167,7 @@ sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 
 else
 
-echo -e "${X_MARK} ${CYAN}Block Hight $BLOCKHIGHT > $DB_HIGHT datatable is out of date${NC}"
+echo -e "${X_MARK} ${CYAN}Current Node block hight $BLOCKHIGHT > Bootstrap block hight $DB_HIGHT. Datatable is out of date${NC}"
 echo -e ""
 
 fi
