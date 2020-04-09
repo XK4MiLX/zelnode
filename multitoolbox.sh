@@ -16,6 +16,7 @@ CYAN='\033[1;36m'
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
+PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 dversion="v2.5"
 
 function zelcash_bootstrap() {
@@ -121,9 +122,9 @@ echo -e "${NC}"
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e "${CYAN}IP: ${PINK}$IP"
-echo -e "${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-echo -e "${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
+echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 PM2_INTALL="0"
 DB_INTALL="0"
@@ -167,7 +168,7 @@ sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 
 else
 
-echo -e "${X_MARK} ${CYAN}Current Node block hight $BLOCKHIGHT > Bootstrap block hight $DB_HIGHT. Datatable is out of date${NC}"
+echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
 
 fi
