@@ -272,7 +272,6 @@ echo -e "${YELLOW}==============================================================
 
 read -p "Pick an option: " -n 1 -r
 echo -e "${NC}"
-
 clear
 sleep 1
 
