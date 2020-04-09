@@ -82,7 +82,6 @@ fi
 
 function install_kernel(){
 
-echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Module: Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
@@ -100,7 +99,6 @@ fi
 
 function analyzer_and_fixer(){
 
-echo -e ""
 echo -e "${GREEN}Module: ZelNode analyzer and fixer${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
@@ -126,7 +124,6 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/no
 
 function fix_lxc_config(){
 
-echo -e ""
 echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
@@ -157,7 +154,6 @@ fi
 
 function install_zelnode(){
 
-echo -e ""
 echo -e "${GREEN}Module: Install ZelNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -177,7 +173,6 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/in
 
 function install_docker(){
 
-echo -e ""
 echo -e "${GREEN}Module: Install Docker${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -253,7 +248,6 @@ su - $usernew
 fi
 
 }
-
 
 clear
 sleep 1
