@@ -56,13 +56,6 @@ function check_benchmarks() {
 
 }
 
-clear
-sleep 2
-echo -e "${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}ZELNODE ANALYZER/FiXER $SCVESION FOR UBUNTU BY XK4MiLX"
-echo -e "${GREEN}Special thanks to dk808 and jriggs28"
-echo -e "${YELLOW}================================================================${NC}"
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
