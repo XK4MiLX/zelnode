@@ -161,7 +161,7 @@ function install_zelnode(){
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Module: Install ZelNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
+
 
 if [[ "$USER" == "root" ]]
 then
@@ -181,7 +181,6 @@ function install_docker(){
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Module: Install Docker${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
 
 if [[ "$USER" != "root" ]]
 then
