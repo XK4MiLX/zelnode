@@ -15,7 +15,7 @@ dversion="v2.5"
 function mongodb_bootstrap(){
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}Install Mongodb datatable && PM2 ${NC}"
+echo -e "${GREEN}Module: Install Mongodb datatable && PM2 ${NC}"
 echo -e "${GREEN}Special thx for CryptoWrench :) ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -71,6 +71,9 @@ fi
 
 function install_kernel(){
 
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Module: Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
 echo -e "${YELLOW}Installing Linux Kernel 5.x${NC}"
 sudo apt-get install --install-recommends linux-generic-hwe-18.04 -y
@@ -85,6 +88,11 @@ fi
 
 
 function analyzer_and_fixer(){
+
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Module: ZelNode analyzer and fixer${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 
 if [[ "$USER" == "root" ]]
 then
@@ -106,6 +114,11 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodea
 }
 
 function fix_lxc_config(){
+
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 
 continer_name="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}================================================================${NC}"
@@ -133,6 +146,11 @@ fi
 
 function install_zelnode(){
 
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Module: Install ZelNode${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
+
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -147,6 +165,11 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/insta
 }
 
 function install_docker(){
+
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}Module: Install Docker${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 
 if [[ "$USER" != "root" ]]
 then
