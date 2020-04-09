@@ -259,7 +259,6 @@ clear
 sleep 1
 echo -e "${BLUE}"
 figlet -f slant "Multitoolbox"
-figlet -f slant "for zelnode"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18${NC}"
@@ -275,31 +274,41 @@ echo -e "${CYAN}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -p "Pick an option: " -n 1 -r
-echo -e "${NC}"
-clear
-sleep 1
 
   case "$REPLY" in
 
- 1)   
+ 1)  
+    clear
+    sleep 1
     install_docker
  ;;
  2) 
+    clear
+    sleep 1
     install_zelnode
  ;;
  3)     
+    clear
+    sleep 1
     analyzer_and_fixer
  ;;
  
  4)  
+    clear
+    sleep 1
     mongodb_bootstrap     
  ;;
  
  5)
+    clear
+    sleep 1
     fix_lxc_config
  ;;
  
  6)
+    clear
+    sleep 1
     install_kernel
  ;;
+
     esac
