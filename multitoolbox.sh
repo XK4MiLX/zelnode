@@ -20,7 +20,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${YELLOW}1 - Install Docker${NC}"
 echo -e "${YELLOW}2 - Install ZelNode${NC}"
 echo -e "${YELLOW}3 - ZelNode analyzer and fixer${NC}"
-echo -e "${YELLOW}4 - Install Mongodb datatable && PM2${NC}"
+echo -e "${YELLOW}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${YELLOW}5 - Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
