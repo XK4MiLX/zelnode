@@ -76,6 +76,8 @@ if [[ "$PM2_INTALL" == "1" | "$DB_INTALL" == "1" ]]
 then
 echo -e "${YELLOW}Starting Zelflux...${NC}"
 pm2 start zelflux > /dev/null 2>&1
+fi
+
 }
 
 
