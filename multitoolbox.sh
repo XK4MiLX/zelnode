@@ -15,20 +15,21 @@ dversion="v2.5"
 function mongodb_bootstrap(){
 
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}Module: Install Mongodb datatable && PM2 ${NC}"
+echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${GREEN}Special thanks to CryptoWrench.${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo "IP: $IP"
-echo "BLOCK HIGHT: $BLOCKHIGHT"
+echo -e "IP: $IP"
+echo -e "BLOCK HIGHT: $BLOCKHIGHT"
 
-if [[ $BLOCKHIGHT > 0 && $BLOCKHIGHT < $DB_HIGHT ]]
-then
+PM2_INTALL="0"
+DB_INTALL="0"
 
 if ! pm2 -v > /dev/null 2>&1; then 
+    PM2_INTALL="1"
     tmux kill-server 
     echo -e "${YELLOW}Installing PM2...${NC}"
     npm i -g pm2 > /dev/null 2>&1
@@ -44,8 +45,14 @@ if ! pm2 -v > /dev/null 2>&1; then
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null  
+    
+else
+echo -e "${YELLOW}PM2 installation skipped...${NC}"
 fi
 
+if [[ $BLOCKHIGHT > 0 && $BLOCKHIGHT < $DB_HIGHT ]]
+then
+DB_INTALL="1"
 echo -e "${YELLOW}Downloading db for mongo...${NC}"
 wget http://77.55.218.93/fluxdb_dump.tar.gz
 echo -e "${YELLOW}Unpacking...${NC}"
@@ -54,8 +61,6 @@ echo -e "${YELLOW}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Importing mongo db...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-echo -e "${YELLOW}Starting Zelflux...${NC}"
-pm2 start zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
@@ -66,6 +71,10 @@ echo -e "${X_MARK} ${CYAN}Block Hight $BLOCKHIGHT > $DB_HIGHT datatable is out o
 echo -e ""
 
 fi
+
+if [[ "$PM2_INTALL"="1" | "$DB_INTALL"="1" ]]
+echo -e "${YELLOW}Starting Zelflux...${NC}"
+pm2 start zelflux > /dev/null 2>&1
 }
 
 
@@ -253,7 +262,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${YELLOW}1 - Install Docker${NC}"
 echo -e "${YELLOW}2 - Install ZelNode${NC}"
 echo -e "${YELLOW}3 - ZelNode analyzer and fixer${NC}"
-echo -e "${YELLOW}4 - Install Mongodb datatable && PM2${NC}"
+echo -e "${YELLOW}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${YELLOW}5 - Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
