@@ -24,7 +24,7 @@ IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e "IP: $IP"
 echo -e "BLOCK HIGHT: $BLOCKHIGHT"
-
+echo -e ""
 PM2_INTALL="0"
 DB_INTALL="0"
 
