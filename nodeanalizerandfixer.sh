@@ -64,8 +64,7 @@ then
     echo -e "${NC}"
     exit
 fi
-sleep 2
-echo -e "${NC}"
+sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f ~/.zelbenchmark/debug.log ]
