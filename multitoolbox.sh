@@ -1,5 +1,10 @@
 #!/bin/bash
 
+BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap3.zip'
+BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+CONFIG_DIR='.zelcash'
+CONFIG_FILE='zelcash.conf'
+
 #color codes
 RED='\033[1;31m'
 YELLOW='\033[1;33m'
@@ -12,9 +17,84 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 dversion="v2.5"
 
-function mongodb_bootstrap(){
+function zelcash_bootstrap() {
+echo -e "${GREEN}Module: Restore Zelcash blockchain form bootstrap${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+echo -e "${NC}"
+if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+echo -e "${YELLOW}Stopping zelcash...${NC}"
+sudo systemctl stop zelcash
+sudo fuser -k 16125/tcp > /dev/null 2>&1
+echo -e "${YELLOW}Cleaning...${NC}"
+rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/database ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/peers.dat	
+fi 
+
+
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
+then
+echo -e "${YELLOW}Local bootstrap file detected...${NC}"
+echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
+unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+else
 
 echo -e ""
+echo -e "${GREEN}Choose a method how to get bootstrap file${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${NC}1 - Download from source build in script${NC}"
+echo -e "${NC}2 - Download from own source${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+read -p "Pick an option: " -n 1 -r
+echo -e "${NC}"
+while true
+
+do
+    case "$REPLY" in
+
+    1 ) 
+
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
+	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
+	unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+	break
+;;
+    2 )
+    
+	BOOTSTRAP_ZIP="$(whiptail --title "Restore Zelcash block chain form bootstrap" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
+	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
+	unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+	break
+;;
+
+     *) echo "Invalid option $REPLY try again...";;
+
+    esac
+
+done
+
+
+fi
+echo -e "${NC}"
+read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+rm -rf $BOOTSTRAP_ZIPFILE
+fi
+
+echo -e "${YELLOW}Starting zelcash...${NC}"
+zelcashd -daemon
+
+}
+
+
+
+function mongodb_bootstrap(){
+
+
 echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -263,8 +343,9 @@ echo -e "${CYAN}1 - Install Docker${NC}"
 echo -e "${CYAN}2 - Install ZelNode${NC}"
 echo -e "${CYAN}3 - ZelNode analyzer and fixer${NC}"
 echo -e "${CYAN}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
-echo -e "${CYAN}5 - Fix your lxc.conf file on host${NC}"
-echo -e "${CYAN}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${CYAN}5 - Restore Zelcash blockchain form bootstrap${NC}"
+echo -e "${CYAN}6 - Fix your lxc.conf file on host${NC}"
+echo -e "${CYAN}7 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -p "Pick an option: " -n 1 -r
@@ -292,14 +373,18 @@ read -p "Pick an option: " -n 1 -r
     sleep 1
     mongodb_bootstrap     
  ;;
- 
- 5)
+  5)  
+    clear
+    sleep 1
+    zelcash_bootstrap     
+ ;; 
+ 6)
     clear
     sleep 1
     fix_lxc_config
  ;;
  
- 6)
+ 7)
     clear
     sleep 1
     install_kernel
