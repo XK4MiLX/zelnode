@@ -103,7 +103,7 @@ then
     exit
 fi
 
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/nodeanalizerandfixer.sh)
 
 }
 
@@ -160,7 +160,7 @@ then
     exit
 fi
 
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/install.sh)
 
 }
 
