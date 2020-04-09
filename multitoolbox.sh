@@ -16,7 +16,7 @@ function mongodb_bootstrap(){
 
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Module: Install Mongodb datatable && PM2 ${NC}"
-echo -e "${GREEN}Special thx for CryptoWrench :) ${NC}"
+echo -e "${GREEN}Special thanks to CryptoWrench.${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 DB_HIGHT=572500
