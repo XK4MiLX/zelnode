@@ -16,7 +16,6 @@ function mongodb_bootstrap(){
 
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
-echo -e "${GREEN}Special thanks to CryptoWrench.${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 DB_HIGHT=572500
@@ -258,15 +257,20 @@ fi
 
 clear
 sleep 1
+echo -e "${BLUE}"
+figlet -t -k "MULTITOOLBOX"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${GREEN}ZELNODE MULTITOOLBOX $dversion FOR UBUNTU BY XK4MiLX${NC}"
+echo -e "${GREEN}Version: $dversion${NC}"
+echo -e "${GREEN}OS: Ubuntu 16/18{NC}"
+echo -e "${GREEN}Created by: XK4MiLX from Zel's team${NC}"
+echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${YELLOW}1 - Install Docker${NC}"
-echo -e "${YELLOW}2 - Install ZelNode${NC}"
-echo -e "${YELLOW}3 - ZelNode analyzer and fixer${NC}"
-echo -e "${YELLOW}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
-echo -e "${YELLOW}5 - Fix your lxc.conf file on host${NC}"
-echo -e "${YELLOW}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${CYAN}1 - Install Docker${NC}"
+echo -e "${CYAN}2 - Install ZelNode${NC}"
+echo -e "${CYAN}3 - ZelNode analyzer and fixer${NC}"
+echo -e "${CYAN}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
+echo -e "${CYAN}5 - Fix your lxc.conf file on host${NC}"
+echo -e "${CYAN}6 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -p "Pick an option: " -n 1 -r
