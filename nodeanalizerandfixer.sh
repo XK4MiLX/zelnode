@@ -283,6 +283,8 @@ fi
    fi
 fi
 
+if [[ "$ZELCONF" == "1" ]]
+then
 
 url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
 conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
@@ -299,6 +301,7 @@ else
 echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 
+fi
  
 
 if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
