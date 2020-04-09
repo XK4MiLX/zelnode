@@ -14,7 +14,7 @@ dversion="v2.5"
 
 function mongodb_bootstrap(){
 
-echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -100,7 +100,7 @@ fi
 
 function analyzer_and_fixer(){
 
-echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 echo -e "${GREEN}Module: ZelNode analyzer and fixer${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
@@ -126,7 +126,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/no
 
 function fix_lxc_config(){
 
-echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
@@ -157,7 +157,7 @@ fi
 
 function install_zelnode(){
 
-echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 echo -e "${GREEN}Module: Install ZelNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -177,7 +177,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/in
 
 function install_docker(){
 
-echo -e "${YELLOW}================================================================${NC}"
+echo -e ""
 echo -e "${GREEN}Module: Install Docker${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -258,7 +258,8 @@ fi
 clear
 sleep 1
 echo -e "${BLUE}"
-figlet -t -k "MULTITOOLBOX"
+figlet -f slant "Multitoolbox"
+figlet -f slant "for zelnode"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18${NC}"
