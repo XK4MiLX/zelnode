@@ -138,9 +138,9 @@ if ! pm2 -v > /dev/null 2>&1; then
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd"
     sudo chmod +x /home/$USER/zelflux/start.sh
+    source .bashrc
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
-    source .bashrc
     pm2 install pm2-logrotate
     pm2 set pm2-logrotate:max_size 6M >/dev/null
     pm2 set pm2-logrotate:retain 6 >/dev/null
