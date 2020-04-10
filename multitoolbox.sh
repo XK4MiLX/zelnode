@@ -29,7 +29,7 @@ then
 echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
 else
 echo -e "${YELLOW}Downloading...${NC}"
-wget -O watchdogs.js https://raw.githubusercontent.com/XK4MiLX/zelnode/testplace/watchdogs.js
+wget -O watchdogs.js https://raw.githubusercontent.com/XK4MiLX/zelnode/watchdogs/watchdog/watchdog.js
 mkdir watchdogs
 mv watchdogs.js /home/$USER/watchdogs/watchdogs.js
 echo -e "${YELLOW}Installing...${NC}"
