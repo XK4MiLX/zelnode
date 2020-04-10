@@ -731,6 +731,7 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
+    source .bashrc
     NUM='140'
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
