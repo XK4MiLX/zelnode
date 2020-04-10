@@ -138,7 +138,6 @@ if ! pm2 -v > /dev/null 2>&1; then
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd"
     sudo chmod +x /home/$USER/zelflux/start.sh
-    source .bashrc
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
     pm2 install pm2-logrotate
@@ -147,6 +146,7 @@ if ! pm2 -v > /dev/null 2>&1; then
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null 
+    source .bashrc
     
     
 else
