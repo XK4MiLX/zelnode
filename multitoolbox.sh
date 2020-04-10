@@ -24,6 +24,11 @@ function install_watchdog() {
 echo -e "${GREEN}Module: Install watchdog for zelnode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
+if ! pm2 -v > /dev/null 2>&1
+then
+echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
+else
+
 if [ -f /home/$USER/watchdogs/watchdogs.js ] 
 then
 echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
@@ -36,6 +41,8 @@ echo -e "${YELLOW}Installing...${NC}"
 cd watchdogs && npm install shelljs
 pm2 start ~/watchdogs/watchdogs.js --name watchdogs
 pm2 save
+fi
+
 fi
 
 }
