@@ -27,6 +27,68 @@ round() {
   printf "%.${2}f" "${1}"
 }
 
+function update_zelcash(){
+COIN_NAME='zelcash'
+COIN_DAEMON='zelcashd'
+COIN_CLI='zelcash-cli'
+COIN_PATH='/usr/local/bin'
+
+# add to path
+PATH=$PATH:"$COIN_PATH"
+export PATH
+
+echo -e "${YELLOW}Closing zelcash daemon and purge apt package${NC}"
+#Closing zelcash daemon and purge apt package
+"$COIN_CLI" stop >/dev/null 2>&1 && sleep 2
+sudo systemctl stop "$COIN_NAME" && sleep 1
+sudo killall "$COIN_DAEMON" >/dev/null 2>&1
+sudo rm "$COIN_PATH/$COIN_NAME"* >/dev/null 2>&1 && sleep 1
+sudo apt-get purge "$COIN_NAME" -y >/dev/null 2>&1 && sleep 1
+sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
+sudo fuser -k 16125/tcp > /dev/null 2>&1
+sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
+
+echo -e "${YELLOW}Install zelcash apt package${NC}"
+echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
+gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
+gpg --export 4B69CA27A986265D | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install "$COIN_NAME" -y
+sudo chmod 755 "$COIN_PATH/$COIN_NAME"* && sleep 2
+if ! gpg --list-keys Zel >/dev/null; then
+  gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
+  gpg --export 4B69CA27A986265D | sudo apt-key add -
+  sudo apt-get update
+  sudo apt-get install "$COIN_NAME" -y
+  sudo chmod 755 "$COIN_PATH/$COIN_NAME"* && sleep 2
+  if ! gpg --list-keys Zel >/dev/null; then
+    gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
+    gpg --export 4B69CA27A986265D | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install "$COIN_NAME" -y
+    sudo chmod 755 "$COIN_PATH/$COIN_NAME"* && sleep 2
+    if ! gpg --list-keys Zel >/dev/null; then
+      gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
+      gpg --export 4B69CA27A986265D | sudo apt-key add -
+      sudo apt-get update
+      sudo apt-get install "$COIN_NAME" -y
+      sudo chmod 755 "$COIN_PATH/$COIN_NAME"* && sleep 2
+      if ! gpg --list-keys Zel >/dev/null; then
+        gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
+        gpg --export 4B69CA27A986265D | sudo apt-key add -
+        sudo apt-get update
+        sudo apt-get install "$COIN_NAME" -y
+        sudo chmod 755 "$COIN_PATH/$COIN_NAME"* && sleep 2
+      fi
+    fi
+  fi
+fi
+
+echo -e "${YELLOW}Restarting service${NC}"
+"$COIN_DAEMON"
+
+}
+
 function check_listen_ports(){
 
 if sudo lsof -i  -n | grep LISTEN | grep 27017 | grep mongod > /dev/null 2>&1
@@ -517,7 +579,7 @@ echo -e "${YELLOW}Installing...${NC}"
 sudo apt-get update && sleep 1
 sudo apt install zelbench -y && sleep 1
 sudo apt install zelcash -y && sleep 1
-echo -e "${YELLOW}Restarting serivce...${NC}"
+echo -e "${YELLOW}Restarting service...${NC}"
 sudo systemctl stop zelcash && sleep 1
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 sudo systemctl start zelcash && sleep 1
