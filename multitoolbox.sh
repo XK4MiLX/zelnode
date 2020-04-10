@@ -361,6 +361,12 @@ fi
 
 }
 
+if ! figlet -v
+then
+sudo apt-get update -y > /dev/null 2>&1
+sudo apt-get install -y figlet > /dev/null 2>&1
+fi
+
 clear
 sleep 1
 echo -e "${BLUE}"
