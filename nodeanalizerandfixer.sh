@@ -13,6 +13,8 @@ FLUXRESTART="0"
 ZELCONF="0"
 BTEST="0"
 LC_CHECK="0"
+ZELFLUX_PORT1="0"
+ZELFLUX_PORT2="0"
 OWNER="0"
 SCVESION=v3.5
 
@@ -25,6 +27,47 @@ round() {
   printf "%.${2}f" "${1}"
 }
 
+function check_listen_ports(){
+
+if sudo lsof -i  -n | grep LISTEN | grep 27017 | grep mongod > /dev/null 2>&1
+then
+echo -e "${CHECK_MARK} ${CYAN}Mongod listen on port 27017${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Mongod not listen${NC}"
+fi
+
+if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1
+then
+echo -e "${CHECK_MARK} ${CYAN}Zelcash listen on port 16125${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelcash not listen${NC}"
+fi
+
+if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelbenchd > /dev/null 2>&1
+then
+echo -e "${CHECK_MARK} ${CYAN}Zelbench listen on port 16125${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelbench not listen${NC}"
+fi
+
+if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
+then
+ZELFLUX_PORT1="1"
+fi
+
+if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
+then
+ZELFLUX_PORT2="1"
+fi
+
+if [[ "$ZELFLUX_PORT1" == "1" && "$ZELFLUX_PORT2" == "1"  ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}Zelflux listen on ports 16126/16127${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelflux not listen${NC}"
+fi
+
+}
 
 function integration(){
 
@@ -87,8 +130,8 @@ echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
 echo -e "${NC}"
-echo -e "${YELLOW}Checking ports...${NC}"
-echo -e "$(sudo lsof -i -P -n | grep LISTEN)"
+echo -e "${YELLOW}Checking listen ports...${NC}"
+check_listen_ports
 echo -e "${NC}"
 echo -e "${YELLOW}File integration checking...${NC}"
 integration
