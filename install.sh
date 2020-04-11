@@ -82,6 +82,7 @@ echo -e "${X_MARK} ${CYAN} Bad directory switching...${NC}"
 cd
 echo -e "${YELLOW}$(pwd)${NC}"
 fi
+sleep 1
 
 #functions
 function wipe_clean() {
