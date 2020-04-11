@@ -525,7 +525,6 @@ echo -e "${YELLOW}Nodejs installing...${NC}"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ~/.profile
 nvm install --lts
-source ~/.bashrc
 }
 
 function zelflux() {
@@ -733,7 +732,7 @@ function check() {
 	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
     fi
     
-    source .bashrc
+
     NUM='140'
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
@@ -774,6 +773,11 @@ function display_banner() {
     echo
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
+    sleep 2
+    echo -e "${YELLOW}Restarting.....${NC}"
+    sleep 4
+    sudo reboot -n
+   
 }
 
 
