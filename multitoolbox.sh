@@ -37,7 +37,8 @@ else
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
-cd watchdog && npm install shelljs && npm install sleep
+cd watchdog && npm install shelljs && npm install sleep 
+npm install moment
 pm2 start ~/watchdog/watchdog.js --name watchdog
 pm2 save
 fi
