@@ -158,6 +158,7 @@ echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
+rm restart_zelflux.sh > /dev/null 2>&1
 PM2_INTALL="0"
 DB_INTALL="0"
 
