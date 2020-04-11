@@ -212,8 +212,13 @@ then
 echo -e "${YELLOW}Starting Zelflux...${NC}"
 pm2 start zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Restarting...${NC}"
-sleep 10
+sleep 2
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 sudo reboot -n
+fi
 fi
 
 }
