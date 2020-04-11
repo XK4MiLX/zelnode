@@ -76,9 +76,9 @@ correct_dir="/home/$USER"
 echo -e "${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} Correct directory...${NC}"
+echo -e "${CHECK_MARK} ${CYAN}Correct directory...${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Bad directory switching...${NC}"
+echo -e "${X_MARK} ${CYAN}Bad directory switching...${NC}"
 cd
 echo -e "${YELLOW}$(pwd)${NC}"
 fi
