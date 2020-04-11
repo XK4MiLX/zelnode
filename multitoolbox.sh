@@ -36,7 +36,7 @@ echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
 echo -e ""
 else
 echo -e "${YELLOW}Downloading...${NC}"
-wget -O watchdog.js https://github.com/XK4MiLX/watchdog/blob/master/watchdog.js
+wget -O watchdog.js https://raw.githubusercontent.com/XK4MiLX/watchdog/master/watchdog.js
 wget -O package.json https://raw.githubusercontent.com/XK4MiLX/watchdog/master/package.json
 mkdir watchdog
 mv watchdog.js /home/$USER/watchdog/watchdog.js
