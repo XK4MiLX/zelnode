@@ -7,7 +7,7 @@ function zeldaemon_check() {
   replace(/T/, ' ').
   replace(/\..+/, '');
 
-console.log('Watchdogs v1.5 by XK4MiLX');
+console.log('Watchdog v1.5 by XK4MiLX');
 console.log('Start: '+data_time );
 console.log('=========================================================');
 var zelbench_status = shell.exec("zelbench-cli getstatus | jq '.benchmarking'",{ silent: true }).stdout;
