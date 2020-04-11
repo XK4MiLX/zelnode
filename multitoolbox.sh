@@ -29,7 +29,6 @@ then
 echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
 echo -e ""
 else
-
 if [ -f /home/$USER/watchdog/watchdog.js ] 
 then
 echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
@@ -42,11 +41,9 @@ cd watchdog && npm install shelljs && npm install sleep
 pm2 start ~/watchdog/watchdog.js --name watchdog
 pm2 save
 fi
-
 fi
 
 }
-
 
 function zelcash_bootstrap() {
 
@@ -70,7 +67,6 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 echo -e "${YELLOW}Cleaning...${NC}"
 rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/database ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/peers.dat	
 fi 
-
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
@@ -116,7 +112,6 @@ do
 
 done
 
-
 fi
 echo -e "${NC}"
 read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
@@ -130,8 +125,6 @@ echo -e "${YELLOW}Starting zelcash...${NC}"
 zelcashd -daemon
 
 }
-
-
 
 function mongodb_bootstrap(){
 
