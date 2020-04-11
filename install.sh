@@ -98,8 +98,8 @@ function wipe_clean() {
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
     tmux kill-server > /dev/null 2>&1
-    pm2 unstartup > /dev/null 2>&1
     pm2 del zelflux > /dev/null 2>&1
+    pm2 unstartup > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
     pm2 flush > /dev/null 2>&1
     sudo rm -rf zelflux && sleep 1
@@ -113,6 +113,7 @@ function wipe_clean() {
     rm update-zelflux.sh > /dev/null 2>&1
     sudo fuser -k 16127/tcp > /dev/null 2>&1
     sudo fuser -k 16125/tcp > /dev/null 2>&1
+    rm -rf ~/$CONFIG_DIR
     
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
