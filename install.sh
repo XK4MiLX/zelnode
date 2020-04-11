@@ -778,9 +778,12 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 2
-    echo -e "${YELLOW}Restarting.....${NC}"
-    sleep 10
+    read -p "Would you like to reboot pc Y/N?" -n 1 -r
+    echo -e "${NC}"
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
     sudo reboot -n
+    fi
    
 }
 
