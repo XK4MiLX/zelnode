@@ -540,7 +540,7 @@ function zelflux() {
 	while true
 		do
 		ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-		if [ $(printf "%s" "$ZELID" | wc -c) -gt "30" ]
+		if [ $(printf "%s" "$ZELID" | wc -c) -ge "30" ]
 		then
 		echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
 		break
