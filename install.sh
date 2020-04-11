@@ -112,6 +112,7 @@ function wipe_clean() {
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
     sudo fuser -k 16127/tcp > /dev/null 2>&1
+    sudo fuser -k 16125/tcp > /dev/null 2>&1
     
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
