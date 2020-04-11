@@ -525,6 +525,7 @@ echo -e "${YELLOW}Nodejs installing...${NC}"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ~/.profile
 nvm install --lts
+source ~/.bashrc
 }
 
 function zelflux() {
@@ -593,6 +594,7 @@ EOF
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    source ~/.bashrc
 }
 	
 function status_loop() {
