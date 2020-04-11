@@ -165,7 +165,7 @@ if ! pm2 -v > /dev/null 2>&1; then
     PM2_INTALL="1"
     tmux kill-server 
     echo -e "${YELLOW}Installing PM2...${NC}"
-    npm i -g pm2 > /dev/null 2>&1
+    sudo npm i -g pm2 > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd"
