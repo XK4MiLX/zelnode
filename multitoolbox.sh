@@ -41,7 +41,7 @@ mkdir watchdog
 mv watchdog.js /home/$USER/watchdogs/watchdog.js
 echo -e "${YELLOW}Installing...${NC}"
 cd watchdog && npm install shelljs
-pm2 start ~/watchdogs/watchdog.js --name watchdog
+pm2 start ~/watchdog/watchdog.js --name watchdog
 pm2 save
 fi
 
