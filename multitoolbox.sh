@@ -165,7 +165,7 @@ if ! pm2 -v > /dev/null 2>&1; then
     PM2_INTALL="1"
     tmux kill-server 
     echo -e "${YELLOW}Installing PM2...${NC}"
-    sudo npm i -g pm2 > /dev/null 2>&1
+    npm i -g pm2 > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd"
@@ -178,7 +178,7 @@ if ! pm2 -v > /dev/null 2>&1; then
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
     pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null 
-    source .bashrc
+    source ~/.bashrc
     
     
 else
