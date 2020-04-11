@@ -21,6 +21,15 @@ dversion="v3.0"
 
 function install_watchdog() {
 
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
 echo -e "${GREEN}Module: Install watchdog for zelnode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
