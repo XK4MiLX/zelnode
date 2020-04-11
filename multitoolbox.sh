@@ -386,7 +386,7 @@ fi
 
 }
 
-if ! figlet -v
+if ! figlet -v > /dev/null 2>&1
 then
 sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install -y figlet > /dev/null 2>&1
