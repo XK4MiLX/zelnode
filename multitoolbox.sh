@@ -165,6 +165,7 @@ if ! pm2 -v > /dev/null 2>&1; then
     PM2_INTALL="1"
     tmux kill-server 
     sudo fuser -k 16127/tcp > /dev/null 2>&1
+    kill node
     echo -e "${YELLOW}Installing PM2...${NC}"
     npm i -g pm2 > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
