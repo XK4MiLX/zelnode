@@ -191,7 +191,7 @@ else
 echo -e "${YELLOW}PM2 installation skipped...${NC}"
 fi
 
-if [[ $BLOCKHIGHT > 0 && $BLOCKHIGHT < $DB_HIGHT ]]
+if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
 DB_INTALL="1"
 echo -e "${YELLOW}Downloading db for mongo...${NC}"
