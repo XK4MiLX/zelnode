@@ -17,7 +17,33 @@ CYAN='\033[1;36m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-dversion="v2.5"
+dversion="v3.0"
+
+function install_watchdog() {
+
+echo -e "${GREEN}Module: Install watchdog for zelnode${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+if ! pm2 -v > /dev/null 2>&1
+then
+echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
+echo -e ""
+else
+if [ -f /home/$USER/watchdog/watchdog.js ] 
+then
+echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
+echo -e ""
+else
+echo -e "${YELLOW}Downloading...${NC}"
+cd && git clone https://github.com/XK4MiLX/watchdog.git
+echo -e "${YELLOW}Installing...${NC}"
+cd watchdog && npm install shelljs && npm install sleep
+pm2 start ~/watchdog/watchdog.js --name watchdog
+pm2 save
+fi
+fi
+
+}
 
 function zelcash_bootstrap() {
 
@@ -41,7 +67,6 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 echo -e "${YELLOW}Cleaning...${NC}"
 rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/database ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/peers.dat	
 fi 
-
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
@@ -87,7 +112,6 @@ do
 
 done
 
-
 fi
 echo -e "${NC}"
 read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
@@ -101,8 +125,6 @@ echo -e "${YELLOW}Starting zelcash...${NC}"
 zelcashd -daemon
 
 }
-
-
 
 function mongodb_bootstrap(){
 
@@ -307,7 +329,7 @@ echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
 apt update && apt upgrade -y
 echo -e "${YELLOW}Installing docker...${NC}"
-    
+
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
@@ -343,6 +365,7 @@ sudo add-apt-repository \
    stable"
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+
 fi
 
 # echo -e "${YELLOW}Creating docker group..${NC}"
@@ -386,7 +409,7 @@ fi
 
 }
 
-if ! figlet -v > /dev/null 2>&1
+if ! figlet -v
 then
 sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install -y figlet > /dev/null 2>&1
@@ -405,10 +428,11 @@ echo -e "${YELLOW}==============================================================
 echo -e "${CYAN}1 - Install Docker${NC}"
 echo -e "${CYAN}2 - Install ZelNode${NC}"
 echo -e "${CYAN}3 - ZelNode analyzer and fixer${NC}"
-echo -e "${CYAN}4 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
-echo -e "${CYAN}5 - Restore Zelcash blockchain from bootstrap${NC}"
-echo -e "${CYAN}6 - Fix your lxc.conf file on host${NC}"
-echo -e "${CYAN}7 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+echo -e "${CYAN}4 - Install watchdog for zelnode${NC}"
+echo -e "${CYAN}5 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
+echo -e "${CYAN}6 - Restore Zelcash blockchain from bootstrap${NC}"
+echo -e "${CYAN}7 - Fix your lxc.conf file on host${NC}"
+echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -p "Pick an option: " -n 1 -r
@@ -430,24 +454,29 @@ read -p "Pick an option: " -n 1 -r
     sleep 1
     analyzer_and_fixer
  ;;
+  4)  
+    clear
+    sleep 1
+    install_watchdog   
+ ;;
  
- 4)  
+ 5)  
     clear
     sleep 1
     mongodb_bootstrap     
  ;;
-  5)  
+  6)  
     clear
     sleep 1
     zelcash_bootstrap     
  ;; 
- 6)
+ 7)
     clear
     sleep 1
     fix_lxc_config
  ;;
  
- 7)
+ 8)
     clear
     sleep 1
     install_kernel
