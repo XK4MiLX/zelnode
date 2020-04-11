@@ -775,7 +775,7 @@ function display_banner() {
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 2
     echo -e "${YELLOW}Restarting.....${NC}"
-    sleep 4
+    sleep 10
     sudo reboot -n
    
 }
