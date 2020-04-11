@@ -38,7 +38,7 @@ else
 echo -e "${YELLOW}Downloading...${NC}"
 wget -O watchdog.js https://raw.githubusercontent.com/XK4MiLX/zelnode/watchdogs/watchdog/watchdog.js
 mkdir watchdog
-mv watchdogs.js /home/$USER/watchdogs/watchdog.js
+mv watchdog.js /home/$USER/watchdogs/watchdog.js
 echo -e "${YELLOW}Installing...${NC}"
 cd watchdog && npm install shelljs
 pm2 start ~/watchdogs/watchdog.js --name watchdog
