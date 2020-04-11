@@ -30,7 +30,7 @@ echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
 echo -e ""
 else
 
-if [ -f /home/$USER/watchdogs/watchdog.js ] 
+if [ -f /home/$USER/watchdog/watchdog.js ] 
 then
 echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
 echo -e ""
