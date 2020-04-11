@@ -71,6 +71,18 @@ if [ "$USERNAME" = "root" ]; then
     exit
 fi
 
+start_dir=$(pwd)
+correct_dir="/home/$USER"
+echo -e "${YELLOW}Checking directory....${NC}"
+if [[ "$start_dir" == "$correct_dir" ]]
+then
+echo -e "${CHECK_MARK} ${CYAN} Correct directory...${NC}"
+else
+echo -e "${X_MARK} ${CYAN} Bad directory switching...${NC}"
+cd
+echo -e "${YELLOW}$(pwd)${NC}"
+fi
+
 #functions
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
