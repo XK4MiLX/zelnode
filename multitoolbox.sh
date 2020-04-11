@@ -42,7 +42,7 @@ mkdir watchdog
 mv watchdog.js /home/$USER/watchdog/watchdog.js
 mv package.json /home/$USER/watchdog/package.json
 echo -e "${YELLOW}Installing...${NC}"
-cd watchdog && npm install shelljs
+cd watchdog && npm install shelljs && npm install sleep
 pm2 start ~/watchdog/watchdog.js --name watchdog
 pm2 save
 fi
