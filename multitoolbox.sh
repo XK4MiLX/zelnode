@@ -27,11 +27,13 @@ echo -e "${YELLOW}==============================================================
 if ! pm2 -v > /dev/null 2>&1
 then
 echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
+echo -e ""
 else
 
 if [ -f /home/$USER/watchdogs/watchdog.js ] 
 then
 echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
+echo -e ""
 else
 echo -e "${YELLOW}Downloading...${NC}"
 wget -O watchdog.js https://raw.githubusercontent.com/XK4MiLX/zelnode/watchdogs/watchdog/watchdog.js
