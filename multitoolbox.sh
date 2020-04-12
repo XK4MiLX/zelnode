@@ -165,12 +165,12 @@ DB_INTALL="0"
 if ! pm2 -v > /dev/null 2>&1; then 
     PM2_INTALL="1"
     tmux kill-server 
-    if tmux ls | grep "created" 
+    if tmux ls | grep "created" > /dev/null 2>&1
     then
       tmux list-sessions | awk 'BEGIN{FS=":"}{print $1}' | xargs -n 1 tmux kill-session -t
     fi
     sudo fuser -k 16127/tcp > /dev/null 2>&1
-    kill node
+    kill node > /dev/null 2>&1
     echo -e "${YELLOW}Installing PM2...${NC}"
     npm i -g pm2 > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
