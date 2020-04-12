@@ -86,7 +86,7 @@ sleep 1
 
 #functions
 function install_watchdog() {
-
+echo -e "
 echo -e "${GREEN}Install watchdog for zelnode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -102,14 +102,11 @@ pm2 save
 if [[ -f ~/watchdog/watchdog.js ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Watchdog installed successful.${NC}"
-echo -e ""
 else
 echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
-echo -e ""
 fi
 else
 echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
-echo -e ""
 fi
 
 }
@@ -117,6 +114,7 @@ fi
 
 
 function mongodb_bootstrap(){
+echo -e "
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
