@@ -138,10 +138,9 @@ mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
-sleep 3
-
+sleep 8
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-
+echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
 then
 echo -e "${CHECH_MARK} ${CYAN}Mongo bootstrap installed successful.${NC}"
@@ -791,7 +790,7 @@ fi
 }
 
 function check() {
-    echo && echo && echo
+    echo
     echo -e "${YELLOW}Running through some checks...${NC}"
     if pgrep zelcashd > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}${COIN_NAME^} daemon is installed and running${NC}" && sleep 1
