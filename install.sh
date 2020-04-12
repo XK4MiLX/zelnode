@@ -138,7 +138,8 @@ mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
-sleep 8
+pm2 reload zelflux
+sleep 30
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
