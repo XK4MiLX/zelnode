@@ -85,6 +85,50 @@ fi
 sleep 1
 
 #functions
+function mongodb_bootstrap(){
+echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${NC}"
+DB_HIGHT=572500
+IP=$(wget http://ipecho.net/plain -O - -q)
+BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
+echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e ""
+if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
+then
+echo -e "${YELLOW}Downloading db for mongo...${NC}"
+wget http://77.55.218.93/fluxdb_dump.tar.gz
+echo -e "${YELLOW}Unpacking...${NC}"
+tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
+echo -e "${YELLOW}Stoping zelflux...${NC}"
+pm2 stop zelflux > /dev/null 2>&1
+echo -e "${YELLOW}Importing mongo db...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+echo -e "${YELLOW}Cleaning...${NC}"
+sudo rm -rf /home/$USER/dump && sleep 1
+sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+sleep 3
+
+BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+
+if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
+then
+echo -e "${CHECH_MARK} ${CYAN}Mongo bootstrap installed successful${NC}"
+echo -e ""
+else
+echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed${NC}"
+echo -e ""
+fi
+sleep 3
+else
+echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+echo -e ""
+fi
+
+}
+
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
     $COIN_CLI stop > /dev/null 2>&1 && sleep 2
@@ -655,6 +699,13 @@ else
     done
     
     fi
+    
+    if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
+    	 mongodb_bootstrap()	
+    else
+    	echo -e "${YELLOW}Restore Mongodb datatable skipped...${NC}"	
+    fi
+      
     check
     display_banner
 }
