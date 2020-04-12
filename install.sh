@@ -95,10 +95,9 @@ then
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
-cd watchdog && npm install shelljs && npm install sleep 
-npm install moment
+cd watchdog && npm install
 pm2 start ~/watchdog/watchdog.js --name watchdog
-pm2 save
+pm2 save && cd
 if [[ -f ~/watchdog/watchdog.js ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Watchdog installed successful.${NC}"
@@ -469,11 +468,8 @@ StartLimitBurst=5
 WantedBy=multi-user.target
 EOF
     sudo chown root:root /etc/systemd/system/$COIN_NAME.service
-    sudo systemctl daemon-reload
-    sleep 4
+    sudo systemctl daemon-reload 
     sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl stop zelcash
-    sleep 4
     sudo systemctl start zelcash
     
 }
@@ -724,9 +720,23 @@ else
 	MSG1="${CYAN}Refreshes every 30 seconds while syncing to chain. Refresh loop will stop automatically once it's fully synced.${NC}"
 	MSG2=''
 	spinning_timer
-	if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+	
+	EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+	LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo | jq '.blocks')
+	
+	
+	if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	    break
 	fi
+	    
+	if grep unknown <<< "$LOCAL_BLOCK_HIGHT" 
+	then
+	echo -e "${YELLOW}Restarting zelcash service..${NC}"
+        sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+	sudo fuser -k 16125/tcp > /dev/null 2>&1
+	sudo systemctl start $COIN_NAME > /dev/null 2>&1 && sleep 5
+	fi
+	
     done
     
     fi
