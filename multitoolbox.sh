@@ -17,7 +17,7 @@ CYAN='\033[1;36m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-dversion="v3.0"
+dversion="v3.5"
 
 function install_watchdog() {
 
@@ -38,11 +38,10 @@ then
 echo -e "${PIN} ${YELLOW}You need install first pm2...${NC}"
 echo -e ""
 else
-if [ -f /home/$USER/watchdog/watchdog.js ] 
-then
-echo -e "${PIN} ${YELLOW}Watchdog already installed...${NC}"
-echo -e ""
-else
+echo -e "${YELLOW}Cleaning...${NC}"
+pm2 del watchdog  > /dev/null 2>&1
+pm2 save  > /dev/null 2>&1
+rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
@@ -50,7 +49,6 @@ cd watchdog && npm install shelljs && npm install sleep
 npm install moment
 pm2 start ~/watchdog/watchdog.js --name watchdog
 pm2 save
-fi
 fi
 
 }
