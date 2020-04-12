@@ -164,6 +164,7 @@ function wipe_clean() {
     sudo killall -s SIGKILL zelbenchd > /dev/null 2>&1
     sudo rm ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
+    sudo rm /usr/local/bin/zel* > /dev/null 2>&1 && sleep 1
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
