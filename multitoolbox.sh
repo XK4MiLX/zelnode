@@ -41,7 +41,7 @@ else
 echo -e "${YELLOW}Cleaning...${NC}"
 pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
-rm -rf /home/$USER/watchdog  > /dev/null 2>&1
+sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
