@@ -147,7 +147,7 @@ then
     echo -e "${NC}"
     exit
 fi
-
+sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 echo -e "${NC}"
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
