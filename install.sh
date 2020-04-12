@@ -117,7 +117,7 @@ echo -e ""
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
-DB_HIGHT=572500
+DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
