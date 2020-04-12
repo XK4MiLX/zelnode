@@ -85,6 +85,37 @@ fi
 sleep 1
 
 #functions
+function install_watchdog() {
+
+echo -e "${GREEN}Install watchdog for zelnode${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+if pm2 -v > /dev/null 2>&1
+then
+echo -e "${YELLOW}Downloading...${NC}"
+cd && git clone https://github.com/XK4MiLX/watchdog.git
+echo -e "${YELLOW}Installing...${NC}"
+cd watchdog && npm install shelljs && npm install sleep 
+npm install moment
+pm2 start ~/watchdog/watchdog.js --name watchdog
+pm2 save
+if [[ -f ~/watchdog/watchdog.js ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}Watchdog installed successful.${NC}"
+echo -e ""
+else
+echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
+echo -e ""
+fi
+else
+echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
+echo -e ""
+fi
+
+}
+
+
+
 function mongodb_bootstrap(){
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -115,10 +146,10 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedh
 
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
 then
-echo -e "${CHECH_MARK} ${CYAN}Mongo bootstrap installed successful${NC}"
+echo -e "${CHECH_MARK} ${CYAN}Mongo bootstrap installed successful.${NC}"
 echo -e ""
 else
-echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed${NC}"
+echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed.${NC}"
 echo -e ""
 fi
 sleep 3
@@ -704,11 +735,17 @@ else
     fi
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
-    	 mongodb_bootstrap()	
+    	 mongodb_bootstrap	
     else
     	echo -e "${YELLOW}Restore Mongodb datatable skipped...${NC}"	
     fi
-      
+    
+    if   whiptail --yesno "Would you like to install watchdog for zelnode?" 8 60; then
+    	 install_watchdog	
+    else
+    	echo -e "${YELLOW}Watchdog installation skipped...${NC}"	
+    fi
+    
     check
     display_banner
 }
