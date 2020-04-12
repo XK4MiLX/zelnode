@@ -188,7 +188,8 @@ function wipe_clean() {
     rm update-zelflux.sh > /dev/null 2>&1
     sudo fuser -k 16127/tcp > /dev/null 2>&1
     sudo fuser -k 16125/tcp > /dev/null 2>&1
-    rm -rf ~/$CONFIG_DIR
+    sudo rm -rf ~/$CONFIG_DIR
+    sudo rm /home/$USER/fluxdb_dump.tar.gz
     
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
