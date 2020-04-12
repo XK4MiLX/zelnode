@@ -45,10 +45,9 @@ rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
-cd watchdog && npm install shelljs && npm install sleep 
-npm install moment
+cd watchdog && npm install
 pm2 start ~/watchdog/watchdog.js --name watchdog
-pm2 save
+pm2 save && cd
 fi
 
 }
