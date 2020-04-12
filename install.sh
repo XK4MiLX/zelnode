@@ -86,7 +86,7 @@ sleep 1
 
 #functions
 function install_watchdog() {
-echo -e "
+echo -e ""
 echo -e "${GREEN}Install watchdog for zelnode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -114,7 +114,7 @@ fi
 
 
 function mongodb_bootstrap(){
-echo -e "
+echo -e ""
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
