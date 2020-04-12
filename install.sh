@@ -120,6 +120,14 @@ echo -e "${NC}"
 DB_HIGHT=572500
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+
+if [[ "$BLOCKHIGHT" == "" ]] 
+then
+pm2 reload zelflux > /dev/null 2>&1
+sleep 40
+BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+fi
+
 echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
