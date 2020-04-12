@@ -131,14 +131,13 @@ echo -e "${YELLOW}Downloading db for mongo...${NC}"
 wget http://77.55.218.93/fluxdb_dump.tar.gz
 echo -e "${YELLOW}Unpacking...${NC}"
 tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
-echo -e "${YELLOW}Stoping zelflux...${NC}"
-pm2 stop zelflux > /dev/null 2>&1
+#echo -e "${YELLOW}Stoping zelflux...${NC}"
+#pm2 stop zelflux > /dev/null 2>&1
 echo -e "${YELLOW}Importing mongo db...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
-pm2 reload zelflux
 sleep 30
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
@@ -150,7 +149,6 @@ else
 echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed.${NC}"
 echo -e ""
 fi
-sleep 3
 else
 echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
