@@ -44,7 +44,19 @@ pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing...${NC}"
+echo -e "${YELLOW}Installing module auto-update...${NC}"
+
+ touch /home/$USER/watchdog/.git/hooks/post-merge
+    cat << EOF > /home/$USER/watchdog/.git/hooks/post-merge
+#/usr/bin/env bash
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+check_run() {
+	echo "$changed_files" | grep --quiet "$1" && eval "$2"
+}
+check_run package.json "npm install"
+EOF
+chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
+
 ##cd watchdog && npm install
 ##pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
 ##pm2 save
