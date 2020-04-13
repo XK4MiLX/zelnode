@@ -120,7 +120,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${NC}"
 pm2 stop zelflux > /dev/null 2>&1 && sleep 2
 pm2 start zelflux > /dev/null 2>&1 && sleep 2
-NUM='90'
+NUM='120'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
