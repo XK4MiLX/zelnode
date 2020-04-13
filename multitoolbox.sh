@@ -148,7 +148,7 @@ then
 fi
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 echo -e "${NC}"
-DB_HIGHT=572500
+DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
