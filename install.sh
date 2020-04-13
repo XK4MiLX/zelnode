@@ -65,11 +65,11 @@ then
 if whiptail --yesno "Would you like to import date from zelcash.conf Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo "Imported info: "
-zelnodeprivkey = $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
+zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
 echo "Private Key = $zelnodeprivkey"
-zelnodeoutpoint = $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
+zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
 echo "Output TX ID = $zelnodeoutpoint"
-zelnodeindex = $(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//') 
+zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//') 
 echo "Output Index = $zelnodeindex"
 fi
 fi
