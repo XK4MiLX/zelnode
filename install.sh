@@ -94,10 +94,13 @@ if pm2 -v > /dev/null 2>&1
 then
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing...${NC}"
+echo -e "${YELLOW}Installing module auto-update....${NC}"
+wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
+mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
+sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
 cd watchdog && npm install
 pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
-pm2 save && cd
+pm2 save
 if [[ -f ~/watchdog/watchdog.js ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Watchdog installed successful.${NC}"
