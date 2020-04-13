@@ -58,7 +58,7 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 
-function import_date(){
+function import_date() {
 
 if [[ -f ~/.zelcash/zelcash.conf ]]
 then
