@@ -84,6 +84,8 @@ echo "Zel ID = $ZELID"
 fi
 fi
 
+sleep 100
+
 }
 
 #end of required details
