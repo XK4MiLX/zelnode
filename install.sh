@@ -123,8 +123,13 @@ BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.dat
 
 if [[ "$BLOCKHIGHT" == "" ]] 
 then
-pm2 reload zelflux > /dev/null 2>&1
-sleep 40
+  
+pm2 stop zelflux > /dev/null 2>&1 && sleep 2
+pm2 start zelflux > /dev/null 2>&1 && sleep 2
+NUM='45'
+MSG1='Restarting zelflux...'
+MSG2="${CHECK_MARK}"
+echo && spinning_timer
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 fi
 
@@ -147,7 +152,11 @@ sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
-sleep 45
+
+NUM='45'
+MSG1='Restarting zelflux...'
+MSG2="${CHECK_MARK}"
+echo && spinning_timer
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
