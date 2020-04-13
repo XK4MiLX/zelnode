@@ -45,7 +45,7 @@ sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
-cd watchdog && npm install husky --save-dev
+cd watchdog && npm install
 pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
 pm2 save
 fi
