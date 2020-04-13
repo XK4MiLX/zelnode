@@ -96,7 +96,7 @@ echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing...${NC}"
 cd watchdog && npm install
-pm2 start ~/watchdog/watchdog.js --name watchdog
+pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
 pm2 save && cd
 if [[ -f ~/watchdog/watchdog.js ]]
 then
