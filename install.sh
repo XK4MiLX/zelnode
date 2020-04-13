@@ -64,13 +64,14 @@ if [[ -f ~/.zelcash/zelcash.conf ]]
 then
 if whiptail --yesno "Would you like to import date from zelcash.conf Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
-echo "Imported info: "
+echo
+echo -e "${SEA}Imported info:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
-echo "Private Key = $zelnodeprivkey"
+echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
-echo "Output TX ID = $zelnodeoutpoint"
+echo -e "${PIN} ${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//') 
-echo "Output Index = $zelnodeindex"
+echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
 fi
 fi
 
@@ -80,12 +81,11 @@ then
 if whiptail --yesno "Would you like to import zelid from userconfig.js Y/N?" 8 60; then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo "Zel ID = $ZELID"
+echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
+echo
 fi
 fi
-
-sleep 100
-
+sleep 50
 }
 
 #end of required details
