@@ -44,7 +44,7 @@ pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing module auto-update...${NC}"
+echo -e "${YELLOW}Installing module auto-update....${NC}"
 
 sudo bash -c "echo '#/usr/bin/env bash' >>/home/$USER/watchdog/.git/hooks/post-merge"
 sudo bash -c "echo 'changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"' >>/home/$USER/watchdog/.git/hooks/post-merge"
