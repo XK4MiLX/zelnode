@@ -46,15 +46,12 @@ echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing module auto-update...${NC}"
 
- touch /home/$USER/watchdog/.git/hooks/post-merge
-    cat << EOF > /home/$USER/watchdog/.git/hooks/post-merge
-#/usr/bin/env bash
-changed_files='"$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"'
-check_run() {
-	echo '"$changed_files"' | grep --quiet "$1" && eval "$2"
-}
-check_run package.json "npm install"
-EOF
+sudo bash -c "echo '#/usr/bin/env bash' >>home/$USER/watchdog/.git/hooks/post-merge"
+sudo bash -c "echo 'changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"' >>home/$USER/watchdog/.git/hooks/post-merge"
+sudo bash -c "echo 'check_run() {' >>home/$USER/watchdog/.git/hooks/post-merge"
+sudo bash -c "echo 'echo '"$changed_files"' | grep --quiet "$1" && eval "$2"' >>home/$USER/watchdog/.git/hooks/post-merge"
+sudo bash -c "echo '}' >>home/$USER/watchdog/.git/hooks/post-merge"
+sudo bash -c "echo 'check_run package.json "npm install"' >>home/$USER/watchdog/.git/hooks/post-merge"
 chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
 
 ##cd watchdog && npm install
