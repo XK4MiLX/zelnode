@@ -45,14 +45,9 @@ sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing module auto-update....${NC}"
-
-sudo bash -c "echo '#/usr/bin/env bash' >>/home/$USER/watchdog/.git/hooks/post-merge"
-sudo bash -c "echo 'changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"' >>/home/$USER/watchdog/.git/hooks/post-merge"
-sudo bash -c "echo 'check_run() {' >>/home/$USER/watchdog/.git/hooks/post-merge"
-sudo bash -c "echo 'echo '"$changed_files"' | grep --quiet "$1" && eval "$2"' >>/home/$USER/watchdog/.git/hooks/post-merge"
-sudo bash -c "echo '}' >>/home/$USER/watchdog/.git/hooks/post-merge"
-sudo bash -c "echo 'check_run package.json "npm install"' >>/home/$USER/watchdog/.git/hooks/post-merge"
-chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
+wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
+mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
+sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
 
 ##cd watchdog && npm install
 ##pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
