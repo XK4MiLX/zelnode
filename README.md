@@ -60,10 +60,11 @@ You can found your correct settings here (ZelCore)
 5) Ability to download bootstrap from own source  
 6) ZelFlux auto-update via CronTab
 7) Error controls 
-8) Supporting NAT configuration
 9) Supporting PM2
 10) Improvement package installation
 11) Restarting benchmark after zelflux installation
+12) Watchgod for zelnode
+13) MongoDB bootstrap
   
 * <b>ZelNode analizer and fixer</b>  
 1) Veryfication errors  
