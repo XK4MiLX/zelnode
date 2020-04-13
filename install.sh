@@ -114,15 +114,14 @@ fi
 
 function mongodb_bootstrap(){
 
-
 echo -e ""
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
 pm2 stop zelflux > /dev/null 2>&1 && sleep 2
 pm2 start zelflux > /dev/null 2>&1 && sleep 2
-NUM='120'
-MSG1='Restarting zelflux...'
+NUM='90'
+MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
 DB_HIGHT=572200
@@ -150,14 +149,15 @@ pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
-MSG1='Restarting zelflux...'
+MSG1='Zelflux starting...'
 MSG2="${CHECK_MARK}"
 spinning_timer
+echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+echo -e ${PIN} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
 then
-echo -e "${CHECH_MARK} ${CYAN}Mongo bootstrap installed successful.${NC}"
+echo -e "${CHECK_MARK} ${CYAN}Mongo bootstrap installed successful.${NC}"
 echo -e ""
 else
 echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed.${NC}"
