@@ -113,25 +113,21 @@ fi
 
 
 function mongodb_bootstrap(){
+
+
 echo -e ""
 echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
+pm2 stop zelflux > /dev/null 2>&1 && sleep 2
+pm2 start zelflux > /dev/null 2>&1 && sleep 2
+NUM='120'
+MSG1='Restarting zelflux...'
+MSG2="${CHECK_MARK}"
+spinning_timer
 DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-
-if [[ "$BLOCKHIGHT" == "" ]] 
-then
-  
-pm2 stop zelflux > /dev/null 2>&1 && sleep 2
-pm2 start zelflux > /dev/null 2>&1 && sleep 2
-NUM='45'
-MSG1='Restarting zelflux...'
-MSG2="${CHECK_MARK}"
-echo && spinning_timer
-BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-fi
 
 echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
@@ -153,10 +149,10 @@ sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
-NUM='45'
+NUM='120'
 MSG1='Restarting zelflux...'
 MSG2="${CHECK_MARK}"
-echo && spinning_timer
+spinning_timer
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${PIN} ${CYAN}Node block hight after restor: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]] 
