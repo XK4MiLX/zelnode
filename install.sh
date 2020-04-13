@@ -105,6 +105,7 @@ fi
 
 start_dir=$(pwd)
 correct_dir="/home/$USER"
+echo
 echo -e "${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
