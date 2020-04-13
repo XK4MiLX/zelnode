@@ -17,7 +17,7 @@ CYAN='\033[1;36m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-dversion="v3.5"
+dversion="v3.6"
 
 function install_watchdog() {
 
@@ -438,7 +438,7 @@ echo -e "${BLUE}"
 figlet -f slant "Multitoolbox"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Version: $dversion${NC}"
-echo -e "${GREEN}OS: Ubuntu 16/18${NC}"
+echo -e "${GREEN}OS: Ubuntu 16/18, Debian 9.0${NC}"
 echo -e "${GREEN}Created by: XK4MiLX from Zel's team${NC}"
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
 echo -e "${YELLOW}================================================================${NC}"
