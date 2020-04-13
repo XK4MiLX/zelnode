@@ -13,7 +13,7 @@ if this way not working you can try:
  
 * <b>Step 1</b>  
 1 - Log to your root accont  
-2 - Select option "Install docker on VPS/Inside LXC continer" nr 1  
+2 - Select option "Install Docker"  
 3 - When u will see window put your username  and hit enter  
 
 ![screen2](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm2.jpg)
