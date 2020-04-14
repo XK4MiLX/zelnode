@@ -482,8 +482,7 @@ module.exports = {
     }
 EOF
 FILE1=~/zelflux/config/userconfig.js
-if [ -f "$FILE1" ]
-then
+if [ -f "$FILE1" ]; then
     echo -e "${CHECK_MARK} ${GREEN}File ~/zelflux/config/userconfig.js created successful${NC}${NC}"
 else
     echo -e "${X_MARK} ${RED}File ~/zelflux/config/userconfig.js file create failed${NC}"
@@ -494,14 +493,12 @@ fi
 #sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USER --hp /home/$USER
 
 FILE2="/home/$USER/update-zelflux.sh"
-if [ -f "$FILE2" ]
-then
+if [ -f "$FILE2" ]; then
 echo -e "\c"
 else
 read -p "Would you like to add auto-update zelflux via crontab Y/N" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
 echo "git pull" >> "/home/$USER/update-zelflux.sh"
 chmod +x "/home/$USER/update-zelflux.sh"
@@ -515,12 +512,11 @@ echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
 fi
 fi
 fi
-if [ "$NOT_FOUND" == "1" ]
-then
+
+if [ "$NOT_FOUND" == "1" ]; then
 read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo -e "${YELLOW}Installing...${NC}"
 sudo apt-get update && sleep 1
 sudo apt install zelbench -y && sleep 1
@@ -531,18 +527,16 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 sudo systemctl start zelcash && sleep 1
 fi
 fi
-if [[ "$REPLACE" == "1" ]]
-then
+
+if [[ "$REPLACE" == "1" ]]; then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
 sudo fuser -k 16125/tcp > /dev/null 2>&1
-if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
-then
-echo -e "\c"
+if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
+#echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
@@ -550,9 +544,8 @@ echo -e "\c"
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeprivkey replaced successful!!!${NC}"
                 fi
 fi
-if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]
-then
-echo -e "\c"
+if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
+#echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]
@@ -560,13 +553,11 @@ echo -e "\c"
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeoutpoint replaced successful!!!${NC}"
                 fi
 fi
-if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]
-then
+if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
 echo -e "\c"
         else
         sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]
-                then
+                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeindex replaced successful!!!${NC}"
                 fi
 fi
@@ -577,29 +568,25 @@ echo -e ""
 sleep 30
 fi
 fi
-if [ "$LC_CHECK" == "1" ]
-then
+
+if [ "$LC_CHECK" == "1" ]; then
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
 echo -e ""
 echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
 read -p "Would you like to reboot pc Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 sudo reboot -n
 fi
 fi
 fi
-if [ "$BTEST" == "1" ]
-then
+if [ "$BTEST" == "1" ]; then
 read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 zelbench-cli restartnodebenchmarks
 sleep 40
 echo -e ""
