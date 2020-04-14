@@ -24,7 +24,7 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 
 #color dialog
 export NEWT_COLORS='
-root=,color20
+root=,color1
 '
 
 #function
