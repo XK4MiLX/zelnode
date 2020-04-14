@@ -28,6 +28,20 @@ title=black,
 '
 
 #function
+function spinning_timer() {
+    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
+    end=$((SECONDS+NUM))
+    while [ $SECONDS -lt $end ];
+    do
+        for i in "${animation[@]}";
+        do
+            echo -ne "${RED}\r$i ${CYAN}${MSG1}${NC}"
+            sleep 0.1
+        done
+    done
+    echo -e "${MSG2}"
+}
+
 round() {
   printf "%.${2}f" "${1}"
 }
@@ -553,11 +567,12 @@ echo -e ""
                 fi
 fi
 echo -e ""
-echo -e "${YELLOW}Starting Zelcash serivce...${NC}"
 sudo systemctl start zelcash
-echo -e "${YELLOW}Waiting...${NC}"
+NUM='35'
+MSG1='Restarting zelcash serivce...'
+MSG2="${CHECK_MARK}"
+spinning_timer
 echo -e ""
-sleep 30
 fi
 fi
 
@@ -580,9 +595,12 @@ read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 zelbench-cli restartnodebenchmarks
-sleep 40
 echo -e ""
-echo -e "${YELLOW}Checking benchmarks details...${NC}"
+NUM='45'
+MSG1='Restarting benchmark...'
+MSG2="${CHECK_MARK}"
+echo && spinning_timer
+echo -e ""
 zelbench-cli getbenchmarks
 fi
 fi
