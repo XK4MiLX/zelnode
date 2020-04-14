@@ -22,6 +22,13 @@ SCVESION=v3.5
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 
+export NEWT_COLORS='
+window=,white	
+border=white,red
+textbox=white
+button=white
+'
+
 #function
 round() {
   printf "%.${2}f" "${1}"
@@ -199,7 +206,6 @@ echo -e "${YELLOW}File integration checking...${NC}"
 integration
 echo -e ""
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
-export NEWT_COLORS=''
    WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 fi
 if whiptail --yesno "Would you like to verify zelcash.conf Y/N?" 8 60; then
