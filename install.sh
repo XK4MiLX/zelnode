@@ -638,7 +638,7 @@ echo -e "${GREEN}MONGODB INSTALLATION${NC}"
 echo -e "${YELLOW}==========================================================================${NC}"
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
-sudo apt purge mongodb* -y > /dev/null 2>&1 && sleep 1
+sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
 echo -e "${YELLOW}Mongodb installing...${NC}"
 sudo apt-get update -y
