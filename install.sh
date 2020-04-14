@@ -67,7 +67,7 @@ function import_date() {
 
 if [[ -f ~/.zelcash/zelcash.conf ]]
 then
-if whiptail --yesno "Would you like to import date from zelcash.conf Y/N?" 8 60; then
+if whiptail --yesno "Would you like to import data from zelcash.conf Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${SEA}Imported settings:${NC}"
