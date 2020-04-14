@@ -64,7 +64,8 @@ You can found your correct settings here (ZelCore)
 10) Improvement package installation
 11) Restarting benchmark after zelflux installation
 12) Watchgod for zelnode
-13) MongoDB bootstrap
+13) MongoDB bootstrap  
+14) Importing old settings
   
 * <b>ZelNode analizer and fixer</b>  
 1) Veryfication errors  
