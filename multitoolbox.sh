@@ -180,11 +180,11 @@ if ! pm2 -v > /dev/null 2>&1; then
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
     pm2 install pm2-logrotate
-    pm2 set pm2-logrotate:max_size 6M >/dev/null
-    pm2 set pm2-logrotate:retain 6 >/dev/null
-    pm2 set pm2-logrotate:compress true >/dev/null
-    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
-    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null 
+    pm2 set pm2-logrotate:max_size 6M > /dev/null
+    pm2 set pm2-logrotate:retain 6 > /dev/null
+    pm2 set pm2-logrotate:compress true > /dev/null
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null
+    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 > /dev/null 
     source ~/.bashrc
     
     
