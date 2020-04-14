@@ -37,17 +37,6 @@ COIN_PATH='/usr/local/bin'
 PATH=$PATH:"$COIN_PATH"
 export PATH
 
-readarray -t newtcols < /etc/newt/palette
-
-newtcols_error=(
-   window=,red
-   border=white,red
-   textbox=white,red
-   button=black,white
-)
-
-NEWT_COLORS="${newtcols[@]} ${newtcols_error[@]}" \
-
 echo -e "${YELLOW}Closing zelcash daemon and purge apt package${NC}"
 #Closing zelcash daemon and purge apt package
 "$COIN_CLI" stop >/dev/null 2>&1 && sleep 2
