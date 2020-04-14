@@ -417,8 +417,6 @@ else
 fi
 echo -e "${YELLOW}=====================================================${NC}"
 
-
-
 if [[ "$OWNER" = "1" ]]
 then
 read -p "Would you like to fix ownership Y/N?" -n 1 -r
@@ -437,8 +435,6 @@ echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
 sudo systemctl start zelcash
 fi
 fi
-
-
 if [ ! -d ~/zelflux ]
 then
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
@@ -456,8 +452,6 @@ else
 fi
 fi
 fi
-
-
 if [[ "$FLUXCONF" == "1" ]]
 then
 read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
@@ -521,7 +515,6 @@ echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
 fi
 fi
 fi
-
 if [[ "$NOT_FOUND" == "1" ]]
 then
 read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
@@ -538,8 +531,6 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 sudo systemctl start zelcash && sleep 1
 fi
 fi
-
-
 if [[ "$REPLACE" == "1" ]]
 then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
@@ -578,7 +569,6 @@ echo -e "\c"
                 then
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeindex replaced successful!!!${NC}"
                 fi
-
 fi
 echo -e "${YELLOW}Starting Zelcash serivce...${NC}"
 sudo systemctl start zelcash
@@ -587,8 +577,6 @@ echo -e ""
 sleep 30
 fi
 fi
-
-
 if [[ "$LC_CHECK" == "1" ]]
 then
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
@@ -606,7 +594,6 @@ sudo reboot -n
 fi
 fi
 fi
-
 if [[ "$BTEST" == "1" ]]
 then
 read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
