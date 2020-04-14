@@ -500,20 +500,20 @@ fi
 fi
 fi
 
-#if [ "$NOT_FOUND" == "1" ]; then
-#read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
-#echo -e ""
-#if [[ $REPLY =~ ^[Yy]$ ]]; then
-#echo -e "${YELLOW}Installing...${NC}"
-#sudo apt-get update && sleep 1
-#sudo apt install zelbench -y && sleep 1
-#sudo apt install zelcash -y && sleep 1
-#echo -e "${YELLOW}Restarting service...${NC}"
-#sudo systemctl stop zelcash && sleep 1
-#sudo fuser -k 16125/tcp > /dev/null 2>&1
-#sudo systemctl start zelcash && sleep 1
-#fi
-#fi
+##if [ "$NOT_FOUND" == "1" ]; then
+##read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
+##echo -e ""
+##if [[ $REPLY =~ ^[Yy]$ ]]; then
+##echo -e "${YELLOW}Installing...${NC}"
+##sudo apt-get update && sleep 1
+##sudo apt install zelbench -y && sleep 1
+##sudo apt install zelcash -y && sleep 1
+##echo -e "${YELLOW}Restarting service...${NC}"
+##sudo systemctl stop zelcash && sleep 1
+##sudo fuser -k 16125/tcp > /dev/null 2>&1
+##sudo systemctl start zelcash && sleep 1
+##fi
+##fi
 
 if [[ "$REPLACE" == "1" ]]; then
 read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
@@ -522,12 +522,13 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
 sudo fuser -k 16125/tcp > /dev/null 2>&1
+
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
 echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeprivkey replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeprivkey replaced successful${NC}"
                 fi
 fi
 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
@@ -535,7 +536,7 @@ echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeoutpoint replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeoutpoint replaced successful${NC}"
                 fi
 fi
 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
@@ -543,7 +544,7 @@ echo -e ""
         else
         sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeindex replaced successful!!!${NC}"
+                        echo -e "${CHECK_MARK} ${GREEN}Zelnodeindex replaced successful${NC}"
                 fi
 fi
 echo -e "${YELLOW}Starting Zelcash serivce...${NC}"
