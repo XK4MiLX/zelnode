@@ -371,8 +371,7 @@ if pm2 -v > /dev/null 2>&1
  then
  echo -e "${CHECK_MARK} ${CYAN}Pm2 is installed${NC}"
  
-if [ -f /home/$USER/zelflux/start.sh ]
-then
+if [ -f /home/$USER/zelflux/start.sh ]; then
 echo -e "${CHECK_MARK} ${CYAN}ZelFlux start script /home/$USER/zelflux/start.sh exists${NC}"
 else
 echo -e "${X_MARK} ${CYAN}ZelFlux start script /home/$USER/zelflux/start.sh does not exists${NC}"
@@ -388,16 +387,13 @@ fi
    fi
 fi
 
-if [ "$ZELCONF" == "1" ]
-then
+if [ "$ZELCONF" == "1" ]; then
 
 url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
 conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
-if [[ $conf == ?(-)+([0-9]) ]]
-then
-if [ "$conf" -ge "100" ]
-then
+if [[ $conf == ?(-)+([0-9]) ]]; then
+if [ "$conf" -ge "100" ]; then
 echo -e "${CHECK_MARK} ${CYAN}Confirmations numbers >= 100($conf)${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Confirmations numbers < 100($conf)${NC}"
@@ -409,20 +405,17 @@ fi
 fi
  
 
-if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
-then
+if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         echo -e "${CHECK_MARK} ${CYAN}IP detected successful ${NC}"
 else
         echo -e "${X_MARK} ${CYAN}IP was not detected try edit /etc/hosts and add there 'your_external_ip hostname' your hostname is $(hostname) ${RED}(only if zelback status is disconnected)${CYAN}"
 fi
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [ "$OWNER" = "1" ]
-then
+if [ "$OWNER" = "1" ]; then
 read -p "Would you like to fix ownership Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo -e "${YELLOW}Stoping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash && sleep 2
 sudo killall -s SIGKILL zelcashd > /dev/null 2>&1
@@ -435,16 +428,14 @@ echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
 sudo systemctl start zelcash
 fi
 fi
-if [ ! -d ~/zelflux ]
-then
+if [ ! -d ~/zelflux ]; then
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 echo -e "${YELLOW}ZelFlux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git
-if [ -d ~/zelflux ]
-then
+if [ -d ~/zelflux ]; then
 echo -e "${CHECK_MARK} ${GREEN}Zelfux was downloaded successfully${NC}"
 FLUXCONF="1"
 else
@@ -452,17 +443,14 @@ else
 fi
 fi
 fi
-if [ "$FLUXCONF" == "1" ]
-then
+if [ "$FLUXCONF" == "1" ]; then
 read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
 echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
+if [[ $REPLY =~ ^[Yy]$ ]]; then
 while true
 do
 zel_id="$(whiptail --title "ZelNode ANALYZER/FiXER $SCVESION" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ]
-then
+if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ]; then
 echo -e "${CHECK_MARK} ${GREEN}Zel ID is valid${NC}"
 break
 else
@@ -504,8 +492,7 @@ echo "git pull" >> "/home/$USER/update-zelflux.sh"
 chmod +x "/home/$USER/update-zelflux.sh"
 (crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
 
-if [[ $(crontab -l | grep -i update-zelflux) ]]
-then
+if [[ $(crontab -l | grep -i update-zelflux) ]]; then
 echo -e "${CHECK_MARK} ${GREEN}Zelflux auto-update was installed successfully${NC}"
 else
 echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
@@ -536,20 +523,18 @@ echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
-echo -e ""
+echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]
-                then
+                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeprivkey replaced successful!!!${NC}"
                 fi
 fi
 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
-echo -e ""
+echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]
-                then
+                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
                         echo -e "${CHECK_MARK} ${GREEN}Zelnodeoutpoint replaced successful!!!${NC}"
                 fi
 fi
