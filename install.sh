@@ -603,7 +603,7 @@ function install_zelflux() {
     sudo ufw allow $LOCPORT/tcp
     sudo ufw allow $ZELNODEPORT/tcp
     sudo ufw allow $MDBPORT/tcp
-    sudo rm /etc/apt/sources.list.d/mongodb*.list
+    sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
     if [[ $(lsb_release -r) = *16.04* ]]; then
     	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
 	echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
