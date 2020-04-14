@@ -37,6 +37,17 @@ COIN_PATH='/usr/local/bin'
 PATH=$PATH:"$COIN_PATH"
 export PATH
 
+readarray -t newtcols < /etc/newt/palette
+
+newtcols_error=(
+   window=,red
+   border=white,red
+   textbox=white,red
+   button=black,white
+)
+
+NEWT_COLORS="${newtcols[@]} ${newtcols_error[@]}" \
+
 echo -e "${YELLOW}Closing zelcash daemon and purge apt package${NC}"
 #Closing zelcash daemon and purge apt package
 "$COIN_CLI" stop >/dev/null 2>&1 && sleep 2
@@ -199,16 +210,7 @@ echo -e "${YELLOW}File integration checking...${NC}"
 integration
 echo -e ""
 
-readarray -t newtcols < /etc/newt/palette
 
-newtcols_error=(
-   window=,red
-   border=white,red
-   textbox=white,red
-   button=black,white
-)
-
-NEWT_COLORS="${newtcols[@]} ${newtcols_error[@]}" \
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 fi
