@@ -200,6 +200,12 @@ integration
 echo -e ""
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
+NEWT_COLORS='
+  window=,red
+  border=white,red
+  textbox=white,red
+  button=black,white
+' \
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 fi
