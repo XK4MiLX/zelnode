@@ -199,13 +199,16 @@ echo -e "${YELLOW}File integration checking...${NC}"
 integration
 echo -e ""
 
-WANIP=$(wget http://ipecho.net/plain -O - -q)
-NEWT_COLORS='
-  window=,red
-  border=white,red
-  textbox=white,red
-  button=black,white
-'
+readarray -t newtcols < /etc/newt/palette
+
+newtcols_error=(
+   window=,red
+   border=white,red
+   textbox=white,red
+   button=black,white
+)
+
+NEWT_COLORS="${newtcols[@]} ${newtcols_error[@]}" \
 if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 fi
