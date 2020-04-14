@@ -22,6 +22,7 @@ SCVESION=v3.5
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 
+#color dialog
 export NEWT_COLORS='
 window=,white	
 border=white,red
