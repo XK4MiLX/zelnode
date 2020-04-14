@@ -595,7 +595,6 @@ read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 zelbench-cli restartnodebenchmarks
-echo -e ""
 NUM='45'
 MSG1='Restarting benchmark...'
 MSG2="${CHECK_MARK}"
