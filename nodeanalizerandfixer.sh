@@ -24,7 +24,6 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 
 #color dialog
 export NEWT_COLORS='
-root=color23,color23
 title= black,
 '
 
