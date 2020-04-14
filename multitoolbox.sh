@@ -18,8 +18,10 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 dversion="v3.6"
-#color dialog
-export NEWT_COLORS=''
+#dialog color
+export NEWT_COLORS='
+title=black,
+'
 
 function install_watchdog() {
 
