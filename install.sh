@@ -57,6 +57,9 @@ NC='\033[0m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
+#color dialog
+export NEWT_COLORS=''
+
 
 function import_date() {
 
