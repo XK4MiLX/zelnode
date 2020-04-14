@@ -388,7 +388,7 @@ fi
    fi
 fi
 
-if [[ "$ZELCONF" == "1" ]]
+if [ "$ZELCONF" == "1" ]
 then
 
 url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
@@ -417,7 +417,7 @@ else
 fi
 echo -e "${YELLOW}=====================================================${NC}"
 
-if [[ "$OWNER" = "1" ]]
+if [ "$OWNER" = "1" ]
 then
 read -p "Would you like to fix ownership Y/N?" -n 1 -r
 echo -e ""
@@ -452,7 +452,7 @@ else
 fi
 fi
 fi
-if [[ "$FLUXCONF" == "1" ]]
+if [ "$FLUXCONF" == "1" ]
 then
 read -p "Would you like to create zelflux userconfig.js Y/N?" -n 1 -r
 echo -e ""
@@ -515,7 +515,7 @@ echo -e "${X_MARK} ${RED}Zelflux auto-update installation has failed${NC}"
 fi
 fi
 fi
-if [[ "$NOT_FOUND" == "1" ]]
+if [ "$NOT_FOUND" == "1" ]
 then
 read -p "Would you like to correct missing files errors Y/N?" -n 1 -r
 echo -e ""
@@ -577,7 +577,7 @@ echo -e ""
 sleep 30
 fi
 fi
-if [[ "$LC_CHECK" == "1" ]]
+if [ "$LC_CHECK" == "1" ]
 then
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
 echo -e ""
@@ -594,7 +594,7 @@ sudo reboot -n
 fi
 fi
 fi
-if [[ "$BTEST" == "1" ]]
+if [ "$BTEST" == "1" ]
 then
 read -p "Would you like to restart node benchmarks Y/N?" -n 1 -r
 echo -e ""
