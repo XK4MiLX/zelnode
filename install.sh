@@ -747,7 +747,7 @@ EOF
     pm2 set pm2-logrotate:retain 6 >/dev/null
     pm2 set pm2-logrotate:compress true >/dev/null
     pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
-    pm2 set pm2-logrotate:rotateInterval 0 12 * * 0 >/dev/null
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' >/dev/null
     source ~/.bashrc
 }
 	
@@ -948,7 +948,7 @@ function display_banner() {
     echo
     echo -e "${YELLOW}   PM2 is now managing Zelflux.${NC}"
     echo -e "${YELLOW}   Commands to manage PM2.${NC}"
-    echo -e "${PIN} ${CYAN}Summary Info: ${SEA}pm2 info zelflux${NC}"
+    echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info zelflux${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
     echo
     pm2 info zelflux
