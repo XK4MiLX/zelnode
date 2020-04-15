@@ -381,7 +381,7 @@ then
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
-      echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux${NC}"     
+      echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux (${BLUE}v$required_ver${NC})"     
    else
       echo -e "${X_MARK} ${CYAN}New version zelflux available${NC}"
       FLUX_UPDATE="1"
