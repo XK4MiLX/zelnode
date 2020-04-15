@@ -381,9 +381,9 @@ then
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
-      echo -e "${CHECK_MARK} ${GREEN}You have the current version of Zelflux${NC}"     
+      echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux${NC}"     
    else
-      echo -e "${X_MARK} ${GREEN}New version zelflux available${NC}"
+      echo -e "${X_MARK} ${CYAN}New version zelflux available${NC}"
       FLUX_UPDATE="1"
    fi
  fi
@@ -468,6 +468,18 @@ echo -e "${YELLOW}Starting Zelcash serivce...${NC}" && sleep 2
 sudo systemctl start zelcash
 fi
 fi
+
+if [[ "$FLUX_UPDATE" == "1" ]]; then
+read -p "Would you like to update zelflux Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+cd /home/$USER/zelflux && git pull && cd
+echo -e "${CHECK_MARK} {GREEN}Zelfux updated...${NC}"
+echo -e ""
+fi
+fi
+
+
 if [ ! -d ~/zelflux ]; then
 read -p "Would you like to clone zelflux from github Y/N?" -n 1 -r
 echo -e ""
