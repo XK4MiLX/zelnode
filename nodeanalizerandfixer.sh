@@ -383,7 +383,7 @@ if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
       echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
    else
-      echo -e "${X_MARK} ${CYAN}New version zelflux available${NC}"
+      echo -e "${X_MARK} ${CYAN}New version of Zelflux available${NC}"
       FLUX_UPDATE="1"
    fi
  fi
@@ -470,7 +470,7 @@ fi
 fi
 
 if [[ "$FLUX_UPDATE" == "1" ]]; then
-read -p "Would you like to update zelflux Y/N?" -n 1 -r
+read -p "Would you like to update Zelflux Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 cd /home/$USER/zelflux && git pull && cd
