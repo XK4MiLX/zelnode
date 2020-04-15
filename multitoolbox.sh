@@ -53,7 +53,7 @@ wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
 cd watchdog && npm install
-pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
+pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 15
 pm2 save
 fi
 
