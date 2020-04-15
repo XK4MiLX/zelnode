@@ -134,11 +134,13 @@ if pm2 -v > /dev/null 2>&1
 then
 echo -e "${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing module auto-update....${NC}"
+echo -e "${YELLOW}Installing git hooks....${NC}"
 wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
+echo -e "${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install
+echo -e "${YELLOW}Starting watchdog...${NC}"
 pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 5
 pm2 save
 if [[ -f ~/watchdog/watchdog.js ]]
