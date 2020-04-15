@@ -287,10 +287,18 @@ else
 fi
 
 if pgrep mongod > /dev/null; then
-    	echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}"
+  echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}"
 else
-    	echo -e "${X_MARK} ${CYAN}Mongodb is not running or failed to install${NC}"
+
+if mongod --version > /dev/null 
+then
+echo -e "${X_MARK} ${CYAN}Mongodb is not running${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Mongodb not installed${NC}"
+fi  
+
 fi
+
 if node -v > /dev/null 2>&1; then
     	echo -e "${CHECK_MARK} ${CYAN}Nodejs is installed${NC}"
 else
