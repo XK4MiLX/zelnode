@@ -232,7 +232,7 @@ fi
 
 
 echo -e "${YELLOW}=====================================================${NC}"
-echo -e "${GREEN}SUMMARY RAPORT${NC}"
+echo -e "${GREEN}SUMMARY REPORT${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
 
