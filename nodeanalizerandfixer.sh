@@ -374,6 +374,19 @@ then
 FILE=~/zelflux/config/userconfig.js
 if [ -f "$FILE" ]
 then
+
+ current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+ required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+if [[ "$required_ver" != "" ]]; then
+   if [ "$(printf '%s\n' "$requiredver" "$currentver" | sort -V | head -n1)" = "$requiredver" ]; then 
+      echo -e "${CHECK_MARK} ${GREEN}You have the current version of Zelflux${NC}"     
+   else
+      echo -e "${X_MARK} ${GREEN}New version zelflux available${NC}"
+      FLUX_UPDATE="1"
+   fi
+ fi
+
 echo -e "${CHECK_MARK} ${CYAN}Zelflux config  ~/zelflux/config/userconfig.js exists${NC}"
 
 ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
