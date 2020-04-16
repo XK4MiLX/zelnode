@@ -610,6 +610,12 @@ function install_zelflux() {
     sudo ufw allow $LOCPORT/tcp
     sudo ufw allow $ZELNODEPORT/tcp
     sudo ufw allow $MDBPORT/tcp
+    
+    if ! sysbench --version > /dev/null 2>&1; then   
+   	curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash
+	sudo apt -y install sysbench > /dev/null 2>&1
+    fi
+    
     sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
     if [[ $(lsb_release -r) = *16.04* ]]; then
     	wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
