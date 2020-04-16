@@ -141,7 +141,7 @@ sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install
 echo -e "${YELLOW}Starting watchdog...${NC}"
-pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch node_modules --watch-delay 15
+pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch "\.git|node_modules" --watch-delay 10
 pm2 save
 if [[ -f ~/watchdog/watchdog.js ]]
 then
