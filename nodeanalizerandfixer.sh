@@ -196,8 +196,10 @@ echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f ~/.zelbenchmark/debug.log ]
 then
 egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
+echo
 else
 echo -e "${RED}Debug file not exists${NC}"
+echo
 fi
 
 echo -e "${YELLOW}Checking zelcash debug.log${NC}"
