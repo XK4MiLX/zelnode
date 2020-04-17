@@ -526,7 +526,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 while true
 do
 zel_id="$(whiptail --title "ZelNode ANALYZER/FiXER $SCVESION" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ]; then
+if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ]; then
 echo -e "${CHECK_MARK} ${GREEN}Zel ID is valid${NC}"
 break
 else
