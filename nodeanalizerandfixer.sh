@@ -199,6 +199,22 @@ egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 else
 echo -e "${RED}Debug file not exists${NC}"
 fi
+
+echo -e "${YELLOW}Checking zelcash debug.log${NC}"
+if [ -f ~/.zelcash/debug.log ]
+then
+
+
+if [[ $(egrep -ac -wi --color 'error|failed' ~/.zelcash/debug.log) != "0" ]]; then
+echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' ~/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' ~/.zelcash/debug.log) ${CYAN}related to ZelBench${NC}"
+echo -e "${CYAN}Creating zelcash_debug_error.log${NC}"
+egrep -wi --color 'error|failed' ~/.zelbenchmark/debug.log > zelcash_debug_error.log
+fi
+
+else
+echo -e "${RED}Debug file not exists${NC}"
+fi
+
 echo -e "${NC}"
 echo -e "${YELLOW}Checking benchmark status...${NC}"
 zelbench-cli getstatus
