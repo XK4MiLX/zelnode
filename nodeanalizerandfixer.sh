@@ -555,7 +555,6 @@ fi
 fi
 
 #sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USER --hp /home/$USER
-
 FILE2="/home/$USER/update-zelflux.sh"
 if [ -f "$FILE2" ]; then
 echo -e "\c"
