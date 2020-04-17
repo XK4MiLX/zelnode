@@ -194,7 +194,7 @@ fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
-if [ -f ~/.zelbenchmark/debug.log ]
+if [ -f /home/$USER/.zelbenchmark/debug.log ]
 then
 egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 echo
@@ -204,7 +204,7 @@ echo
 fi
 
 echo -e "${YELLOW}Checking zelcash debug.log${NC}"
-if [ -f ~/.zelcash/debug.log ]
+if [ -f /home/$USER/.zelcash/debug.log ]
 then
 
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
