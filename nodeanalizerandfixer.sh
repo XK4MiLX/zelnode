@@ -208,7 +208,13 @@ if [ -f ~/.zelcash/debug.log ]
 then
 
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
-echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to ZelBench${NC}"
+echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
+
+if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
+echo -e "${CYAN}Benchmark errors:${NC}"
+egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
+fi
+
 echo -e "${CYAN}Creating zelcash_debug_error.log${NC}"
 egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
 fi
