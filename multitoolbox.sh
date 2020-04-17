@@ -134,9 +134,14 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 rm -rf $BOOTSTRAP_ZIPFILE
 fi
-
+read -p "Would you like to start zelcash daemon Y/N?" -n 1 -r
+echo -e "${NC}"
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
 echo -e "${YELLOW}Starting zelcash...${NC}"
 zelcashd -daemon
+fi
+
 
 }
 
