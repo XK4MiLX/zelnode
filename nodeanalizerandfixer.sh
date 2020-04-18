@@ -1,13 +1,6 @@
 #!/bin/bash
 
-#color codes 
-
-RED='\033[1;31m'
-YELLOW='\033[1;33m'
-BLUE="\\033[38;5;27m"
-GREEN='\033[1;32m'
-NC='\033[0m'
-CYAN='\033[1;36m'
+#const
 REPLACE="0"
 FLUXCONF="0"
 FLUXRESTART="0"
@@ -20,16 +13,53 @@ FLUX_UPDATE="0"
 OWNER="0"
 SCVESION=v3.5
 
+#color codes
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
+BLUE="\\033[38;5;27m"
+SEA="\\033[38;5;49m"
+GREEN='\033[1;32m'
+CYAN='\033[1;36m'
+NC='\033[0m'
+
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
+PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 
 #dialog color
 export NEWT_COLORS='
 title=black,
-'
 
 #function
+function show_time () {
+    num=$1
+    min=0
+    hour=0
+    day=0
+    if((num>59));then
+        ((sec=num%60))
+        ((num=num/60))
+        if((num>59));then
+            ((min=num%60))
+            ((num=num/60))
+            if((num>23));then
+                ((hour=num%24))
+                ((day=num/24))
+            else
+                ((hour=num))
+            fi
+        else
+            ((min=num))
+        fi
+    else
+        ((sec=num))
+    fi
+    echo -e "${PIN} ${CYAN}Last error was \c"
+    echo -e "${RED}$day"d "$hour"h "$min"m "$sec"s"${NC}"
+}
+
+
 function spinning_timer() {
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
@@ -211,8 +241,20 @@ if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != 
 echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
 
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
-echo -e "${CYAN}Benchmark errors:${NC}"
-egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
+
+echo -e "${SEA}Benchmark errors info:${NC}"
+error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+data_now_format=$(date +%F_%H-%M-%S)
+echo "{PIN} ${CYAN}Last error line: $error_line${NC}"
+echo "{PIN} ${CYAN}Lasr error time: $event_date${NC}$"
+event_time=$(date --date "$event_date" +%s)
+now_date=$(date +%s)
+tdiff=$((now_date-event_time))
+show_time "$tdiff"
+##echo -e "${CYAN}Benchmark errors:${NC}"
+##egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
+
 fi
 
 echo -e "${CYAN}Creating zelcash_debug_error.log${NC}"
