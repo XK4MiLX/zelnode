@@ -240,7 +240,7 @@ then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
 echo -e ""
-echo -e "${SEA}Benchmark errors info:${NC}"
+echo -e "${SEA}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
