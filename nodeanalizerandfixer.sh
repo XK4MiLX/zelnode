@@ -30,6 +30,7 @@ PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 #dialog color
 export NEWT_COLORS='
 title=black,
+'
 
 #function
 function show_time() {
