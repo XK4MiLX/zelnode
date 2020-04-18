@@ -257,7 +257,7 @@ error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | 
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date$ ago.{NC}"
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date$ ago.${NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
