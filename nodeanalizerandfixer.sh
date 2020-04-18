@@ -227,7 +227,22 @@ sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
-egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
+if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
+echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
+#egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
+error_line=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+data_now_format=$(date +%F_%H-%M-%S)
+echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date$ ago{NC}"
+event_time=$(date --date "$event_date" +%s)
+now_date=$(date +%s)
+tdiff=$((now_date-event_time))
+show_time "$tdiff"
+echo -e "${PIN} ${CYAN}Creating zelbenchmark_debug_error.log${NC}"
+egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelcash_debug_error.log
+echo
+fi
 echo
 else
 echo -e "${RED}Debug file not exists${NC}"
@@ -242,7 +257,7 @@ error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | 
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date${NC}"
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date$ ago{NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
