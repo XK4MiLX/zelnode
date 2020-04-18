@@ -224,19 +224,15 @@ fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
-if [ -f /home/$USER/.zelbenchmark/debug.log ]
-then
+if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
 egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 echo
 else
 echo -e "${RED}Debug file not exists${NC}"
 echo
 fi
-
 echo -e "${YELLOW}Checking zelcash debug.log${NC}"
-if [ -f /home/$USER/.zelcash/debug.log ]
-then
-
+if [ -f /home/$USER/.zelcash/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
 echo -e ""
@@ -252,11 +248,9 @@ tdiff=$((now_date-event_time))
 show_time "$tdiff"
 ##echo -e "${CYAN}Benchmark errors:${NC}"
 ##egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
-
 fi
 echo -e "${CYAN}Creating zelcash_debug_error.log${NC}"
 egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
-
 else
 echo -e "${RED}Debug file not exists${NC}"
 fi
