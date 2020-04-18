@@ -58,7 +58,7 @@ function show_time() {
         ((sec=num))
     fi
     echo -e "${PIN} ${CYAN}Last error was \c"
-    echo -e "${RED}$day"d "$hour"h "$min"m "$sec"s" ago.${NC}"
+    echo -e "${RED}$day"d "$hour"h "$min"m "$sec"s"${CYAN} ago.${NC}"
 }
 
 
