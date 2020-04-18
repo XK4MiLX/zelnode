@@ -241,7 +241,7 @@ error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | 
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-echo -e "${PIN} ${CYAN}Lasr error time: $event_date${NC}"
+echo -e "${PIN} ${CYAN}Lasr error time: ${SEA}$event_date${NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
@@ -249,7 +249,7 @@ show_time "$tdiff"
 ##echo -e "${CYAN}Benchmark errors:${NC}"
 ##egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
 fi
-echo -e "${CYAN}Creating zelcash_debug_error.log${NC}"
+echo -e "${PIN} ${CYAN}Creating zelcash_debug_error.log${NC}"
 egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
 else
 echo -e "${RED}Debug file not exists${NC}"
