@@ -26,6 +26,7 @@ NC='\033[0m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
+BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 
 #dialog color
 export NEWT_COLORS='
@@ -236,7 +237,7 @@ echo -e "${YELLOW}Checking zelcash debug.log${NC}"
 if [ -f /home/$USER/.zelcash/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
-echo -e "${CYAN}ZelBench errors info:${NC}"
+echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
@@ -251,8 +252,10 @@ show_time "$tdiff"
 fi
 echo -e "${PIN} ${CYAN}Creating zelcash_debug_error.log${NC}"
 egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
+echo
 else
 echo -e "${RED}Debug file not exists${NC}"
+echo
 fi
 
 echo -e "${NC}"
