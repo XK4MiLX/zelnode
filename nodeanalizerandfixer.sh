@@ -32,7 +32,7 @@ export NEWT_COLORS='
 title=black,
 
 #function
-function show_time () {
+function show_time() {
     num=$1
     min=0
     hour=0
