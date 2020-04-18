@@ -227,7 +227,7 @@ sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
-if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
+if [[ $(egrep -ac -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
 echo -e "${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 error_line=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
@@ -240,7 +240,7 @@ now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
 echo -e "${PIN} ${CYAN}Creating zelbenchmark_debug_error.log${NC}"
-egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelcash_debug_error.log
+egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
 echo
 fi
 echo
