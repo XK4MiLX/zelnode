@@ -244,8 +244,8 @@ echo -e "${SEA}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 data_now_format=$(date +%F_%H-%M-%S)
-echo "{PIN} ${CYAN}Last error line: $error_line${NC}"
-echo "{PIN} ${CYAN}Lasr error time: $event_date${NC}$"
+echo "${PIN} ${CYAN}Last error line: $error_line${NC}"
+echo "${PIN} ${CYAN}Lasr error time: $event_date${NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
