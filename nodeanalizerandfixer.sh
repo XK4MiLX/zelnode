@@ -317,11 +317,23 @@ echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
+
+
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
 echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
 else
 echo -e "${PIN} ${CYAN}Status: ${RED}not synced${NC}"
 fi
+
+echo -e ""
+echo -e "${BOOK} ${YELLOW}Checking node status:${NC}"
+zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
+node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
+collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
+echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
+echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
+echo -e ""
+
 
 fi
 
@@ -333,17 +345,39 @@ echo -e "${BOOK} ${YELLOW}File integration checking:${NC}"
 integration
 echo -e ""
 
-echo -e "${BOOK} ${YELLOW}Checking node status:${NC}"
-zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
-node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
-collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
-echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
-echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
-echo -e ""
+
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 #fi
+
+echo -e "${BOOK} ${YELLOW} Checking service:${NC}"
+if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running'; then
+echo -e "${CHECK_MARK} ${CYAN} Docker servive running${NC}"
+else
+echo -e "${X_MARK} ${CYAN} Docker servive not running${NC}"
+fi
+
+if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running'; then
+echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running${NC}"
+else
+echo -e "${X_MARK} ${CYAN} Docker Socket for the API not running${NC}"
+fi
+
+if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running'; then
+echo -e "${CHECK_MARK} ${CYAN} MongoDB service running${NC}"
+else
+echo -e "${X_MARK} ${CYAN} MongoDB service not running${NC}"
+fi
+
+if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running'; then
+echo -e "${CHECK_MARK} ${CYAN} Zelcash service running${NC}"
+else
+echo -e "${X_MARK} ${CYAN} Zelcash service not running${NC}"
+fi
+echo -e ""
+
+
 
 if [[ $node_status != "CONFIRMED" ]]; then
 if whiptail --yesno "Would you like to verify zelcash.conf Y/N?" 8 60; then
