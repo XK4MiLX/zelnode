@@ -280,7 +280,7 @@ fi
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
 echo -e "${NC}"
-echo -e "${YELLOW}${BOOK} Zalcash deamon information:${NC}"
+echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
 zelcash_getinfo=$(zelcash-cli getinfo)
 version=$(jq -r '.version' <<< "$zelcash_getinfo")
 blocks_hight=$(jq -r '.blocks' <<< "$zelcash_getinfo")
