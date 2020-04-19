@@ -375,11 +375,11 @@ echo -e ""
 
 echo -e "${BOOK} ${YELLOW}Checking service:..${NC}"
 
-snap_docker_running=$(systemctl status snap.docker.dockerd.service > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
-snap_docker_inactive=$(systemctl status snap.docker.dockerd.service > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+snap_docker_running=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
+snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
-docker_running=$(systemctl status docker > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
-docker_inactive=$(systemctl status docker > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
+docker_inactive=$(systemctl status docker 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
