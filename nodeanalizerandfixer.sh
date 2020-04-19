@@ -344,6 +344,7 @@ echo "txhash: $txhash"
 
 #if [[ "$txhash" != "" ]]; then
 
+
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
