@@ -376,19 +376,19 @@ echo -e ""
 echo -e "${BOOK} ${YELLOW}Checking service:..${NC}"
 
 snap_docker_running=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
-snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'inactive' | grep -o 'since.*')
+snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
-docker_inactive=$(systemctl status docker 2> /dev/null | grep 'inactive' | grep -o 'since.*')
+docker_inactive=$(systemctl status docker 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 docker_socket_running=$(systemctl status docker.socket 2> /dev/null | grep 'running'  | grep -o 'since.*')
-docker_socket_inactive=$(systemctl status docker.socket 2> /dev/null | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')
+docker_socket_inactive=$(systemctl status docker.socket 2> /dev/null | egrep 'inactive|failed' > /dev/null 2>&1 | grep -o 'since.*')
 
 mongod_running=$(systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
-mongod_inactive=$(systemctl status mongod 2> /dev/null | grep 'inactive' | grep -o 'since.*')
+mongod_inactive=$(systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 zelcash_running=$(systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
-zelcash_inactive=$(systemctl status zelcash 2> /dev/null | grep 'inactive' | grep -o 'since.*')
+zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
@@ -439,10 +439,10 @@ fi
 fi
 
 if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Zelcash service ${SEA}$zelcash_running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelcash service running ${SEA}$zelcash_running${NC}"
 else
 if [[ "$zelcash_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${RED}$zelcash_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Zelcash service not running ${RED}$zelcash_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Zelcash service is not installed${NC}"
 fi
