@@ -391,7 +391,7 @@ if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running $docker_running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Docker servive not running $docker_inactive${NC}"
-if
+fi
 
 if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'running'  | grep -o 'since.*')${NC}"
