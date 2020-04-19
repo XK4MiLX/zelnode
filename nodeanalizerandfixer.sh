@@ -194,7 +194,7 @@ NOT_FOUND="0"
 for (( i=0;i<$ELEMENTS;i++)); do
  
         if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
-            echo -e "${CHECK_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
+            echo -e "${CHECK_MARK} ${CYAN} ${FILE_ARRAY[${i}]}"
         else
             echo -e "${X_MARK} ${CYAN} ${FILE_ARRAY[${i}]}"
             NOT_FOUND="1"
@@ -209,7 +209,7 @@ function check_benchmarks() {
  if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]
  then
   var_round=$(round "$var_benchmark" 2)
-  echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
+  echo -e "${X_MARK} ${CYAN} $3 $var_round $4${NC}"
  fi
 
 }
