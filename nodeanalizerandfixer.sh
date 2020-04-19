@@ -228,7 +228,7 @@ sudo apt install bc > /dev/null 2>&1
 echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
-echo -e "${YELLOW}${WORNING} {CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 error_line=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
