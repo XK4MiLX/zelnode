@@ -279,7 +279,31 @@ fi
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
+
+echo -e "${BOOK}  ${YELLOW}ZelBench status:${NC}"
+zelbench_getatus=$(zelbench-cli getstatus)
+zelbench_status=$(jq -r '.status' <<< "$zelbench_getatus")
+zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
+zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
+
+echo -e "${PIN} ${CYAN}Zelbench status: ${SEA}$zelbench_status${NC}"
+echo -e "${PIN} ${CYAN}Benchmark: ${SEA}$zelbench_benchmark${NC}"
+echo -e "${PIN} ${CYAN}ZelBack: ${SEA}$zelbench_zelback${NC}"
 echo -e "${NC}"
+
+if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" | "$zelbench_benchmark" == "BAMF" ]]; then
+echo -e "${CHECK_MARK} ${CYAN}ZelBench working correct, all requirements met.${NC}"
+fi
+
+if [[ "$zelbench_benchmark" == "failed" ]]; then
+echo -e "${X_MARK} ${CYAN}ZelBench not working correct, check zelbenchmark debug.log${NC}"
+fi
+
+if [[ "$zelbench_benchmark" == "toaster" ]]; then
+echo -e "${X_MARK} ${CYAN}ZelBench working correct but minimum system requirements not met.${NC}"
+fi
+
+echo -e "${NC}
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
 zelcash_getinfo=$(zelcash-cli getinfo)
 version=$(jq -r '.version' <<< "$zelcash_getinfo")
@@ -301,10 +325,10 @@ fi
 fi
 
 echo -e "${NC}"
-echo -e "${YELLOW}Checking listen ports...${NC}"
+echo -e "${BOOK} ${YELLOW}Checking listen ports...${NC}"
 check_listen_ports
 echo -e "${NC}"
-echo -e "${YELLOW}File integration checking...${NC}"
+echo -e "${BOOK} ${YELLOW}File integration checking...${NC}"
 integration
 echo -e ""
 
