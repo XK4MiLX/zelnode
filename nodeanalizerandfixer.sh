@@ -406,7 +406,7 @@ fi
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
 else
-if [[ "docker_running" != "" ]]; then
+if [[ "$docker_running" != "" ]]; then
 echo -e "${X_MARK} ${CYAN}Docker servive not running ${SEA}$docker_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Docker is not installed${NC}"
@@ -439,10 +439,10 @@ fi
 fi
 
 if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Zelcash service ${SEA}$running zelcash_running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelcash service ${SEA}$zelcash_running${NC}"
 else
 if [[ $running zelcash_inactive != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${SEA}$running zelcash_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${SEA}$zelcash_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Zelcash service is not installed${NC}"
 fi
