@@ -198,8 +198,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
         else
             echo -e "${X_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
             NOT_FOUND="1"
-        fi
-  
+        fi 
 done
 
 }
@@ -278,7 +277,6 @@ echo
 fi
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
-
 
 echo -e "${BOOK}  ${YELLOW}ZelBench status:${NC}"
 zelbench_getatus=$(zelbench-cli getstatus)
