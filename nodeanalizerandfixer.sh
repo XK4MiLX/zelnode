@@ -337,7 +337,9 @@ echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 
 txhash=$(grep -o '\w*' | sed -n '2p' | egrep '\w{10,50}' <<< "$collateral")
-echo "$txhash"
+
+echo "txhash: $txhash"
+
 if [[ "$txhash" != "" ]]; then
 
 url_to_check="https://explorer.zel.cash/api/tx/$txhash"
