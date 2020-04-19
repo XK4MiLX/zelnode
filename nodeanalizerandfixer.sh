@@ -352,25 +352,25 @@ WANIP=$(wget http://ipecho.net/plain -O - -q)
 #fi
 
 echo -e "${BOOK} ${YELLOW} Checking service:${NC}"
-if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running'; then
+if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Docker servive not running${NC}"
 fi
 
-if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running'; then
+if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Docker Socket for the API not running${NC}"
 fi
 
-if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running'; then
+if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} MongoDB service not running${NC}"
 fi
 
-if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running'; then
+if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Zelcash service running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Zelcash service not running${NC}"
