@@ -375,7 +375,7 @@ echo -e ""
 
 echo -e "${BOOK} ${YELLOW}Checking service:${NC}"
 
-if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if $(systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running') > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running $(systemctl status snap.docker.dockerd.service | grep 'running' | grep -o 'since.*')${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Docker(SNAP) servive not running $(systemctl status snap.docker.dockerd.service | grep 'inactive' | grep -o 'since.*')${NC}"
