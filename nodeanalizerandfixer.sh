@@ -335,6 +335,7 @@ collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
+echo "error check..."
 
 txhash=$(grep -o '\w*' | sed -n '2p' | egrep '\w{10,50}' <<< "$collateral")
 
