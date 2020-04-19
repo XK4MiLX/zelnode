@@ -337,8 +337,9 @@ echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 echo "error check1..."
 
+txhash=$(grep -o "\w*" <<< "$collateral")
+echo "txhash: $txhash"
 txhash=$(grep -o "\w*" | sed -n "2p" | egrep "\w{10,50}" <<< "$collateral")
-
 echo "txhash: $txhash"
 
 #if [[ "$txhash" != "" ]]; then
