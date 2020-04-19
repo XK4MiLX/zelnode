@@ -335,19 +335,11 @@ echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 
-echo -e ""
-echo -e "${BOOK} ${YELLOW}Checking node status:${NC}"
-zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
-node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
-collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
-echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
-echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
-
 txhash=$(grep -o '\w*' | sed -n '2p' | egrep '\w{10,50}' <<< "$collateral")
 
 if [[ "$txhash" != "" ]]; then
 
-url_to_check="https://explorer.zel.cash/api/tx/$zelnodeoutpoint"
+url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
 if [[ $conf == ?(-)+([0-9]) ]]; then
