@@ -305,7 +305,7 @@ check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
 fi
 
-echo -e "${NC}
+echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
 zelcash_getinfo=$(zelcash-cli getinfo)
 version=$(jq -r '.version' <<< "$zelcash_getinfo")
