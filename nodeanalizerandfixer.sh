@@ -353,12 +353,9 @@ WANIP=$(wget http://ipecho.net/plain -O - -q)
 
 echo -e "${BOOK} ${YELLOW} Checking service:${NC}"
 
-
-
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN}Docker(SNAP) servive running${NC}"
 else
-
 
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running${NC}"
@@ -371,7 +368,6 @@ echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Docker Socket for the API not running${NC}"
 fi
-
 
 fi
 
@@ -387,8 +383,6 @@ else
 echo -e "${X_MARK} ${CYAN} Zelcash service not running${NC}"
 fi
 echo -e ""
-
-
 
 if [[ $node_status != "CONFIRMED" ]]; then
 if whiptail --yesno "Would you like to verify zelcash.conf Y/N?" 8 60; then
