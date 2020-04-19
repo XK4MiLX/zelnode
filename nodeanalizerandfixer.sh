@@ -283,6 +283,7 @@ echo -e "${NC}"
 echo -e "${YELLOW}Checking zelcash information...${NC}"
 zelcash_info=$(zelcash-cli getinfo)
 echo "$(jq -r '.version' <<< "$zelcash_info")"
+echo "$zelcash_info" | jq -r '.version'
 echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
