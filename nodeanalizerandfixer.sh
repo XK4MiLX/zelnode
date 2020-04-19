@@ -27,7 +27,7 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-WORNING="${YELLOW}\xE2\x9A\xA0${NC}"
+WORNING="${SEA}\xF0\x9F\x9A\xA8${NC}"
 
 #dialog color
 export NEWT_COLORS='
