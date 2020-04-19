@@ -242,7 +242,7 @@ echo -e "${PIN} ${CYAN}Creating zelbenchmark_debug_error.log${NC}"
 egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
 echo
 else
-echo -e "${YELLOW}\xF0\x9F\x94\x8A ${CYAN}Found: ${RED}0 errors${NC}"
+echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 fi
 echo
 else
