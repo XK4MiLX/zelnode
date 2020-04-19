@@ -391,7 +391,7 @@ zelcash_running=$(systemctl status zelcash 2> /dev/null | grep 'running' | grep 
 zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 
-if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${SEA}$snap_docker_running${NC}"
 else
 
@@ -403,7 +403,7 @@ fi
 
 fi
 
-if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
 else
 if [[ "$docker_inactive" != "" ]]; then
@@ -414,7 +414,7 @@ fi
 
 fi
 
-if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if systemctl list-units | grep docker.socket | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
 else
 
@@ -426,7 +426,7 @@ fi
 
 fi
 
-if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
 else
 
@@ -438,7 +438,7 @@ fi
 
 fi
 
-if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
+if systemctl list-units | grep zelcash | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Zelcash service running ${SEA}$zelcash_running${NC}"
 else
 if [[ "$zelcash_inactive" != "" ]]; then
