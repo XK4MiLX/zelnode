@@ -373,13 +373,6 @@ echo -e ""
 
 
 
-
-
-snap.docker.dockerd.service
-
-
-
-
 echo -e "${BOOK} ${YELLOW}Checking service:${NC}"
 
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
