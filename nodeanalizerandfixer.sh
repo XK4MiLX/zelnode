@@ -335,11 +335,11 @@ collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
-echo "error check1..."
+echo "error check123..."
 
 txhash=$(grep -o "\w*" <<< "$collateral")
-echo "txhash: $txhash"
-txhash=$(grep -o "\w*" | sed -n "2p" | egrep "\w{10,50}" <<< "$collateral")
+txhash=$(sed -n "2p" <<< "$txhash")
+txhash=$(egrep "\w{10,50}" <<< "$txhash")
 echo "txhash: $txhash"
 
 #if [[ "$txhash" != "" ]]; then
