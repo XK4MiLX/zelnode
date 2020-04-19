@@ -32,6 +32,7 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 #dialog color
 export NEWT_COLORS='
 title=black,
+WANIP=$(wget http://ipecho.net/plain -O - -q)
 '
 
 #function
@@ -365,7 +366,7 @@ integration
 echo -e ""
 
 
-WANIP=$(wget http://ipecho.net/plain -O - -q)
+
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 #fi
