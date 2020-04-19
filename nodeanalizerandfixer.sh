@@ -351,7 +351,7 @@ WANIP=$(wget http://ipecho.net/plain -O - -q)
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 #fi
 
-echo -e "${BOOK} ${YELLOW} Checking service:${NC}"
+echo -e "${BOOK} ${YELLOW}Checking service:${NC}"
 
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
