@@ -277,24 +277,29 @@ echo -e "${RED}Debug file not exists${NC}"
 echo
 fi
 
-echo -e "${NC}"
-echo -e "${YELLOW}Checking benchmark status...${NC}"
-zelbench-cli getstatus
-echo -e "${NC}"
-echo -e "${YELLOW}Checking benchmarks details...${NC}"
-zelbench-cli getbenchmarks
-echo -e "${NC}"
-echo -e "${YELLOW}Checking zelcash information...${NC}"
-
 if zelcash-cli getinfo > /dev/null 2>&1; then
-zelcash_info=$(zelcash-cli getinfo)
-echo "$(jq -r '.version' <<< "$zelcash_info")"
-echo "$zelcash_info" | jq -r '.version'
+
+echo -e "${NC}"
+echo -e"${YELLOW}${BOOK} Zalcash deamon information:${NC}"
+zelcash_getinfo=$(zelcash-cli getinfo)
+version=$(jq -r '.version' <<< "$zelcash_getinfo")
+blocks_hight=$(jq -r '.blocks' <<< "$zelcash_getinfo")
+protocolversion=$(jq -r '.protocolversion' <<< "$zelcash_getinfo")
+connections=$(jq -r '.connections' <<< "$zelcash_getinfo")
+
+echo -e "${PIN} ${CYAN}Version: ${SEA}$version${NC}"
+echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
+echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
+echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
+
+if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
+echo -e "${PIN} ${CYAN}status: ${GREEN}synced${NC}"
+else
+echo -e "${PIN} ${CYAN}status: ${RED}not synced${NC}"
 fi
 
-echo -e "${NC}"
-echo -e "${YELLOW}Checking node status...${NC}"
-zelcash-cli getzelnodestatus
+fi
+
 echo -e "${NC}"
 echo -e "${YELLOW}Checking listen ports...${NC}"
 check_listen_ports
