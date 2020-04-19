@@ -338,7 +338,7 @@ zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
 node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
 collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
-echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}
+echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 
 
 
