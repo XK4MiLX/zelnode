@@ -396,7 +396,7 @@ echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${SEA}$snap_docker_r
 else
 
 if [ "$snap_docker_inactive" != "" ]; then
-echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running ${SEA}$snap_docker_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running ${RED}$snap_docker_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Docker(SNAP) is not installed${NC}"
 fi
@@ -407,7 +407,7 @@ if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
 else
 if [[ "$docker_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Docker servive not running ${SEA}$docker_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Docker servive not running ${RED}$docker_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Docker is not installed${NC}"
 fi
@@ -419,7 +419,7 @@ echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_s
 else
 
 if [[ "$docker_socket_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${SEA}$docker_socket_inactive ${NC}"
+echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${RED}$docker_socket_inactive ${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Docker Socket for the API is not installed${NC}"
 fi
@@ -431,7 +431,7 @@ echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC
 else
 
 if [[ "$mongod_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}MongoDB service not running ${SEA}$mongod_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}MongoDB service not running ${RED}$mongod_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}MongoDB service is not installed${NC}"
 fi
@@ -442,7 +442,7 @@ if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /de
 echo -e "${CHECK_MARK} ${CYAN} Zelcash service ${SEA}$zelcash_running${NC}"
 else
 if [[ "$zelcash_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${SEA}$zelcash_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${RED}$zelcash_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Zelcash service is not installed${NC}"
 fi
