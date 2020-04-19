@@ -381,14 +381,14 @@ snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null
 docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
 docker_inactive=$(systemctl status docker 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
-docker_socket_running=$(systemctl status docker.socket > /dev/null 2>&1 | grep 'running'  | grep -o 'since.*')
-docker_socket_inactive=$(systemctl status docker.socket > /dev/null 2>&1 | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')
+docker_socket_running=$(systemctl status docker.socket 2> /dev/null | grep 'running'  | grep -o 'since.*')
+docker_socket_inactive=$(systemctl status docker.socket 2> /dev/null | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')
 
-mongod_running=$(systemctl status mongod > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
-mongod_inactive=$(systemctl status mongod > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+mongod_running=$(systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
+mongod_inactive=$(systemctl status mongod > 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
-zelcash_running=$(systemctl status zelcash > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
-zelcash_inactive=$(systemctl status zelcash > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+zelcash_running=$(systemctl status zelcash > 2> /dev/null | grep 'running' | grep -o 'since.*')
+zelcash_inactive=$(systemctl status zelcash > 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
 
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
