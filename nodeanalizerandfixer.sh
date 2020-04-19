@@ -280,7 +280,7 @@ fi
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
 echo -e "${NC}"
-echo -e"${YELLOW}${BOOK} Zalcash deamon information:${NC}"
+echo -e "${YELLOW}${BOOK} Zalcash deamon information:${NC}"
 zelcash_getinfo=$(zelcash-cli getinfo)
 version=$(jq -r '.version' <<< "$zelcash_getinfo")
 blocks_hight=$(jq -r '.blocks' <<< "$zelcash_getinfo")
@@ -293,9 +293,9 @@ echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
-echo -e "${PIN} ${CYAN}status: ${GREEN}synced${NC}"
+echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
 else
-echo -e "${PIN} ${CYAN}status: ${RED}not synced${NC}"
+echo -e "${PIN} ${CYAN}Status: ${RED}not synced${NC}"
 fi
 
 fi
