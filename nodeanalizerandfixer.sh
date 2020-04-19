@@ -295,7 +295,7 @@ echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${
 fi
 
 if [[ "$zelbench_benchmark" == "failed" ]]; then
-echo -e "${X_MARK} ${CYAN} ZelBench not working correct, check zelbenchmark debug.log${NC}"
+echo -e "${X_MARK} ${CYAN}ZelBench not working correct, check zelbenchmark debug.log${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
@@ -348,10 +348,10 @@ if [[ $conf == ?(-)+([0-9]) ]]; then
 if [ "$conf" -ge "100" ]; then
 echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
+echo -e "${X_MARK} ${CYAN}Confirmations numbers < 100($conf)${NC}"
 fi
 else
-echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
+echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 fi
 
@@ -384,31 +384,31 @@ docker_inactive=$(systemctl status docker > /dev/null 2>&1 | grep 'inactive' | g
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Docker(SNAP) servive not running${NC}"
+echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running${NC}"
 fi
 
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Docker servive running $docker_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Docker servive not running $docker_inactive${NC}"
+echo -e "${X_MARK} ${CYAN}Docker servive not running $docker_inactive${NC}"
 fi
 
 if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'running'  | grep -o 'since.*')${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Docker Socket for the API not running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')${NC}"
+echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')${NC}"
 fi
 
 if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running $(systemctl status mongod > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')${NC}"
 else
-echo -e "${X_MARK} ${CYAN} MongoDB service not running $(systemctl status mongod > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
+echo -e "${X_MARK} ${CYAN}MongoDB service not running $(systemctl status mongod > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
 fi
 
 if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' ; then
 echo -e "${CHECK_MARK} ${CYAN} Zelcash service running $(systemctl status zelcash > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Zelcash service not running $(systemctl status zelcash > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
+echo -e "${X_MARK} ${CYAN}Zelcash service not running $(systemctl status zelcash > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
 fi
 echo -e ""
 
