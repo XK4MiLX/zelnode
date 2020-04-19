@@ -252,6 +252,8 @@ echo -e "${YELLOW}Checking zelcash debug.log${NC}"
 if [ -f /home/$USER/.zelcash/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
+
+if [[ $(egrep -ac -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'ZelBenchd isn' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
@@ -262,6 +264,8 @@ event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
+fi
+
 ##echo -e "${CYAN}Benchmark errors:${NC}"
 ##egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
 fi
@@ -281,9 +285,13 @@ echo -e "${YELLOW}Checking benchmarks details...${NC}"
 zelbench-cli getbenchmarks
 echo -e "${NC}"
 echo -e "${YELLOW}Checking zelcash information...${NC}"
+
+if zelcash-cli getinfo > /dev/null 2>&1; then
 zelcash_info=$(zelcash-cli getinfo)
 echo "$(jq -r '.version' <<< "$zelcash_info")"
 echo "$zelcash_info" | jq -r '.version'
+fi
+
 echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
