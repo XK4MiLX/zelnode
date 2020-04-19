@@ -247,7 +247,7 @@ else
 echo -e "${RED}Debug file not exists${NC}"
 echo
 fi
-echo -e "${YELLOW}Checking zelcash debug.log${NC}"
+echo -e "${BOOK} ${YELLOW}Checking zelcash debug.log${NC}"
 if [ -f /home/$USER/.zelcash/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to Benchmark${NC}"
@@ -278,7 +278,7 @@ fi
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
-echo -e "${BOOK}  ${YELLOW}ZelBench status:${NC}"
+echo -e "${BOOK} ${YELLOW}ZelBench status:${NC}"
 zelbench_getatus=$(zelbench-cli getstatus)
 zelbench_status=$(jq -r '.status' <<< "$zelbench_getatus")
 zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
@@ -298,6 +298,7 @@ echo -e "${X_MARK} ${CYAN}ZelBench not working correct, check zelbenchmark debug
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
+$BTEST="1"
 echo -e "${X_MARK} ${CYAN}ZelBench working correct but minimum system requirements not met.${NC}"
 check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
