@@ -382,15 +382,15 @@ docker_running=$(systemctl status docker > /dev/null 2>&1 | grep 'running' | gre
 docker_inactive=$(systemctl status docker > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
 
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' ; then
-echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Docker(SNAP) servive not running ${NC}"
+echo -e "${X_MARK} ${CYAN} Docker(SNAP) servive not running${NC}"
 fi
 
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' ; then
-echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker servive running $docker_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Docker servive not running ${NC}"
+echo -e "${X_MARK} ${CYAN} Docker servive not running $docker_inactive${NC}"
 if
 
 if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' ; then
