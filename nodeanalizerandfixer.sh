@@ -301,6 +301,8 @@ fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
 echo -e "${X_MARK} ${CYAN}ZelBench working correct but minimum system requirements not met.${NC}"
+check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
+check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
 fi
 
 echo -e "${NC}
@@ -433,41 +435,7 @@ else
 echo -e "${X_MARK} ${CYAN}User $USER is not member of 'docker'${NC}"
 fi
 
-b_status=$(zelbench-cli getstatus | jq '.benchmarking')
-zelback=$(zelbench-cli getstatus | jq '.zelback')
 
-good_zelback='"connected"'
-good_benchamrk1='"BASIC"'
-good_benchamrk2='"SUPER"'
-good_benchamrk3='"BAMF"'
-failed_benchamrk='"failed"'
-
-if [[ "$b_status"  == "$good_benchamrk1" || "$b_status"  == "$good_benchamrk2" || "$b_status"  == "$good_benchamrk3" ]]
-then
-echo -e "${CHECK_MARK} ${CYAN}Benchmark [OK]($b_status)${NC}"
-else
-BTEST="1"
-echo -e "${X_MARK} ${CYAN}Benchmark [Failed]${NC}"
-
-bench_status=$(zelbench-cli getbenchmarks | jq '.status')
-if [[ "$bench_status" == "$failed_benchamrk" ]] 
-then
-lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
-lc_numeric_need='"en_US.UTF-8"'
-
-if [ "$lc_numeric_var" == "$lc_numeric_need" ]
-then
-echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC is correct${NC}"
-else
-echo -e "${X_MARK} ${CYAN}You need set LC_NUMERIC to en_US.UTF-8${NC}"
-LC_CHECK="1"
-fi
-fi
-
-check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
-check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
-
-fi
 
 if [ "$good_zelback" == "$zelback" ]
 then
