@@ -291,7 +291,7 @@ echo -e "${PIN} ${CYAN}Benchmark: ${SEA}$zelbench_benchmark${NC}"
 echo -e "${PIN} ${CYAN}ZelBack: ${SEA}$zelbench_zelback${NC}"
 echo -e "${NC}"
 
-if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" | "$zelbench_benchmark" == "BAMF" ]]; then
+if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
 echo -e "${CHECK_MARK} ${CYAN}ZelBench working correct, all requirements met.${NC}"
 fi
 
