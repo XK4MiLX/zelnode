@@ -153,16 +153,16 @@ fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${CYAN}Zelcash listen on port 16125${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelcash listen on port 16125${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Zelcash not listen${NC}"
+echo -e "${X_MARK} ${CYAN} Zelcash not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelbenchd > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${CYAN}Zelbench listen on port 16125${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelbench listen on port 16125${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Zelbench not listen${NC}"
+echo -e "${X_MARK} ${CYAN} Zelbench not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
@@ -177,9 +177,9 @@ fi
 
 if [[ "$ZELFLUX_PORT1" == "1" && "$ZELFLUX_PORT2" == "1"  ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}Zelflux listen on ports 16126/16127${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelflux listen on ports 16126/16127${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Zelflux not listen${NC}"
+echo -e "${X_MARK} ${CYAN} Zelflux not listen${NC}"
 fi
 
 }
@@ -290,11 +290,11 @@ echo -e "${PIN} ${CYAN}ZelBack: ${SEA}$zelbench_zelback${NC}"
 echo -e "${NC}"
 
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
-echo -e "${CHECK_MARK} ${CYAN}ZelBench working correct, all requirements met.${NC}"
+echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "failed" ]]; then
-echo -e "${X_MARK} ${CYAN}ZelBench not working correct, check zelbenchmark debug.log${NC}"
+echo -e "${X_MARK} ${CYAN} ZelBench not working correct, check zelbenchmark debug.log${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
