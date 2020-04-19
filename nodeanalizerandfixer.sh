@@ -224,7 +224,7 @@ then
 fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
-echo -e "${YELLOW}Checking zelbenchmark debug.log${NC}"
+echo -e "${BOOK} ${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
@@ -241,6 +241,8 @@ show_time "$tdiff"
 echo -e "${PIN} ${CYAN}Creating zelbenchmark_debug_error.log${NC}"
 egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
 echo
+else
+echo -e "${YELLOW}\xF0\x9F\x94\x8A ${CYAN}Found: ${RED}0 errors${NC}"
 fi
 echo
 else
