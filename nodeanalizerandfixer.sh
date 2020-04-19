@@ -340,7 +340,6 @@ collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 
-
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
@@ -388,7 +387,6 @@ echo -e "${X_MARK} ${CYAN}Zelnodeindex does not match${NC}"
 fi
 
 fi
-
 
 if ls -la ~/.zelcash | grep root > /dev/null; then
 echo -e "${X_MARK} ${CYAN}Zelcash directory root ownership detected${NC}"
