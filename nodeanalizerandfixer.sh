@@ -196,7 +196,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
         if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
             echo -e "${CHECK_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
         else
-            echo -e "${X_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
+            echo -e "${X_MARK} ${CYAN} ${FILE_ARRAY[${i}]}"
             NOT_FOUND="1"
         fi 
 done
