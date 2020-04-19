@@ -381,34 +381,71 @@ snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null
 docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
 docker_inactive=$(systemctl status docker 2> /dev/null | grep 'inactive' | grep -o 'since.*')
 
+docker_socket_running=$(systemctl status docker.socket > /dev/null 2>&1 | grep 'running'  | grep -o 'since.*')
+docker_socket_inactive=$(systemctl status docker.socket > /dev/null 2>&1 | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')
+
+mongod_running=$(systemctl status mongod > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
+mongod_inactive=$(systemctl status mongod > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+
+zelcash_running=$(systemctl status zelcash > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')
+zelcash_inactive=$(systemctl status zelcash > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')
+
+
 if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${SEA}$snap_docker_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running${NC}"
+
+if [ "$snap_docker_inactive" != "" ]; then
+echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running ${SEA}$snap_docker_inactive${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Docker(SNAP) is not installed${NC}"
+fi
+
 fi
 
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Docker servive running $docker_running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Docker servive not running $docker_inactive${NC}"
+if [[ "docker_running" != "" ]]; then
+echo -e "${X_MARK} ${CYAN}Docker servive not running ${SEA}$docker_inactive${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Docker is not installed${NC}"
+fi
+
 fi
 
 if systemctl list-units | grep docker.socket | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'running'  | grep -o 'since.*')${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running $(systemctl status docker.socket > /dev/null 2>&1 | grep 'inactive' > /dev/null 2>&1 | grep -o 'since.*')${NC}"
+
+if [[ "$docker_socket_inactive" != "" ]]; then
+echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${SEA}$docker_socket_inactive ${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Docker Socket for the API is not installed${NC}"
+fi
+
 fi
 
 if systemctl list-units | grep mongod | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} MongoDB service running $(systemctl status mongod > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')${NC}"
+echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN}MongoDB service not running $(systemctl status mongod > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
+
+if [[ "$mongod_inactive" != "" ]]; then
+echo -e "${X_MARK} ${CYAN}MongoDB service not running ${SEA}$mongod_inactive${NC}"
+else
+echo -e "${X_MARK} ${CYAN}MongoDB service is not installed${NC}"
+fi
+
 fi
 
 if systemctl list-units | grep zelcash | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Zelcash service running $(systemctl status zelcash > /dev/null 2>&1 | grep 'running' | grep -o 'since.*')${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelcash service ${SEA}$running zelcash_running${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Zelcash service not running $(systemctl status zelcash > /dev/null 2>&1 | grep 'inactive' | grep -o 'since.*')${NC}"
+if [[ $running zelcash_inactive != "" ]]; then
+echo -e "${X_MARK} ${CYAN}Zelcash service not running  ${SEA}$running zelcash_inactive${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zelcash service is not installed${NC}"
+fi
 fi
 echo -e ""
 
