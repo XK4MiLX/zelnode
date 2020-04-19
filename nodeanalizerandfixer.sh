@@ -354,7 +354,7 @@ WANIP=$(wget http://ipecho.net/plain -O - -q)
 echo -e "${BOOK} ${YELLOW} Checking service:${NC}"
 
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN}Docker(SNAP) servive running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running${NC}"
 else
 
 if systemctl list-units | grep docker.service | egrep -wi 'loaded|active|running' > /dev/null 2>&1; then
