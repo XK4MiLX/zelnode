@@ -571,7 +571,6 @@ fi
 
 fi
  
-
 if [[ $(ping -c1 $(hostname | grep .) | sed -nE 's/^PING[^(]+\(([^)]+)\).*/\1/p') =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         echo -e "${CHECK_MARK} ${CYAN}IP detected successful ${NC}"
 else
