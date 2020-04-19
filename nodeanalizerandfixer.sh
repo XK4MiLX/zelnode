@@ -281,7 +281,8 @@ echo -e "${YELLOW}Checking benchmarks details...${NC}"
 zelbench-cli getbenchmarks
 echo -e "${NC}"
 echo -e "${YELLOW}Checking zelcash information...${NC}"
-zelcash-cli getinfo
+zelcash_info=$(zelcash-cli getinfo > /dev/null 2>&1)
+echo "$(jq -r '.version' <<< "$zelcash_info")"
 echo -e "${NC}"
 echo -e "${YELLOW}Checking node status...${NC}"
 zelcash-cli getzelnodestatus
