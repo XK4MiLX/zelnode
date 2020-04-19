@@ -32,9 +32,8 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 #dialog color
 export NEWT_COLORS='
 title=black,
-WANIP=$(wget http://ipecho.net/plain -O - -q)
 '
-
+WANIP=$(wget http://ipecho.net/plain -O - -q)
 #function
 function show_time() {
     num=$1
