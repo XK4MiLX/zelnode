@@ -243,8 +243,8 @@ egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debu
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
-fi
 echo
+fi
 else
 echo -e "${RED}Debug file not exists${NC}"
 echo
@@ -270,10 +270,8 @@ egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/ze
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
-fi
-echo -e "${PIN} ${CYAN}Creating zelcash_debug_error.log${NC}"
-egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
 echo
+fi
 else
 echo -e "${RED}Debug file not exists${NC}"
 echo
