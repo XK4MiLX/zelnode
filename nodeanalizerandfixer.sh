@@ -335,12 +335,11 @@ collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
-echo "error check123..."
 
+echo -e "${BOOK} ${YELLOW}Checking collateral confirmations:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
 txhash=$(sed -n "2p" <<< "$txhash")
 txhash=$(egrep "\w{10,50}" <<< "$txhash")
-echo "txhash: $txhash"
 
 if [[ "$txhash" != "" ]]; then
 url_to_check="https://explorer.zel.cash/api/tx/$txhash"
@@ -348,12 +347,12 @@ conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
 if [[ $conf == ?(-)+([0-9]) ]]; then
 if [ "$conf" -ge "100" ]; then
-echo -e "${CHECK_MARK} ${CYAN}Confirmations numbers >= 100($conf)${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Confirmations numbers < 100($conf)${NC}"
+echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
 fi
 else
-echo -e "${X_MARK} ${CYAN}Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
+echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
 fi
 fi
 
