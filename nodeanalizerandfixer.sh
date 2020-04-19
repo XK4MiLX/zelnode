@@ -253,7 +253,6 @@ echo -e "${BOOK} ${YELLOW}Checking zelcash debug.log${NC}"
 if [ -f /home/$USER/.zelcash/debug.log ]; then
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to benchmark${NC}"
-
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
@@ -266,9 +265,11 @@ now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
 fi
-
-##echo -e "${CYAN}Benchmark errors:${NC}"
-##egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log
+echo -e "${PIN} ${CYAN}Creating zelcash_debug_error.log${NC}"
+egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
+echo
+else
+echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 fi
 echo -e "${PIN} ${CYAN}Creating zelcash_debug_error.log${NC}"
 egrep -wi --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
