@@ -381,11 +381,9 @@ echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}File integration checking:${NC}"
 integration
 echo -e ""
-
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 #fi
-
 echo -e "${BOOK} ${YELLOW}Checking service:..${NC}"
 
 snap_docker_running=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
