@@ -336,7 +336,6 @@ echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
-
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
 echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
 else
