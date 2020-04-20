@@ -294,7 +294,7 @@ fi
 if [[ "$zelbench_status" == "online" ]]; then
 zelbench_status_color="${SEA}$zelbench_status"
 else
-zelbench_status_color="${RED}$zelbench_status" ]]; then
+zelbench_status_color="${RED}$zelbench_status"
 fi
 
 if [[ "$zelbench_zelback" == "connected" ]]; then
