@@ -249,7 +249,7 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
-    sudo rm -rf ~/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     
