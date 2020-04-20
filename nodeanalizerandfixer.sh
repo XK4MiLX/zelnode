@@ -479,7 +479,7 @@ echo -e "${BOOK} ${YELLOW}Checking ZelFlux..${NC}"
 
 if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}ZelFront is working${NC}"
+echo -e "${CHECK_MARK} ${CYAN} ZelFront is working${NC}"
 else
 echo -e "${X_MARK} ${CYAN}ZelFront is not working${NC}"
 fi
@@ -496,9 +496,9 @@ then
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${CHECK_MARK} ${CYAN}Y ou have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
+      echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
    else
-      echo -e "${X_MARK} ${CYAN}New version of Zelflux available${NC}"
+      echo -e "${X_MARK} ${CYAN}New version of Zelflux available ${SEA}required_ver${NC}"
       FLUX_UPDATE="1"
    fi
  fi
