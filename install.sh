@@ -266,8 +266,7 @@ function wipe_clean() {
     else
     	echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     fi
-    
-    
+   
     
     echo
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
