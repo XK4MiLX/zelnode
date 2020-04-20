@@ -475,4 +475,53 @@ fi
 fi
 echo -e ""
 
+echo -e "${BOOK} ${YELLOW}Checking ZelFlux..${NC}"
+
+if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
+then
+echo -e "${CHECK_MARK} ${CYAN}ZelFront is working${NC}"
+else
+echo -e "${X_MARK} ${CYAN}ZelFront is not working${NC}"
+fi
+
+
+if [ -d ~/zelflux ]
+then
+FILE=~/zelflux/config/userconfig.js
+if [ -f "$FILE" ]
+then
+
+ current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+ required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+if [[ "$required_ver" != "" ]]; then
+   if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
+      echo -e "${CHECK_MARK} ${CYAN}Y ou have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
+   else
+      echo -e "${X_MARK} ${CYAN}New version of Zelflux available${NC}"
+      FLUX_UPDATE="1"
+   fi
+ fi
+
+echo -e "${CHECK_MARK} ${CYAN} Zelflux config  ~/zelflux/config/userconfig.js exists${NC}"
+
+ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
+if [ "$ZELIDLG" -eq "36" ] || [ "$ZELIDLG" -eq "35" ]
+then
+echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Zel ID is not valid${NC}"
+fi
+
+else
+FLUXCONF="1"
+    echo -e "${X_MARK} ${CYAN} Zelflux config ~/zelflux/config/userconfig.js does not exists${NC}"
+fi
+
+else
+    echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
+fi
+
+
+
 
