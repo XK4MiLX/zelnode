@@ -285,8 +285,14 @@ zelbench_status=$(jq -r '.status' <<< "$zelbench_getatus")
 zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
 zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
 
+if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]
+zelbench_status="${RED}$zelbench_status"
+else
+zelbench_status="${SEA}$zelbench_status"
+fi
+
 echo -e "${PIN} ${CYAN}Zelbench status: ${SEA}$zelbench_status${NC}"
-echo -e "${PIN} ${CYAN}Benchmark: ${SEA}$zelbench_benchmark${NC}"
+echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark${NC}"
 echo -e "${PIN} ${CYAN}ZelBack: ${SEA}$zelbench_zelback${NC}"
 echo -e "${NC}"
 
@@ -295,7 +301,7 @@ echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${
 fi
 
 if [[ "$zelbench_benchmark" == "failed" ]]; then
-echo -e "${X_MARK} ${CYAN}ZelBench not working correct, check zelbenchmark debug.log${NC}"
+echo -e "${X_MARK} ${CYAN}ZelBench detected problem, check zelbenchmark debug.log${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
@@ -370,8 +376,6 @@ echo -e ""
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
    #WANIP=$(whiptail  --title "ZelNode ANALIZER/FiXER $SCVESION" --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
 #fi
-
-
 
 echo -e "${BOOK} ${YELLOW}Checking service:..${NC}"
 
