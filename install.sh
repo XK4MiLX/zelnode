@@ -221,6 +221,8 @@ function wipe_clean() {
     sudo killall -s SIGKILL $COIN_DAEMON > /dev/null 2>&1 && sleep 2
     zelbench-cli stop > /dev/null 2>&1 && sleep 1
     sudo killall -s SIGKILL zelbenchd > /dev/null 2>&1 && sleep 1
+    sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
+    sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
     sudo rm -rf  ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/local/bin/zel* > /dev/null 2>&1 && sleep 1
@@ -246,8 +248,6 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
-    sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
-    sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
     sudo rm -rf ~/$CONFIG_DIR 
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
