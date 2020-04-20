@@ -352,7 +352,7 @@ collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 if [ "$node_status" == "CONFIRMED" ]
 then
 node_status_color="${SEA}$node_status"
-elseif [ "$node_status" == "STARTED" ]
+else if [ "$node_status" == "STARTED" ]
 then
 node_status_color="${YELLOW}$node_status"
 else
