@@ -475,8 +475,8 @@ then
 echo -e "${YELLOW}Local bootstrap file detected...${NC}"
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 
-lsof +d /home/$USER/.zelcash
-sleep 4
+#lsof +d /home/$USER/.zelcash
+#sleep 4
 
 unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
 else
