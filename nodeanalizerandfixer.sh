@@ -518,7 +518,7 @@ then
 echo -e "${WORNING} ${CYAN}Zelflux problem detected, check ~/zelflux/error.log"
 fi
 
-if [ -f ~/zelflux/ZelFront/dist/index.html ]
+if [ ! -f ~/zelflux/ZelFront/dist/index.html ]
 then
 echo -e "${WORNING} ${CYAN}Zelflux problem detected, missing ~/zelflux/ZelFront/dist/index.html"
 fi
