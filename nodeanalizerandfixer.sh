@@ -515,8 +515,14 @@ fi
 
 if [ -f ~/zelflux/error.log ]
 then
-echo -e "${WORNING} ${CYAN}Zelflux detected problems, check ~/zelflux/error.log"
+echo -e "${WORNING} ${CYAN}Zelflux problem detected, check ~/zelflux/error.log"
 fi
+
+if [ -f ~/zelflux/ZelFront/dist/index.html ]
+then
+echo -e "${WORNING} ${CYAN}Zelflux problem detected, missing ~/zelflux/ZelFront/dist/index.html"
+fi
+
 
 else
 FLUXCONF="1"
