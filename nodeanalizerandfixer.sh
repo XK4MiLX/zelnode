@@ -513,6 +513,11 @@ else
 echo -e "${X_MARK} ${CYAN}Zel ID is not valid${NC}"
 fi
 
+if [ -f ~/zelflux/error.log ]
+then
+echo -e "${WORNING} ${CYAN} Zelflux detected problems, check ~/zelflux/error.log"
+fi
+
 else
 FLUXCONF="1"
     echo -e "${X_MARK} ${CYAN} Zelflux config ~/zelflux/config/userconfig.js does not exists${NC}"
@@ -522,9 +527,6 @@ else
     echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
 fi
 
-if [ -d ~/zelflux/error.log ]
-then
-echo -e "${WORNING} ${CYAN} Zelflux detected problems, check ~/zelflux/error.log"
-fi
+
 
 
