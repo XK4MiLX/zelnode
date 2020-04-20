@@ -219,13 +219,14 @@ function wipe_clean() {
     $COIN_CLI stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL $COIN_DAEMON > /dev/null 2>&1 && sleep 2
-    zelbench-cli stop > /dev/null 2>&1 && sleep 1
+    zelbench-cli stop > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL zelbenchd > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
     sudo rm -rf  ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/local/bin/zel* > /dev/null 2>&1 && sleep 1
+    sudo apt-get remove zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm -rf /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
@@ -248,10 +249,27 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
-    sudo rm -rf ~/$CONFIG_DIR 
+    sudo rm -rf ~/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     
+    
+    
+    if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
+    	echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
+    else
+    	echo -e "${X_MARK} ${CYAN}Config directory /home/$USER/$CONFIG_DIR cleaned [Failed]${NC}" && sleep 1
+    fi
+    
+    if ! ls '/usr/local/bin/' | grep zel > /dev/null 2>&1 ; then
+    	echo -e "${CHECK_MARK} ${CYAN} Bin directory cleaned [OK]${NC}" && sleep 1
+    else
+    	echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
+    fi
+    
+    
+    
+    echo
     echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
