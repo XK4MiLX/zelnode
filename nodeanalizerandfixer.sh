@@ -413,7 +413,7 @@ zelcash_running=$(systemctl status zelcash 2> /dev/null | grep 'running' | grep 
 zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 
-if systemctl list-units | grep snap.docker.dockerd.servicen | egrep -wi 'running' > /dev/null 2>&1; then
+if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${SEA}$snap_docker_running${NC}"
 else
 
