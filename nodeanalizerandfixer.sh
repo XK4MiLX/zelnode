@@ -285,7 +285,7 @@ zelbench_status=$(jq -r '.status' <<< "$zelbench_getatus")
 zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
 zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
 
-if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]
+if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]; then
 zelbench_benchmark="${RED}$zelbench_benchmark"
 else
 zelbench_benchmark="${SEA}$zelbench_benchmark"
