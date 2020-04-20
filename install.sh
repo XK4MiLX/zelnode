@@ -87,7 +87,6 @@ if whiptail --yesno "Would you like to import zelid from userconfig.js Y/N?" 8 6
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
-echo
 fi
 fi
 sleep 2
@@ -96,7 +95,7 @@ sleep 2
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
-
+echo
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
