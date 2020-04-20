@@ -212,11 +212,11 @@ echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bo
 echo -e ""
 fi
 
-}"
+}
 
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
-    $COIN_CLI stop > /dev/null 2>&1 && sleep 2
+    "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL $COIN_DAEMON > /dev/null 2>&1 && sleep 2
     zelbench-cli stop > /dev/null 2>&1 && sleep 2
