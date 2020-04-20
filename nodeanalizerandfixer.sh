@@ -148,21 +148,21 @@ if sudo lsof -i  -n | grep LISTEN | grep 27017 | grep mongod > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN} Mongod listen on port 27017${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Mongod not listen${NC}"
+echo -e "${X_MARK} ${CYAN}Mongod not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN} Zelcash listen on port 16125${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Zelcash not listen${NC}"
+echo -e "${X_MARK} ${CYAN}Zelcash not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelbenchd > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN} Zelbench listen on port 16125${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Zelbench not listen${NC}"
+echo -e "${X_MARK} ${CYAN}Zelbench not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
@@ -179,7 +179,7 @@ if [[ "$ZELFLUX_PORT1" == "1" && "$ZELFLUX_PORT2" == "1"  ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} Zelflux listen on ports 16126/16127${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Zelflux not listen${NC}"
+echo -e "${X_MARK} ${CYAN}Zelflux not listen${NC}"
 fi
 
 }
@@ -196,7 +196,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
         if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
             echo -e "${CHECK_MARK} ${CYAN} ${FILE_ARRAY[${i}]}"
         else
-            echo -e "${X_MARK} ${CYAN} ${FILE_ARRAY[${i}]}"
+            echo -e "${X_MARK} ${CYAN}${FILE_ARRAY[${i}]}"
             NOT_FOUND="1"
         fi 
 done
@@ -209,7 +209,7 @@ function check_benchmarks() {
  if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]
  then
   var_round=$(round "$var_benchmark" 2)
-  echo -e "${X_MARK} ${CYAN} $3 $var_round $4${NC}"
+  echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
  fi
 
 }
@@ -291,9 +291,21 @@ else
 zelbench_benchmark_color="${SEA}$zelbench_benchmark"
 fi
 
-echo -e "${PIN} ${CYAN}Zelbench status: ${SEA}$zelbench_status${NC}"
+if [[ "$zelbench_status" == "online" then
+zelbench_status_color="${SEA}$zelbench_status"
+else
+zelbench_status_color="${RED}$zelbench_status"
+fi
+
+if [[ "$zelbench_zelback" == "connected" then
+zelbench_zelback_color="${SEA}$zelbench_zelback"
+else
+zelbench_zelback_color="${RED}$zelbench_zelback"
+fi
+
+echo -e "${PIN} ${CYAN}Zelbench status: $zelbench_status_color${NC}"
 echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
-echo -e "${PIN} ${CYAN}ZelBack: ${SEA}$zelbench_zelback${NC}"
+echo -e "${PIN} ${CYAN}ZelBack: $zelbench_zelback_color${NC}"
 echo -e "${NC}"
 
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
@@ -301,7 +313,7 @@ echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${
 fi
 
 if [[ "$zelbench_benchmark" == "failed" ]]; then
-echo -e "${X_MARK} ${CYAN}ZelBench detected problem, check zelbenchmark debug.log${NC}"
+echo -e "${X_MARK} ${CYAN}ZelBench problem detected, check zelbenchmark debug.log${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
