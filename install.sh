@@ -479,7 +479,7 @@ echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 lsof +d /home/$USER/.zelcash
 sleep 4
 
-unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+unzip $BOOTSTRAP_ZIPFILE -o /home/$USER/$CONFIG_DIR
 else
 
 echo -e ""
