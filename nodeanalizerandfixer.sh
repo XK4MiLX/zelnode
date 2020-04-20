@@ -357,7 +357,7 @@ else
 node_status_color="${RED}$node_status"
 fi
 
-echo -e "${PIN} ${CYAN}Node status: ${SEA}$node_status${NC}"
+echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 
