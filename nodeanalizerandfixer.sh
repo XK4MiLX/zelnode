@@ -286,9 +286,9 @@ zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
 zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
 
 if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]
-zelbench_status="${RED}$zelbench_status"
+zelbench_benchmark="${RED}$zelbench_benchmark"
 else
-zelbench_status="${SEA}$zelbench_status"
+zelbench_benchmark="${SEA}$zelbench_benchmark"
 fi
 
 echo -e "${PIN} ${CYAN}Zelbench status: ${SEA}$zelbench_status${NC}"
