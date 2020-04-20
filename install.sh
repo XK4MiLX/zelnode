@@ -750,7 +750,6 @@ EOF
     # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd"
-    restart_script
     pm2 start ~/zelflux/start.sh --name zelflux
     pm2 save
     pm2 install pm2-logrotate
@@ -850,82 +849,55 @@ sudo chmod 755 \${COIN_PATH}/\${COIN_NAME}*
 \$COIN_DAEMON > /dev/null 2>&1
 EOF
 
-sudo chmod +x update.sh 
-echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
-echo "git pull" >> "/home/$USER/update-zelflux.sh"
-chmod +x "/home/$USER/update-zelflux.sh"
-(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
+#sudo chmod +x update.sh 
+#echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
+#echo "git pull" >> "/home/$USER/update-zelflux.sh"
+#chmod +x "/home/$USER/update-zelflux.sh"
+#(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
  
 }
 
-function restart_script() {
-
-if [ -f /home/"$USERNAME"/zelflux/start.sh ]
-then
-echo -e "${YELLOW}Run script already exist...${NC}"
-else
-    echo -e "${YELLOW}Creating a script to run zelflux...${NC}"
-    touch /home/"$USERNAME"/zelflux/start.sh
-    cat << EOF > /home/"$USERNAME"/zelflux/start.sh
-#!/bin/bash
-
-cd zelflux && npm start
-EOF
-fi
-    sudo chmod +x /home/"$USERNAME"/zelflux/start.sh
-}
 
 function check() {
     echo
     echo -e "${YELLOW}Running through some checks...${NC}"
+    
     if pgrep zelcashd > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}${COIN_NAME^} daemon is installed and running${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}${COIN_NAME^} daemon is not running${NC}" && sleep 1
     fi
+    
     if [ -d "/home/$USERNAME/.zcash-params" ]; then
     	echo -e "${CHECK_MARK} ${CYAN}zkSNARK params installed${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}zkSNARK params not installed${NC}" && sleep 1
     fi
+    
     if mongod --version > /dev/null; then
     	echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}Mongodb is not running or failed to install${NC}" && sleep 1
     fi
+    
     if node -v > /dev/null 2>&1; then
     	echo -e "${CHECK_MARK} ${CYAN}Nodejs installed${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}Nodejs did not install${NC}" && sleep 1
     fi
+    
     if [ -d "/home/$USERNAME/zelflux" ]; then
     	echo -e "${CHECK_MARK} ${CYAN}Zelflux installed${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}Zelflux did not install${NC}" && sleep 1
     fi
+    
     if [ -f "/home/$USERNAME/$UPDATE_FILE" ]; then
     	echo -e "${CHECK_MARK} ${CYAN}Update script created${NC}" && sleep 1
     else
     	echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 1
     fi
-    if [ -f "/home/$USERNAME/zelflux/start.sh" ]; then
-    	echo -e "${CHECK_MARK} ${CYAN}Restart script for Zelflux created${NC}" && sleep 1
-    else
-    	echo -e "${X_MARK} ${CYAN}Restart script not installed${NC}" && sleep 1
-    fi
-    if [ -f "/home/$USERNAME/update-zelflux.sh" ]; then
-    	echo -e "${CHECK_MARK} ${CYAN}Update script for Zelflux created${NC}" && sleep 1
-    else
-    	echo -e "${X_MARK} ${CYAN}Update script for Zelflux not installed${NC}" && sleep 1
-    fi
-    if [[ $(crontab -l | grep -i update-zelflux) ]]
-    then
- 	echo -e "${CHECK_MARK} ${CYAN}Zelflux auto-update via Crontab installed${NC}"
-    else
-	echo -e "${X_MARK} ${CYAN}Zelflux auto-update via Crontab not installed${NC}"
-    fi
-    
-
+  
     NUM='140'
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
