@@ -291,13 +291,13 @@ else
 zelbench_benchmark_color="${SEA}$zelbench_benchmark"
 fi
 
-if [[ "$zelbench_status" == "online" then
+if [[ "$zelbench_status" == "online" ]]; then
 zelbench_status_color="${SEA}$zelbench_status"
 else
-zelbench_status_color="${RED}$zelbench_status"
+zelbench_status_color="${RED}$zelbench_status" ]]; then
 fi
 
-if [[ "$zelbench_zelback" == "connected" then
+if [[ "$zelbench_zelback" == "connected" ]]; then
 zelbench_zelback_color="${SEA}$zelbench_zelback"
 else
 zelbench_zelback_color="${RED}$zelbench_zelback"
