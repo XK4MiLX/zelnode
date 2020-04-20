@@ -496,7 +496,7 @@ then
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${CHECK_MARK} ${CYAN}You have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
+      echo -e "${CHECK_MARK} ${CYAN} You have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
    else
       echo -e "${X_MARK} ${CYAN}New version of Zelflux available ${SEA}required_ver${NC}"
       FLUX_UPDATE="1"
@@ -515,7 +515,7 @@ fi
 
 if [ -f ~/zelflux/error.log ]
 then
-echo -e "${WORNING} ${CYAN} Zelflux detected problems, check ~/zelflux/error.log"
+echo -e "${WORNING} ${CYAN}Zelflux detected problems, check ~/zelflux/error.log"
 fi
 
 else
@@ -526,7 +526,7 @@ fi
 else
     echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
 fi
-
+echo 
 
 
 
