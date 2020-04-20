@@ -349,9 +349,11 @@ zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
 node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
 collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
 
-if [[ "$node_status" == "CONFIRMED" ]]; then
+if [ "$node_status" == "CONFIRMED" ]
+then
 node_status_color="${SEA}$node_status"
-elseif [[ "$node_status" == "STARTED" ]]; then
+elseif [ "$node_status" == "STARTED" ]
+then
 node_status_color="${YELLOW}$node_status"
 else
 node_status_color="${RED}$node_status"
