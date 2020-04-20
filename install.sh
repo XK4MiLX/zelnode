@@ -233,7 +233,7 @@ function wipe_clean() {
     tmux kill-server > /dev/null 2>&1 && sleep 1  
     pm2 del zelflux > /dev/null 2>&1 && sleep 1
     pm2 del watchdog > /dev/null 2>&1 && sleep 1
-    pm2 save >/dev/null 2>&1
+    pm2 save > /dev/null 2>&1
     pm2 unstartup > /dev/null 2>&1 && sleep 1 
     pm2 flush > /dev/null 2>&1 && sleep 1
     pm2 save > /dev/null 2>&1 && sleep 1
