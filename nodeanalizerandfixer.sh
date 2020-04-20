@@ -522,6 +522,9 @@ else
     echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
 fi
 
-
+if [ -d ~/zelflux/error.log ]
+then
+echo -e "${WORNING} ${CYAN} Zelflux detected problems, check ~/zelflux/error.log"
+fi
 
 
