@@ -86,7 +86,7 @@ if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
 echo -e "${YELLOW}Local bootstrap file detected...${NC}"
 echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
 else
 
 echo -e ""
@@ -107,7 +107,7 @@ do
 	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
 	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-	unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
 	break
 ;;
     2 )
@@ -116,7 +116,7 @@ do
 	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
 	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-	unzip $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
 	break
 ;;
 
