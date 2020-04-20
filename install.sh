@@ -90,12 +90,12 @@ echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 fi
 sleep 2
+echo
 }
 
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
-echo
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
@@ -234,8 +234,8 @@ function wipe_clean() {
     pm2 unstartup > /dev/null 2>&1
     pm2 flush > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
-    pm2 kill 2>&1 && sleep 1
-    sudo npm remove pm2 -g 2>&1 && sleep 1
+    pm2 kill > /dev/null 2>&1
+    sudo npm remove pm2 -g > /dev/null 2>&1
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 1
