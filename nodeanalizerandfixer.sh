@@ -526,7 +526,7 @@ fi
 
 else
 FLUXCONF="1"
-    echo -e "${X_MARK} ${CYAN} Zelflux config ~/zelflux/config/userconfig.js does not exists${NC}"
+    echo -e "${X_MARK} ${CYAN}Zelflux config ~/zelflux/config/userconfig.js does not exists${NC}"
 fi
 
 else
