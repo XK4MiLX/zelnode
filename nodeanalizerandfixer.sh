@@ -22,12 +22,15 @@ GREEN='\033[1;32m'
 CYAN='\033[1;36m'
 NC='\033[0m'
 
+
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+HOT="${RED}\xF0\x9F\x94\xA5${NC}"
+
 
 #dialog color
 export NEWT_COLORS='
@@ -498,7 +501,7 @@ if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
       echo -e "${CHECK_MARK} ${CYAN} You have the current version of Zelflux ${GREEN}(v$required_ver)${NC}"     
    else
-      echo -e "${X_MARK} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
+      echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
       FLUX_UPDATE="1"
    fi
  fi
