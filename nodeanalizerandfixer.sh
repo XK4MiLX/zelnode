@@ -329,7 +329,7 @@ echo -e "${X_MARK} ${CYAN}ZelBench problem detected, check zelbenchmark debug.lo
 fi
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
-$BTEST="1"
+BTEST="1"
 echo -e "${X_MARK} ${CYAN}ZelBench working correct but minimum system requirements not met.${NC}"
 check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
