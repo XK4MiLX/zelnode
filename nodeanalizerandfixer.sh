@@ -234,9 +234,11 @@ echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
 error_line=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
-data_now_format=$(date +%F_%H-%M-%S)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date${NC}"
+event_time_uxtime=$(date -d "$event_date" +"%s")
+event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_human_time_local${NC} / ${GREEN}$event_human_time_utc${NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
@@ -260,9 +262,11 @@ if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != 
 echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
-data_now_format=$(date +%F_%H-%M-%S)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_date${NC}"
+event_time_uxtime=$(date -d "$event_date" +"%s")
+event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_human_time_local${NC} / ${GREEN}$event_human_time_utc${NC}"
 event_time=$(date --date "$event_date" +%s)
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
