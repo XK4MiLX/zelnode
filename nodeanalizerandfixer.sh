@@ -322,6 +322,8 @@ echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
 echo -e "${PIN} ${CYAN}ZelBack: $zelbench_zelback_color${NC}"
 echo -e "${NC}"
 
+
+
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${NC}"
 fi
@@ -330,11 +332,16 @@ if [[ "$zelbench_benchmark" == "failed" ]]; then
 echo -e "${X_MARK} ${CYAN}ZelBench problem detected, check zelbenchmark debug.log${NC}"
 fi
 
+
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
 BTEST="1"
 echo -e "${X_MARK} ${CYAN}ZelBench working correct but minimum system requirements not met.${NC}"
 check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
+fi
+
+if [[ "$zelbench_zelback" == "disconnected" ]]; then
+echo -e "${X_MARK} ${CYAN}ZelBack does not work properly${NC}"
 fi
 
 echo -e "${NC}"
