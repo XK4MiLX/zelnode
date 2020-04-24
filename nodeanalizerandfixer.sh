@@ -23,8 +23,6 @@ CYAN='\033[1;36m'
 NC='\033[0m'
 ORANGE='\e[38;5;202m'
 
-
-
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
