@@ -519,6 +519,17 @@ fi
 if [ -f ~/zelflux/error.log ]
 then
 echo -e "${WORNING} ${CYAN}Zelflux error.log file detected, check ~/zelflux/error.log"
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/zelflux/error.log)${CYAN} error events${NC}"
+error_line=$(cat /home/$USER/zelflux/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
+echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
+event_date=$(cat /home/$USER/zelflux/error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
+event_time_uxtime=$(date -d "$event_date" +"%s")
+event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_human_time_local${NC} / ${GREEN}$event_human_time_utc${NC}"
+now_date=$(date +%s)
+tdiff=$((now_date-event_time_uxtime))
+show_time "$tdiff"
 fi
 
 if [ ! -f ~/zelflux/ZelFront/dist/index.html ]
