@@ -255,8 +255,9 @@ fi
 #echo -e "${RED}Debug file not exists${NC}"
 #echo
 fi
-echo -e "${BOOK} ${YELLOW}Checking zelcash debug.log${NC}"
+
 if [ -f /home/$USER/.zelcash/debug.log ]; then
+echo -e "${BOOK} ${YELLOW}Checking zelcash debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to benchmark${NC}"
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
@@ -280,9 +281,9 @@ else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 echo
 fi
-else
-echo -e "${RED}Debug file not exists${NC}"
-echo
+#else
+#echo -e "${RED}Debug file not exists${NC}"
+#echo
 fi
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
