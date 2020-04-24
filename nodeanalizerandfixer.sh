@@ -227,8 +227,9 @@ then
 fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
-echo -e "${BOOK} ${YELLOW}Checking zelbenchmark debug.log${NC}"
+
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
+echo -e "${BOOK} ${YELLOW}Checking zelbenchmark debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'warning|error|critical|failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
@@ -250,9 +251,9 @@ else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 echo
 fi
-else
-echo -e "${RED}Debug file not exists${NC}"
-echo
+#else
+#echo -e "${RED}Debug file not exists${NC}"
+#echo
 fi
 echo -e "${BOOK} ${YELLOW}Checking zelcash debug.log${NC}"
 if [ -f /home/$USER/.zelcash/debug.log ]; then
