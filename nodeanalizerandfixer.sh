@@ -21,6 +21,8 @@ SEA="\\033[38;5;49m"
 GREEN='\033[1;32m'
 CYAN='\033[1;36m'
 NC='\033[0m'
+ORANGE='\e[38;5;82m'
+
 
 
 #emoji codes
@@ -29,7 +31,7 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-HOT="${RED}\xF0\x9F\x94\xA5${NC}"
+HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 
 
 #dialog color
