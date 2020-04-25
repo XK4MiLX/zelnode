@@ -884,7 +884,7 @@ else
         EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo | jq '.connections')
-	LEFT=$((EXPLORER_BLOCK-LOCAL_BLOCK_HIGHT))
+	LEFT=$(EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT)
 
         NUM='20'
         MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC}"
