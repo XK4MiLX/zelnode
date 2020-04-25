@@ -770,7 +770,7 @@ export NVM_DIR="$HOME/.nvm" && (
 . ~/.profile
 source ~/.bashrc
 sleep 1
-nvm install --lts > /dev/null 2>&1
+nvm install v12.16.1 > /dev/null 2>&1
 sudo chown -R $USER /usr/local/lib/node_modules
 
 
