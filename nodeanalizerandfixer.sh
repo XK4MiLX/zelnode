@@ -493,6 +493,27 @@ echo -e ""
 
 echo -e "${BOOK} ${YELLOW}Checking ZelFlux:${NC}"
 
+if pm2 -v > /dev/null 2>&1; then
+pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
+if [[ "$pm2_zelflux_status" == "online" ]]; then
+pm2_zelflux_uptime=$(pm2 info zelflux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+echo -e "${CHECK_MARK} ${CYAN} Pm2 Zelflux status: $pm2_zelflux_status, uptime: $pm2_zelflux_uptime ($pm2_zelflux_restarts)${NC}" 
+else
+if [[ "$pm2_zelflux_status" != "" ]]; then
+echo -e "${X_MARK} ${CYAN} Pm2 Zelflux status: $pm2_zelflux_status ${NC}" 
+fi
+fi
+else
+echo -e "${X_MARK} ${CYAN}Pm2 is not installed${NC}"
+if tmux ls | grep created &> /dev/null; then
+echo -e "${CHECK_MARK} ${CYAN} Tmux session exists${NC}"
+else
+echo -e "${X_MARK} ${CYAN}Tmux session does not exists${NC}"
+fi
+fi
+
+
 if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} ZelFront is working${NC}"
