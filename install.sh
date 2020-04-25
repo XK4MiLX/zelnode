@@ -707,7 +707,8 @@ sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ~/.profile
-nvm install --lts
+#nvm install --lts
+nvm install v12.16.1
 }
 
 function zelflux() {
