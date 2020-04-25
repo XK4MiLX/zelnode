@@ -671,8 +671,8 @@ EOF
 }
 
 function install_zelflux() {
-    echo 
-    echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
+    #echo 
+    #echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
     sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
