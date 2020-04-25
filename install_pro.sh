@@ -764,7 +764,9 @@ sleep 1
 nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
-echo -e "${YELLOW}Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+echo -e "${CHECK_MARK} ${YELLOW} Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+else
+echo -e "${X_MARK} ${YELLOW}Nodejs was not installed${NC}"
 fi
 
 }
@@ -810,6 +812,17 @@ module.exports = {
       }
     }
 EOF
+
+if [ -d ~/zelflux ]
+then
+current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+echo -e "${CHECK_MARK} ${YELLOW} Zelflux version: ${GREEN}$current_ver${YELLOW} installed${NC}"
+else
+echo -e "${X_MARK} ${YELLOW}Zelflux was not installed${NC}"
+fi
+
+
+
    echo
    echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
    #if pm2 -v > /dev/null 2>&1; then
@@ -949,46 +962,8 @@ EOF
 
 
 function check() {
-    echo -e "${YELLOW}Running through some checks...${NC}"
-
-    if pgrep zelcashd > /dev/null; then
-        echo -e "${CHECK_MARK} ${CYAN}${COIN_NAME^} daemon is installed and running${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}${COIN_NAME^} daemon is not running${NC}" && sleep 1
-    fi
-
-    if [ -d "/home/$USERNAME/.zcash-params" ]; then
-        echo -e "${CHECK_MARK} ${CYAN}zkSNARK params installed${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}zkSNARK params not installed${NC}" && sleep 1
-    fi
-
-    if mongod --version > /dev/null; then
-        echo -e "${CHECK_MARK} ${CYAN}Mongodb is installed and running${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Mongodb is not running or failed to install${NC}" && sleep 1
-    fi
-
-    if node -v > /dev/null 2>&1; then
-        echo -e "${CHECK_MARK} ${CYAN}Nodejs installed${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Nodejs did not install${NC}" && sleep 1
-    fi
-
-    if [ -d "/home/$USERNAME/zelflux" ]; then
-        echo -e "${CHECK_MARK} ${CYAN}Zelflux installed${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Zelflux did not install${NC}" && sleep 1
-    fi
-
-    if [ -f "/home/$USERNAME/$UPDATE_FILE" ]; then
-        echo -e "${CHECK_MARK} ${CYAN}Update script created${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Update script not installed${NC}" && sleep 1
-    fi
-
-    NUM='140'
-    MSG1='Finalizing installation please be patient this will take about 2 min...'
+    NUM='30'
+    MSG1='Finalizing installation please be patient this will take about 30 sec...'
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
     echo
