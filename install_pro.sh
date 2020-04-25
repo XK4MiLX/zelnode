@@ -490,7 +490,7 @@ else
 
 echo -e ""
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${RED}Choose a method how to get bootstrap file${NC}"
+echo -e "${GREEN}CHOOSE A METHOD HOW TO GET BOOTSTRAP FILE${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}1 - Download from source build in script${NC}"
 echo -e "${NC}2 - Download from own source${NC}"
