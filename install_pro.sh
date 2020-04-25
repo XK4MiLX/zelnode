@@ -63,7 +63,6 @@ export NEWT_COLORS='
 title=black,
 '
 
-
 function import_date() {
 
 if [[ -f ~/.zelcash/zelcash.conf ]]
@@ -80,7 +79,6 @@ zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodei
 echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
 fi
 fi
-
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
