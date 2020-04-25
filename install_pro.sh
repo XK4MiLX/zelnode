@@ -891,7 +891,7 @@ else
 	CONNECTIONS="N/A        "
 	sudo systemctl stop zelcash
 	sudo systemctl start zelcash
-	sleep(100)
+	sleep 100
 	fi
 	
         NUM='10'
