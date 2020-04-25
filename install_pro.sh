@@ -485,7 +485,7 @@ echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
 #lsof +d /home/$USER/.zelcash
 #sleep 4
 
-unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 else
 
 echo -e ""
@@ -507,7 +507,7 @@ do
         echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
         wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
         echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-        unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+        unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
         break
 ;;
     2 )
@@ -516,7 +516,7 @@ do
         echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
         wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
         echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-        unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+        unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
         break
 ;;
 
@@ -889,10 +889,13 @@ else
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
 	LOCAL_BLOCK_HIGHT="N/A"
 	LEFT="N/A"
-	CONNECTIONS="N/A"
+	CONNECTIONS="N/A        "
+	sudo systemctl stop zelcash
+	sudo systemctl start zelcash
+	sleep(100)
 	fi
 	
-        NUM='20'
+        NUM='10'
         MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC} "
         MSG2=''
         spinning_timer
