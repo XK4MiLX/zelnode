@@ -127,7 +127,8 @@ import_date
 #functions
 function install_watchdog() {
 echo -e ""
-echo -e "${GREEN}Install watchdog for zelnode${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}INSTALL WATCHDOG FOR ZELNODE${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if pm2 -v > /dev/null 2>&1
@@ -156,11 +157,11 @@ fi
 }
 
 
-
 function mongodb_bootstrap(){
 
 echo -e ""
-echo -e "${GREEN}Restore Mongodb datatable from bootstrap${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+echo -e "${GREEN}RESTORE MONGODB DATATABLE FROM BOOTSTRAP${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${NC}"
 pm2 stop zelflux > /dev/null 2>&1 && sleep 2
@@ -218,7 +219,6 @@ fi
 
 function wipe_clean() {
     echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
-
 
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
@@ -357,17 +357,17 @@ function create_swap() {
 function install_packages() {
     echo -e "${YELLOW}Installing Packages...${NC}"
     if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        sudo apt-get install dirmngr apt-transport-https -y
+        sudo apt-get install dirmngr apt-transport-https -y > /dev/null 2>&1
     fi
-    sudo apt-get install software-properties-common -y
-    sudo apt-get update -y
-    sudo apt-get upgrade -y
-    sudo apt-get install nano htop pwgen ufw figlet tmux jq -y
-    sudo apt-get install build-essential libtool pkg-config -y
-    sudo apt-get install libc6-dev m4 g++-multilib -y
+    sudo apt-get install software-properties-common -y > /dev/null 2>&1
+    sudo apt-get update -y > /dev/null 2>&1
+    sudo apt-get upgrade -y > /dev/null 2>&1
+    sudo apt-get install nano htop pwgen ufw figlet tmux jq -y > /dev/null 2>&1
+    sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
+    sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
     sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y
-    sudo apt-get install wget curl bsdmainutils automake fail2ban -y
-    sudo apt-get remove sysbench -y
+    sudo apt-get install wget curl bsdmainutils automake fail2ban -y > /dev/null 2>&1
+    sudo apt-get remove sysbench -y > /dev/null 2>&1
     echo -e "${YELLOW}Packages complete...${NC}"
 }
 
@@ -738,10 +738,10 @@ sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
 echo -e "${YELLOW}Mongodb installing...${NC}"
-sudo apt-get update -y
-sudo apt-get install mongodb-org -y
-sudo systemctl enable mongod
-sudo systemctl start  mongod
+sudo apt-get update -y > /dev/null 2>&1
+sudo apt-get install mongodb-org -y 
+sudo systemctl enable mongod > /dev/null 2>&1
+sudo systemctl start  mongod > /dev/null 2>&1
 }
 
 function install_nodejs() {
@@ -836,22 +836,22 @@ EOF
    #npm i -g pm2 > /dev/null 2>&1
   # else
    echo -e "${YELLOW}Installing...${NC}"
-   npm install pm2@latest -g
+   npm install pm2@latest -g > /dev/null 2>&1
    #fi
 
     echo -e "${YELLOW}Configuring PM2...${NC}"
     # pm2 startup systemd -u $USERNAME
     # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
-    sudo bash -c "$cmd"
+    sudo bash -c "$cmd" > /dev/null 2>&1
     pm2 start ~/zelflux/start.sh --name zelflux
-    pm2 save
-    pm2 install pm2-logrotate
-    pm2 set pm2-logrotate:max_size 6M >/dev/null
-    pm2 set pm2-logrotate:retain 6 >/dev/null
-    pm2 set pm2-logrotate:compress true >/dev/null
-    pm2 set pm2-logrotate:workerInterval 3600 >/dev/null
-    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' >/dev/null
+    pm2 save > /dev/null 2>&1
+    pm2 install pm2-logrotate > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
     source ~/.bashrc
 }
 
@@ -859,13 +859,11 @@ function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 
-echo -e "${YELLOW}======================================================================================"
-echo -e "${GREEN} ZELNODE IS SYNCING..."
-echo -e " CHECK BLOCK HEIGHT AT https://explorer.zel.cash/"
-echo -e " YOU COULD START YOUR ZELNODE FROM YOUR CONTROL WALLET WHILE IT SYNCS"
-echo -e "${YELLOW}======================================================================================${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
+echo -e "${GREEN}ZELNODE SYNCING...${NC}"
+echo -e "${YELLOW}==========================================================================${NC}"
 echo
-echo -e "${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
+echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 echo
 $COIN_CLI getinfo
 sleep 2
@@ -895,17 +893,15 @@ else
 	fi
 	
         NUM='20'
-        MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC}"
+        MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC} "
         MSG2=''
         spinning_timer
 	
 	EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 
-
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
-            echo
-	    echo -e "${CYAN}ZelNode is full synced.${NC}${CHECK_MARK}"
+	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
