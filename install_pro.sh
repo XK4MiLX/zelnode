@@ -753,13 +753,14 @@ export NVM_DIR="$HOME/.nvm" && (
   cd "$NVM_DIR"
   git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
 ) && \. "$NVM_DIR/nvm.sh"
-
+cd
 . ~/.profile
 source ~/.bashrc
 sleep 1
 #nvm install v12.16.1
 nvm install --lts > /dev/null 2>&1
-if [ node -v ]; then
+if node -v > /dev/null 2>&1
+then
 echo -e "${YELLOW}Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
 fi
 
