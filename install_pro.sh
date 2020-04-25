@@ -601,8 +601,8 @@ Description=$COIN_NAME service
 After=network.target
 [Service]
 Type=forking
-User=$USERNAME
-Group=$USERNAME
+User=$USER
+Group=$USER
 WorkingDirectory=/home/$USER/$CONFIG_DIR/
 ExecStart=/home/$USER/start_zelcash_service.sh
 ExecStop=-/home/$USER/stop_zelcash_service.sh
@@ -625,11 +625,11 @@ EOF
 
 function basic_security() {
     echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
-    sudo ufw allow "$SSHPORT"/tcp
-    sudo ufw allow "$PORT"/tcp
-    sudo ufw logging on
-    sudo ufw default deny incoming
-    sudo ufw limit OpenSSH
+    sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
+    sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
+    sudo ufw logging on > /dev/null 2>&1
+    sudo ufw default deny incoming > /dev/null 2>&1
+    sudo ufw limit OpenSSH > /dev/null 2>&1
     echo "y" | sudo ufw enable > /dev/null 2>&1
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
@@ -688,10 +688,11 @@ function install_zelflux() {
     echo -e "${YELLOW}==========================================================================${NC}"
     echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
     echo -e "${YELLOW}==========================================================================${NC}"
-    sudo ufw allow $ZELFRONTPORT/tcp
-    sudo ufw allow $LOCPORT/tcp
-    sudo ufw allow $ZELNODEPORT/tcp
-    sudo ufw allow $MDBPORT/tcp
+    
+    sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
+    sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
+    sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
+    sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
     if ! sysbench --version > /dev/null 2>&1; then
         curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash
