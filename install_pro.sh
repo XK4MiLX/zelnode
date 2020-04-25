@@ -542,7 +542,8 @@ function create_service_scripts() {
 
 echo -e "${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
 sudo touch /home/$USER/start_zelcash_service.sh
-sudo bash -c "cat << EOF > /home/$USER/start_zelcash_service.sh
+sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
+cat << EOF > /home/$USER/start_zelcash_service.sh
 #!/bin/bash
 #color codes
 RED='\033[1;31m'
@@ -573,18 +574,19 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
 bash -c "zelcashd"
 exit
-EOF"
+EOF
 
 echo -e "${YELLOW}Creating ${COIN_NAME^} service stop script...${NC}"
 sudo touch /home/$USER/stop_zelcash_service.sh
-sudo bash -c "cat << EOF > /home/$USER/stop_zelcash_service.sh
+sudo chown $USER:$USER /home/$USER/stop_zelcash_service.sh
+cat << EOF > /home/$USER/stop_zelcash_service.sh
 #!/bin/bash
 bash -c "zelcash-cli stop"
 exit
-EOF"
+EOF
 
-chmod +x /home/$USER/stop_zelcash_service.sh
-chmod +x /home/$USER/start_zelcash_service.sh
+sudo chmod +x /home/$USER/stop_zelcash_service.sh
+sudo chmod +x /home/$USER/start_zelcash_service.sh
 
 }
 
@@ -592,7 +594,7 @@ chmod +x /home/$USER/start_zelcash_service.sh
 function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
-    sudo chown "$USERNAME":"$USERNAME" /etc/systemd/system/$COIN_NAME.service
+    sudo chown $USER:"$USER /etc/systemd/system/$COIN_NAME.service
     cat << EOF > /etc/systemd/system/$COIN_NAME.service
 [Unit]
 Description=$COIN_NAME service
