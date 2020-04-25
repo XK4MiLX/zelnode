@@ -873,7 +873,7 @@ sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 else
 	
    echo -e "${YELLOW}==========================================================================${NC}"
-   echo -e "${GREEN}PROCESS ZELNODE SYNCING...${NC}"
+   echo -e "${GREEN}ZELNODE SYNCING...${NC}"
    echo -e "${YELLOW}==========================================================================${NC}"
    echo
 	
