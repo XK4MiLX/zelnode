@@ -590,7 +590,6 @@ sudo chmod +x /home/$USER/start_zelcash_service.sh
 
 }
 
-
 function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
