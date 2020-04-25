@@ -882,10 +882,15 @@ else
     do
         
         EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
-        LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo | jq '.blocks')
-	CONNECTIONS=$(${COIN_CLI} getinfo | jq '.connections')
+        LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
+	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$(EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT)
-
+	
+	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
+	LOCAL_BLOCK_HIGHT="N/A"
+	LEFT="N/A"
+	fi
+	
         NUM='20'
         MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC}"
         MSG2=''
@@ -893,6 +898,7 @@ else
 
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
+            echo
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
@@ -987,12 +993,7 @@ function check() {
     MSG1='Finalizing installation please be patient this will take about 2 min...'
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
-    echo -e "${YELLOW}Restarting benchmarks...${NC}"
-    zelbench-cli restartnodebenchmarks
-    NUM='35'
-    MSG1='Restarting benchmarks...'
-    MSG2="${CHECK_MARK}"
-    echo && spinning_timer
+    echo
     echo -e "${YELLOW}Checking benchmarks details...${NC}"
     zelbench-cli getbenchmarks
 
