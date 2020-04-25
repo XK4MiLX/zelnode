@@ -260,7 +260,6 @@ function wipe_clean() {
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
 
 
-
     if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
         echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
     else
@@ -301,7 +300,7 @@ function spinning_timer() {
             sleep 0.1
         done
     done
-    echo -e "${MSG2}"
+    echo -ne "${MSG2}"
 }
 
 function ssh_port() {
@@ -541,6 +540,7 @@ fi
 
 function create_service_scripts() {
 
+echo
 echo -e "${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
 sudo touch /home/$USER/start_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
