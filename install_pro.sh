@@ -902,6 +902,7 @@ else
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
+	    echo
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
