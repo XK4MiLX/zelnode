@@ -124,10 +124,10 @@ import_date
 
 #functions
 function install_watchdog() {
-echo -e ""
-echo -e "${YELLOW}================================================================${NC}"
+
+echo 
 echo -e "${GREEN}INSTALL WATCHDOG FOR ZELNODE${NC}"
-echo -e "${YELLOW}================================================================${NC}"
+echo 
 
 if pm2 -v > /dev/null 2>&1
 then
@@ -156,14 +156,11 @@ fi
 
 function mongodb_bootstrap(){
 
-echo -e ""
-echo -e "${YELLOW}================================================================${NC}"
+
+echo
 echo -e "${GREEN}RESTORE MONGODB DATATABLE FROM BOOTSTRAP${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-echo -e "${NC}"
-pm2 stop zelflux > /dev/null 2>&1 && sleep 2
-pm2 start zelflux > /dev/null 2>&1 && sleep 2
-NUM='120'
+echo 
+NUM='60'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
@@ -362,7 +359,7 @@ function install_packages() {
     sudo apt-get install nano htop pwgen ufw figlet tmux jq -y > /dev/null 2>&1
     sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
     sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
-    sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y
+    sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y > /dev/null 2>&1
     sudo apt-get install wget curl bsdmainutils automake fail2ban -y > /dev/null 2>&1
     sudo apt-get remove sysbench -y > /dev/null 2>&1
     echo -e "${YELLOW}Packages complete...${NC}"
@@ -416,42 +413,42 @@ EOF
 }
 
 function zel_package() {
-    sudo apt-get update
-    sudo apt install zelcash zelbench -y
+    sudo apt-get update > /dev/null 2>&1 && sleep 2
+    sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/${COIN_NAME}*
 }
 
 function install_zel() {
-    echo -e "${YELLOW}==========================================================================${NC}"
+    echo 
     echo -e "${GREEN}ZELCASH, ZELBENCH INSTALLATION${NC}"
-    echo -e "${YELLOW}==========================================================================${NC}"
+    echo 
     echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
         echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list
     fi
-    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
-    gpg --export 4B69CA27A986265D | sudo apt-key add -
+    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
     zel_package && sleep 2
     if ! gpg --list-keys Zel > /dev/null; then
         echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-        gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D
-        gpg --export 4B69CA27A986265D | sudo apt-key add -
+        gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+        gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
         zel_package && sleep 2
         if ! gpg --list-keys Zel > /dev/null; then
             echo -e "${YELLOW}Second keyserver also failed will try a different keyserver.${NC}"
-            gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D
-            gpg --export 4B69CA27A986265D | sudo apt-key add -
+            gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
             zel_package && sleep 2
             if ! gpg --list-keys Zel > /dev/null; then
                 echo -e "${YELLOW}Third keyserver also failed will try a different keyserver.${NC}"
-                gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D
-                gpg --export 4B69CA27A986265D | sudo apt-key add -
+                gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+                gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
                 zel_package && sleep 2
                 if ! gpg --list-keys Zel > /dev/null; then
                     echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-                    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D
-                    gpg --export 4B69CA27A986265D | sudo apt-key add -
+                    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+                    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
                     zel_package && sleep 2
                 fi
             fi
@@ -461,7 +458,7 @@ function install_zel() {
 
 function zk_params() {
     echo -e "${YELLOW}Installing zkSNARK params...${NC}"
-    bash zelcash-fetch-params.sh
+    bash zelcash-fetch-params.sh > /dev/null 2>&1 && sleep 2
     sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 }
 
@@ -486,12 +483,12 @@ unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 else
 
 echo -e ""
-echo -e "${YELLOW}================================================================${NC}"
+
 echo -e "${GREEN}CHOOSE A METHOD HOW TO GET BOOTSTRAP FILE${NC}"
-echo -e "${YELLOW}================================================================${NC}"
+echo
 echo -e "${NC}1 - Download from source build in script${NC}"
 echo -e "${NC}2 - Download from own source${NC}"
-echo -e "${YELLOW}================================================================${NC}"
+echo
 read -p "Pick an option: " -n 1 -r
 echo -e "${NC}"
 while true
@@ -683,9 +680,9 @@ EOF
 }
 
 function install_zelflux() {
-    echo -e "${YELLOW}==========================================================================${NC}"
+    echo 
     echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
-    echo -e "${YELLOW}==========================================================================${NC}"
+    echo 
     
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
@@ -727,24 +724,24 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-echo -e "${YELLOW}==========================================================================${NC}"
+echo 
 echo -e "${GREEN}MONGODB INSTALLATION${NC}"
-echo -e "${YELLOW}==========================================================================${NC}"
+echo 
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
 echo -e "${YELLOW}Mongodb installing...${NC}"
 sudo apt-get update -y > /dev/null 2>&1
-sudo apt-get install mongodb-org -y 
+sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
 sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 }
 
 function install_nodejs() {
-echo -e "${YELLOW}==========================================================================${NC}"
+echo 
 echo -e "${GREEN}NODEJS AND NPM INSTALLATION${NC}"
-echo -e "${YELLOW}==========================================================================${NC}"
+echo 
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -766,9 +763,9 @@ sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
 
 export NVM_DIR="$HOME/.nvm" && (
-  git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
+  git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
   cd "$NVM_DIR"
-  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
+  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` 
 ) && \. "$NVM_DIR/nvm.sh"
 
 . ~/.profile
@@ -781,9 +778,9 @@ nvm install --lts
 
 function zelflux() {
 
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo 
    echo -e "${GREEN}ZELFLUX INSTALLATION${NC}"
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo 
     if [ -d "./zelflux" ]; then
          echo -e "${YELLOW}Cleaning old installation....${NC}"
         sudo rm -rf zelflux
@@ -808,7 +805,7 @@ function zelflux() {
         fi
 
     echo -e "${YELLOW}Downloading....${NC}"
-    git clone https://github.com/zelcash/zelflux.git
+    git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
     echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
     touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
@@ -821,9 +818,10 @@ module.exports = {
     }
 EOF
 
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo
    echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo
+
 
    #if pm2 -v > /dev/null 2>&1; then
    #echo -e "${YELLOW}Cleaning old installation....${NC}"
@@ -841,7 +839,7 @@ EOF
     # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     cmd=$(pm2 startup systemd -u $USER | grep sudo)
     sudo bash -c "$cmd" > /dev/null 2>&1
-    pm2 start ~/zelflux/start.sh --name zelflux
+    pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
     pm2 install pm2-logrotate > /dev/null 2>&1
     pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
@@ -856,9 +854,8 @@ function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 
-echo -e "${YELLOW}==========================================================================${NC}"
+echo
 echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-echo -e "${YELLOW}==========================================================================${NC}"
 echo
 echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 echo
@@ -868,9 +865,10 @@ sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 
 else
 	
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo
    echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-   echo -e "${YELLOW}==========================================================================${NC}"
+   echo
+   
    f=0
 	
     while true
@@ -885,7 +883,7 @@ else
 	f=$((f+1))
 	LOCAL_BLOCK_HIGHT="N/A"
 	LEFT="N/A"
-	CONNECTIONS="N/A        "
+	CONNECTIONS="N/A"
 	sudo systemctl stop zelcash
 	sudo systemctl start zelcash
 	sleep 100
@@ -953,7 +951,6 @@ EOF
 
 
 function check() {
-    echo
     echo -e "${YELLOW}Running through some checks...${NC}"
 
     if pgrep zelcashd > /dev/null; then
