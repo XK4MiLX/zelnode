@@ -501,7 +501,7 @@ pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' |
 echo -e "${CHECK_MARK} ${CYAN} Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${CYAN}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}$pm2_zelflux_restarts${NC}" 
 else
 if [[ "$pm2_zelflux_status" != "" ]]; then
-echo -e "${X_MARK} ${CYAN} Pm2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
+echo -e "${X_MARK} ${CYAN}Pm2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
 fi
 fi
 else
