@@ -726,7 +726,9 @@ sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
- echo -e "${YELLOW}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+ echo -e "${CHECK_MARK} ${YELLOW} MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+else
+ echo -e "${X_MARK} ${YELLOW}MongoDB was not installed${NC}" 
 fi
 }
 
