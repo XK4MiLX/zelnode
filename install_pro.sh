@@ -276,7 +276,7 @@ function wipe_clean() {
 
     echo -e "${YELLOW}Firewall enabled...${NC}"
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
-         sudo ufw disable
+         sudo ufw disable > /dev/null 2>&1
     fi
 
     else
@@ -422,10 +422,10 @@ function install_zel() {
     echo 
     echo -e "${GREEN}ZELCASH, ZELBENCH INSTALLATION${NC}"
     echo 
-    echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
+    echo 'deb https://apt.zel.cash/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
-        echo 'deb https://zelcash.github.io/aptrepo/ all main' | sudo tee --append /etc/apt/sources.list.d/zelcash.list
+        echo 'deb https://zelcash.github.io/aptrepo/ all main' 2> /dev/null | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     fi
     gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
@@ -641,8 +641,7 @@ function start_daemon() {
         MSG2="${CHECK_MARK}"
         echo && spinning_timer
         echo
-        $COIN_CLI getinfo
-        sleep 5
+        sleep 2
     else
         echo -e "${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
         exit
@@ -765,13 +764,13 @@ echo -e "${YELLOW}Nodejs installing...${NC}"
 export NVM_DIR="$HOME/.nvm" && (
   git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
   cd "$NVM_DIR"
-  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` 
+  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
 ) && \. "$NVM_DIR/nvm.sh"
 
 . ~/.profile
 source ~/.bashrc
 sleep 1
-nvm install --lts
+nvm install --lts > /dev/null 2>&1
 
 
 }
