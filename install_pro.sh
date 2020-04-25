@@ -480,7 +480,6 @@ else
 
 echo -e ""
 echo -e "${GREEN}CHOOSE A METHOD HOW TO GET BOOTSTRAP FILE${NC}"
-echo
 echo -e "${NC}1 - Download from source build in script${NC}"
 echo -e "${NC}2 - Download from own source${NC}"
 echo
@@ -724,6 +723,10 @@ sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
 sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
+if mongod --version > /dev/null 2>&1 
+then
+ echo -e "${YELLOW}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+fi
 }
 
 function install_nodejs() {
@@ -1015,7 +1018,7 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info zelflux${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
     echo
-    pm2 info zelflux
+    pm2 list
     echo
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
