@@ -57,6 +57,7 @@ NC='\033[0m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
+CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -870,13 +871,12 @@ sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 
 else
 	
-        echo -e "${YELLOW}======================================================================================"
-        echo -e "${GREEN} ZELNODE IS SYNCING"
-        echo -e " THIS SCREEN REFRESHES EVERY 20 SECONDS"
-        echo -e " CHECK BLOCK HEIGHT AT https://explorer.zel.cash/"
-        echo -e " YOU COULD START YOUR ZELNODE FROM YOUR CONTROL WALLET WHILE IT SYNCS"
-        echo -e "${YELLOW}======================================================================================${NC}"
-        echo
+   echo -e "${YELLOW}==========================================================================${NC}"
+   echo -e "${GREEN}PROCESS ZELNODE SYNCING...${NC}"
+   echo -e "${YELLOW}==========================================================================${NC}
+   echo
+	
+	
 
     while true
     do
@@ -889,16 +889,21 @@ else
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
 	LOCAL_BLOCK_HIGHT="N/A"
 	LEFT="N/A"
+	CONNECTIONS="N/A"
 	fi
 	
         NUM='20'
-        MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC}"
+        MSG1="${CLOCK} ${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC}"
         MSG2=''
         spinning_timer
+	
+	EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+        LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
             echo
+	    echo -e "${CYAN}ZelNode is full synced.${NC}${CHECK_MARK}"
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
