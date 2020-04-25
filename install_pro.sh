@@ -460,7 +460,7 @@ function zk_params() {
 
 function bootstrap() {
 
-echo -e "${NC}"
+
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
 echo -e "${YELLOW}Cleaning...${NC}"
 rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
@@ -479,7 +479,6 @@ unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 else
 
 echo -e ""
-
 echo -e "${GREEN}CHOOSE A METHOD HOW TO GET BOOTSTRAP FILE${NC}"
 echo
 echo -e "${NC}1 - Download from source build in script${NC}"
@@ -529,7 +528,6 @@ fi
 
 function create_service_scripts() {
 
-echo
 echo -e "${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
 sudo touch /home/$USER/start_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
@@ -750,7 +748,6 @@ sudo rm -rf /usr/local/lib/node*
 sudo rm -rf /usr/local/include/node*
 sudo rm -rf /usr/local/bin/node*
 echo -e "${YELLOW}Nodejs installing...${NC}"
-
 export NVM_DIR="$HOME/.nvm" && (
   git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
   cd "$NVM_DIR"
