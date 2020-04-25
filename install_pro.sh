@@ -681,32 +681,32 @@ function install_zelflux() {
     sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
     if ! sysbench --version > /dev/null 2>&1; then
-        curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash
+        curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
         sudo apt -y install sysbench > /dev/null 2>&1
     fi
 
     sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
     if [[ $(lsb_release -r) = *16.04* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" 2> /dev/null| sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
     elif [[ $(lsb_release -r) = *18.04* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
@@ -731,7 +731,6 @@ sudo systemctl start  mongod > /dev/null 2>&1
 function install_nodejs() {
 echo 
 echo -e "${GREEN}NODEJS AND NPM INSTALLATION${NC}"
-echo 
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -760,10 +759,12 @@ export NVM_DIR="$HOME/.nvm" && (
 
 . ~/.profile
 source ~/.bashrc
-
 sleep 1
 #nvm install v12.16.1
-nvm install --lts
+nvm install --lts > /dev/null 2>&1
+if [ node -v ]; then
+echo -e "${YELLOW}Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+fi
 
 }
 
@@ -808,11 +809,8 @@ module.exports = {
       }
     }
 EOF
-sudo chown -R $USER /home/$USER/zelflux/node_modules/
    echo
    echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
-
-
    #if pm2 -v > /dev/null 2>&1; then
    #echo -e "${YELLOW}Cleaning old installation....${NC}"
    #pm2 kill > /dev/null 2>&1
@@ -827,7 +825,7 @@ sudo chown -R $USER /home/$USER/zelflux/node_modules/
     echo -e "${YELLOW}Configuring PM2...${NC}"
     # pm2 startup systemd -u $USERNAME
     # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
-    startup systemd -u $USER
+    pm2 startup systemd -u $USER > /dev/null 2>&1
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
     pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
