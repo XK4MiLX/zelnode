@@ -884,7 +884,7 @@ else
         EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
-	LEFT=$(EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT)
+	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 	
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
 	LOCAL_BLOCK_HIGHT="N/A"
