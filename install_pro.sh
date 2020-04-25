@@ -875,9 +875,8 @@ else
    echo -e "${GREEN}ZELNODE SYNCING...${NC}"
    echo -e "${YELLOW}==========================================================================${NC}"
    echo
+   f=0
 	
-	
-
     while true
     do
         
@@ -887,6 +886,7 @@ else
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 	
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
+	f=$((f+1))
 	LOCAL_BLOCK_HIGHT="N/A"
 	LEFT="N/A"
 	CONNECTIONS="N/A        "
@@ -896,7 +896,7 @@ else
 	fi
 	
         NUM='10'
-        MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks,  Connections: ${YELLOW}$CONNECTIONS${NC} "
+        MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 	
