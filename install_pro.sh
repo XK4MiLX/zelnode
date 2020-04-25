@@ -770,8 +770,7 @@ export NVM_DIR="$HOME/.nvm" && (
 . ~/.profile
 source ~/.bashrc
 sleep 1
-nvm install v12.16.1 > /dev/null 2>&1
-sudo chown -R $USER /usr/local/lib/node_modules
+nvm install v12.16.1
 
 
 }
@@ -817,7 +816,7 @@ module.exports = {
       }
     }
 EOF
-
+sudo chown -R $USER /home/$USER/zelflux/node_modules/
    echo
    echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
    echo
