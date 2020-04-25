@@ -498,7 +498,7 @@ pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/�
 if [[ "$pm2_zelflux_status" == "online" ]]; then
 pm2_zelflux_uptime=$(pm2 info zelflux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
 pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-echo -e "${CHECK_MARK} ${CYAN} Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${NC}, uptime: {GREEN}$pm2_zelflux_uptime${NC} ${SEA}($pm2_zelflux_restarts)${NC}" 
+echo -e "${CHECK_MARK} ${CYAN} Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${NC}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}($pm2_zelflux_restarts)${NC}" 
 else
 if [[ "$pm2_zelflux_status" != "" ]]; then
 echo -e "${X_MARK} ${CYAN} Pm2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
