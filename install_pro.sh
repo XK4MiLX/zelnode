@@ -127,8 +127,6 @@ function install_watchdog() {
 
 echo 
 echo -e "${GREEN}INSTALL WATCHDOG FOR ZELNODE${NC}"
-echo 
-
 if pm2 -v > /dev/null 2>&1
 then
 echo -e "${YELLOW}Downloading...${NC}"
@@ -159,7 +157,6 @@ function mongodb_bootstrap(){
 
 echo
 echo -e "${GREEN}RESTORE MONGODB DATATABLE FROM BOOTSTRAP${NC}"
-echo 
 NUM='60'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
@@ -421,7 +418,6 @@ function zel_package() {
 function install_zel() {
     echo 
     echo -e "${GREEN}ZELCASH, ZELBENCH INSTALLATION${NC}"
-    echo 
     echo 'deb https://apt.zel.cash/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
@@ -522,13 +518,11 @@ done
 
 
 fi
-echo -e "${NC}"
-read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
-echo -e "${NC}"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-rm -rf $BOOTSTRAP_ZIPFILE
-fi
+
+ if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+    rm -rf $BOOTSTRAP_ZIPFILE
+ fi
+
 
 }
 
@@ -614,7 +608,7 @@ EOF
     sudo chown root:root /etc/systemd/system/$COIN_NAME.service
     sudo systemctl daemon-reload
     sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl start zelcash
+    sudo systemctl start zelcash > /dev/null 2>&1
 
 }
 
@@ -681,8 +675,6 @@ EOF
 function install_zelflux() {
     echo 
     echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
-    echo 
-    
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
     sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
@@ -725,7 +717,6 @@ function install_zelflux() {
 function install_mongod() {
 echo 
 echo -e "${GREEN}MONGODB INSTALLATION${NC}"
-echo 
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
@@ -769,9 +760,10 @@ export NVM_DIR="$HOME/.nvm" && (
 
 . ~/.profile
 source ~/.bashrc
-sleep 1
-nvm install v12.16.1
 
+sleep 1
+#nvm install v12.16.1
+nvm install --lts
 
 }
 
@@ -779,7 +771,7 @@ function zelflux() {
 
    echo 
    echo -e "${GREEN}ZELFLUX INSTALLATION${NC}"
-   echo 
+   
     if [ -d "./zelflux" ]; then
          echo -e "${YELLOW}Cleaning old installation....${NC}"
         sudo rm -rf zelflux
@@ -819,7 +811,6 @@ EOF
 sudo chown -R $USER /home/$USER/zelflux/node_modules/
    echo
    echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
-   echo
 
 
    #if pm2 -v > /dev/null 2>&1; then
@@ -836,8 +827,8 @@ sudo chown -R $USER /home/$USER/zelflux/node_modules/
     echo -e "${YELLOW}Configuring PM2...${NC}"
     # pm2 startup systemd -u $USERNAME
     # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
-    cmd=$(pm2 startup systemd -u $USER | grep sudo)
-    sudo bash -c "$cmd" > /dev/null 2>&1
+    startup systemd -u $USER
+    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
     pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
     pm2 install pm2-logrotate > /dev/null 2>&1
@@ -866,7 +857,7 @@ else
 	
    echo
    echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-   echo
+
    
    f=0
 	
@@ -883,20 +874,29 @@ else
 	LOCAL_BLOCK_HIGHT="N/A"
 	LEFT="N/A"
 	CONNECTIONS="N/A"
-	sudo systemctl stop zelcash
-	sudo systemctl start zelcash
-	sleep 100
+	sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+	sudo systemctl start zelcash > /dev/null 2>&1
+	
+          NUM='90'
+          MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+          MSG2=''
+          spinning_timer
+	  
+	  EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+       	  LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
+	  CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
+	  LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+
 	fi
 	
-        NUM='10'
+	
+	NUM='10'
         MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
-	
-	EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
-        LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
+	
 	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
 	    echo
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
