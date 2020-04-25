@@ -593,7 +593,7 @@ sudo chmod +x /home/$USER/start_zelcash_service.sh
 function create_service() {
     echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
-    sudo chown $USER:"$USER /etc/systemd/system/$COIN_NAME.service
+    sudo chown $USER:$USER /etc/systemd/system/$COIN_NAME.service
     cat << EOF > /etc/systemd/system/$COIN_NAME.service
 [Unit]
 Description=$COIN_NAME service
