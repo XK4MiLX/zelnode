@@ -543,7 +543,7 @@ function create_service_scripts() {
 echo -e "${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
 sudo touch /home/$USER/start_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
-cat << EOF > /home/$USER/start_zelcash_service.sh
+    cat << EOF > /home/$USER/start_zelcash_service.sh
 #!/bin/bash
 #color codes
 RED='\033[1;31m'
@@ -579,7 +579,7 @@ EOF
 echo -e "${YELLOW}Creating ${COIN_NAME^} service stop script...${NC}"
 sudo touch /home/$USER/stop_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/stop_zelcash_service.sh
-cat << EOF > /home/$USER/stop_zelcash_service.sh
+    cat << EOF > /home/$USER/stop_zelcash_service.sh
 #!/bin/bash
 bash -c "zelcash-cli stop"
 exit
