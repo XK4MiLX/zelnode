@@ -296,8 +296,6 @@ function spinning_timer() {
 }
 
 #function spinning_timer() {
-   
-
     
    # echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
     
