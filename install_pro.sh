@@ -281,20 +281,36 @@ function wipe_clean() {
 }
 
 function spinning_timer() {
-   
-
-    echo -e ""
-    echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-    
+    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
     while [ $SECONDS -lt $end ];
-    do       
-         sleep 0.1
-	 
+    do
+        for i in "${animation[@]}";
+        do
+	    echo -e ""
+            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
+            sleep 0.1
+	    
+        done
     done
-    
-    echo -ne "${MSG2}"
+    echo -e "${MSG2}"
 }
+
+#function spinning_timer() {
+   
+
+    
+   # echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
+    
+   # end=$((SECONDS+NUM))
+    #while [ $SECONDS -lt $end ];
+    #do       
+        # sleep 0.1
+	 
+   # done
+    
+    #echo -ne "${MSG2}"
+#}
 
 function ssh_port() {
     echo -e "${YELLOW}Detecting SSH port being used...${NC}" && sleep 1
