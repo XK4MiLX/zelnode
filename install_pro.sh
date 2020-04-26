@@ -675,7 +675,7 @@ function start_daemon() {
         MSG2="${CHECK_MARK}"
         echo && spinning_timer
         echo
-	zelbench-cli stop > /dev/null 2>&1  && sleep 2
+	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo -e "${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
         exit
