@@ -128,28 +128,28 @@ import_date
 
 #functions
 function install_watchdog() {
-echo -e "${YELLOW}Install watchdog for zelnod${NC}"
+echo -e "${ARROW} ${YELLOW}Install watchdog for zelnod${NC}"
 if pm2 -v > /dev/null 2>&1
 then
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
+cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
+echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
+wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge -q --show-progress
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
-echo -e "${YELLOW}Installing watchdog module....${NC}"
-cd watchdog && npm install
-echo -e "${YELLOW}Starting watchdog...${NC}"
-pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch "\.git|node_modules" --watch-delay 10
-pm2 save
+echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
+cd watchdog && npm install > /dev/null 2>&1
+echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
+pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch "\.git|node_modules" --watch-delay 10 > /dev/null 2>&1 
+pm2 save > /dev/null 2>&1
 if [[ -f ~/watchdog/watchdog.js ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}Watchdog installed successful.${NC}"
+echo -e "${ARROW} ${CYAN}Watchdog installed successful.${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
+echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
 fi
 else
-echo -e "${X_MARK} ${CYAN}Watchdog installion failed.${NC}"
+echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
 fi
 
 }
@@ -174,15 +174,15 @@ echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
-echo -e "${YELLOW}Downloading db for mongo...${NC}"
-wget http://77.55.218.93/fluxdb_dump.tar.gz
-echo -e "${YELLOW}Unpacking...${NC}"
+echo -e "${ARROW} ${YELLOW}Downloading db for mongodb...${NC}"
+wget http://77.55.218.93/fluxdb_dump.tar.gz -q --show-progress 
+echo -e "${ARROW} ${YELLOW}Unpacking...${NC}"
 tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
-echo -e "${YELLOW}Stoping zelflux...${NC}"
+echo -e "${ARROW} ${YELLOW}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
-echo -e "${YELLOW}Importing mongo db...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-echo -e "${YELLOW}Cleaning...${NC}"
+echo -e "${ARROW} ${YELLOW}Importing mongodb datatable...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop 
+echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump && sleep 1
 sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 pm2 start zelflux > /dev/null 2>&1
@@ -915,6 +915,7 @@ else
    echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
    
    f=0
+ #  c=0
 	
     while true
     do
@@ -924,6 +925,15 @@ else
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 	
+	#if [[ "$CONNECTIONS" == "0" ]]; then
+	 # c=$((c+1))
+	 # if [[ "$c" > 3 ]]; then
+	  # c=0;
+	   #LOCAL_BLOCK_HIGHT=""
+	#  fi
+	
+	#fi
+	#
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
 	f=$((f+1))
 	LOCAL_BLOCK_HIGHT="N/A"
@@ -949,6 +959,8 @@ else
         MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
+	
+	
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	
