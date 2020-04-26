@@ -266,7 +266,7 @@ function wipe_clean() {
         #echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     #fi
 
-    echo
+
 
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
@@ -1019,6 +1019,7 @@ function check() {
 function display_banner() {
     echo -e "${BLUE}"
     figlet -t -k "ZELNODES  &  ZELFLUX"
+    figlet -t -k "COMPLITED"
     echo -e "${NC}"
     echo -e "${YELLOW}================================================================================================================================"
     echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
