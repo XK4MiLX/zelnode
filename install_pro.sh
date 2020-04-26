@@ -292,7 +292,7 @@ function spinning_timer() {
 	    
         done
     done
-    echo -e "${MSG2}"
+    echo -ne "${MSG2}"
 }
 
 #function spinning_timer() {
