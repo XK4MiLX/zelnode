@@ -59,7 +59,7 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
-ARROW="${SEA}\xE2\x96\xB6B${NC}"
+ARROW="${SEA}\xE2\x96\xB6${NC}"
 
 #dialog color
 export NEWT_COLORS='
@@ -113,7 +113,7 @@ fi
 start_dir=$(pwd)
 correct_dir="/home/$USER"
 echo
-echo -e "${YELLOW}Checking directory....${NC}"
+echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
 echo -e "${CHECK_MARK} ${CYAN}Correct directory...${NC}"
@@ -131,7 +131,7 @@ function install_watchdog() {
 echo -e "${YELLOW}Install watchdog for zelnod${NC}"
 if pm2 -v > /dev/null 2>&1
 then
-echo -e "${YELLOW}Downloading...${NC}"
+echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${YELLOW}Installing git hooks....${NC}"
 wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
@@ -158,7 +158,7 @@ function mongodb_bootstrap(){
 
 
 echo
-echo -e "${GREEN}Restore mongodb datatable from bootstrap${NC}"
+echo -e "${ARROW} ${GREEN}Restore mongodb datatable from bootstrap${NC}"
 NUM='30'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
@@ -211,7 +211,7 @@ fi
 }
 
 function wipe_clean() {
-    echo -e "${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
+    echo -e "${ARROW} ${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
 
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
@@ -275,13 +275,13 @@ function wipe_clean() {
        
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
-	 echo -e "${YELLOW}Firewall status: ${RED}Disabled${NC}"
+	 echo -e "${ARROW} ${YELLOW}Firewall status: ${RED}Disabled${NC}"
     else	 
-	 echo -e "${YELLOW}Firewall status: ${GREEN}Enabled${NC}"
+	 echo -e "${ARROW} ${YELLOW}Firewall status: ${GREEN}Enabled${NC}"
     fi
 
     else
-        echo -e "${YELLOW}Firewall status: ${RED}Disabled${NC}"
+        echo -e "${ARROW} ${YELLOW}Firewall status: ${RED}Disabled${NC}"
     fi
 }
 
@@ -329,7 +329,7 @@ function ssh_port() {
 function ip_confirm() {
    # echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
     WANIP=$(wget http://ipecho.net/plain -O - -q) 
-    echo -e "$${ARROW}  {YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
+    echo -e "${ARROW} ${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
     if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
     fi
@@ -359,7 +359,7 @@ function create_swap() {
             sudo mkswap /swapfile
             sudo swapon /swapfile
             echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-            echo -e "${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
+            echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
         fi
@@ -381,13 +381,13 @@ function install_packages() {
     sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y > /dev/null 2>&1
     sudo apt-get install wget curl bsdmainutils automake fail2ban -y > /dev/null 2>&1
     sudo apt-get remove sysbench -y > /dev/null 2>&1
-    echo -e "$${ARROW} {YELLOW}Packages complete...${NC}"
+    echo -e "${ARROW} ${YELLOW}Packages complete...${NC}"
 }
 
 function create_conf() {
     echo -e "${ARROW} ${YELLOW}Creating zelcash config file...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
-        echo -e "${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
+        echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
         mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
     fi
     RPCUSER=$(pwgen -1 8 -n)
@@ -903,7 +903,7 @@ function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
-echo -e "${CLOCK} ${GREEN}ZELNODE SYNCING...${NC}"
+echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
 echo -e "${ARROW} ${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 $COIN_CLI getinfo
 sleep 2
@@ -912,8 +912,7 @@ sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 else
 	
    echo
-   echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-
+   echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
    
    f=0
 	
@@ -953,7 +952,7 @@ else
 
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	
-	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
+	    echo -e "${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}"
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
@@ -1012,7 +1011,7 @@ function check() {
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
     echo
-    echo -e "${YELLOW}Checking benchmarks details...${NC}"
+    echo -e "${ARROW} ${YELLOW}Checking benchmarks details...${NC}"
     zelbench-cli getbenchmarks
 
 }
@@ -1020,7 +1019,6 @@ function check() {
 function display_banner() {
     echo -e "${BLUE}"
     figlet -t -k "ZELNODES  &  ZELFLUX"
-    figlet -t -k "PM2  EDITION"
     echo -e "${NC}"
     echo -e "${YELLOW}================================================================================================================================"
     echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
