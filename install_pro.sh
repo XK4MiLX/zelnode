@@ -197,14 +197,14 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedh
 echo -e ${PIN} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}Mongo bootstrap installed successful.${NC}"
+echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
 echo -e ""
 else
-echo -e "${X_MARK} ${CYAN}Mongo bootstrap installation failed.${NC}"
+echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
 echo -e ""
 fi
 else
-echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
 fi
 
@@ -322,7 +322,7 @@ function ssh_port() {
         SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
         echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
     else
-        echo -e "${ARROW}  ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+        echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
     fi
 }
 
@@ -572,7 +572,7 @@ fi
 
 function create_service_scripts() {
 
-echo -e "${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
+echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
 sudo touch /home/$USER/start_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
     cat <<'EOF' > /home/$USER/start_zelcash_service.sh
@@ -608,7 +608,7 @@ bash -c "zelcashd"
 exit
 EOF
 
-echo -e "${YELLOW}Creating ${COIN_NAME^} service stop script...${NC}"
+echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service stop script...${NC}"
 sudo touch /home/$USER/stop_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/stop_zelcash_service.sh
     cat <<'EOF' > /home/$USER/stop_zelcash_service.sh
@@ -769,7 +769,7 @@ sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
- echo -e "${ARROW} ${YELLOW} MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+ echo -e "${ARROW} ${YELLOW}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
  echo
 else
  echo -e "${ARROW} ${YELLOW}MongoDB was not installed${NC}" 
@@ -822,7 +822,7 @@ fi
 function zelflux() {
    
     if [ -d "./zelflux" ]; then
-         echo -e "${YELLOW}Removing any instances of zelflux....${NC}"
+         echo -e "${ARROW} ${YELLOW}Removing any instances of zelflux....${NC}"
          sudo rm -rf zelflux
     fi
 
@@ -874,7 +874,7 @@ fi
 	
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
-    echo -e "${YELLOW}Configuring PM2...${NC}"
+    echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USER > /dev/null 2>&1
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
     pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
