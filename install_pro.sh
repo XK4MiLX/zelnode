@@ -419,6 +419,7 @@ zelnodeoutpoint=$zelnodeoutpoint
 zelnodeindex=$zelnodeindex
 server=1
 daemon=1
+bind=$WANIP
 txindex=1
 listen=1
 externalip=$WANIP
