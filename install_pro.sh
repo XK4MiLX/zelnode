@@ -511,7 +511,7 @@ do
     1 )
 
         echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-        wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
+        wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
         echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
         unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
         break
@@ -520,7 +520,7 @@ do
 
         BOOTSTRAP_ZIP="$(whiptail --title "ZelNode Installer" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
         echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-        wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
+        wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
         echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
         unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
         break
