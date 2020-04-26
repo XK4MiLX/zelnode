@@ -59,6 +59,8 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
+ARROW="${SEA}\xE2\x96\xB6B${NC}"
+
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -318,16 +320,16 @@ function ssh_port() {
     SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
     if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
         SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
-        echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+        echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
     else
-        echo -e "${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+        echo -e "${ARROW}  ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
     fi
 }
 
 function ip_confirm() {
    # echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
     WANIP=$(wget http://ipecho.net/plain -O - -q) 
-    echo -e "${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
+    echo -e "$${ARROW}  {YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
     if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
     fi
@@ -345,7 +347,7 @@ function create_swap() {
         #echo -e "${YELLOW}Swap set at $swap...${NC}"
     elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
         swap=4G
-        echo -e "${YELLOW}Swap set at $swap...${NC}"
+       # echo -e "${YELLOW}Swap set at $swap...${NC}"
     elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
         swap=2G
         #echo -e "${YELLOW}Swap set at $swap...${NC}"
@@ -359,14 +361,14 @@ function create_swap() {
             echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
             echo -e "${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
-            echo -e "${YELLOW}Creating a swapfile skipped...${NC}"
+            echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
         fi
     fi
     sleep 2
 }
 
 function install_packages() {
-    echo -e "${YELLOW}Installing Packages...${NC}"
+    echo -e "${ARROW} ${YELLOW}Installing Packages...${NC}"
     if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
         sudo apt-get install dirmngr apt-transport-https -y > /dev/null 2>&1
     fi
@@ -379,11 +381,11 @@ function install_packages() {
     sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y > /dev/null 2>&1
     sudo apt-get install wget curl bsdmainutils automake fail2ban -y > /dev/null 2>&1
     sudo apt-get remove sysbench -y > /dev/null 2>&1
-    echo -e "${YELLOW}Packages complete...${NC}"
+    echo -e "$${ARROW} {YELLOW}Packages complete...${NC}"
 }
 
 function create_conf() {
-    echo -e "${YELLOW}Creating Conf File...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating zelcash config file...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
         echo -e "${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
         mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
@@ -471,7 +473,7 @@ function install_zel() {
 }
 
 function zk_params() {
-    echo -e "${YELLOW}Installing zkSNARK params...${NC}"
+    echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
     bash zelcash-fetch-params.sh > /dev/null 2>&1 && sleep 2
     sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
 }
@@ -480,15 +482,15 @@ function bootstrap() {
 
 
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-echo -e "${YELLOW}Cleaning...${NC}"
+echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
 rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
 fi
 
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
-echo -e "${YELLOW}Local bootstrap file detected...${NC}"
-echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
+echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 
 #lsof +d /home/$USER/.zelcash
 #sleep 4
@@ -505,18 +507,18 @@ whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get boots
 
 case $CHOICE in
 	"1)")   
-		echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+		echo -e "${ARROW} ${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-       		echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+       		echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
         	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 
 
 	;;
 	"2)")   
   		BOOTSTRAP_ZIP="$(whiptail --title "ZELNODE INSTALLATION" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-		echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+		echo -e "${ARROW} ${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-		echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+		echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 	;;
 esac
@@ -621,7 +623,7 @@ sudo chmod +x /home/$USER/start_zelcash_service.sh
 }
 
 function create_service() {
-    echo -e "${YELLOW}Creating ${COIN_NAME^} service...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service...${NC}"
     sudo touch /etc/systemd/system/$COIN_NAME.service
     sudo chown $USER:$USER /etc/systemd/system/$COIN_NAME.service
     cat << EOF > /etc/systemd/system/$COIN_NAME.service
@@ -650,7 +652,7 @@ EOF
 }
 
 function basic_security() {
-    echo -e "${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
+    echo -e "${ARROW} ${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
     sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
     sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
@@ -671,23 +673,22 @@ function start_daemon() {
     MSG2=''
     if $COIN_DAEMON > /dev/null 2>&1; then
         echo && spinning_timer
-        NUM='4'
+        NUM='2'
         MSG1='Getting info...'
         MSG2="${CHECK_MARK}"
         echo && spinning_timer
-        echo
+        echo && echo
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
-        echo -e "${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+        echo -e "${ARROW} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
         exit
     fi
 }
 
 function log_rotate() {
-    echo -e "${YELLOW}Configuring log rotate function for debug logs...${NC}"
+    echo -e "${ARROW} ${YELLOW}Configuring log rotate function for debug logs...${NC}"
     sleep 1
-    if [ -f /etc/logrotate.d/zeldebuglog ]; then
-        echo -e "${YELLOW}Existing log rotate conf found, backing up to ~/zeldebuglogrotate.old ...${NC}"
+    if [ -f /etc/logrotat${ARROW} ting log rotate conf found, backing up to ~/zeldebuglogrotate.old ...${NC}"
         sudo mv /etc/logrotate.d/zeldebuglog ~/zeldebuglogrotate.old;
         sleep 2
     fi
@@ -715,13 +716,13 @@ EOF
 
 function install_zelflux() {
     #echo 
-    echo -e "${YELLOW}Configuring firewall...${NC}"
+    echo -e "${ARROW} ${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
     sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
     sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
-    echo -e "${YELLOW}Configuring service repositories...${NC}"
+    echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
     if ! sysbench --version > /dev/null 2>&1; then
         curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
         sudo apt -y install sysbench > /dev/null 2>&1
@@ -757,27 +758,27 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
+echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
-echo -e "${YELLOW}Mongodb installing...${NC}"
+echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
 sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
 sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
- echo -e "${CHECK_MARK} ${YELLOW} MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+ echo -e "${ARROW} ${YELLOW} MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
  echo
 else
- echo -e "${X_MARK} ${YELLOW}MongoDB was not installed${NC}" 
+ echo -e "${ARROW} ${YELLOW}MongoDB was not installed${NC}" 
  echo
 fi
 }
 
 function install_nodejs() {
-echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
+echo -e "${ARROW} ${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
 sudo apt-get remove nodejs npm nvm -y > /dev/null 2>&1 && sleep 1
@@ -795,7 +796,7 @@ sudo rm -rf /opt/local/lib/node_modules
 sudo rm -rf /usr/local/lib/node*
 sudo rm -rf /usr/local/include/node*
 sudo rm -rf /usr/local/bin/node*
-echo -e "${YELLOW}Nodejs installing...${NC}"
+echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
 export NVM_DIR="$HOME/.nvm" && (
   git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
   cd "$NVM_DIR"
@@ -809,10 +810,10 @@ sleep 1
 nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${YELLOW} Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+echo -e "${ARROW} ${YELLOW}Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
 echo
 else
-echo -e "${X_MARK} ${YELLOW}Nodejs was not installed${NC}"
+echo -e "${ARROW} ${YELLOW}Nodejs was not installed${NC}"
 echo
 fi
 
@@ -827,9 +828,9 @@ function zelflux() {
 
 
 
-    echo -e "${YELLOW}Zelflux installing...${NC}"
+    echo -e "${ARROW} ${YELLOW}Zelflux installing...${NC}"
     git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
-    echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating zelflux configuration file...${NC}"
     
     
             if [[ "$IMPORT_ZELID" == "0" ]]
@@ -840,10 +841,10 @@ function zelflux() {
                 ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
                 if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
                 then
-                echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
+                echo -e "${ARROW} ${CYAN}Zel ID is valid${NC}"
                 break
                 else
-                echo -e "${X_MARK} ${CYAN}Zel ID is not valid try again...${NC}"
+                echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...${NC}"
                 sleep 4
                 fi
         done
@@ -864,14 +865,14 @@ EOF
 if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-echo -e "${CHECK_MARK} ${YELLOW} Zelflux version: ${GREEN}$current_ver${YELLOW} installed${NC}"
+echo -e "${ARROW} ${YELLOW}Zelflux version: ${GREEN}$current_ver${YELLOW} installed${NC}"
 echo
 else
-echo -e "${X_MARK} ${YELLOW}Zelflux was not installed${NC}"
+echo -e "${ARROW} ${YELLOW}Zelflux was not installed${NC}"
 echo
 fi
 	
-    echo -e "${YELLOW}PM2 installing...${NC}"
+    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USER > /dev/null 2>&1
@@ -888,10 +889,10 @@ fi
     
     if node -v > /dev/null 2>&1
     then
-    echo -e "${CHECK_MARK} ${YELLOW} PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+    echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
     echo
     else
-    echo -e "${X_MARK} ${YELLOW}PM2 was not installed${NC}"
+    echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
     echo
     fi
     
@@ -902,8 +903,8 @@ function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
-echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
+echo -e "${CLOCK} ${GREEN}ZELNODE SYNCING...${NC}"
+echo -e "${ARROW} ${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 $COIN_CLI getinfo
 sleep 2
 sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
@@ -933,7 +934,7 @@ else
 	sudo systemctl start zelcash > /dev/null 2>&1
 	
           NUM='65'
-          MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+          MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
 	  
@@ -946,7 +947,7 @@ else
 	
 	
 	NUM='10'
-        MSG1="${CLOCK}${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+        MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 
@@ -966,13 +967,13 @@ else
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
          mongodb_bootstrap
     else
-        echo -e "${YELLOW}Restore Mongodb datatable skipped...${NC}"
+        echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
     fi
 
     if   whiptail --yesno "Would you like to install watchdog for zelnode?" 8 60; then
          install_watchdog
     else
-        echo -e "${YELLOW}Watchdog installation skipped...${NC}"
+        echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
     fi
 
     check
@@ -980,7 +981,7 @@ else
 }
 
 function update_script() {
-    echo -e "${YELLOW}Creating a script to update binaries for future updates...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating a script to update binaries for future updates...${NC}"
     touch /home/"$USERNAME"/update.sh
     cat << EOF > /home/"$USERNAME"/update.sh
 #!/bin/bash
