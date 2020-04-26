@@ -68,7 +68,7 @@ function import_date() {
 
 if [[ -f ~/.zelcash/zelcash.conf ]]
 then
-if whiptail --yesno "Would you like to import data from zelcash.conf Y/N?" 8 60; then
+if whiptail --yesno "Would you like to import data from zelcash.conf and userconfig.js Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${YELLOW}Imported settings:${NC}"
@@ -78,17 +78,18 @@ zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/ze
 echo -e "${PIN} ${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
 echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
-fi
-fi
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
-if whiptail --yesno "Would you like to import zelid from userconfig.js Y/N?" 8 60; then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
+
 fi
+fi
+
+
 sleep 2
 echo
 }
@@ -155,8 +156,8 @@ function mongodb_bootstrap(){
 
 
 echo
-echo -e "${GREEN}RESTORE MONGODB DATATABLE FROM BOOTSTRAP${NC}"
-NUM='60'
+echo -e "${GREEN}Restore mongodb datatable from bootstrap${NC}"
+NUM='30'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
