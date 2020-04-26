@@ -134,7 +134,7 @@ then
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge -q --show-progress
+wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
@@ -144,12 +144,12 @@ pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --
 pm2 save > /dev/null 2>&1
 if [[ -f ~/watchdog/watchdog.js ]]
 then
-echo -e "${ARROW} ${CYAN}Watchdog installed successful.${NC}"
+echo -e "${ARROW} ${YELLOW}Watchdog installed successful.${NC}"
 else
-echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
+echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
 fi
 else
-echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
+echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
 fi
 
 }
@@ -158,12 +158,12 @@ function mongodb_bootstrap(){
 
 
 echo
-echo -e "${ARROW} ${GREEN}Restore mongodb datatable from bootstrap${NC}"
+echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 NUM='30'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
-echo
+echo && echo
 DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -197,10 +197,10 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedh
 echo -e ${PIN} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+echo -e "${ARROW} ${YELLOW}Mongo bootstrap installed successful.${NC}"
 echo -e ""
 else
-echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+echo -e "${ARROW} ${YELLOW}Mongo bootstrap installation failed.${NC}"
 echo -e ""
 fi
 else
