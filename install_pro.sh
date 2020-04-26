@@ -281,17 +281,18 @@ function wipe_clean() {
 }
 
 function spinning_timer() {
+   
+
     echo -e ""
-    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
+    echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
+    
     end=$((SECONDS+NUM))
     while [ $SECONDS -lt $end ];
-    do
-        for i in "${animation[@]}";
-        do
-            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-            sleep 0.1
-        done
+    do       
+         sleep 0.1
+	 
     done
+    
     echo -ne "${MSG2}"
 }
 
