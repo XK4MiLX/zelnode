@@ -265,18 +265,17 @@ function wipe_clean() {
 
 
 
-    echo
-    echo -e "${YELLOW}Detecting Firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
 
-    echo -e "${YELLOW}Firewall enabled...${NC}"
+       echo -e "${YELLOW}Firewall status:  ${GREEN}enabled${NC}"
+       
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
     fi
 
     else
-        echo -e "${YELLOW}Firewall disabled...${NC}"
+        echo -e "${YELLOW}Firewall status:  ${RED}disabled${NC}"
     fi
 }
 
@@ -313,7 +312,7 @@ function spinning_timer() {
 #}
 
 function ssh_port() {
-    echo -e "${YELLOW}Detecting SSH port being used...${NC}" && sleep 1
+    #echo -e "${YELLOW}Detecting SSH port being used...${NC}" && sleep 1
     SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
     if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
         SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
@@ -324,28 +323,30 @@ function ssh_port() {
 }
 
 function ip_confirm() {
-    echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
-    WANIP=$(wget http://ipecho.net/plain -O - -q)
+   # echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
+    WANIP=$(wget http://ipecho.net/plain -O - -q) 
+    echo -e "${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
     if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
     fi
+    
 }
 
 function create_swap() {
-    echo -e "${YELLOW}Creating swap if none detected...${NC}" && sleep 1
+    #echo -e "${YELLOW}Creating swap if none detected...${NC}" && sleep 1
     MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
     gb=$(awk "BEGIN {print $MEM/1048576}")
     GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
     if [ "$GB" -lt 2 ]; then
         (( swapsize=GB*2 ))
         swap="$swapsize"G
-        echo -e "${YELLOW}Swap set at $swap...${NC}"
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
     elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
         swap=4G
         echo -e "${YELLOW}Swap set at $swap...${NC}"
     elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
         swap=2G
-        echo -e "${YELLOW}Swap set at $swap...${NC}"
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
     fi
     if ! grep -q "swapfile" /etc/fstab; then
         if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
