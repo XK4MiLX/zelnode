@@ -268,14 +268,17 @@ function wipe_clean() {
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
 
-       echo -e "${YELLOW}Firewall status:  ${GREEN}enabled${NC}"
+       
        
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
+	 echo -e "${YELLOW}Firewall status: ${RED}Disabled${NC}"
+    else	 
+	 echo -e "${YELLOW}Firewall status: ${GREEN}Enabled${NC}"
     fi
 
     else
-        echo -e "${YELLOW}Firewall status:  ${RED}disabled${NC}"
+        echo -e "${YELLOW}Firewall status: ${RED}Disabled${NC}"
     fi
 }
 
@@ -355,7 +358,7 @@ function create_swap() {
             echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
             echo -e "${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
-            echo -e "${YELLOW}You have opted out on creating a swapfile so no swap created...${NC}"
+            echo -e "${YELLOW}Creating a swapfile skipped...${NC}"
         fi
     fi
     sleep 2
@@ -432,8 +435,6 @@ function zel_package() {
 }
 
 function install_zel() {
-    echo 
-    echo -e "${GREEN}ZELCASH, ZELBENCH INSTALLATION${NC}"
     echo 'deb https://apt.zel.cash/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
@@ -495,7 +496,7 @@ else
 
 
 CHOICE=$(
-whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 16 100 9 \
+whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 16 70 9 \
 	"1)" "Download from source build in script"   \
 	"2)" "Download from own source"  3>&2 2>&1 1>&3	
 )
@@ -766,8 +767,10 @@ sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
  echo -e "${CHECK_MARK} ${YELLOW} MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+ echo
 else
  echo -e "${X_MARK} ${YELLOW}MongoDB was not installed${NC}" 
+ echo
 fi
 }
 
@@ -805,8 +808,10 @@ nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${YELLOW} Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+echo
 else
 echo -e "${X_MARK} ${YELLOW}Nodejs was not installed${NC}"
+echo
 fi
 
 }
@@ -815,10 +820,17 @@ function zelflux() {
    
     if [ -d "./zelflux" ]; then
          echo -e "${YELLOW}Removing any instances of zelflux....${NC}"
-        sudo rm -rf zelflux
+         sudo rm -rf zelflux
     fi
 
-        if [[ "$IMPORT_ZELID" == "0" ]]
+
+
+    echo -e "${YELLOW}Cloning git....${NC}"
+    git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
+    echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
+    
+    
+            if [[ "$IMPORT_ZELID" == "0" ]]
         then
 
         while true
@@ -826,7 +838,7 @@ function zelflux() {
                 ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
                 if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
                 then
-                echo -e "${CHECK_MARK} ${CYAN}Zel ID is valid${NC}"
+                echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
                 break
                 else
                 echo -e "${X_MARK} ${CYAN}Zel ID is not valid try again...${NC}"
@@ -835,10 +847,7 @@ function zelflux() {
         done
 
         fi
-
-    echo -e "${YELLOW}Downloading....${NC}"
-    git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
-    echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
+      
     touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
@@ -854,12 +863,13 @@ if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 echo -e "${CHECK_MARK} ${YELLOW} Zelflux version: ${GREEN}$current_ver${YELLOW} installed${NC}"
+echo
 else
 echo -e "${X_MARK} ${YELLOW}Zelflux was not installed${NC}"
+echo
 fi
-
-
-    echo -e "${YELLOW}Installing...${NC}"
+	
+    echo -e "${YELLOW}Installing PM2...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USER > /dev/null 2>&1
@@ -877,8 +887,10 @@ fi
     if node -v > /dev/null 2>&1
     then
     echo -e "${CHECK_MARK} ${YELLOW} PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+    echo
     else
     echo -e "${X_MARK} ${YELLOW}PM2 was not installed${NC}"
+    echo
     fi
     
     
@@ -887,12 +899,9 @@ fi
 function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
-
 echo
 echo -e "${GREEN}ZELNODE SYNCING...${NC}"
 echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
-sudo systemctl restart zelcash && sleep 2
-echo
 $COIN_CLI getinfo
 sleep 2
 sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
@@ -921,7 +930,7 @@ else
 	sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
 	sudo systemctl start zelcash > /dev/null 2>&1
 	
-          NUM='90'
+          NUM='65'
           MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
@@ -942,7 +951,6 @@ else
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	
 	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
-	    sudo systemctl restart zelcash && sleep 2
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
