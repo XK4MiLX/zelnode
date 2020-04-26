@@ -646,9 +646,6 @@ WantedBy=multi-user.target
 EOF
     sudo chown root:root /etc/systemd/system/$COIN_NAME.service
     sudo systemctl daemon-reload
-    sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl start zelcash > /dev/null 2>&1
-
 }
 
 function basic_security() {
@@ -664,6 +661,10 @@ function basic_security() {
 }
 
 function start_daemon() {
+
+    sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
+    sudo systemctl start zelcash > /dev/null 2>&1
+    
     NUM='120'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
     MSG2=''
