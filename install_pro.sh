@@ -1017,7 +1017,6 @@ function check() {
 function display_banner() {
     echo -e "${BLUE}"
     figlet -t -k "ZELNODES  &  ZELFLUX"
-    figlet -t -k "COMPLITED"
     echo -e "${NC}"
     echo -e "${YELLOW}================================================================================================================================"
     echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
