@@ -688,9 +688,10 @@ function start_daemon() {
 function log_rotate() {
     echo -e "${ARROW} ${YELLOW}Configuring log rotate function for debug logs...${NC}"
     sleep 1
-    if [ -f /etc/logrotat${ARROW} ting log rotate conf found, backing up to ~/zeldebuglogrotate.old ...${NC}"
-        sudo mv /etc/logrotate.d/zeldebuglog ~/zeldebuglogrotate.old;
-        sleep 2
+    if [ -f /etc/logrotate.d/zeldebuglog ]; then
+        echo -e "${ARROW} ${YELLOW}Existing log rotate conf found, backing up to ~/zeldebuglogrotate.old ...${NC}"
+	sudo mv /etc/logrotate.d/zeldebuglog ~/zeldebuglogrotate.old
+	sleep 2
     fi
     sudo touch /etc/logrotate.d/zeldebuglog
     sudo chown "$USERNAME":"$USERNAME" /etc/logrotate.d/zeldebuglog
@@ -702,7 +703,6 @@ function log_rotate() {
   weekly
   rotate 4
 }
-
 /home/$USERNAME/.zelbenchmark/debug.log {
   compress
   copytruncate
