@@ -263,7 +263,7 @@ function wipe_clean() {
         echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     fi
 
-
+    echo
 
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
@@ -714,12 +714,13 @@ EOF
 
 function install_zelflux() {
     #echo 
-    #echo -e "${GREEN}PREPERING FOR MONGODB, NODEJS, ZELFLUX INSTALLATION${NC}"
+    echo -e "${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
     sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
     sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
+    echo -e "${YELLOW}Configuring service repositories...${NC}"
     if ! sysbench --version > /dev/null 2>&1; then
         curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
         sudo apt -y install sysbench > /dev/null 2>&1
@@ -825,7 +826,7 @@ function zelflux() {
 
 
 
-    echo -e "${YELLOW}Cloning git....${NC}"
+    echo -e "${YELLOW}Zelflux installing...${NC}"
     git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
     echo -e "${YELLOW}Creating zelflux configuration file...${NC}"
     
@@ -869,7 +870,7 @@ echo -e "${X_MARK} ${YELLOW}Zelflux was not installed${NC}"
 echo
 fi
 	
-    echo -e "${YELLOW}Installing PM2...${NC}"
+    echo -e "${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
     pm2 startup systemd -u $USER > /dev/null 2>&1
