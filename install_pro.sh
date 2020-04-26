@@ -71,7 +71,7 @@ then
 if whiptail --yesno "Would you like to import data from zelcash.conf Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
-echo -e "${SEA}Imported settings:${NC}"
+echo -e "${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
 echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
@@ -125,9 +125,7 @@ import_date
 
 #functions
 function install_watchdog() {
-
-echo 
-echo -e "${GREEN}INSTALL WATCHDOG FOR ZELNODE${NC}"
+echo -e "${YELLOW}Install watchdog for zelnod${NC}"
 if pm2 -v > /dev/null 2>&1
 then
 echo -e "${YELLOW}Downloading...${NC}"
