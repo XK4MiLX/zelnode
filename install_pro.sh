@@ -945,7 +945,7 @@ else
 	fi
 	
 	
-	NUM='10'
+	NUM='15'
         MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
