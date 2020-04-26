@@ -283,13 +283,14 @@ function wipe_clean() {
 }
 
 function spinning_timer() {
+    echo -e ""
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
     while [ $SECONDS -lt $end ];
     do
         for i in "${animation[@]}";
         do
-            echo -ne "${RED}\r$i ${CYAN}${MSG1}${NC}"
+            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
             sleep 0.1
         done
     done
@@ -713,8 +714,6 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-echo 
-echo -e "${GREEN}MONGODB INSTALLATION${NC}"
 echo -e "${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
@@ -733,8 +732,6 @@ fi
 }
 
 function install_nodejs() {
-echo 
-echo -e "${GREEN}NODEJS AND NPM INSTALLATION${NC}"
 echo -e "${YELLOW}Removing any instances of Nodejs...${NC}"
 n-uninstall -y > /dev/null 2>&1 && sleep 1
 rm -rf ~/n
@@ -775,12 +772,9 @@ fi
 }
 
 function zelflux() {
-
-   echo 
-   echo -e "${GREEN}ZELFLUX INSTALLATION${NC}"
    
     if [ -d "./zelflux" ]; then
-         echo -e "${YELLOW}Cleaning old installation....${NC}"
+         echo -e "${YELLOW}Removing any instances of zelflux....${NC}"
         sudo rm -rf zelflux
     fi
 
@@ -825,23 +819,9 @@ echo -e "${X_MARK} ${YELLOW}Zelflux was not installed${NC}"
 fi
 
 
-
-   echo
-   echo -e "${GREEN}PROCESS MANAGER FOR NODEJS INSTALLATION${NC}"
-   #if pm2 -v > /dev/null 2>&1; then
-   #echo -e "${YELLOW}Cleaning old installation....${NC}"
-   #pm2 kill > /dev/null 2>&1
-   #npm remove pm2 -g > /dev/null 2>&1
-   #echo -e "${YELLOW}Installing...${NC}"
-   #npm i -g pm2 > /dev/null 2>&1
-  # else
-   echo -e "${YELLOW}Installing...${NC}"
-   npm install pm2@latest -g > /dev/null 2>&1
-   #fi
-
+    echo -e "${YELLOW}Installing...${NC}"
+    npm install pm2@latest -g > /dev/null 2>&1
     echo -e "${YELLOW}Configuring PM2...${NC}"
-    # pm2 startup systemd -u $USERNAME
-    # sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/v12.16.1/bin pm2 startup systemd -u $USERNAME --hp /home/$USERNAME
     pm2 startup systemd -u $USER > /dev/null 2>&1
     sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
     pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
@@ -853,6 +833,15 @@ fi
     pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
     source ~/.bashrc
+    
+    if node -v > /dev/null 2>&1
+    then
+    echo -e "${CHECK_MARK} ${YELLOW} PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+    else
+    echo -e "${X_MARK} ${YELLOW}PM2 was not installed${NC}"
+    fi
+    
+    
 }
 
 function status_loop() {
@@ -861,7 +850,6 @@ if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.inf
 
 echo
 echo -e "${GREEN}ZELNODE SYNCING...${NC}"
-echo
 echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
 echo
 $COIN_CLI getinfo
@@ -906,7 +894,7 @@ else
 	
 	
 	NUM='10'
-        MSG1="${CLOCK}${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+        MSG1="${CLOCK}${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 
