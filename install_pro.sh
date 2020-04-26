@@ -497,9 +497,9 @@ else
 
 
 CHOICE=$(
-whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 16 70 9 \
-	"1)" "Download from source build in script"   \
-	"2)" "Download from own source"  3>&2 2>&1 1>&3	
+whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+        "1)" "Download from source build in script" \
+        "2)" "Download from own source" 3>&2 2>&1 1>&3
 )
 
 
