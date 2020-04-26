@@ -490,8 +490,7 @@ echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 
 #lsof +d /home/$USER/.zelcash
 #sleep 4
-
-unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR | pv -l >/dev/null
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 else
 
 
@@ -507,7 +506,7 @@ case $CHOICE in
 		echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
        		echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-        	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR | pv -l >/dev/null
+        	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 
 
 	;;
@@ -516,7 +515,7 @@ case $CHOICE in
 		echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
 		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		echo -e "${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR | pv -l >/dev/null
+		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 	;;
 esac
 
@@ -892,6 +891,7 @@ if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.inf
 echo
 echo -e "${GREEN}ZELNODE SYNCING...${NC}"
 echo -e "${CLOCK}${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
+sudo systemctl restart zelcash && sleep 2
 echo
 $COIN_CLI getinfo
 sleep 2
