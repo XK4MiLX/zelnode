@@ -73,7 +73,7 @@ then
 if whiptail --yesno "Would you like to import data from zelcash.conf and userconfig.js Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
-echo -e "${YELLOW}Imported settings:${NC}"
+echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
 echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
@@ -254,17 +254,17 @@ function wipe_clean() {
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
 
 
-    if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
-        echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Config directory /home/$USER/$CONFIG_DIR cleaned [Failed]${NC}" && sleep 1
-    fi
+   # if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
+       # echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
+    #else
+        #echo -e "${X_MARK} ${CYAN}Config directory /home/$USER/$CONFIG_DIR cleaned [Failed]${NC}" && sleep 1
+    #fi
 
-    if ! ls '/usr/local/bin/' | grep zel > /dev/null 2>&1 ; then
-        echo -e "${CHECK_MARK} ${CYAN} Bin directory cleaned [OK]${NC}" && sleep 1
-    else
-        echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
-    fi
+   # if ! ls '/usr/local/bin/' | grep zel > /dev/null 2>&1 ; then
+        #echo -e "${CHECK_MARK} ${CYAN} Bin directory cleaned [OK]${NC}" && sleep 1
+    #else
+        #echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
+    #fi
 
     echo
 
