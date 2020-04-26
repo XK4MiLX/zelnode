@@ -674,8 +674,7 @@ function start_daemon() {
         MSG2="${CHECK_MARK}"
         echo && spinning_timer
         echo
-        sleep 2
-	zelbench-cli stop
+	zelbench-cli stop && sleep 2
     else
         echo -e "${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
         exit
@@ -942,7 +941,7 @@ else
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
 	
 	    echo -e "${CYAN} ZelNode is full synced.${NC}${CHECK_MARK}"
-	    sudo systemctl restart zelcash
+	    sudo systemctl restart zelcash && sleep 2
 	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
             break
         fi
@@ -995,7 +994,7 @@ EOF
 
 function check() {
     NUM='90'
-    MSG1='Finalizing installation please be patient this will take about 30 sec...'
+    MSG1='Finalizing installation please be patient this will take about 90 sec...'
     MSG2="${CHECK_MARK}"
     echo && echo && spinning_timer
     echo
