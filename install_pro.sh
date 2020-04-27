@@ -492,9 +492,9 @@ echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
 echo -e "${ARROW} ${YELLOW}Checking file integration...${NC}"
 if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
 then
-echo -e "${ARROW} ${YELLOW}File integration.....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}File integration.....................[${CHECK_MARK}${CYAN}]${NC}"
 else
-echo -e "${ARROW} ${YELLOW}File integration.....................[${X_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}File integration.....................[${X_MARK}${CYAN}]${NC}"
 rm -rf zel-bootstrap.zip
 fi
 fi
@@ -1032,7 +1032,7 @@ EOF
 function check() {
     NUM='30'
     MSG1='Finalizing installation please be patient this will take about 30 sec...'
-    MSG2=".............[${CHECK_MARK}]"
+    MSG2=".............${CYAN}[${CHECK_MARK}${CYAN}]${NC}"
     echo && echo && spinning_timer
     echo
     echo -e "${ARROW} ${YELLOW}Checking benchmarks details...${NC}"
