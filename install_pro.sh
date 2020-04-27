@@ -117,7 +117,7 @@ echo
 echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
-echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN}................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 else
 echo -e "${ARROW} ${CYAN}Bad directory switching...${NC}"
 cd
