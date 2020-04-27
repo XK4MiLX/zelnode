@@ -129,7 +129,7 @@ import_date
 
 #functions
 function install_watchdog() {
-echo -e "${ARROW} ${YELLOW}Install watchdog for zelnod${NC}"
+echo -e "${ARROW} ${YELLOW}Install watchdog for zelnode${NC}"
 if pm2 -v > /dev/null 2>&1
 then
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
@@ -145,7 +145,8 @@ pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --
 pm2 save > /dev/null 2>&1
 if [[ -f ~/watchdog/watchdog.js ]]
 then
-echo -e "${ARROW} ${YELLOW}Watchdog installed successful.${NC}"
+current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+echo -e "${ARROW} ${YELLOW}Watchdog ${GREEN}v$(current_ver) ${YELLOW}installed successful.${NC}"
 else
 echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
 fi
