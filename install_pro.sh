@@ -165,7 +165,7 @@ function mongodb_bootstrap(){
 
 echo
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-NUM='30'
+NUM='50'
 MSG1='Zelflux loading...'
 MSG2="${CHECK_MARK}"
 spinning_timer
