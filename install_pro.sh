@@ -113,7 +113,7 @@ fi
 start_dir=$(pwd)
 correct_dir="/home/$USER"
 echo
-echo -e " ${YELLOW}Checking directory....${NC}"
+echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
 echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN}................[${CHECK_MARK}${CYAN}]${NC}"
