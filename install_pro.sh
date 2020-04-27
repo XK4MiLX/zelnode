@@ -654,6 +654,7 @@ EOF
 
 function basic_security() {
     echo -e "${ARROW} ${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
+    sudo ufw allow 16124/tcp > /dev/null 2>&1
     sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
     sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
