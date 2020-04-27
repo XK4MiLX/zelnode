@@ -150,7 +150,7 @@ pm2 save > /dev/null 2>&1
 if [[ -f ~/watchdog/watchdog.js ]]
 then
 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
-echo -e "${ARROW} ${YELLOW}Watchdog ${GREEN}v$current_ver${YELLOW}installed successful.${NC}"
+echo -e "${ARROW} ${YELLOW}Watchdog ${GREEN}v$current_ver${YELLOW} installed successful.${NC}"
 else
 echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
 fi
