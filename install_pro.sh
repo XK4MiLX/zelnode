@@ -163,8 +163,6 @@ fi
 
 function mongodb_bootstrap(){
 
-
-echo
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 NUM='90'
 MSG1='Zelflux loading...'
@@ -994,12 +992,13 @@ else
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
 	    echo -e "${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 	    sudo chown -R $USER:$USER /home/$USER
+	    echo
             break
         fi
     done
     
     fi
-
+    echo	
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
          mongodb_bootstrap
     else
@@ -1050,7 +1049,7 @@ function check() {
     echo && echo
         
 echo -e "${BOOK}${YELLOW}ZelBench benchmarks:${NC}"
-echo -e "${YELLOW}==============================${NC}"
+echo -e "${YELLOW}======================${NC}"
 zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 
 if [[ "zelbench_benchmarks" != "" ]]; then
