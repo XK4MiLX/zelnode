@@ -60,6 +60,7 @@ X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
 ARROW="${SEA}\xE2\x96\xB6${NC}"
+BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 
 #dialog color
 export NEWT_COLORS='
@@ -878,7 +879,7 @@ EOF
 if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-echo -e "${ARROW} ${YELLOW}Zelflux version: ${GREEN}$current_ver${YELLOW} installed${NC}"
+echo -e "${ARROW} ${YELLOW}Zelflux version: v${GREEN}$current_ver${YELLOW} installed${NC}"
 echo
 else
 echo -e "${ARROW} ${YELLOW}Zelflux was not installed${NC}"
@@ -1036,7 +1037,7 @@ function check() {
     echo && echo && spinning_timer
     echo
         
-echo -e "${BOOK} ${YELLOW}ZelBench benchmarks:${NC}"
+echo -e "${ARROW} ${YELLOW}ZelBench benchmarks:${NC}"
 zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 
 if [[ "zelbench_benchmarks" != "" ]]; then
@@ -1048,14 +1049,19 @@ echo -e "${BOOK} ${CYAN}STATUS: ${GREEN}$zelbench_status${NC}"
 zelbench_cores=$(jq -r '.cores' <<< "$zelbench_benchmarks")
 echo -e "${BOOK} ${CYAN}CORES: ${GREEN}$zelbench_cores${NC}"
 zelbench_ram=$(jq -r '.ram' <<< "$zelbench_benchmarks")
+zelbench_ram=$(round "$zelbench_ram" 2)
 echo -e "${BOOK} ${CYAN}RAM: ${GREEN}$zelbench_ram${NC}"
 zelbench_ssd=$(jq -r '.ssd' <<< "$zelbench_benchmarks")
+zelbench_ssd=$(round "$zelbench_ssd" 2)
 echo -e "${BOOK} ${CYAN}SSD: ${GREEN}$zelbench_ssd${NC}"
 zelbench_hdd=$(jq -r '.hdd' <<< "$zelbench_benchmarks")
+zelbench_hdd=$(round "$zelbench_hdd" 2)
 echo -e "${BOOK} ${CYAN}HDD: ${GREEN}$zelbench_hdd${NC}"
 zelbench_ddwrite=$(jq -r '.ddwrite' <<< "$zelbench_benchmarks")
+zelbench_ddwrite=$(round "$zelbench_ddwrite" 2)
 echo -e "${BOOK} ${CYAN}DDWRITE: ${GREEN}$zelbench_ddwrite${NC}"
 zelbench_eps=$(jq -r '.eps' <<< "$zelbench_benchmarks")
+zelbench_eps=$(round "$zelbench_eps" 2)
 echo -e "${BOOK} ${CYAN}EPS: ${GREEN}$zelbench_eps${NC}"
 fi
 
