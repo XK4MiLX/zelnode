@@ -417,14 +417,12 @@ echo -e ""
 #fi
 echo -e "${BOOK} ${YELLOW}Checking service:${NC}"
 
+docker_working=0
 snap_docker_running=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
 snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
 docker_inactive=$(systemctl status docker 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
-
-docker_socket_running=$(systemctl status docker.socket 2> /dev/null | grep 'running'  | grep -o 'since.*')
-docker_socket_inactive=$(systemctl status docker.socket 2> /dev/null | egrep 'inactive|failed' > /dev/null 2>&1 | grep -o 'since.*')
 
 mongod_running=$(systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
 mongod_inactive=$(systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
@@ -435,38 +433,46 @@ zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|faile
 
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Docker(SNAP) servive running ${SEA}$snap_docker_running${NC}"
+docker_working=1
 else
 
 if [ "$snap_docker_inactive" != "" ]; then
-echo -e "${X_MARK} ${CYAN}Docker(SNAP) servive not running ${RED}$snap_docker_inactive${NC}"
+echo -e "${BOOK} ${CYAN}Docker(SNAP) servive not running ${RED}$snap_docker_inactive${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Docker(SNAP) is not installed${NC}"
+echo -e "${BOOK} ${CYAN}Docker(SNAP) is not installed${NC}"
 fi
 
 fi
 
 if systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
+echo -e "${BOOK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
+docker_working=1
 else
 if [[ "$docker_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Docker servive not running ${RED}$docker_inactive${NC}"
+echo -e "${BOOK} ${CYAN}Docker servive not running ${RED}$docker_inactive${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Docker is not installed${NC}"
+echo -e "${BOOK} ${CYAN}Docker is not installed${NC}"
 fi
 
 fi
 
-if systemctl list-units | grep docker.socket | egrep -wi 'running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
+if [[ "$docker_working" == "1" ]]; then
+echo -e "${CHECK_MARK} ${CYAN}Docker is working correct${NC}"
 else
-
-if [[ "$docker_socket_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${RED}$docker_socket_inactive ${NC}"
-else
-echo -e "${X_MARK} ${CYAN}Docker Socket for the API is not installed${NC}"
+echo -e "${X_MARK} ${CYAN}Docker is not working${NC}"
 fi
 
-fi
+#if systemctl list-units | grep docker.socket | egrep -wi 'running' > /dev/null 2>&1; then
+#echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
+#else
+
+#if [[ "$docker_socket_inactive" != "" ]]; then
+#echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${RED}$docker_socket_inactive ${NC}"
+#else
+#echo -e "${X_MARK} ${CYAN}Docker Socket for the API is not installed${NC}"
+#fi
+
+#fi
 
 if systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
