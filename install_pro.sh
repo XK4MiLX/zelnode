@@ -61,6 +61,7 @@ PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
 ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 
 #dialog color
 export NEWT_COLORS='
@@ -167,7 +168,7 @@ echo
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 NUM='90'
 MSG1='Zelflux loading...'
-MSG2="${CHECK_MARK}"
+MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo && echo
 DB_HIGHT=572200
@@ -196,7 +197,7 @@ pm2 save > /dev/null 2>&1
 
 NUM='120'
 MSG1='Zelflux starting...'
-MSG2="${CHECK_MARK}"
+MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -935,7 +936,7 @@ LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 
 NUM='2'
 MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
-MSG2="${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}"
+MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 sudo chown -R $USER:$USER /home/$USER
 echo
@@ -991,7 +992,7 @@ else
         spinning_timer
 	
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-	    echo -e "${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}"
+	    echo -e "${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 	    sudo chown -R $USER:$USER /home/$USER
             break
         fi
@@ -1048,8 +1049,8 @@ function check() {
     echo && echo && spinning_timer
     echo && echo
         
-echo -e "${ARROW} ${YELLOW}ZelBench benchmarks:${NC}"
-echo
+echo -e "${HOT} ${YELLOW}ZelBench benchmarks:${NC}"
+echo -e "${CYAN}==============================${NC}"
 zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 
 if [[ "zelbench_benchmarks" != "" ]]; then
