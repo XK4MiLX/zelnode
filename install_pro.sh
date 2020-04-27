@@ -67,6 +67,10 @@ export NEWT_COLORS='
 title=black,
 '
 
+function round() {
+  printf "%.${2}f" "${1}"
+}
+
 function import_date() {
 
 if [[ -f ~/.zelcash/zelcash.conf ]]
