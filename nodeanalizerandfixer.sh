@@ -30,6 +30,7 @@ PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
+ARROW="${SEA}\xE2\x96\xB6${NC}"
 
 
 #dialog color
@@ -437,27 +438,27 @@ docker_working=1
 else
 
 if [ "$snap_docker_inactive" != "" ]; then
-echo -e "${BOOK} ${CYAN}Docker(SNAP) servive not running ${RED}$snap_docker_inactive${NC}"
+echo -e "${ARROW} ${CYAN}Docker(SNAP) servive not running ${RED}$snap_docker_inactive${NC}"
 else
-echo -e "${BOOK} ${CYAN}Docker(SNAP) is not installed${NC}"
+echo -e "${ARROW} ${CYAN}Docker(SNAP) is not installed${NC}"
 fi
 
 fi
 
 if systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
-echo -e "${BOOK} ${CYAN} Docker servive running ${SEA}$docker_running${NC}"
+echo -e "${ARROW} ${CYAN}Docker servive running ${SEA}$docker_running${NC}"
 docker_working=1
 else
 if [[ "$docker_inactive" != "" ]]; then
-echo -e "${BOOK} ${CYAN}Docker servive not running ${RED}$docker_inactive${NC}"
+echo -e "${ARROW} ${CYAN}Docker servive not running ${RED}$docker_inactive${NC}"
 else
-echo -e "${BOOK} ${CYAN}Docker is not installed${NC}"
+echo -e "${ARROW} ${CYAN}Docker is not installed${NC}"
 fi
 
 fi
 
 if [[ "$docker_working" == "1" ]]; then
-echo -e "${CHECK_MARK} ${CYAN}Docker is working correct${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Docker is working correct${NC}"
 else
 echo -e "${X_MARK} ${CYAN}Docker is not working${NC}"
 fi
