@@ -1032,11 +1032,36 @@ EOF
 function check() {
     NUM='30'
     MSG1='Finalizing installation please be patient this will take about 30 sec...'
-    MSG2=".............${CYAN}[${CHECK_MARK}${CYAN}]${NC}"
+    MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && echo && spinning_timer
     echo
-    echo -e "${ARROW} ${YELLOW}Checking benchmarks details...${NC}"
-    zelbench-cli getbenchmarks
+        
+echo -e "${BOOK} ${YELLOW}ZelBench benchmarks:${NC}"
+zelbench_benchmarks=$(zelbench-cli getbenchmarks)
+
+if [[ "zelbench_benchmarks" != "" ]]; then
+zelbench_status=$(jq -r '.status' <<< "$zelbench_benchmarks")
+if [[ "$zelbench_status" == "failed" ]]; then
+echo -e "${ARROW} ${CYAN}Zelbench benchmark failed.................[${X_MARK}${CYAN}]${NC}"
+else
+echo -e "${BOOK} ${CYAN}STATUS: ${GREEN}$zelbench_status${NC}"
+zelbench_cores=$(jq -r '.cores' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}CORES: ${GREEN}$zelbench_cores${NC}"
+zelbench_ram=$(jq -r '.ram' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}RAM: ${GREEN}$zelbench_ram${NC}"
+zelbench_ssd=$(jq -r '.ssd' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}SSD: ${GREEN}$zelbench_ssd${NC}"
+zelbench_hdd=$(jq -r '.hdd' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}HDD: ${GREEN}$zelbench_hdd${NC}"
+zelbench_ddwrite=$(jq -r '.ddwrite' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}DDWRITE: ${GREEN}$zelbench_ddwrite${NC}"
+zelbench_eps=$(jq -r '.eps' <<< "$zelbench_benchmarks")
+echo -e "${BOOK} ${CYAN}EPS: ${GREEN}$zelbench_eps${NC}"
+fi
+
+else
+echo -e "${ARROW} ${CYAN}Zelbench not responding.................[${X_MARK}${CYAN}]${NC}"
+fi
 
 }
 
