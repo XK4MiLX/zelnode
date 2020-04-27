@@ -867,10 +867,10 @@ function zelflux() {
                 ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
                 if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
                 then
-                echo -e "${ARROW} ${CYAN}Zel ID is valid${NC}"
+                echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
                 break
                 else
-                echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...${NC}"
+                echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...........[${X_MARK}${CYAN}]${NC}}"
                 sleep 4
                 fi
         done
