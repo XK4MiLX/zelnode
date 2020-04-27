@@ -99,11 +99,11 @@ echo
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
-sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo
+sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "Zelnode setup starting, press [CTRL+C] to cancel.${NC}"
-sleep 3
+sleep 2
 if [ "$USERNAME" = "root" ]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
     sleep 4
@@ -113,14 +113,14 @@ fi
 start_dir=$(pwd)
 correct_dir="/home/$USER"
 echo
-echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
+echo -e " ${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
-echo -e "${CHECK_MARK} ${CYAN}Correct directory...${NC}"
+echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN}................[${CHECK_MARK}]${NC}"
 else
-echo -e "${X_MARK} ${CYAN}Bad directory switching...${NC}"
+echo -e "${ARROW} ${CYAN}Bad directory switching...${NC}"
 cd
-echo -e "${YELLOW}$(pwd)${NC}"
+echo -e "${ARROW} ${CYAN}Current directory ${GREEN}$(pwd)${CYAN}${NC}"
 fi
 sleep 1
 
