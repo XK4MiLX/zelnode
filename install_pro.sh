@@ -695,7 +695,7 @@ function start_daemon() {
         echo && spinning_timer
         NUM='2'
         MSG1='Getting info...'
-        MSG2="${CHECK_MARK}"
+        MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         echo && spinning_timer
         echo && echo
 	
@@ -1046,11 +1046,11 @@ function check() {
     NUM='30'
     MSG1='Finalizing installation please be patient this will take about 30 sec...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-    echo && echo && spinning_timer
+    echo && spinning_timer
     echo && echo
         
-echo -e "${HOT} ${YELLOW}ZelBench benchmarks:${NC}"
-echo -e "${CYAN}==============================${NC}"
+echo -e "${BOOK}${YELLOW}ZelBench benchmarks:${NC}"
+echo -e "${YELLOW}==============================${NC}"
 zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 
 if [[ "zelbench_benchmarks" != "" ]]; then
