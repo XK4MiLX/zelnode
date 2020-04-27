@@ -938,6 +938,7 @@ MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${
 MSG2="${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}"
 spinning_timer
 sudo chown -R $USER:$USER /home/$USER
+echo
 
 else
 	
