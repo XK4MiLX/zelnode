@@ -884,7 +884,7 @@ EOF
 if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-echo -e "${ARROW} ${YELLOW}Zelflux version: ${GREEN}v $current_ver${YELLOW} installed${NC}"
+echo -e "${ARROW} ${YELLOW}Zelflux version: ${GREEN}v$current_ver${YELLOW} installed${NC}"
 echo
 else
 echo -e "${ARROW} ${YELLOW}Zelflux was not installed${NC}"
