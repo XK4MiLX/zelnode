@@ -697,6 +697,12 @@ function start_daemon() {
         MSG2="${CHECK_MARK}"
         echo && spinning_timer
         echo && echo
+	
+	zelcash_version=$(zelcash-cli getinfo | jq -r '.version')
+	echo -e "${ARROW} ${CYAN}Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed${NC}"
+	zelbench_version=$(zelbench-cli getinfo | jq -r '.version')
+	echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
+	echo
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo -e "${ARROW} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
