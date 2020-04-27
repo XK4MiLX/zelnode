@@ -1088,8 +1088,8 @@ function display_banner() {
     figlet -t -k "ZELNODES  &  ZELFLUX"
     echo -e "${NC}"
     echo -e "${YELLOW}================================================================================================================================"
-    echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
-    echo -e "${CYAN} COURTESY OF DK808/XK4MiLX${NC}"
+    echo -e "PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
+    echo -e "${CYAN}COURTESY OF DK808/XK4MiLX${NC}"
     echo
     if pm2 -v > /dev/null 2>&1; then
 	pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
