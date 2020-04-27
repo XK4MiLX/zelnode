@@ -1105,7 +1105,7 @@ function display_banner() {
      fi
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE ZELCASH.${NC}" 
     echo -e "${PIN} ${CYAN}Start zelcash: ${SEA}sudo systemctl start zelcash${NC}"
-    echo -e "${PIN} ${CYAN}Stop zelcash: ${SEA}sudo systemctl stop zelcash${COIN_CLI} stop${NC}"
+    echo -e "${PIN} ${CYAN}Stop zelcash: ${SEA}sudo systemctl stop zelcash${NC}"
     echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE ZELBENCH.${NC}" 
