@@ -419,10 +419,10 @@ zelnodeoutpoint=$zelnodeoutpoint
 zelnodeindex=$zelnodeindex
 server=1
 daemon=1
-bind=$WANIP
 txindex=1
 listen=1
 externalip=$WANIP
+bind=$WANIP
 addnode=explorer.zel.cash
 addnode=explorer2.zel.cash
 addnode=explorer.zel.zelcore.io
@@ -876,29 +876,27 @@ fi
 	
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
-    echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
-    pm2 startup systemd -u $USER > /dev/null 2>&1
-    sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-    pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
-    pm2 save > /dev/null 2>&1
-    pm2 install pm2-logrotate > /dev/null 2>&1
-    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-    source ~/.bashrc
     
-    if node -v > /dev/null 2>&1
+    if pm2 -v > /dev/null 2>&1
     then
-    echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
-    echo
+     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+   	pm2 startup systemd -u $USER > /dev/null 2>&1
+   	sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    	pm2 save > /dev/null 2>&1
+	pm2 install pm2-logrotate > /dev/null 2>&1
+	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+	source ~/.bashrc
+	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+	echo
     else
-    echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
-    echo
-    fi
-    
-    
+   	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
+   	 echo
+    fi 
 }
 
 function status_loop() {
@@ -906,10 +904,17 @@ function status_loop() {
 if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
-echo -e "${ARROW} ${CYAN}ZelNode is already synced.${NC}${CHECK_MARK}"
-$COIN_CLI getinfo
-sleep 2
-sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
+
+EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
+CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
+LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+
+NUM='2'
+MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+MSG2='${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}'
+spinning_timer
+sudo chown -R $USER:$USER /home/$USER
 
 else
 	
@@ -944,7 +949,7 @@ else
 	sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
 	sudo systemctl start zelcash > /dev/null 2>&1
 	
-          NUM='65'
+          NUM='60'
           MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
@@ -957,20 +962,16 @@ else
 	fi
 	
 	
-	NUM='15'
+	NUM='20'
         MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 	
-	
-
-        if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then
-	
+        if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
 	    echo -e "${CYAN} ZELNODE is full synced.${NC}${CHECK_MARK}"
-	    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
+	    sudo chown -R $USER:USER /home/$USER
             break
         fi
-
     done
     
     fi
@@ -1018,9 +1019,9 @@ EOF
 
 
 function check() {
-    NUM='90'
-    MSG1='Finalizing installation please be patient this will take about 90 sec...'
-    MSG2="${CHECK_MARK}"
+    NUM='30'
+    MSG1='Finalizing installation please be patient this will take about 30 sec...'
+    MSG2=".............[${CHECK_MARK}]"
     echo && echo && spinning_timer
     echo
     echo -e "${ARROW} ${YELLOW}Checking benchmarks details...${NC}"
