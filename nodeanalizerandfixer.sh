@@ -466,13 +466,11 @@ fi
 #if systemctl list-units | grep docker.socket | egrep -wi 'running' > /dev/null 2>&1; then
 #echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
 #else
-
 #if [[ "$docker_socket_inactive" != "" ]]; then
 #echo -e "${X_MARK} ${CYAN}Docker Socket for the API not running ${RED}$docker_socket_inactive ${NC}"
 #else
 #echo -e "${X_MARK} ${CYAN}Docker Socket for the API is not installed${NC}"
 #fi
-
 #fi
 
 if systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
