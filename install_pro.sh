@@ -978,7 +978,6 @@ else
 
 	fi
 	
-	
 	NUM='20'
         MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
@@ -1043,6 +1042,7 @@ function check() {
     echo
         
 echo -e "${ARROW} ${YELLOW}ZelBench benchmarks:${NC}"
+echo
 zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 
 if [[ "zelbench_benchmarks" != "" ]]; then
@@ -1084,20 +1084,37 @@ function display_banner() {
     echo -e " PLEASE COMPLETE THE ZELNODE SETUP AND START YOUR ZELNODE${NC}"
     echo -e "${CYAN} COURTESY OF DK808/XK4MiLX${NC}"
     echo
-    echo -e "${YELLOW}   Commands to manage ${COIN_NAME}. Note that you have to be in the zelcash directory when entering commands.${NC}"
-    echo -e "${PIN} ${CYAN}TO START: ${SEA}${COIN_DAEMON}${NC}"
-    echo -e "${PIN} ${CYAN}TO STOP : ${SEA}${COIN_CLI} stop${NC}"
+    echo -e "${ARROW}${YELLOW}   Commands to manage zelcash. 
+    echo -e "${PIN} ${CYAN}START ZELCASH: ${SEA}sudo systemctl start zelcash${NC}"
+    echo -e "${PIN} ${CYAN}STOP ZELCASH: ${SEA}sudo systemctl stop zelcash${COIN_CLI} stop${NC}"
     echo -e "${PIN} ${CYAN}RPC LIST: ${SEA}${COIN_CLI} help${NC}"
     echo
-    echo -e "${PIN} ${YELLOW}To update binaries wait for announcement that update is ready then enter:${NC} ${SEA}./${UPDATE_FILE}${NC}"
+    echo -e "${ARROW}${YELLOW}   Commands to manage zelbench. 
+    echo -e "${PIN} ${CYAN}GET INFO: ${SEA}zelbench-cli getinfo${NC}"
+    echo -e "${PIN} ${CYAN}CHECK BENCHMARKS: ${SEA}zelbench-cli getbenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}RESTART BENCHMARKS: ${SEA}zelbench-cli restartnodebenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}STOP BENCHMARK: ${SEA}zelbench-cli stop${NC}"
+    echo -e "${PIN} ${CYAN}START BENCHMARK: ${SEA}sudo systemctl restart zelcash${NC}"
     echo
-    echo -e "${YELLOW}   PM2 is now managing Zelflux.${NC}"
-    echo -e "${YELLOW}   Commands to manage PM2.${NC}"
-    echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info zelflux${NC}"
-    echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+    echo -e "$${ARROW}{YELLOW}   Commands to manage zelflux.${NC}"
+    echo -e "${PIN} ${CYAN}SUMMARY INFO: ${SEA}pm2 info zelflux${NC}"
+    echo -e "${PIN} ${CYAN}LOGS IN REAL TIME: ${SEA}pm2 monit${NC}"
+    echo -e "${PIN} ${CYAN}STOP ZELFLUX: ${SEA}pm2 stop zelflux${NC}"
+    echo -e "${PIN} ${CYAN}START ZELFLUX: ${SEA}pm2 start zelflux${NC}"
     echo
-    pm2 list
-    echo
+    if pm2 -v > /dev/null 2>&1; then
+	pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
+	if [[ "$pm2_zelflux_status" == "online" ]]; then
+	pm2_zelflux_uptime=$(pm2 info zelflux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+	pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+	echo -e "${BOOK}${CYAN}Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${CYAN}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}$pm2_zelflux_restarts${NC}" 
+	else
+		if [[ "$pm2_zelflux_status" != "" ]]; then
+		echo -e "${BOOK}${CYAN}Pm2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
+		fi
+	fi
+	    echo
+     fi
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 2
