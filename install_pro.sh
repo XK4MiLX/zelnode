@@ -1046,7 +1046,7 @@ function check() {
     MSG1='Finalizing installation please be patient this will take about 30 sec...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && echo && spinning_timer
-    echo
+    echo && echo
         
 echo -e "${ARROW} ${YELLOW}ZelBench benchmarks:${NC}"
 echo
@@ -1057,24 +1057,24 @@ zelbench_status=$(jq -r '.status' <<< "$zelbench_benchmarks")
 if [[ "$zelbench_status" == "failed" ]]; then
 echo -e "${ARROW} ${CYAN}Zelbench benchmark failed.................[${X_MARK}${CYAN}]${NC}"
 else
-echo -e "${BOOK} ${CYAN}STATUS: ${GREEN}$zelbench_status${NC}"
+echo -e "${BOOK}${CYAN}STATUS: ${GREEN}$zelbench_status${NC}"
 zelbench_cores=$(jq -r '.cores' <<< "$zelbench_benchmarks")
-echo -e "${BOOK} ${CYAN}CORES: ${GREEN}$zelbench_cores${NC}"
+echo -e "${BOOK}${CYAN}CORES: ${GREEN}$zelbench_cores${NC}"
 zelbench_ram=$(jq -r '.ram' <<< "$zelbench_benchmarks")
 zelbench_ram=$(round "$zelbench_ram" 2)
-echo -e "${BOOK} ${CYAN}RAM: ${GREEN}$zelbench_ram${NC}"
+echo -e "${BOOK}${CYAN}RAM: ${GREEN}$zelbench_ram${NC}"
 zelbench_ssd=$(jq -r '.ssd' <<< "$zelbench_benchmarks")
 zelbench_ssd=$(round "$zelbench_ssd" 2)
-echo -e "${BOOK} ${CYAN}SSD: ${GREEN}$zelbench_ssd${NC}"
+echo -e "${BOOK}${CYAN}SSD: ${GREEN}$zelbench_ssd${NC}"
 zelbench_hdd=$(jq -r '.hdd' <<< "$zelbench_benchmarks")
 zelbench_hdd=$(round "$zelbench_hdd" 2)
-echo -e "${BOOK} ${CYAN}HDD: ${GREEN}$zelbench_hdd${NC}"
+echo -e "${BOOK}${CYAN}HDD: ${GREEN}$zelbench_hdd${NC}"
 zelbench_ddwrite=$(jq -r '.ddwrite' <<< "$zelbench_benchmarks")
 zelbench_ddwrite=$(round "$zelbench_ddwrite" 2)
-echo -e "${BOOK} ${CYAN}DDWRITE: ${GREEN}$zelbench_ddwrite${NC}"
+echo -e "${BOOK}${CYAN}DDWRITE: ${GREEN}$zelbench_ddwrite${NC}"
 zelbench_eps=$(jq -r '.eps' <<< "$zelbench_benchmarks")
 zelbench_eps=$(round "$zelbench_eps" 2)
-echo -e "${BOOK} ${CYAN}EPS: ${GREEN}$zelbench_eps${NC}"
+echo -e "${BOOK}${CYAN}EPS: ${GREEN}$zelbench_eps${NC}"
 fi
 
 else
@@ -1099,24 +1099,24 @@ function display_banner() {
 	echo -e "${BOOK} ${CYAN}Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${CYAN}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}$pm2_zelflux_restarts${NC}" 
 	else
 		if [[ "$pm2_zelflux_status" != "" ]]; then
-		echo -e "${BOOK} ${CYAN}Pm2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
+		echo -e "${PIN} ${CYAN}PM2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
 		fi
 	fi
 	    echo
      fi
-    echo -e "${ARROW}${YELLOW} COMMANDS TO MANAGE ZELCASH.${NC}" 
+    echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE ZELCASH.${NC}" 
     echo -e "${PIN} ${CYAN}Start zelcash: ${SEA}sudo systemctl start zelcash${NC}"
     echo -e "${PIN} ${CYAN}Stop zelcash: ${SEA}sudo systemctl stop zelcash${COIN_CLI} stop${NC}"
     echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
     echo
-    echo -e "${ARROW}${YELLOW} COMMANDS TO MANAGE ZELBENCH.${NC}" 
+    echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE ZELBENCH.${NC}" 
     echo -e "${PIN} ${CYAN}Get info: ${SEA}zelbench-cli getinfo${NC}"
     echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}zelbench-cli getbenchmarks${NC}"
     echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}zelbench-cli restartnodebenchmarks${NC}"
     echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}zelbench-cli stop${NC}"
     echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
     echo
-    echo -e "${ARROW}${YELLOW} COMMANDS TO MANAGE ZELFLUX.${NC}"
+    echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE ZELFLUX.${NC}"
     echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info zelflux${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
     echo -e "${PIN} ${CYAN}Stop zelflux: ${SEA}pm2 stop zelflux${NC}"
