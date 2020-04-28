@@ -532,7 +532,7 @@ whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get boots
 
 case $CHOICE in
 	"1)")   
-		echo -e "${ARROW} ${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+		echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
        		echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
         	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
@@ -541,7 +541,7 @@ case $CHOICE in
 	;;
 	"2)")   
   		BOOTSTRAP_ZIP="$(whiptail --title "ZELNODE INSTALLATION" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-		echo -e "${ARROW} ${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
+		echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
 		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
