@@ -334,8 +334,7 @@ function ip_confirm() {
 	 exit
     	 fi
     fi
-     
-    #echo -e "${ARROW} ${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
+   echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ..........[${CHECK_MARK}${CYAN}]${NC}"
    # if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         #WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
    # fi
