@@ -819,6 +819,7 @@ function install_zelflux() {
 }
 
 function install_mongod() {
+echo
 echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
