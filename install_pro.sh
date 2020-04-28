@@ -726,7 +726,7 @@ function start_daemon() {
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
     MSG2=''
     if $COIN_DAEMON > /dev/null 2>&1; then
-        echo && spinning_timer
+        spinning_timer
         NUM='2'
         MSG1='Getting info...'
         MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
