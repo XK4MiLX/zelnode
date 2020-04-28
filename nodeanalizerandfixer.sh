@@ -627,6 +627,7 @@ echo -e "${X_MARK} ${CYAN} Zelnodeindex does not match${NC}"
 fi
 
 fi
+echo
 #echo
 #echo -e "${YELLOW}===================================================${NC}"
 
