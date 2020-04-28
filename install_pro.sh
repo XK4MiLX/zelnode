@@ -595,7 +595,7 @@ fi
 
 function create_service_scripts() {
 
-echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service start script...${NC}"
+echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service custom scripts...${NC}" && sleep 1
 sudo touch /home/$USER/start_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/start_zelcash_service.sh
     cat <<'EOF' > /home/$USER/start_zelcash_service.sh
@@ -631,7 +631,7 @@ bash -c "zelcashd"
 exit
 EOF
 
-echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service stop script...${NC}"
+
 sudo touch /home/$USER/stop_zelcash_service.sh
 sudo chown $USER:$USER /home/$USER/stop_zelcash_service.sh
     cat <<'EOF' > /home/$USER/stop_zelcash_service.sh
@@ -646,7 +646,7 @@ sudo chmod +x /home/$USER/start_zelcash_service.sh
 }
 
 function create_service() {
-    echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating ${COIN_NAME^} service...${NC}" && sleep 1
     sudo touch /etc/systemd/system/$COIN_NAME.service
     sudo chown $USER:$USER /etc/systemd/system/$COIN_NAME.service
     cat << EOF > /etc/systemd/system/$COIN_NAME.service
