@@ -273,8 +273,6 @@ function wipe_clean() {
 
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
-
-       
        
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
