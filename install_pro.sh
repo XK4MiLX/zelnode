@@ -689,6 +689,34 @@ function basic_security() {
     sudo systemctl start fail2ban > /dev/null 2>&1
 }
 
+function pm2_install(){
+
+    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
+    npm install pm2@latest -g > /dev/null 2>&1
+    
+    if pm2 -v > /dev/null 2>&1
+    then
+     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+   	pm2 startup systemd -u $USER > /dev/null 2>&1
+   	sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    	pm2 save > /dev/null 2>&1
+	pm2 install pm2-logrotate > /dev/null 2>&1
+	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+	source ~/.bashrc
+	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+	echo
+    else
+   	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
+	 echo
+    fi 
+
+}
+
 function start_daemon() {
 
     sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
@@ -710,6 +738,7 @@ function start_daemon() {
 	zelbench_version=$(zelbench-cli getinfo | jq -r '.version')
 	echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
+	pm2_install
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo -e "${ARROW} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
@@ -907,33 +936,6 @@ fi
 
 }
 
-function pm2_install(){
-
-    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
-    npm install pm2@latest -g > /dev/null 2>&1
-    
-    if pm2 -v > /dev/null 2>&1
-    then
-     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
-   	pm2 startup systemd -u $USER > /dev/null 2>&1
-   	sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
-	pm2 install pm2-logrotate > /dev/null 2>&1
-	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
-	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
-	echo
-    else
-   	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
-	 echo
-    fi 
-
-}
 
 function status_loop() {
 
@@ -1013,7 +1015,7 @@ else
     
     fi
     echo   
-    pm2_install
+   
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
          mongodb_bootstrap
