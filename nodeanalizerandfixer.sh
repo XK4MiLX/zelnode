@@ -601,7 +601,7 @@ fi
 echo 
 if [[ "$ZELCONF" == "1" ]]
 then
-echo -e "${BOOK} ${YELLOW}Checking ~/.zelcash/zelcash.conf ...${NC}"
+echo -e "${BOOK} ${YELLOW}Checking ~/.zelcash/zelcash.conf${NC}"
 if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} Zelnodeprivkey matches${NC}"
@@ -627,6 +627,7 @@ echo -e "${X_MARK} ${CYAN} Zelnodeindex does not match${NC}"
 fi
 
 fi
-echo -e "${YELLOW}=====================================================${NC}"
+echo
+echo -e "${YELLOW}===================================================${NC}"
 
 
