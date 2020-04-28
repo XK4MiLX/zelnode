@@ -332,7 +332,7 @@ function ssh_port() {
 function ip_confirm() {
     echo -e "${ARROW} ${YELLOW}Detecting IP address...${NC}"
     WANIP=$(wget http://ipecho.net/plain -O - -q) 
-    if [[ "$WANIP" == "" ]; then
+    if [[ "$WANIP" == "" ]]; then
      WANIP=$(curl ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
       	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
