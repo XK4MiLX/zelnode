@@ -336,6 +336,7 @@ function ip_confirm() {
      WANIP=$(curl ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
       	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+	 exit
     	 fi
     fi
      
