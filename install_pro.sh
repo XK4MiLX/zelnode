@@ -1042,8 +1042,8 @@ EOF
 
 
 function check() {
-    NUM='30'
-    MSG1='Finalizing installation please be patient this will take about 30 sec...'
+    NUM='60'
+    MSG1='Finalizing installation please be patient this will take about 1min...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && spinning_timer
     echo && echo
