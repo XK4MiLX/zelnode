@@ -55,7 +55,7 @@ NC='\033[0m'
 
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
-X_MARK="${RED}\xE2\x9D\x8C${NC}"
+X_MARK="${RED}\xE2\x9C\x96${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
 CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
 ARROW="${SEA}\xE2\x96\xB6${NC}"
@@ -334,7 +334,7 @@ function ip_confirm() {
 	 exit
     	 fi
     fi
-   echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ..........[${CHECK_MARK}${CYAN}]${NC}"
+   echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ${CYAN}..........[${CHECK_MARK}${CYAN}]${NC}"
    # if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         #WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
    # fi
