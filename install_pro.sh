@@ -269,8 +269,6 @@ function wipe_clean() {
         #echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     #fi
 
-
-
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
        
