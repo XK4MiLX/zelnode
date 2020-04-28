@@ -904,7 +904,11 @@ else
 echo -e "${ARROW} ${YELLOW}Zelflux was not installed${NC}"
 echo
 fi
-	
+
+}
+
+function pm2_install(){
+
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     
@@ -923,9 +927,12 @@ fi
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
 	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+	echo
     else
    	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
+	 echo
     fi 
+
 }
 
 function status_loop() {
@@ -1005,7 +1012,9 @@ else
     done
     
     fi
-    echo	
+    echo   
+    pm2_install
+    
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
          mongodb_bootstrap
     else
