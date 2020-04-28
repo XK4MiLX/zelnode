@@ -164,7 +164,7 @@ fi
 function mongodb_bootstrap(){
 
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-NUM='90'
+NUM='95'
 MSG1='Zelflux loading...'
 MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
@@ -333,11 +333,20 @@ function ssh_port() {
 
 function ip_confirm() {
    # echo -e "${YELLOW}Detecting IP address being used...${NC}" && sleep 1
+  
+   
     WANIP=$(wget http://ipecho.net/plain -O - -q) 
-    echo -e "${ARROW} ${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
-    if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
-        WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
+    if [[ "$WANIP" == "" ]; then
+     WANIP=$(curl ifconfig.me)     
+         if [[ "$WANIP" == "" ]]; then
+      	 echo -e "${ARROW} ${CYAN} IP address could not be found, installation stopped [${X_MARK}${CYAN}]${NC}"
+    	 fi
     fi
+    
+    #echo -e "${ARROW} ${YELLOW}Detected IP: ${GREEN}$WANIP${NC}"
+   # if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
+        #WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
+   # fi
     
 }
 
