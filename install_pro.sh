@@ -1148,8 +1148,8 @@ function display_banner() {
     bootstrap
     create_service_scripts
     create_service
-    start_daemon
     install_zelflux
+    start_daemon
     log_rotate
     update_script
     basic_security
