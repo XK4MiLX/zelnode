@@ -790,6 +790,7 @@ function install_zelflux() {
 }
 
 function install_mongod() {
+echo
 echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
@@ -922,10 +923,8 @@ fi
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
 	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
-	echo
     else
    	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
-   	 echo
     fi 
 }
 
