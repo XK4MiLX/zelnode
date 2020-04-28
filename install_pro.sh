@@ -730,7 +730,7 @@ function start_daemon() {
         NUM='2'
         MSG1='Getting info...'
         MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-        echo && spinning_timer
+        spinning_timer
         echo && echo
 	
 	zelcash_version=$(zelcash-cli getinfo | jq -r '.version')
@@ -819,7 +819,6 @@ function install_zelflux() {
 }
 
 function install_mongod() {
-echo
 echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
