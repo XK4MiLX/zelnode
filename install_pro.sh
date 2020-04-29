@@ -75,7 +75,6 @@ swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 echo -e "${ARROW} ${CYAN}Install config loaded ................[${CHECK_MARK}${CYAN}]${NC}"
-
 fi
 }
 
