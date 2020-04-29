@@ -71,9 +71,11 @@ import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
 ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
 firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
 bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
+bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
 swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
+echo
 echo -e "${ARROW} ${YELLOW}Install config loaded:"
 
 if [[ "$import_settings" == "1" ]]; then
