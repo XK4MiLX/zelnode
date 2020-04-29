@@ -66,7 +66,6 @@ export NEWT_COLORS='
 title=black,
 '
 function config_file() {
-
 if [[ -f /home/$USER/install_conf.json ]]; then
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
 ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
@@ -165,6 +164,7 @@ echo -e "${ARROW} ${CYAN}Current directory ${GREEN}$(pwd)${CYAN}${NC}"
 fi
 sleep 1
 
+config_file
 import_date
 
 #functions
