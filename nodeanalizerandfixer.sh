@@ -627,9 +627,7 @@ echo -e "${X_MARK} ${CYAN} Zelnodeindex does not match${NC}"
 fi
 
 fi
-echo
 echo -e "${YELLOW}===================================================${NC}"
-
 if [[ "$FLUX_UPDATE" == "1" ]]; then
 read -p "Would you like to update Zelflux Y/N?" -n 1 -r
 echo -e ""
