@@ -65,6 +65,18 @@ HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 export NEWT_COLORS='
 title=black,
 '
+function config_file() {
+
+if [[ -f /home/$USER/install_conf.json ]]; then
+import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
+ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
+firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
+bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
+swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
+mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
+watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
+fi
+}
 
 function round() {
   printf "%.${2}f" "${1}"
@@ -72,8 +84,10 @@ function round() {
 
 function import_date() {
 
-if [[ -f ~/.zelcash/zelcash.conf ]]
-then
+if [[ -f ~/.zelcash/zelcash.conf ]]; then
+
+if [[ -z "$import_settings" ]]; then
+
 if whiptail --yesno "Would you like to import data from zelcash.conf and userconfig.js Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
@@ -93,8 +107,30 @@ echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 
 fi
+
+else 
+
+if [[ "$import_settings" == "1" ]]; then
+IMPORT_ZELCONF="1"
+echo
+echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
+zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
+echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
+zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
+echo -e "${PIN} ${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
+
+if [[ -f ~/zelflux/config/userconfig.js ]]
+then
+IMPORT_ZELID="1"
+ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
+fi
 fi
 
+
+fi
 
 sleep 2
 echo
