@@ -76,7 +76,7 @@ swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 echo
-echo -e "${ARROW} ${YELLOW}Install config loaded:"
+echo -e "${ARROW} ${YELLOW}Install config:"
 
 if [[ "$import_settings" == "1" ]]; then
 echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}"
