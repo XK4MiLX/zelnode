@@ -1029,7 +1029,6 @@ NUM='2'
 MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-sudo chown -R $USER:$USER /home/$USER
 echo
 
 else
@@ -1084,7 +1083,6 @@ else
 	
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
 	    echo -e "${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
-	    sudo chown -R $USER:$USER /home/$USER
 	    echo
             break
         fi
