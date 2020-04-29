@@ -128,9 +128,7 @@ echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 fi
 
-
 fi
-
 sleep 2
 echo
 }
