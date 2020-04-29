@@ -107,7 +107,7 @@ ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' |
 echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 fi
-fi
+
 
 else 
 
@@ -130,6 +130,7 @@ echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 fi
 
+fi
 fi
 sleep 2
 echo
