@@ -98,6 +98,12 @@ else
 echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
+if [[ "$bootstrap_zip_del" == "1" ]]; then
+echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file ...........................[${CHECK_MARK}${CYAN}]${NC}"
+else
+echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file ............................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
 if [[ "$swapon" == "1" ]]; then
 echo -e "${PIN}${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
