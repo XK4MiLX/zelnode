@@ -104,7 +104,7 @@ IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
-
+fi
 fi
 
 else 
