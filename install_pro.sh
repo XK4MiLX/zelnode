@@ -144,9 +144,9 @@ sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
-pm2 start ~/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch "\.git|node_modules|error.log" --watch-delay 10 > /dev/null 2>&1 
+pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch "\.git|node_modules|error.log" --watch-delay 10 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
-if [[ -f ~/watchdog/watchdog.js ]]
+if [[ -f /home/$USER/watchdog/watchdog.js ]]
 then
 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
 echo -e "${ARROW} ${YELLOW}Watchdog ${GREEN}v$current_ver${YELLOW} installed successful.${NC}"
