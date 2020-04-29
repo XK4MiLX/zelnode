@@ -77,35 +77,35 @@ watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 echo -e "${ARROW} ${CYAN}Install config loaded ..........................................[${CHECK_MARK}${CYAN}]${NC}"
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN} ${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN} ${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN} ${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}"
 else
-echo -e "${PIN} ${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$bootstrap_url" != "" ]]; then
-echo -e "${PIN} ${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}"
 else
-echo -e "${PIN} ${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN} ${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN} ${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$watchdog" == "1" ]]; then
-echo -e "${PIN} ${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 fi
@@ -126,17 +126,17 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN} ${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN} ${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
+echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
 fi
 fi
 
@@ -148,11 +148,11 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN} ${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN} ${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-echo -e "${PIN} ${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
