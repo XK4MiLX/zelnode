@@ -531,7 +531,6 @@ echo -e "${X_MARK} ${CYAN} Tmux session does not exists${NC}"
 fi
 fi
 
-
 if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} ZelFront is working${NC}"
@@ -588,7 +587,6 @@ if [ ! -f ~/zelflux/ZelFront/dist/index.html ]
 then
 echo -e "${WORNING} ${CYAN}Zelflux problem detected, missing ~/zelflux/ZelFront/dist/index.html"
 fi
-
 
 else
 FLUXCONF="1"
