@@ -640,9 +640,9 @@ current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
 if [[ "$required_ver" == "$current_ver" ]]; then
-echo -e "${CHECK_MARK} {GREEN}Zelfux updated successfully.${NC}"
+echo -e "${CHECK_MARK} {CYAN}Zelfux updated successfully.${NC}"
 else
-echo -e "${X_MARK} {GREEN}Zelfux was not updated.${NC}"
+echo -e "${X_MARK} {CYAN}Zelfux was not updated.${NC}"
 echo -e ""
 fi
 
