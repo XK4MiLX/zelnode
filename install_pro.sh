@@ -74,7 +74,40 @@ bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
-echo -e "${ARROW} ${CYAN}Install config loaded ................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Install config loaded ..........................................[${CHECK_MARK}${CYAN}]${NC}"
+
+if [[ "$import_settings" == "1" ]]; then
+echo -e "${PIN} ${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$ssh_port" != "" ]]; then
+echo -e "${PIN} ${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$firewall_disable" == "1" ]]; then
+echo -e "${PIN} ${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}"
+else
+echo -e "${PIN} ${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$bootstrap_url" != "" ]]; then
+echo -e "${PIN} ${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}"
+else
+echo -e "${PIN} ${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$swapon" == "1" ]]; then
+echo -e "${PIN} ${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$mongo_bootstrap" == "1" ]]; then
+echo -e "${PIN} ${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$watchdog" == "1" ]]; then
+echo -e "${PIN} ${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
 fi
 }
 
@@ -734,7 +767,7 @@ function pm2_install(){
     then
      	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
-   	sudo env PATH=$PATH:/home/$USERNAME/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+   	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
    	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	pm2 install pm2-logrotate > /dev/null 2>&1
