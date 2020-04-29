@@ -632,13 +632,13 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
 read -p "Would you like to update Zelflux Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-cd /home/$USER/zelflux && git pull && cd
+cd /home/$USER/zelflux && git pull > /dev/null 2>&1;  && cd
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 if [[ "$required_ver" == "$current_ver" ]]; then
-echo -e "${CHECK_MARK} {CYAN}Zelfux updated successfully.${NC}"
+echo -e "${CHECK_MARK} ${CYAN}Zelfux updated successfully.${NC}"
 else
-echo -e "${X_MARK} {CYAN}Zelfux was not updated.${NC}"
+echo -e "${X_MARK} ${CYAN}Zelfux was not updated.${NC}"
 echo -e ""
 fi
 fi
