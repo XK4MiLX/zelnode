@@ -321,9 +321,16 @@ fi
 
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
-
-    sudo killall apt > /dev/null 2>&1
-    sudo killall apt-get > /dev/null 2>&1
+    apt_number=$(ps aux | grep 'apt' | wc -l)
+    
+    if [[ "$apt_number" > 1 ]]; then
+    
+        sudo killall apt > /dev/null 2>&1
+        sudo killall apt-get > /dev/null 2>&1
+	sudo dpkg --configure -a > /dev/null 2>&1
+	
+    fi
+    
     echo -e "${ARROW} ${CYAN}Stopping all services and running processes${NC}"
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
