@@ -145,8 +145,14 @@ index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
+if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+echo -e "${PIN}${CYAN}Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+
 if [[ "$import_settings" == "1" ]]; then
 echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
 fi
 
 if [[ "$ssh_port" != "" ]]; then
