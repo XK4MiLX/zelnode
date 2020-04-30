@@ -480,7 +480,7 @@ function ip_confirm() {
 	 exit
     	 fi
     fi
-   string="Detected IP: ${GREEN}$WANIP ................................."
+   string="Detected IP: ${GREEN}$WANIP${CYAN} ................................."
    string_leght=${#string}
    string_cut=$((string_leght-40))
    string=${string::${#string}-string_cut}
