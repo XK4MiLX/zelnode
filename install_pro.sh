@@ -284,14 +284,14 @@ if [[ -f /home/$USER/watchdog/watchdog.js ]]
 then
 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
 #echo -e "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed successful.${NC}"
-string_limit_check_mark " Watchdog v$current_ver installed................................." "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
+string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
 else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
-string_limit_x_mark " Watchdog was not installed................................." "${ARROW} ${CYAN}Watchdog was not installed................................."
+string_limit_x_mark "Watchdog was not installed................................." "Watchdog was not installed................................."
 fi
 else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
-string_limit_x_mark " Watchdog was not installed................................." "${ARROW} ${CYAN}Watchdog was not installed................................."
+string_limit_x_mark "Watchdog was not installed................................." "Watchdog was not installed................................."
 fi
 
 }
@@ -881,11 +881,11 @@ function pm2_install(){
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	 string_limit_check_mark " PM2 version: v$(pm2 -v) installed................................." "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed................................."
+	 string_limit_check_mark "PM2 version: v$(pm2 -v) installed................................." "PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed................................."
 	 echo
     else
    	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
-	 string_limit_x_mark " PM2 was not installed................................." "${ARROW} ${CYAN}PM2 was not installed................................."
+	 string_limit_x_mark "PM2 was not installed................................." "PM2 was not installed................................."
 	 echo
     fi 
 
@@ -1007,11 +1007,11 @@ sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
  #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
- string_limit_check_mark " MongoDB version: $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+ string_limit_check_mark "MongoDB version: $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
  echo
 else
  #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
- string_limit_x_mark " MongoDB was not installed................................." "${ARROW} ${CYAN}MongoDB was not installed................................."
+ string_limit_x_mark "MongoDB was not installed................................." "MongoDB was not installed................................."
  echo
 fi
 }
@@ -1050,11 +1050,11 @@ nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
 #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
-string_limit_check_mark " Nodejs version: $(node -v) installed................................." "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed................................."
+string_limit_check_mark "Nodejs version: $(node -v) installed................................." "Nodejs version: ${GREEN}$(node -v)${CYAN} installed................................."
 echo
 else
 #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
-string_limit_x_mark " Nodejs was not installed................................." "${ARROW} ${CYAN}Nodejs was not installed................................."
+string_limit_x_mark "Nodejs was not installed................................." "Nodejs was not installed................................."
 echo
 fi
 
@@ -1107,12 +1107,12 @@ if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 
-string_limit_check_mark " Zelflux version: v$current_ver installed................................." "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed................................."
+string_limit_check_mark "Zelflux version: v$current_ver installed................................." "Zelflux version: ${GREEN}v$current_ver${CYAN} installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
 
 echo
 else
-string_limit_x_mark " Zelflux was not installed................................." "${ARROW} ${CYAN}Zelflux was not installed................................."
+string_limit_x_mark "Zelflux was not installed................................." "Zelflux was not installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux was not installed${NC}"
 echo
 fi
