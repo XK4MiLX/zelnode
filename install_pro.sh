@@ -289,6 +289,7 @@ import_date
 else
 
 if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+echo
 IMPORT_ZELCONF="1"
 echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
 zelnodeprivkey="$prvkey"
@@ -297,6 +298,7 @@ zelnodeoutpoint="$outpoint"
 echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex="$index"
 echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+echo
 fi
 
 fi
