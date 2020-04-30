@@ -413,12 +413,11 @@ function wipe_clean() {
     rm update-zelflux.sh > /dev/null 2>&1
     
     if  ! whiptail --yesno "Would you like to keep zelcash config directory?" 8 60; then
-    
-    BOOTSTRAP_SKIP="1"
     echo -e "${ARROW} ${CYAN}Removing Zelcash config directory...${NC}"
     sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
-    
+    else
+        BOOTSTRAP_SKIP="1"
     fi
     
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
