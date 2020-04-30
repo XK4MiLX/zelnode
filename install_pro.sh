@@ -425,7 +425,7 @@ function wipe_clean() {
 	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
 	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
 	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 
+	sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     fi
