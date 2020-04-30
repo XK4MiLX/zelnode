@@ -137,7 +137,7 @@ bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_de
 swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
-leave_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.leave_old_chain')
+use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
@@ -179,8 +179,8 @@ if [[ "$watchdog" == "1" ]]; then
 echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-if [[ "$leave_old_chain" == "1" ]]; then
-echo -e "${PIN}${CYAN}Diuring re-installation old chain will be intact ................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+if [[ "$use_old_chain" == "1" ]]; then
+echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use ................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -412,6 +412,8 @@ function wipe_clean() {
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
     
+    if [[ -z "$use_old_chain" ]]; then
+    
     if  ! whiptail --yesno "Would you like to use old chain from zelcash config directory?" 8 60; then
     echo -e "${ARROW} ${CYAN}Removing Zelcash config directory...${NC}"
     sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
@@ -428,6 +430,31 @@ function wipe_clean() {
 	sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+    fi
+    
+    else
+    
+    if [[ "$use_old_chain" == "1" ]]; then
+    
+      BOOTSTRAP_SKIP="1"
+      sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
+      sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
+      sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+    
+    else
+    
+      echo -e "${ARROW} ${CYAN}Removing Zelcash config directory...${NC}"
+      sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
+      sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+    
+    fi
     fi
     
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
@@ -447,20 +474,29 @@ function wipe_clean() {
     #else
         #echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     #fi
-    echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
-    if [[ $(sudo ufw status | grep "Status: active") ]]
-    then
-       
-    if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
+  echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
+ if [[ $(sudo ufw status | grep "Status: active") ]]
+  then
+    if [[ -z "$firewall_disable" ]]; then    
+      if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
 	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-    else	 
+      else	 
 	 echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+      fi
+    else
+    
+      if [[ "$firewall_disable" == "1" ]]; then
+  	 sudo ufw disable > /dev/null 2>&1
+	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
+      else
+        echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+      fi
     fi
-
+    
     else
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-    fi
+ fi
 }
 
 function spinning_timer() {
@@ -540,6 +576,8 @@ function ip_confirm() {
 }
 
 function create_swap() {
+
+ if [[ -z "$swapon" ]]; then
     #echo -e "${YELLOW}Creating swap if none detected...${NC}" && sleep 1
     MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
     gb=$(awk "BEGIN {print $MEM/1048576}")
@@ -566,6 +604,42 @@ function create_swap() {
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
         fi
+    fi
+    
+    else
+    
+     if [[ "$swapon" == "1" ]]; then
+     
+    MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    gb=$(awk "BEGIN {print $MEM/1048576}")
+    GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
+    if [ "$GB" -lt 2 ]; then
+        (( swapsize=GB*2 ))
+        swap="$swapsize"G
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
+    elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
+        swap=4G
+       # echo -e "${YELLOW}Swap set at $swap...${NC}"
+    elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
+        swap=2G
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
+    fi
+    if ! grep -q "swapfile" /etc/fstab; then
+        #if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+            sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
+            sudo chmod 600 /swapfile > /dev/null 2>&1
+            sudo mkswap /swapfile > /dev/null 2>&1
+            sudo swapon /swapfile > /dev/null 2>&1
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
+            echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
+      else
+            echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
+      fi
+    #fi
+     
+     fi
+    
+    
     fi
     sleep 2
 }
@@ -687,6 +761,7 @@ function zk_params() {
 
 function bootstrap() {
 
+if [[ -z "$bootstrap_url" ]]; then
 
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
 echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
@@ -749,49 +824,69 @@ case $CHOICE in
 	;;
 esac
 
-#echo -e ""
-#echo -e "${GREEN}CHOOSE A METHOD HOW TO GET BOOTSTRAP FILE${NC}"
-#echo -e "${NC}1 - Download from source build in script${NC}"
-#echo -e "${NC}2 - Download from own source${NC}"
-#echo
-#read -p "Pick an option: " -n 1 -r
-#echo -e "${NC}"
-#while true
+fi
 
-#do
-    #case "$REPLY" in
+else
 
-    #1 )
+if [[ "$bootstrap_url" != "" ]]; then
 
-        #echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-       # wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-       # echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-       # unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > | pv -l >/dev/null
-        #break
-#;;
-   # 2 )
+if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+    echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
+    rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
+fi
 
-       # BOOTSTRAP_ZIP="$(whiptail --title "ZelNode Installer" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-        #echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-        #wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-        #echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-       # unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR | pv -l >/dev/null
-        #break
-#;;
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
+    echo -e "${ARROW} ${YELLOW}Checking if zip file is corrupted...${NC}"
 
-    # *) echo "Invalid option $REPLY try again...";;
+    if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
+    then
+      echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+    else
+      printf '\e[A\e[K'
+      printf '\e[A\e[K'
+      printf '\e[A\e[K'
+      printf '\e[A\e[K'
+      printf '\e[A\e[K'
+      printf '\e[A\e[K'
+      echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+      rm -rf zel-bootstrap.zip
+    fi
+fi
 
-   # esac
 
-#done
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+else
+echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+fi
+else
+BOOTSTRAP_ZIP="$bootstrap_url"
+echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+fi
+
 
 
 fi
 
+if [[ -z "$bootstrap_zip_del" ]]; then
  if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
     rm -rf $BOOTSTRAP_ZIPFILE
  fi
+else
 
+if [[ "$bootstrap_zip_del" == "1" ]]; then
+  rm -rf $BOOTSTRAP_ZIPFILE
+fi
+  
+fi
 
 }
 
@@ -1228,18 +1323,39 @@ else
     fi
 
    
+  if [[ -z "$mongo_bootstrap" ]]; then
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
          mongodb_bootstrap
     else
         echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
     fi
-
+  else
+   
+    if [[ "$mongo_bootstrap" == "1" ]]; then
+      mongodb_bootstrap
+    else
+      echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
+    fi
+   
+  fi
+    
+    
+  if [[ -z "$watchdog" ]]; then
     if   whiptail --yesno "Would you like to install watchdog for zelnode?" 8 60; then
          install_watchdog
     else
         echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
     fi
+   else
+   
+     if [[ "$watchdog" == "1" ]]; then
+      install_watchdog
+     else
+      echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
+     fi
+   
+   fi
 
     check
     display_banner
