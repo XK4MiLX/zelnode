@@ -442,7 +442,7 @@ function ssh_port() {
 	if [[ $ssh_port =~ $pettern ]] ; then
 	  SSHPORT="$ssh_port"
 	else
-	 echo -e "${ARROW} ${CYAN}SSH port must be number...................[${X_MARK}${CYAN}]${NC}}"
+	 echo -e "${ARROW} ${CYAN}SSH port must be integer...................[${X_MARK}${CYAN}]${NC}}"
 	 exit
 	fi	   
     fi
