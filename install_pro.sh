@@ -861,10 +861,10 @@ function pm2_install(){
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
-	echo -e "${ARROW} ${YELLOW}PM2 version: ${GREEN}v$(pm2 -v)${YELLOW} installed${NC}"
+	echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	echo
     else
-   	 echo -e "${ARROW} ${YELLOW}PM2 was not installed${NC}"
+   	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
 	 echo
     fi 
 
@@ -985,10 +985,10 @@ sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
- echo -e "${ARROW} ${YELLOW}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${YELLOW} installed${NC}"
+ echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
  echo
 else
- echo -e "${ARROW} ${YELLOW}MongoDB was not installed${NC}" 
+ echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
  echo
 fi
 }
@@ -1026,10 +1026,10 @@ sleep 1
 nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
-echo -e "${ARROW} ${YELLOW}Nodejs version: ${GREEN}$(node -v)${YELLOW} installed${NC}"
+echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
 echo
 else
-echo -e "${ARROW} ${YELLOW}Nodejs was not installed${NC}"
+echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
 echo
 fi
 
@@ -1081,10 +1081,10 @@ EOF
 if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-echo -e "${ARROW} ${YELLOW}Zelflux version: ${GREEN}v$current_ver${YELLOW} installed${NC}"
+echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
 echo
 else
-echo -e "${ARROW} ${YELLOW}Zelflux was not installed${NC}"
+echo -e "${ARROW} ${CYAN}Zelflux was not installed${NC}"
 echo
 fi
 
