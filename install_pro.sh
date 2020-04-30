@@ -37,6 +37,7 @@ USERNAME="$(whoami)"
 IMPORT_ZELCONF="0"
 IMPORT_ZELID="0"
 CORRUPTED="0"
+BOOTSTRAP_SKIP="0"
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -400,8 +401,8 @@ function wipe_clean() {
     echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
-    echo -e "${ARROW} ${CYAN}Removing Zelcash chain directiory...${NC}"
-    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+
+    
     sudo rm -rf .zelbenchmark && sleep 1
     ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
     echo -e "${ARROW} ${CYAN}Removing others files and scripts...${NC}"
@@ -410,7 +411,16 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
+    
+    if  ! whiptail --yesno "Would you like to keep zelcash config directory?" 8 60; then
+    
+    BOOTSTRAP_SKIP="1"
+    echo -e "${ARROW} ${CYAN}Removing Zelcash config directory...${NC}"
     sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+    
+    fi
+    
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
@@ -891,7 +901,7 @@ function pm2_install(){
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	 string_limit_check_mark "PM2 version: v$(pm2 -v) installed................................." "PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed................................."
+	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................."
 	 echo
     else
    	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
@@ -918,10 +928,10 @@ function start_daemon() {
         echo && echo
 	
 	zelcash_version=$(zelcash-cli getinfo | jq -r '.version')
-	string_limit_check_mark "Zelcash version: v$zelcash_version installed................................." "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
+	string_limit_check_mark "Zelcash v$zelcash_version installed................................." "Zelcash ${GREEN}v$zelcash_version${CYAN} installed................................."
 	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
 	zelbench_version=$(zelbench-cli getinfo | jq -r '.version')
-	string_limit_check_mark "Zelbench version: v$zelbench_version installed................................." "Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed................................."
+	string_limit_check_mark "Zelbench v$zelbench_version installed................................." "Zelbench ${GREEN}v$zelbench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
 	pm2_install
@@ -1019,7 +1029,7 @@ sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
  #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
- string_limit_check_mark "MongoDB version: $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+ string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
  echo
 else
  #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
@@ -1062,7 +1072,7 @@ nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
 #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
-string_limit_check_mark "Nodejs version: $(node -v) installed................................." "Nodejs version: ${GREEN}$(node -v)${CYAN} installed................................."
+string_limit_check_mark "Nodejs $(node -v) installed................................." "Nodejs ${GREEN}$(node -v)${CYAN} installed................................."
 echo
 else
 #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
@@ -1119,7 +1129,7 @@ if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 
-string_limit_check_mark "Zelflux version: v$current_ver installed................................." "Zelflux version: ${GREEN}v$current_ver${CYAN} installed................................."
+string_limit_check_mark "Zelflux v$current_ver installed................................." "Zelflux ${GREEN}v$current_ver${CYAN} installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
 
 echo
@@ -1348,7 +1358,9 @@ function display_banner() {
     create_conf
     install_zel
     zk_params
+    if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
     bootstrap
+    fi
     create_service_scripts
     create_service
     install_zelflux
