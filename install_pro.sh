@@ -36,6 +36,7 @@ COIN_PATH='/usr/local/bin'
 USERNAME="$(whoami)"
 IMPORT_ZELCONF="0"
 IMPORT_ZELID="0"
+CORRUPTED="0"
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -60,11 +61,38 @@ CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
 ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
+WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
 #dialog color
 export NEWT_COLORS='
 title=black,
 '
+function integration_check() {
+PATH_TO_FOLDER=( /usr/local/bin/ ) 
+FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+ELEMENTS=${#FILE_ARRAY[@]}
+NOT_FOUND="0"
+
+for (( i=0;i<$ELEMENTS;i++)); do
+        if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
+            echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${CHECK_MARK}${CYAN}]${NC}"
+        else
+            echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${X_MARK}${CYAN}]${NC}"
+	    CORRUPTED="1"
+        fi 
+	
+	
+	if [[ CORRUPTED == "1" ]]; then
+	  echo -e "${WORNING} ${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
+	  echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again..."
+	  echo
+	  exit
+	fi
+	
+done
+}
+
+
 function config_file() {
 if [[ -f /home/$USER/install_conf.json ]]; then
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
@@ -75,6 +103,7 @@ bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_de
 swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
+leave_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.leave_old_chain')
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
@@ -114,6 +143,10 @@ fi
 
 if [[ "$watchdog" == "1" ]]; then
 echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}"
+fi
+
+if [[ "$leave_old_chain" == "1" ]]; then
+echo -e "${PIN}${CYAN}Diuring re-installation old chain will be intact ................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 fi
@@ -472,7 +505,7 @@ function install_packages() {
     sudo apt-get install software-properties-common -y > /dev/null 2>&1
     sudo apt-get update -y > /dev/null 2>&1
     sudo apt-get upgrade -y > /dev/null 2>&1
-    sudo apt-get install nano htop pwgen ufw figlet tmux jq -y > /dev/null 2>&1
+    sudo apt-get install nano htop pwgen ufw figlet tmux jq unzip -y > /dev/null 2>&1
     sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
     sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
     sudo apt-get install autoconf ncurses-dev unzip git python python-zmq -y > /dev/null 2>&1
@@ -533,6 +566,7 @@ function zel_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
     sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/${COIN_NAME}*
+    integration_check
 }
 
 function install_zel() {
@@ -573,7 +607,7 @@ function install_zel() {
 function zk_params() {
     echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
     bash zelcash-fetch-params.sh > /dev/null 2>&1 && sleep 2
-    sudo chown -R "$USERNAME":"$USERNAME" /home/"$USERNAME"
+    sudo chown -R $USER:$USER /home/$USER  > /dev/null 2>&1
 }
 
 function bootstrap() {
@@ -591,7 +625,7 @@ echo -e "${ARROW} ${YELLOW}Checking file integration...${NC}"
 
 if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
 then
-echo -e "${ARROW} ${CYAN}File integration.....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Zip archive integration.....................[${CHECK_MARK}${CYAN}]${NC}"
 else
 printf '\e[A\e[K'
 printf '\e[A\e[K'
@@ -599,7 +633,7 @@ printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}File integration.....................[${X_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Zip archive integration.....................[${X_MARK}${CYAN}]${NC}"
 rm -rf zel-bootstrap.zip
 fi
 fi
@@ -833,7 +867,8 @@ function start_daemon() {
 	pm2_install
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
-        echo -e "${ARROW} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+        echo -e "${WORNING} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+	echo
         exit
     fi
 }
