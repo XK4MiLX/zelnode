@@ -68,7 +68,7 @@ export NEWT_COLORS='
 title=black,
 '
 function integration_check() {
-PATH_TO_FOLDER=( /usr/local/bin/ ) 
+PATH_TO_FOLDER='/usr/local/bin/'
 FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
 
