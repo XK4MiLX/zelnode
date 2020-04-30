@@ -358,12 +358,14 @@ function wipe_clean() {
     pm2 save > /dev/null 2>&1 && sleep 1
     pm2 kill > /dev/null 2>&1  && sleep 1
     npm remove pm2 -g > /dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
     echo -e "${ARROW} ${CYAN}Removing Zelcash chain directiory${NC}"
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     sudo rm -rf .zelbenchmark && sleep 1
     ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
+    echo -e "${ARROW} ${CYAN}Removing others files and scripts...${NC}"
     rm $UPDATE_FILE > /dev/null 2>&1
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
@@ -525,6 +527,7 @@ function install_packages() {
 }
 
 function create_conf() {
+    echo
     echo -e "${ARROW} ${YELLOW}Creating zelcash config file...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
         echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
