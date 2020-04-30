@@ -20,7 +20,6 @@
 ###### you must be logged in as a sudo user, not root #######
 
 COIN_NAME='zelcash'
-
 #wallet information
 UPDATE_FILE='update.sh'
 BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap.zip'
