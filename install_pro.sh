@@ -283,12 +283,15 @@ pm2 save > /dev/null 2>&1
 if [[ -f /home/$USER/watchdog/watchdog.js ]]
 then
 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
-echo -e "${ARROW} ${YELLOW}Watchdog ${GREEN}v$current_ver${YELLOW} installed successful.${NC}"
+#echo -e "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed successful.${NC}"
+string_limit_check_mark " Watchdog v$current_ver installed................................." "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
 else
-echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
+#echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
+string_limit_x_mark " Watchdog was not installed................................." "${ARROW} ${CYAN}Watchdog was not installed................................."
 fi
 else
-echo -e "${ARROW} ${YELLOW}Watchdog installion failed.${NC}"
+#echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
+string_limit_x_mark " Watchdog was not installed................................." "${ARROW} ${CYAN}Watchdog was not installed................................."
 fi
 
 }
@@ -332,10 +335,10 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scann
 echo -e ${PIN} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${YELLOW}Mongo bootstrap installed successful.${NC}"
+echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
 echo -e ""
 else
-echo -e "${ARROW} ${YELLOW}Mongo bootstrap installation failed.${NC}"
+echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
 echo -e ""
 fi
 else
@@ -415,19 +418,19 @@ function wipe_clean() {
     #else
         #echo -e "${X_MARK} ${CYAN}Bin directory cleaned [Failed]${NC}" && sleep 1
     #fi
-
+    echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
     if [[ $(sudo ufw status | grep "Status: active") ]]
     then
        
     if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
-	 echo -e "${ARROW} ${YELLOW}Firewall status: ${RED}Disabled${NC}"
+	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
     else	 
-	 echo -e "${ARROW} ${YELLOW}Firewall status: ${GREEN}Enabled${NC}"
+	 echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
     fi
 
     else
-        echo -e "${ARROW} ${YELLOW}Firewall status: ${RED}Disabled${NC}"
+        echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
     fi
 }
 
@@ -478,6 +481,7 @@ function ssh_port() {
 	pettern='^[0-9]+$'
 	if [[ $ssh_port =~ $pettern ]] ; then
 	  SSHPORT="$ssh_port"
+	  echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
 	else
 	 echo -e "${ARROW} ${CYAN}SSH port must be integer................[${X_MARK}${CYAN}]${NC}}"
 	 echo
@@ -876,10 +880,12 @@ function pm2_install(){
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
-	echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	echo
+	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+	 string_limit_check_mark " PM2 version: v$(pm2 -v) installed................................." "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed................................."
+	 echo
     else
    	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
+	 string_limit_x_mark " PM2 was not installed................................." "${ARROW} ${CYAN}PM2 was not installed................................."
 	 echo
     fi 
 
@@ -1000,10 +1006,12 @@ sudo systemctl enable mongod > /dev/null 2>&1
 sudo systemctl start  mongod > /dev/null 2>&1
 if mongod --version > /dev/null 2>&1 
 then
- echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
+ #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
+ string_limit_check_mark " MongoDB version: $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
  echo
 else
- echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
+ #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
+ string_limit_x_mark " MongoDB was not installed................................." "${ARROW} ${CYAN}MongoDB was not installed................................."
  echo
 fi
 }
@@ -1041,10 +1049,12 @@ sleep 1
 nvm install --lts > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
-echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+#echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+string_limit_check_mark " Nodejs version: $(node -v) installed................................." "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed................................."
 echo
 else
-echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+#echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+string_limit_x_mark " Nodejs was not installed................................." "${ARROW} ${CYAN}Nodejs was not installed................................."
 echo
 fi
 
@@ -1096,10 +1106,14 @@ EOF
 if [ -d ~/zelflux ]
 then
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
+
+string_limit_check_mark " Zelflux version: v$current_ver installed................................." "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed................................."
+#echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
+
 echo
 else
-echo -e "${ARROW} ${CYAN}Zelflux was not installed${NC}"
+string_limit_x_mark " Zelflux was not installed................................." "${ARROW} ${CYAN}Zelflux was not installed................................."
+#echo -e "${ARROW} ${CYAN}Zelflux was not installed${NC}"
 echo
 fi
 
