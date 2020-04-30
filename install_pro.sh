@@ -295,7 +295,7 @@ if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
 import_date
 else
 
-if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != ""  && "$ZELID" !=""  ]]; then
+if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != ""  && "$ZELID" != ""  ]]; then
 echo
 IMPORT_ZELCONF="1"
 IMPORT_ZELID="1"
