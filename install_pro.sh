@@ -68,12 +68,11 @@ export NEWT_COLORS='
 title=black,
 '
 function integration_check() {
-PATH_TO_FOLDER='/usr/local/bin/'
 FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
 
 for (( i=0;i<$ELEMENTS;i++)); do
-        if [ -f "$PATH_TO_FOLDER"${FILE_ARRAY[${i}]} ]; then
+        if [ -f "$COIN_PATH/"${FILE_ARRAY[${i}]} ]; then
             echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${CHECK_MARK}${CYAN}]${NC}"
         else
             echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${X_MARK}${CYAN}]${NC}"
@@ -82,8 +81,8 @@ for (( i=0;i<$ELEMENTS;i++)); do
 	
 	
 	if [[ "$CORRUPTED" == "1" ]]; then
-	  echo -e "${WORNING} ${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
-	  echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again..."
+	  echo -e "${WORNING}${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
+	  echo -e "${WORNING}${CYAN}Will exit out so try and run the script again..."
 	  echo
 	  exit
 	fi	
@@ -563,7 +562,7 @@ EOF
 function zel_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
     sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
-    sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1
+    sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
     integration_check
 }
 
