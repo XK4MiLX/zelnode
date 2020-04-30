@@ -72,12 +72,19 @@ FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-
 ELEMENTS=${#FILE_ARRAY[@]}
 
 for (( i=0;i<$ELEMENTS;i++)); do
-        if [ -f "$COIN_PATH/${FILE_ARRAY[${i}]}" ]; then
-            echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${CHECK_MARK}${CYAN}]${NC}"
-        else
-            echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${X_MARK}${CYAN}]${NC}"
-	    CORRUPTED="1"
-        fi 	
+
+string="${FILE_ARRAY[${i}]}................................."
+string_leght=${#string}
+string_cut=$((string_leght-40))
+string=${string::${#string}-string_cut}
+
+if [ -f "$COIN_PATH/${FILE_ARRAY[${i}]}" ]; then
+  echo -e "${ARROW}${CYAN} $string[${CHECK_MARK}${CYAN}]${NC}"
+else
+  echo -e "${ARROW}${CYAN} $string[${X_MARK}${CYAN}]${NC}"
+  CORRUPTED="1"
+fi
+
 done
 
 if [[ "$CORRUPTED" == "1" ]]; then
