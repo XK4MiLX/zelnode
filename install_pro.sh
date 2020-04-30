@@ -138,6 +138,10 @@ swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
+prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
+outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
+index=$(cat /home/$USER/install_conf.json | jq -r '.index')
+
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
@@ -278,7 +282,24 @@ fi
 sleep 1
 
 config_file
+
+
+if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
 import_date
+else
+
+if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+IMPORT_ZELCONF="1"
+echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
+zelnodeprivkey="$prvkey"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+zelnodeoutpoint="$outpoint"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+zelnodeindex="$index"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+fi
+
+fi
 
 #functions
 function install_watchdog() {
