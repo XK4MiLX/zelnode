@@ -278,7 +278,7 @@ function mongodb_bootstrap(){
 
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 NUM='95'
-MSG1='${ARROW} ${CYAN}Zelflux loading...'
+MSG1='Zelflux loading...'
 MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo && echo
@@ -305,8 +305,8 @@ pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
-MSG1='${ARROW} ${CYAN}Zelflux starting...'
-MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
+MSG1='Zelflux starting...'
+MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -1103,10 +1103,10 @@ CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 
 NUM='2'
-MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
+MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo
+echo && echo
 
 else
 	
@@ -1142,7 +1142,7 @@ else
 	sudo systemctl start zelcash > /dev/null 2>&1
 	
           NUM='60'
-          MSG1="${CYAN}Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+          MSG1="Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
 	  
@@ -1154,7 +1154,7 @@ else
 	fi
 	
 	NUM='20'
-        MSG1="${CYAN}Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+        MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 	
@@ -1166,7 +1166,7 @@ else
     done
     
     fi
-    echo   
+
    
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
