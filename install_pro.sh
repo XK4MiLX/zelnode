@@ -106,45 +106,45 @@ echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN}${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_url" != "" ]]; then
-echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file ...........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file ............................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file ............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN}${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$watchdog" == "1" ]]; then
-echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$leave_old_chain" == "1" ]]; then
-echo -e "${PIN}${CYAN}Diuring re-installation old chain will be intact ................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${PIN}${CYAN}Diuring re-installation old chain will be intact ................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -165,17 +165,17 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
+echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 fi
 fi
 
@@ -187,23 +187,23 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
 if [[ -f ~/zelflux/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}"
+echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 fi
 fi
 
 fi
 fi
-sleep 2
+sleep 1
 echo
 }
 
