@@ -71,7 +71,6 @@ function integration_check() {
 PATH_TO_FOLDER=( /usr/local/bin/ ) 
 FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
-NOT_FOUND="0"
 
 for (( i=0;i<$ELEMENTS;i++)); do
         if [ -f $PATH_TO_FOLDER${FILE_ARRAY[${i}]} ]; then
