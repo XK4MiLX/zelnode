@@ -86,8 +86,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
 	  echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again..."
 	  echo
 	  exit
-	fi
-	
+	fi	
 done
 }
 
