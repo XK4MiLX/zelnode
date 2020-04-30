@@ -68,22 +68,32 @@ export NEWT_COLORS='
 title=black,
 '
 function string_limit_check_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::40}
+else
 string=$1
 string_color=$2
 string_leght=${#string}
 string_leght_color=${#string_color}
 string_diff=$((string_leght_color-string_leght))
 string=${string_color::40+string_diff}
+fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
 function string_limit_x_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::40}
+else
 string=$1
 string_color=$2
 string_leght=${#string}
 string_leght_color=${#string_color}
 string_diff=$((string_leght_color-string_leght))
 string=${string_color::40+string_diff}
+fi
 echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
@@ -287,11 +297,11 @@ current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
 string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
 else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
-string_limit_x_mark "Watchdog was not installed................................." "Watchdog was not installed................................."
+string_limit_x_mark "Watchdog was not installed................................."
 fi
 else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
-string_limit_x_mark "Watchdog was not installed................................." "Watchdog was not installed................................."
+string_limit_x_mark "Watchdog was not installed................................."
 fi
 
 }
@@ -885,7 +895,7 @@ function pm2_install(){
 	 echo
     else
    	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
-	 string_limit_x_mark "PM2 was not installed................................." "PM2 was not installed................................."
+	 string_limit_x_mark "PM2 was not installed................................."
 	 echo
     fi 
 
@@ -908,9 +918,11 @@ function start_daemon() {
         echo && echo
 	
 	zelcash_version=$(zelcash-cli getinfo | jq -r '.version')
-	echo -e "${ARROW} ${CYAN}Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed${NC}"
+	string_limit_check_mark "Zelcash version: v$zelcash_version installed................................." "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
+	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
 	zelbench_version=$(zelbench-cli getinfo | jq -r '.version')
-	echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
+	string_limit_check_mark "Zelbench version: v$zelbench_version installed................................." "Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed................................."
+	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
 	pm2_install
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
@@ -1011,7 +1023,7 @@ then
  echo
 else
  #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
- string_limit_x_mark "MongoDB was not installed................................." "MongoDB was not installed................................."
+ string_limit_x_mark "MongoDB was not installed................................."
  echo
 fi
 }
@@ -1054,7 +1066,7 @@ string_limit_check_mark "Nodejs version: $(node -v) installed...................
 echo
 else
 #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
-string_limit_x_mark "Nodejs was not installed................................." "Nodejs was not installed................................."
+string_limit_x_mark "Nodejs was not installed................................."
 echo
 fi
 
@@ -1112,7 +1124,7 @@ string_limit_check_mark "Zelflux version: v$current_ver installed...............
 
 echo
 else
-string_limit_x_mark "Zelflux was not installed................................." "Zelflux was not installed................................."
+string_limit_x_mark "Zelflux was not installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux was not installed${NC}"
 echo
 fi
