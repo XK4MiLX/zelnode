@@ -77,16 +77,16 @@ for (( i=0;i<$ELEMENTS;i++)); do
         else
             echo -e "${ARROW}${CYAN} ${FILE_ARRAY[${i}]}.......................[${X_MARK}${CYAN}]${NC}"
 	    CORRUPTED="1"
-        fi 
-	
-	
-	if [[ "$CORRUPTED" == "1" ]]; then
-	  echo -e "${WORNING}${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
-	  echo -e "${WORNING}${CYAN}Will exit out so try and run the script again..."
-	  echo
-	  exit
-	fi	
+        fi 	
 done
+
+if [[ "$CORRUPTED" == "1" ]]; then
+  echo -e "${WORNING}${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
+  echo -e "${WORNING}${CYAN}Will exit out so try and run the script again..."
+  echo
+  exit
+fi	
+
 }
 
 
