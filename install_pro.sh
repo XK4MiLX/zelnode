@@ -338,7 +338,7 @@ function wipe_clean() {
 	
     fi
     
-    echo -e "${ARROW} ${CYAN}Stopping all services and running processes${NC}"
+    echo -e "${ARROW} ${CYAN}Stopping all services and running processes...${NC}"
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
@@ -368,7 +368,7 @@ function wipe_clean() {
     echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
-    echo -e "${ARROW} ${CYAN}Removing Zelcash chain directiory${NC}"
+    echo -e "${ARROW} ${CYAN}Removing Zelcash chain directiory...${NC}"
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     sudo rm -rf .zelbenchmark && sleep 1
     ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
@@ -383,7 +383,7 @@ function wipe_clean() {
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
-    echo
+    echo -e ""
 
    # if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
        # echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
@@ -1057,7 +1057,7 @@ function zelflux() {
                 ZELID="$(whiptail --title "ZelFlux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
                 if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
                 then
-                echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+                echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
                 break
                 else
                 echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...........[${X_MARK}${CYAN}]${NC}}"
@@ -1225,7 +1225,7 @@ zelbench_benchmarks=$(zelbench-cli getbenchmarks)
 if [[ "zelbench_benchmarks" != "" ]]; then
 zelbench_status=$(jq -r '.status' <<< "$zelbench_benchmarks")
 if [[ "$zelbench_status" == "failed" ]]; then
-echo -e "${ARROW} ${CYAN}Zelbench benchmark failed.................[${X_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Zelbench benchmark failed...............[${X_MARK}${CYAN}]${NC}"
 else
 echo -e "${BOOK}${CYAN}STATUS: ${GREEN}$zelbench_status${NC}"
 zelbench_cores=$(jq -r '.cores' <<< "$zelbench_benchmarks")
