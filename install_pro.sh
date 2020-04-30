@@ -510,6 +510,7 @@ function create_swap() {
 }
 
 function install_packages() {
+    echo
     echo -e "${ARROW} ${YELLOW}Installing Packages...${NC}"
     if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
         sudo apt-get install dirmngr apt-transport-https -y > /dev/null 2>&1
@@ -527,7 +528,6 @@ function install_packages() {
 }
 
 function create_conf() {
-    echo
     echo -e "${ARROW} ${YELLOW}Creating zelcash config file...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
         echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
