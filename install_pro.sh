@@ -634,12 +634,12 @@ fi
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
 echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
-echo -e "${ARROW} ${YELLOW}Checking file integration...${NC}"
+echo -e "${ARROW} ${YELLOW}Checking if zip file is damaged...${NC}"
 
 
 if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
 then
-echo -e "${ARROW} ${CYAN}Zip archive integration.....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap file is fine.....................[${CHECK_MARK}${CYAN}]${NC}"
 else
 printf '\e[A\e[K'
 printf '\e[A\e[K'
@@ -647,7 +647,7 @@ printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}Zip archive integration.....................[${X_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.....................[${X_MARK}${CYAN}]${NC}"
 rm -rf zel-bootstrap.zip
 fi
 fi
