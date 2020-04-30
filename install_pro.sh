@@ -563,7 +563,7 @@ EOF
 function zel_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
     sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
-    sudo chmod 755 $COIN_PATH/${COIN_NAME}*
+    sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1
     integration_check
 }
 
