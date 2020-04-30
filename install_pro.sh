@@ -278,8 +278,8 @@ function mongodb_bootstrap(){
 
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 NUM='95'
-MSG1='Zelflux loading...'
-MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+MSG1='${ARROW} ${CYAN}Zelflux loading...'
+MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo && echo
 DB_HIGHT=572200
@@ -305,8 +305,8 @@ pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
-MSG1='Zelflux starting...'
-MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+MSG1='${ARROW} ${CYAN}Zelflux starting...'
+MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -460,7 +460,8 @@ function ssh_port() {
 	if [[ $ssh_port =~ $pettern ]] ; then
 	  SSHPORT="$ssh_port"
 	else
-	 echo -e "${ARROW} ${CYAN}SSH port must be integer...................[${X_MARK}${CYAN}]${NC}}"
+	 echo -e "${ARROW} ${CYAN}SSH port must be integer................[${X_MARK}${CYAN}]${NC}}"
+	 echo
 	 exit
 	fi	   
     fi
@@ -475,10 +476,15 @@ function ip_confirm() {
      WANIP=$(curl ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
       	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+	 echo
 	 exit
     	 fi
     fi
-   echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ${CYAN}..........[${CHECK_MARK}${CYAN}]${NC}"
+   string="Detected IP: ${GREEN}$WANIP ................................."
+   string_leght=${#string}
+   string_cut=$((string_leght-40))
+   string=${string::${#string}-string_cut}
+   echo -e "${ARROW} ${CYAN}Detected IP: $string[${CHECK_MARK}${CYAN}]${NC}"
    # if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         #WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
    # fi
@@ -646,7 +652,7 @@ echo -e "${ARROW} ${YELLOW}Checking if zip file is damaged...${NC}"
 
 if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
 then
-echo -e "${ARROW} ${CYAN}Bootstrap file is fine.....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
 else
 printf '\e[A\e[K'
 printf '\e[A\e[K'
@@ -654,7 +660,7 @@ printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.....................[${X_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
 rm -rf zel-bootstrap.zip
 fi
 fi
@@ -876,7 +882,7 @@ function start_daemon() {
         spinning_timer
         NUM='2'
         MSG1='Getting info...'
-        MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+        MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
         spinning_timer
         echo && echo
 	
