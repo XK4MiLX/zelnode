@@ -322,6 +322,7 @@ fi
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
 
+    echo -e "${ARROW} ${CYAN}Stopping all service and running processes${NC}"
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
@@ -333,11 +334,13 @@ function wipe_clean() {
     sudo rm -rf  ${COIN_PATH}/zel* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
     sudo rm -rf /usr/local/bin/zel* > /dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${CYAN}Removing zelcash && zelbench...${NC}"
     sudo apt-get remove zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get purge zelcash zelbench -y > /dev/null 2>&1 && sleep 1
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm -rf /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
     tmux kill-server > /dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${CYAN}Removing PM2...${NC}"
     pm2 del zelflux > /dev/null 2>&1 && sleep 1
     pm2 del watchdog > /dev/null 2>&1 && sleep 1
     pm2 save > /dev/null 2>&1
@@ -348,6 +351,7 @@ function wipe_clean() {
     npm remove pm2 -g > /dev/null 2>&1 && sleep 1
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
+    echo -e "${ARROW} ${CYAN}Removing Zelcash chain directiory${NC}"
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     sudo rm -rf .zelbenchmark && sleep 1
     ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
@@ -561,6 +565,7 @@ EOF
 
 function zel_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
+    echo -e "${ARROW} ${YELLOW}Zelcash && Zelbench installing...${NC}"
     sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
     integration_check
