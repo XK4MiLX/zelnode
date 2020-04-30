@@ -93,7 +93,7 @@ if [[ "$CORRUPTED" == "1" ]]; then
   echo
   exit
 fi	
-
+echo -e ""
 }
 
 
