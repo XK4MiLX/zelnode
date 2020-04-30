@@ -160,7 +160,7 @@ echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use ............
 
 else
 
-if [[ "$bootstrap_url" != "" ]]; then
+if [[ "$bootstrap_url" == "" ]]; then
 echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
 echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -833,7 +833,7 @@ fi
 
 else
 
-if [[ "$bootstrap_url" != "" ]]; then
+if [[ "$bootstrap_url" == "" ]]; then
 
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
     echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
