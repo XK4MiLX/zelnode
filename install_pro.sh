@@ -833,8 +833,6 @@ fi
 
 else
 
-if [[ "$bootstrap_url" == "" ]]; then
-
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
     echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
     rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate
@@ -860,6 +858,8 @@ if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
 fi
 
 
+if [[ "$bootstrap_url" == "" ]]; then
+
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
 echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
@@ -870,11 +870,16 @@ echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 fi
 else
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+else
 BOOTSTRAP_ZIP="$bootstrap_url"
 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
 unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+fi
 fi
 
 
