@@ -695,12 +695,12 @@ fi
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
 echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
-echo -e "${ARROW} ${YELLOW}Checking if zip file is damaged...${NC}"
+echo -e "${ARROW} ${YELLOW}Checking if zip file is corrupted...${NC}"
 
 
 if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
 then
-echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
 else
 printf '\e[A\e[K'
 printf '\e[A\e[K'
