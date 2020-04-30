@@ -81,7 +81,7 @@ for (( i=0;i<$ELEMENTS;i++)); do
 done
 
 if [[ "$CORRUPTED" == "1" ]]; then
-  echo -e "${WORNING}${CYAN}Zelcash package corrupted...................................[${X_MARK}${CYAN}]${NC}"
+  echo -e "${WORNING}${CYAN}Zelcash package corrupted..."
   echo -e "${WORNING}${CYAN}Will exit out so try and run the script again..."
   echo
   exit
