@@ -322,7 +322,7 @@ fi
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of ${COIN_NAME^}${NC}"
 
-    echo -e "${ARROW} ${CYAN}Stopping all service and running processes${NC}"
+    echo -e "${ARROW} ${CYAN}Stopping all services and running processes${NC}"
     sudo killall nano > /dev/null 2>&1
     "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
