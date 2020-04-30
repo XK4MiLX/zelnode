@@ -365,7 +365,7 @@ function wipe_clean() {
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
-
+    echo
 
    # if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
        # echo -e "${CHECK_MARK} ${CYAN} Config directory /home/$USER/$CONFIG_DIR cleaned [OK]${NC}" && sleep 1
