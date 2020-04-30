@@ -67,6 +67,27 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 export NEWT_COLORS='
 title=black,
 '
+function string_limit_check_mark() {
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::40+string_diff}
+echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
+function string_limit_x_mark() {
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::40+string_diff}
+echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
+}
+
+
 function integration_check() {
 FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
@@ -74,9 +95,7 @@ ELEMENTS=${#FILE_ARRAY[@]}
 for (( i=0;i<$ELEMENTS;i++)); do
 
 string="${FILE_ARRAY[${i}]}................................."
-string_leght=${#string}
-string_cut=$((string_leght-40))
-string=${string::${#string}-string_cut}
+string=${string::40}
 
 if [ -f "$COIN_PATH/${FILE_ARRAY[${i}]}" ]; then
   echo -e "${ARROW}${CYAN} $string[${CHECK_MARK}${CYAN}]${NC}"
@@ -480,11 +499,7 @@ function ip_confirm() {
 	 exit
     	 fi
     fi
-   string="Detected IP: ${GREEN}$WANIP${CYAN} ................................."
-   string_leght=${#string}
-   string_cut=$((string_leght-40))
-   string=${string::${#string}-string_cut}
-   echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+   string_limit_check_mark "Detected IP: $WANIP ................................." "Detected IP: ${GREEN}$WANIP${CYAN} ................................."
    # if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
         #WANIP=$(whiptail --inputbox "        Enter IP address" 8 36 3>&1 1>&2 2>&3)
    # fi
