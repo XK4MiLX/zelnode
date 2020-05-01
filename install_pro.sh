@@ -37,6 +37,7 @@ IMPORT_ZELCONF="0"
 IMPORT_ZELID="0"
 CORRUPTED="0"
 BOOTSTRAP_SKIP="0"
+WATCHDOG_INSTALL="0"
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -316,6 +317,7 @@ function install_watchdog() {
 echo -e "${ARROW} ${YELLOW}Install watchdog for zelnode${NC}"
 if pm2 -v > /dev/null 2>&1
 then
+WATCHDOG_INSTALL="1"
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
@@ -1508,6 +1510,14 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Stop zelflux: ${SEA}pm2 stop zelflux${NC}"
     echo -e "${PIN} ${CYAN}Start zelflux: ${SEA}pm2 start zelflux${NC}"
     echo
+    if [[ "$WATCHDOG_INSTALL == "1" ]]; then
+    echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE WATCHDOG.${NC}"
+    echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+    echo -e "${PIN} ${CYAN}Stop watchdog: ${SEA}pm2 start watchdog${NC}"
+    echo -e "${PIN} ${CYAN}Start watchdog: ${SEA}pm2 start watchdog --watch${NC}"
+    echo -e "${PIN} ${CYAN}Error logs: ${SEA}watchdog_error.log${NC}"
+    echo
+    fi
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 2
