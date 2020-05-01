@@ -1026,6 +1026,7 @@ function basic_security() {
     echo "y" | sudo ufw enable > /dev/null 2>&1
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
+    sudo ufw default deny outgoing > /dev/null 2>&1
 }
 
 function pm2_install(){
