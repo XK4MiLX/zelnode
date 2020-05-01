@@ -1,4 +1,33 @@
-# ZELNODE MULTITOOLBOX
+# WHY ZELNODE MULTITOOLBOX?  
+  
+* <b>Docker installation</b>  
+1) You need put username only  
+2) Error controls  
+  
+* <b>Node installation</b>  
+1) Ability to disable firewall diuring installation  
+2) Zel ID veryfication  
+3) Supporting installation in LXC continer  
+4) Auto-detection bootstrap archive if is in user home directory   
+5) Ability to download bootstrap from own source  
+6) ZelFlux auto-update via CronTab
+7) Error controls 
+9) Supporting PM2
+10) Improvement package installation
+11) Restarting benchmark after zelflux installation
+12) Watchgod for zelnode
+13) MongoDB bootstrap  
+14) Importing old settings
+  
+* <b>ZelNode analizer and fixer</b>  
+1) Veryfication errors  
+2) Fix build in script 
+
+
+
+
+
+# ZELNODE INSTALLATION WITH MULTITOOLBOX
 
 <b>1) How run script</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
@@ -46,30 +75,6 @@ If everything goes well you will see
 You can found your correct settings here (ZelCore)
 ![screen8](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/pic03v2.jpg) 
 
-# WHY ZELNODE MULTITOOLBOX?  
-  
-* <b>Docker installation</b>  
-1) You need put username only  
-2) Error controls  
-  
-* <b>Node installation</b>  
-1) Ability to disable firewall diuring installation  
-2) Zel ID veryfication  
-3) Supporting installation in LXC continer  
-4) Auto-detection bootstrap archive if is in user home directory   
-5) Ability to download bootstrap from own source  
-6) ZelFlux auto-update via CronTab
-7) Error controls 
-9) Supporting PM2
-10) Improvement package installation
-11) Restarting benchmark after zelflux installation
-12) Watchgod for zelnode
-13) MongoDB bootstrap  
-14) Importing old settings
-  
-* <b>ZelNode analizer and fixer</b>  
-1) Veryfication errors  
-2) Fix build in script 
 
   
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
