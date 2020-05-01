@@ -569,7 +569,7 @@ fi
 if [ -f ~/zelflux/error.log ]
 then
 echo
-echo -e "${WORNING} ${YELLOW}Zelflux error.log file detected, check ~/zelflux/error.log"
+echo -e "${BOOK} ${YELLOW}Zelflux error.log file detected, check ~/zelflux/error.log"
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/zelflux/error.log)${CYAN} error events${NC}"
 error_line=$(cat /home/$USER/zelflux/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
@@ -629,11 +629,11 @@ fi
 
 if [[ -f /home/$USER/watchdog/watchdog_error.log ]]; then
 echo
-echo -e "${WORNING} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
+echo -e "${BOOK} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/watchdog/watchdog_error.log)${CYAN} error events${NC}"
-error_line=$(egrep -wi --color 'benchmarking' /home/$USER/watchdog/watchdog_error.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+error_line=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-event_date=$(egrep -wi --color 'benchmarking' /home/$USER/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+event_date=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 event_time_uxtime=$(date -d "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
