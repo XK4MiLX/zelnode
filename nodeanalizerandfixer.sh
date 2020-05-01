@@ -538,7 +538,6 @@ else
 echo -e "${X_MARK} ${CYAN} ZelFront is not working${NC}"
 fi
 
-
 if [ -d ~/zelflux ]
 then
 FILE=~/zelflux/config/userconfig.js
