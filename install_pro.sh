@@ -1022,11 +1022,16 @@ function basic_security() {
     sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
+    sudo ufw default deny outgoing > /dev/null 2>&1
+    sudo ufw allow out to any port 80 > /dev/null 2>&1
+    sudo ufw allow out to any port 443 > /dev/null 2>&1
+    sudo ufw allow out to any port 53 > /dev/null 2>&1
     sudo ufw limit OpenSSH > /dev/null 2>&1
     echo "y" | sudo ufw enable > /dev/null 2>&1
+    sudo ufw reload  > /dev/null 2>&1
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
-    sudo ufw default deny outgoing > /dev/null 2>&1
+
 }
 
 function pm2_install(){
