@@ -10,7 +10,7 @@ Node installation support own config file
 no more question diuring installation ....
 You need only create file called install_conf.json
 Example of configuration diuring installation
-``
+```
 {
   "import_settings": "",
   "prvkey": "",
@@ -26,7 +26,7 @@ Example of configuration diuring installation
   "use_old_chain": "0",
   "watchdog": "0"
 }
-``
+```
 Priority
 1) import setting from install_conf ( prvkey, outpoint, index, zelid )
 2) import_setting - import existing settings from zelcash and zelflux config file
