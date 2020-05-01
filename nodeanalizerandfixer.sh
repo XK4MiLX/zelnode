@@ -32,7 +32,6 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 ARROW="${CYAN}\xE2\x96\xB6${NC}"
 
-
 #dialog color
 export NEWT_COLORS='
 title=black,
