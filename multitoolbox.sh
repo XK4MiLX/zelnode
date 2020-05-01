@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap3.zip'
+BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
@@ -328,7 +328,9 @@ then
     exit
 fi
 echo -e "${NC}"
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
+#bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install_pro.sh)
+
 
 }
 
