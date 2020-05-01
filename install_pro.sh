@@ -156,44 +156,44 @@ fi
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN}SSH port set ....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN}${CYAN}Firewall disabled diuring installation ..........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Firewall enabled diuring installation ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$use_old_chain" == "1" ]]; then
-echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use ................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 
 else
 
 if [[ "$bootstrap_url" == "" ]]; then
-echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts ..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file ...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file ............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
 
 if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN}${CYAN}Create a file that will be used for swap ........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB .......................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$watchdog" == "1" ]]; then
-echo -e "${PIN}${CYAN}Install watchdog ................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 
