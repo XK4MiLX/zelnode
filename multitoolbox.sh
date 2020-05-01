@@ -17,7 +17,8 @@ CYAN='\033[1;36m'
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 X_MARK="${RED}\xE2\x9D\x8C${NC}"
 PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-dversion="v3.6"
+WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+dversion="v3.7"
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -327,7 +328,18 @@ then
     echo -e "${NC}"
     exit
 fi
+
+if sudo docker run hello-world > /dev/null 2>&1
+then
 echo -e "${NC}"
+else
+echo -e "${WORNING}${CYAN}Docker is not installed.${NC}"
+echo -e "${WORNING}${CYAN}First install docker from root accont.${NC}"
+exit
+fi
+
+
+
 #bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install_pro.sh)
 
