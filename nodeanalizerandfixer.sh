@@ -596,9 +596,10 @@ fi
 else
     echo -e "${X_MARK} ${CYAN} Directory ~/zelflux does not exists${CYAN}"
 fi
-echo 
+
 if [[ "$ZELCONF" == "1" ]]
 then
+echo 
 echo -e "${BOOK} ${YELLOW}Checking ~/.zelcash/zelcash.conf${NC}"
 if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//') ]]
 then
@@ -625,6 +626,22 @@ echo -e "${X_MARK} ${CYAN} Zelnodeindex does not match${NC}"
 fi
 
 fi
+
+if [[ -f /home/$USER/watchdog/watchdog_error.log ]]; then
+echo
+echo -e "${WORNING} ${CYAN}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/watchdog/watchdog_error.log)${CYAN} error events${NC}"
+error_line=$(cat /home/$USER/watchdog/watchdog_error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
+echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
+event_date=$(cat /home/$USER/watchdog/watchdog_error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
+event_time_uxtime=$(date -d "$event_date" +"%s")
+event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
+echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_human_time_local${NC} / ${GREEN}$event_human_time_utc${NC}"
+now_date=$(date +%s)
+tdiff=$((now_date-event_time_uxtime))
+show_time "$tdiff"
+fi 
 echo -e "${YELLOW}===================================================${NC}"
 if [[ "$FLUX_UPDATE" == "1" ]]; then
 read -p "Would you like to update Zelflux Y/N?" -n 1 -r
