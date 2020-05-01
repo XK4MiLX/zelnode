@@ -450,6 +450,8 @@ function wipe_clean() {
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1
     
+ if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+    
     if [[ -z "$use_old_chain" ]]; then
     
     if  ! whiptail --yesno "Would you like to use old chain from zelcash config directory?" 8 60; then
@@ -494,7 +496,8 @@ function wipe_clean() {
     
     fi
     fi
-    
+fi
+
     sudo rm /home/$USER/fluxdb_dump.tar.gz > /dev/null 2>&1
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
