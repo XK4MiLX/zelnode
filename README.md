@@ -32,9 +32,8 @@ Priority
 2) import_setting - import existing settings from zelcash and zelflux config file
 3) question diuring installation
 
-  
-```
-<b>Any donations are welcomed and appreciated. Thanks.</b>  
+<b>Any donations are welcomed and appreciated. Thanks.</b>   
+``` 
 CruxID: k4mil@zel.crux  
 ZEL: t1f66kBo9xzpgPJV6wvzT7MY6unpm42kvST  
 BTC: 1NDVjrP1zg35nfSD1WBKyYSBf8dgJ8AKay  
