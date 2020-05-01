@@ -591,8 +591,6 @@ function ssh_port() {
 	 exit
 	fi	   
     fi
-    
-    
 }
 
 function ip_confirm() {
