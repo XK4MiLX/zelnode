@@ -1510,7 +1510,7 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Stop zelflux: ${SEA}pm2 stop zelflux${NC}"
     echo -e "${PIN} ${CYAN}Start zelflux: ${SEA}pm2 start zelflux${NC}"
     echo
-    if [[ "$WATCHDOG_INSTALL == "1" ]]; then
+    if [[ "$WATCHDOG_INSTALL" == "1" ]]; then
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE WATCHDOG.${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
     echo -e "${PIN} ${CYAN}Stop watchdog: ${SEA}pm2 start watchdog${NC}"
