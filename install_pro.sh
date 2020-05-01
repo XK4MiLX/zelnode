@@ -1467,7 +1467,6 @@ fi
 else
 echo -e "${ARROW} ${CYAN}Zelbench not responding.................[${X_MARK}${CYAN}]${NC}"
 fi
-
 }
 
 function display_banner() {
