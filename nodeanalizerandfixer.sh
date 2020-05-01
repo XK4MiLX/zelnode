@@ -264,7 +264,7 @@ echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
 error_line=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}' | head -n1)
+event_date=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -d "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -633,7 +633,7 @@ echo -e "${BOOK} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/wat
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/watchdog/watchdog_error.log)${CYAN} error events${NC}"
 error_line=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-event_date=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+event_date=$(cat /home/$USER/watchdog/watchdog_error.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}' | head -n1)
 event_time_uxtime=$(date -d "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
