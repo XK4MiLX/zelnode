@@ -1322,6 +1322,12 @@ else
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 	
+	if [[ "$LEFT" == "0" ]]; then	
+	  time_break='5'
+	else
+	  time_break='20'
+	fi
+	
 	#if [[ "$CONNECTIONS" == "0" ]]; then
 	 # c=$((c+1))
 	 # if [[ "$c" > 3 ]]; then
@@ -1351,7 +1357,7 @@ else
 
 	fi
 	
-	NUM='20'
+	NUM="$time_break"
         MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
