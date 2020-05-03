@@ -24,6 +24,67 @@ export NEWT_COLORS='
 title=black,
 '
 
+function pm2_install(){
+
+    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
+    npm install pm2@latest -g > /dev/null 2>&1
+    
+    if pm2 -v > /dev/null 2>&1
+    then
+     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+   	pm2 startup systemd -u $USER > /dev/null 2>&1
+   	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    	pm2 save > /dev/null 2>&1
+	pm2 install pm2-logrotate > /dev/null 2>&1
+	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+	source ~/.bashrc
+	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
+	 echo -e "${NC}"
+         DB_HIGHT=572200
+         IP=$(wget http://ipecho.net/plain -O - -q)
+         BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+         echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
+         echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+         echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+         echo -e ""
+
+      if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
+       then
+       
+        echo -e "${YELLOW}Downloading db for mongo...${NC}"
+        wget http://77.55.218.93/fluxdb_dump.tar.gz
+        echo -e "${YELLOW}Unpacking...${NC}"
+        tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
+        echo -e "${YELLOW}Stoping zelflux...${NC}"
+        pm2 stop zelflux > /dev/null 2>&1
+        echo -e "${YELLOW}Importing mongo db...${NC}"
+        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+        echo -e "${YELLOW}Cleaning...${NC}"
+        sudo rm -rf /home/$USER/dump && sleep 1
+        sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+	pm2 start zelflux > /dev/null 2>&1
+
+      else
+
+      echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+      echo -e ""
+
+     fi
+	  
+    else
+   	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
+	 string_limit_x_mark "PM2 was not installed................................."
+	 echo
+    fi 
+
+}
+
 function install_watchdog() {
 
 if [[ "$USER" == "root" ]]
@@ -159,7 +220,17 @@ then
     echo -e "${NC}"
     exit
 fi
+
+rm restart_zelflux.sh > /dev/null 2>&1
+PM2_INTALL="0"
+DB_INTALL="0"
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
+
+if ! pm2 -v > /dev/null 2>&1; then 
+  pm2_install  
+else
+##echo -e "${YELLOW}PM2 installation skipped...${NC}"
+
 echo -e "${NC}"
 DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
@@ -168,67 +239,34 @@ echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
-rm restart_zelflux.sh > /dev/null 2>&1
-PM2_INTALL="0"
-DB_INTALL="0"
-
-if ! pm2 -v > /dev/null 2>&1; then 
-    PM2_INTALL="1"
-    tmux kill-server 
-    if tmux ls | grep "created" > /dev/null 2>&1
-    then
-      tmux list-sessions | awk 'BEGIN{FS=":"}{print $1}' | xargs -n 1 tmux kill-session -t
-    fi
-    sudo fuser -k 16127/tcp > /dev/null 2>&1
-    kill node > /dev/null 2>&1
-    echo -e "${YELLOW}Installing PM2...${NC}"
-    npm i -g pm2 > /dev/null 2>&1
-    echo -e "${YELLOW}Configuring PM2...${NC}"
-    cmd=$(pm2 startup systemd -u $USER | grep sudo)
-    sudo bash -c "$cmd"
-    sudo chmod +x /home/$USER/zelflux/start.sh
-    pm2 start ~/zelflux/start.sh --name zelflux
-    pm2 save
-    pm2 install pm2-logrotate
-    pm2 set pm2-logrotate:max_size 6M > /dev/null
-    pm2 set pm2-logrotate:retain 6 > /dev/null
-    pm2 set pm2-logrotate:compress true > /dev/null
-    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null
-    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 
-    source ~/.bashrc
-    
-    
-else
-echo -e "${YELLOW}PM2 installation skipped...${NC}"
-fi
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-then
-DB_INTALL="1"
-echo -e "${YELLOW}Downloading db for mongo...${NC}"
-wget http://77.55.218.93/fluxdb_dump.tar.gz
-echo -e "${YELLOW}Unpacking...${NC}"
-tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
-echo -e "${YELLOW}Stoping zelflux...${NC}"
-pm2 stop zelflux > /dev/null 2>&1
-echo -e "${YELLOW}Importing mongo db...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-echo -e "${YELLOW}Cleaning...${NC}"
-sudo rm -rf /home/$USER/dump && sleep 1
-sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+    then
+    DB_INTALL="1"
+    echo -e "${YELLOW}Downloading db for mongo...${NC}"
+    wget http://77.55.218.93/fluxdb_dump.tar.gz
+    echo -e "${YELLOW}Unpacking...${NC}"
+    tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
+    echo -e "${YELLOW}Stoping zelflux...${NC}"
+    pm2 stop zelflux > /dev/null 2>&1
+    echo -e "${YELLOW}Importing mongo db...${NC}"
+    mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+    echo -e "${YELLOW}Cleaning...${NC}"
+    sudo rm -rf /home/$USER/dump && sleep 1
+    sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+    echo -e "${YELLOW}Starting Zelflux...${NC}"
+    pm2 start zelflux > /dev/null 2>&1
+    
+    else
 
-else
+    echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+    echo -e ""
 
-echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-echo -e ""
+   fi
+
 
 fi
 
-if [[ "$PM2_INTALL" == "1" || "$DB_INTALL" == "1" ]]
-then
-echo -e "${YELLOW}Starting Zelflux...${NC}"
-pm2 start zelflux > /dev/null 2>&1
-fi
 
 }
 
