@@ -571,10 +571,10 @@ echo -e "${CYAN}1 - Install Docker${NC}"
 echo -e "${CYAN}2 - Install ZelNode${NC}"
 echo -e "${CYAN}3 - ZelNode analyzer and fixer${NC}"
 echo -e "${CYAN}4 - Install watchdog for zelnode${NC}"
-echo -e "${CYAN}5 - Restore Mongodb datatable from bootstrap && Install PM2${NC}"
+echo -e "${CYAN}5 - Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${CYAN}6 - Restore Zelcash blockchain from bootstrap${NC}"
-echo -e "${CYAN}7 - Fix your lxc.conf file on host${NC}"
-echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
+#echo -e "${CYAN}7 - Fix your lxc.conf file on host${NC}"
+#echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -p "Pick an option: " -n 1 -r
@@ -612,16 +612,16 @@ read -p "Pick an option: " -n 1 -r
     sleep 1
     zelcash_bootstrap     
  ;; 
- 7)
-    clear
-    sleep 1
-    fix_lxc_config
- ;;
+ #7)
+   # clear
+  #  sleep 1
+   # fix_lxc_config
+# ;;
  
- 8)
-    clear
-    sleep 1
-    install_kernel
- ;;
+# 8)
+    #clear
+   # sleep 1
+    #install_kernel
+# ;;
 
     esac
