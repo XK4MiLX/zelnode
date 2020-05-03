@@ -1527,7 +1527,7 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 1
-    source ~/.bashrc
+    source /home/$USER/.bashrc
 }
 
 #end of functions
