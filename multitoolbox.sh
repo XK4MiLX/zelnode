@@ -24,6 +24,36 @@ export NEWT_COLORS='
 title=black,
 '
 
+function string_limit_check_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::40}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::40+string_diff}
+fi
+echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
+function string_limit_x_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::40}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::40+string_diff}
+fi
+echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
+}
+
 function pm2_install(){
 
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
@@ -31,6 +61,7 @@ function pm2_install(){
     
     if pm2 -v > /dev/null 2>&1
     then
+        rm restart_zelflux.sh > /dev/null 2>&1
      	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
    	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
@@ -78,7 +109,7 @@ function pm2_install(){
      fi
 	  
     else
-   	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
+   	 #echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
 	 string_limit_x_mark "PM2 was not installed................................."
 	 echo
     fi 
@@ -221,9 +252,7 @@ then
     exit
 fi
 
-rm restart_zelflux.sh > /dev/null 2>&1
-PM2_INTALL="0"
-DB_INTALL="0"
+
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 
 if ! pm2 -v > /dev/null 2>&1; then 
