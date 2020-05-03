@@ -1523,6 +1523,8 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Error logs: ${SEA}~/watchdog/watchdog_error.log${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
     echo
+    echo -e "${PIN} ${RED}IMPORTANT: After installation check ${SEA}'pm2 list'${RED} if not work, type ${SEA}'source /home/$USER/.bashrc'${NC}"
+    echo
     fi
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
