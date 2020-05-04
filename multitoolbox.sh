@@ -94,7 +94,7 @@ function pm2_install(){
     if pm2 -v > /dev/null 2>&1
     then
         rm restart_zelflux.sh > /dev/null 2>&1
-     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+     	echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
    	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
    	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
@@ -112,30 +112,30 @@ function pm2_install(){
          DB_HIGHT=572200
          IP=$(wget http://ipecho.net/plain -O - -q)
          BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-         echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-         echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-         echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+         echo -e "${ARROW} ${CYAN}IP: ${PINK}$IP"
+         echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+         echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
          echo -e ""
 
       if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
        then
        
-        echo -e "${YELLOW}Downloading db for mongo...${NC}"
+        echo -e "${ARROW} ${CYAN}Downloading db for mongo...${NC}"
         wget http://77.55.218.93/fluxdb_dump.tar.gz
-        echo -e "${YELLOW}Unpacking...${NC}"
-        tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
-        echo -e "${YELLOW}Stoping zelflux...${NC}"
+        echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+        tar xvf fluxdb_dump.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
+        echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
         pm2 stop zelflux > /dev/null 2>&1
-        echo -e "${YELLOW}Importing mongo db...${NC}"
-        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-        echo -e "${YELLOW}Cleaning...${NC}"
+        echo -e "${ARROW} ${CYAN}Importing mongo db...${NC}"
+        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
         sudo rm -rf /home/$USER/dump && sleep 1
         sudo rm -rf fluxdb_dump.tar.gz && sleep 1
 	pm2 start zelflux > /dev/null 2>&1
 
       else
 
-      echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+      echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
       echo -e ""
 
      fi
@@ -170,18 +170,18 @@ fi
 
 if pm2 -v > /dev/null 2>&1
 then
-echo -e "${YELLOW}Cleaning...${NC}"
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
-echo -e "${YELLOW}Downloading...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${YELLOW}Installing module auto-update....${NC}"
+echo -e "${ARROW} ${CYAN}Installing module auto-update....${NC}"
 wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
-sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
-cd watchdog && npm install
-pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10
+sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge  
+cd watchdog && npm install > /dev/null 2>&1
+pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1
 fi
 
 }
