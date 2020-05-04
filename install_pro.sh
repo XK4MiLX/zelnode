@@ -262,7 +262,7 @@ echo
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
-
+start_install=`date +%s`
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
@@ -1342,6 +1342,7 @@ else
    echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
    
    f=0
+   start_sync=`date +%s`
  #  c=0
 	
     while true
@@ -1393,7 +1394,7 @@ else
         spinning_timer
 	
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-	    echo -e "${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
+	    echo -e "${CYAN} Duration: ${GREEN}$((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 	    echo
             break
         fi
@@ -1556,7 +1557,7 @@ function display_banner() {
     echo
     fi
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
-    echo -e "${YELLOW}================================================================================================================================${NC}"
+    echo -e "${YELLOW}===================================================================================================================[ ${GREEN}Duration: $((($(date +%s)-$start_install)/60)) min. $((($(date +%s)-$start_install) % 60)) sec. ${YELLOW}]${NC}"
     sleep 1
     cd $HOME
     exec bash
