@@ -263,12 +263,33 @@ echo
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
-sudo apt  install jq > /dev/null 2>&1
+
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "Zelnode setup starting, press [CTRL+C] to cancel.${NC}"
 sleep 2
+
+if jq --version > /dev/null 2>&1; then
+echo -e ""
+else
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
+sudo apt  install jq > /dev/null 2>&1
+
+  if jq --version > /dev/null 2>&1
+  then
+    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
+    echo
+  else
+    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+    string_limit_x_mark "JQ was not installed................................."
+    echo
+    exit
+  fi
+fi
+
 if [ "$USERNAME" = "root" ]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
     sleep 4
