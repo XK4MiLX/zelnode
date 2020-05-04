@@ -1242,7 +1242,7 @@ echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
 #cd
 curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash > /dev/null 2>&1
 . ~/.profile
-source ~/.bashrc
+bash -c "source /home/$USER/.bashrc"
 sleep 1
 #nvm install v12.16.1
 nvm install --lts > /dev/null 2>&1
@@ -1559,7 +1559,6 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
     echo -e "${YELLOW}================================================================================================================================${NC}"
     sleep 1
-    source /home/$USER/.bashrc
 }
 
 #end of functions
