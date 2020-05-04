@@ -372,24 +372,24 @@ NUM='95'
 MSG1='Zelflux loading...'
 MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo && echo
+echo
 DB_HIGHT=590910
 BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${YELLOW}Downloading db for mongodb...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading db for mongodb...${NC}"
 wget http://77.55.218.93/mongod_bootstrap.tar.gz -q --show-progress 
-echo -e "${ARROW} ${YELLOW}Unpacking...${NC}"
+echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf mongod_bootstrap.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${YELLOW}Stoping zelflux...${NC}"
+echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
-echo -e "${ARROW} ${YELLOW}Importing mongodb datatable...${NC}"
+echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf mongod_bootstrap.tar.gz > /dev/null 2>&1  && sleep 1
 pm2 start zelflux > /dev/null 2>&1
