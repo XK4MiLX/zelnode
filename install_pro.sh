@@ -381,7 +381,7 @@ echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${CYAN}Downloading db for mongodb...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}http://77.55.218.93/mongod_bootstrap.tar.gz${NC}"
 wget http://77.55.218.93/mongod_bootstrap.tar.gz -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf mongod_bootstrap.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
