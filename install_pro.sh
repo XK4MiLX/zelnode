@@ -1049,7 +1049,7 @@ function basic_security() {
     sudo ufw allow out to any port 443 > /dev/null 2>&1
     sudo ufw allow out to any port 53 > /dev/null 2>&1
     
-    sudo ufw default deny outgoing > /dev/null 2>&1
+    sudo ufw default allow outgoing > /dev/null 2>&1
     sudo ufw limit OpenSSH > /dev/null 2>&1
     echo "y" | sudo ufw enable > /dev/null 2>&1
     sudo ufw reload > /dev/null 2>&1
