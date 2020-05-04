@@ -18,7 +18,6 @@
 ###############################################################################################################################################################################################################
 
 ###### you must be logged in as a sudo user, not root #######
-
 COIN_NAME='zelcash'
 #wallet information
 UPDATE_FILE='update.sh'
@@ -128,6 +127,7 @@ echo -e ""
 
 
 function config_file() {
+
 if [[ -f /home/$USER/install_conf.json ]]; then
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
 ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
@@ -262,11 +262,33 @@ echo
 #end of required details
 #
 #Suppressing password prompts for this user so zelnode can operate
+start_install=`date +%s`
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Zel's team and AltTank Army."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "Zelnode setup starting, press [CTRL+C] to cancel.${NC}"
 sleep 2
+
+if jq --version > /dev/null 2>&1; then
+echo -e ""
+else
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
+sudo apt  install jq -y > /dev/null 2>&1
+
+  if jq --version > /dev/null 2>&1
+  then
+    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
+    echo
+  else
+    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+    string_limit_x_mark "JQ was not installed................................."
+    echo
+    exit
+  fi
+fi
+
 if [ "$USERNAME" = "root" ]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
     sleep 4
@@ -275,7 +297,6 @@ fi
 
 start_dir=$(pwd)
 correct_dir="/home/$USER"
-echo
 echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
 if [[ "$start_dir" == "$correct_dir" ]]
 then
@@ -341,7 +362,6 @@ else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
 string_limit_x_mark "Watchdog was not installed................................."
 fi
-
 }
 
 function mongodb_bootstrap(){
@@ -351,26 +371,26 @@ NUM='95'
 MSG1='Zelflux loading...'
 MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo && echo
-DB_HIGHT=572200
+echo
+DB_HIGHT=590910
 BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${YELLOW}Downloading db for mongodb...${NC}"
-wget http://77.55.218.93/fluxdb_dump.tar.gz -q --show-progress 
-echo -e "${ARROW} ${YELLOW}Unpacking...${NC}"
-tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
-echo -e "${ARROW} ${YELLOW}Stoping zelflux...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}http://77.55.218.93/mongod_bootstrap.tar.gz${NC}"
+wget http://77.55.218.93/mongod_bootstrap.tar.gz -q --show-progress 
+echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+tar xvf mongod_bootstrap.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
+echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
-echo -e "${ARROW} ${YELLOW}Importing mongodb datatable...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop 
-echo -e "${ARROW} ${YELLOW}Cleaning...${NC}"
-sudo rm -rf /home/$USER/dump && sleep 1
-sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+sudo rm -rf mongod_bootstrap.tar.gz > /dev/null 2>&1  && sleep 1
 pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
@@ -380,7 +400,7 @@ MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e ${PIN} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
 then
 echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
@@ -1022,8 +1042,17 @@ function basic_security() {
     sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
+    
+    sudo ufw allow out to any port 80 > /dev/null 2>&1
+    sudo ufw allow out to any port 443 > /dev/null 2>&1
+    sudo ufw allow out to any port 53 > /dev/null 2>&1
+    sudo ufw allow out to any port 16124 > /dev/null 2>&1
+    sudo ufw allow out to any port 16125 > /dev/null 2>&1
+    
+    sudo ufw default deny outgoing > /dev/null 2>&1
     sudo ufw limit OpenSSH > /dev/null 2>&1
     echo "y" | sudo ufw enable > /dev/null 2>&1
+    sudo ufw reload > /dev/null 2>&1
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
 }
@@ -1140,7 +1169,7 @@ function install_zelflux() {
         install_mongod
         install_nodejs
         zelflux
-    elif [[ $(lsb_release -r) = *18.04* ]]; then
+    elif [[ $(lsb_release -r) = *18.04* || $(lsb_release -r) = *20.04*  ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
@@ -1213,7 +1242,7 @@ echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
 #cd
 curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash > /dev/null 2>&1
 . ~/.profile
-source ~/.bashrc
+. ~/.bashrc
 sleep 1
 #nvm install v12.16.1
 nvm install --lts > /dev/null 2>&1
@@ -1313,6 +1342,7 @@ else
    echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
    
    f=0
+   start_sync=`date +%s`
  #  c=0
 	
     while true
@@ -1364,7 +1394,7 @@ else
         spinning_timer
 	
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-	    echo -e "${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
+	    echo -e "${BLUE} Duration: ${GREEN}$((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 	    echo
             break
         fi
@@ -1372,7 +1402,6 @@ else
     
     fi
 
-   
   if [[ -z "$mongo_bootstrap" ]]; then
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
@@ -1528,9 +1557,10 @@ function display_banner() {
     echo
     fi
     echo -e "${PIN} ${CYAN}To access your frontend to Zelflux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
-    echo -e "${YELLOW}================================================================================================================================${NC}"
+    echo -e "${YELLOW}===================================================================================================================[${GREEN}Duration: $((($(date +%s)-$start_install)/60)) min. $((($(date +%s)-$start_install) % 60)) sec.${YELLOW}]${NC}"
     sleep 1
-    source /home/$USER/.bashrc
+    cd $HOME
+    exec bash
 }
 
 #end of functions
