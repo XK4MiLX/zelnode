@@ -1402,7 +1402,6 @@ else
     
     fi
 
-   
   if [[ -z "$mongo_bootstrap" ]]; then
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
