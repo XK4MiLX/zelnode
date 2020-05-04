@@ -274,7 +274,7 @@ echo -e ""
 else
 echo -e ""
 echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
-sudo apt  install jq > /dev/null 2>&1
+sudo apt  install jq -y > /dev/null 2>&1
 
   if jq --version > /dev/null 2>&1
   then
