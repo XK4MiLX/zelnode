@@ -79,7 +79,6 @@ function pm2_install_watchdog(){
     	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
 	 echo -e "${NC}"
@@ -111,7 +110,6 @@ function pm2_install(){
     	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
 	 echo -e "${NC}"
@@ -181,7 +179,7 @@ pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git
+cd && git clone https://github.com/XK4MiLX/watchdog.git  > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Installing module auto-update....${NC}"
 wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
