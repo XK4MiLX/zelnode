@@ -468,7 +468,7 @@ adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
-apt update && apt upgrade -y > /dev/null 2>&1
+apt update > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1
 echo -e "${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
@@ -481,7 +481,7 @@ sudo apt-get install \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y > /dev/null 2>&
+    software-properties-common -y > /dev/null 2>&1
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
