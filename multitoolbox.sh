@@ -182,7 +182,6 @@ mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge 
 cd watchdog && npm install
 pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10
-pm2 save
 fi
 
 }
@@ -469,44 +468,44 @@ adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
-apt update && apt upgrade -y
+apt update && apt upgrade -y > /dev/null 2>&
 echo -e "${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
-sudo apt-get remove docker docker-engine docker.io containerd runc
-sudo apt-get update
+sudo apt-get remove docker docker-engine docker.io containerd runc > /dev/null 2>&
+sudo apt-get update > /dev/null 2>&
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y
+    software-properties-common -y > /dev/null 2>&
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+sudo apt-get update > /dev/null 2>&
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&
 
 else
 
-sudo apt-get update
+sudo apt-get update > /dev/null 2>&
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y 
+    software-properties-common -y > /dev/null 2>&
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+sudo apt-get update > /dev/null 2>&
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&
 
 fi
 
