@@ -1205,12 +1205,13 @@ sudo rm -rf /usr/local/lib/node*
 sudo rm -rf /usr/local/include/node*
 sudo rm -rf /usr/local/bin/node*
 echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
-export NVM_DIR="$HOME/.nvm" && (
-  git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
-  cd "$NVM_DIR"
-  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
-) && \. "$NVM_DIR/nvm.sh"
-cd
+#export NVM_DIR="$HOME/.nvm" && (
+ # git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR" > /dev/null 2>&1 
+ # cd "$NVM_DIR"
+ # git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
+#) && \. "$NVM_DIR/nvm.sh"
+#cd
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 . ~/.profile
 source ~/.bashrc
 sleep 1
