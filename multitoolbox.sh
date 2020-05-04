@@ -79,6 +79,7 @@ function pm2_install_watchdog(){
     	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
 	 echo -e "${NC}"
@@ -110,6 +111,7 @@ function pm2_install(){
     	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
     	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
 	 echo -e "${NC}"
@@ -179,7 +181,7 @@ pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git  > /dev/null 2>&1
+cd && git clone https://github.com/XK4MiLX/watchdog.git
 echo -e "${ARROW} ${CYAN}Installing module auto-update....${NC}"
 wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
@@ -464,7 +466,7 @@ fi
 echo -e "${NC}"
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
-adduser "$usernew"
+adduser --gecos "" "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
@@ -474,8 +476,8 @@ echo -e "{ARROW} ${YELLOW}Installing docker...${NC}"
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
-sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1
-sudo apt-get update -y > /dev/null 2>&1
+sudo apt-get remove docker docker-engine docker.io containerd runc -y 
+sudo apt-get update -y 
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
@@ -487,8 +489,8 @@ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update -y > /dev/null 2>&1
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
+sudo apt-get update -y 
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
 
 else
 
@@ -498,14 +500,14 @@ sudo apt-get install \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y > /dev/null 2>&1
+    software-properties-common -y 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update -y > /dev/null 2>&1
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
+sudo apt-get update -y 
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
 
 fi
 
