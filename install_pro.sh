@@ -1170,7 +1170,7 @@ function install_zelflux() {
         install_mongod
         install_nodejs
         zelflux
-    elif [[ $(lsb_release -r) = *18.04* ]]; then
+    elif [[ $(lsb_release -r) = *18.04* || $(lsb_release -r) = *20.04*  ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
         install_mongod
