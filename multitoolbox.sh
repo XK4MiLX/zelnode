@@ -468,14 +468,14 @@ adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${YELLOW}Update and upgrade system...${NC}"
-apt update && apt upgrade -y > /dev/null 2>&
+apt update && apt upgrade -y > /dev/null 2>&1
 echo -e "${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
-sudo apt-get remove docker docker-engine docker.io containerd runc > /dev/null 2>&
-sudo apt-get update > /dev/null 2>&
+sudo apt-get remove docker docker-engine docker.io containerd runc > /dev/null 2>&1
+sudo apt-get update > /dev/null 2>&1
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
@@ -487,25 +487,25 @@ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update > /dev/null 2>&
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&
+sudo apt-get update > /dev/null 2>&1
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
 else
 
-sudo apt-get update > /dev/null 2>&
+sudo apt-get update > /dev/null 2>&1
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y > /dev/null 2>&
+    software-properties-common -y > /dev/null 2>&1
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update > /dev/null 2>&
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&
+sudo apt-get update > /dev/null 2>&1
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
 fi
 
