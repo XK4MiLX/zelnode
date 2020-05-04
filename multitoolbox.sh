@@ -458,20 +458,20 @@ then
 fi
 
 echo -e "${NC}"
-usernew="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-echo -e "${YELLOW}Creating new user...${NC}"
+usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
 adduser "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
-echo -e "${YELLOW}Update and upgrade system...${NC}"
-apt update > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1
+echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
+apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1
 echo -e "${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
-sudo apt-get remove docker docker-engine docker.io containerd runc > /dev/null 2>&1
-sudo apt-get update > /dev/null 2>&1
+sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1
+sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
@@ -483,12 +483,12 @@ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update > /dev/null 2>&1
+sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
 else
 
-sudo apt-get update > /dev/null 2>&1
+sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
@@ -500,7 +500,7 @@ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-sudo apt-get update > /dev/null 2>&1
+sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
 fi
@@ -508,7 +508,7 @@ fi
 # echo -e "${YELLOW}Creating docker group..${NC}"
 # groupadd docker
 echo -e "${NC}"
-echo -e "${YELLOW}Adding $usernew to docker group...${NC}"
+echo -e "${ARROW} ${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
