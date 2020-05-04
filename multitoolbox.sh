@@ -269,7 +269,6 @@ echo -e "${YELLOW}Starting zelcash...${NC}"
 zelcashd -daemon
 fi
 
-
 }
 
 function mongodb_bootstrap(){
@@ -293,7 +292,6 @@ if ! pm2 -v > /dev/null 2>&1; then
   pm2_install  
 else
 ##echo -e "${YELLOW}PM2 installation skipped...${NC}"
-
 echo -e "${NC}"
 DB_HIGHT=572200
 IP=$(wget http://ipecho.net/plain -O - -q)
@@ -330,9 +328,7 @@ if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 
 fi
 
-
 }
-
 
 function install_kernel(){
 
