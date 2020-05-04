@@ -287,6 +287,7 @@ fi
 
 
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
+sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
 
 if ! pm2 -v > /dev/null 2>&1; then 
   pm2_install  
@@ -305,16 +306,16 @@ if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
     then
     DB_INTALL="1"
     echo -e "${YELLOW}Downloading db for mongo...${NC}"
-    wget http://77.55.218.93/fluxdb_dump.tar.gz
+    wget http://77.55.218.93/mongod_bootstrap.tar.gz
     echo -e "${YELLOW}Unpacking...${NC}"
-    tar xvf fluxdb_dump.tar.gz -C /home/$USER && sleep 1
+    tar xvf mongod_bootstrap.tar.gz -C /home/$USER && sleep 1
     echo -e "${YELLOW}Stoping zelflux...${NC}"
     pm2 stop zelflux > /dev/null 2>&1
     echo -e "${YELLOW}Importing mongo db...${NC}"
     mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
     echo -e "${YELLOW}Cleaning...${NC}"
     sudo rm -rf /home/$USER/dump && sleep 1
-    sudo rm -rf fluxdb_dump.tar.gz && sleep 1
+    sudo rm -rf mongod_bootstrap.tar.gz && sleep 1
     echo -e "${YELLOW}Starting Zelflux...${NC}"
     pm2 start zelflux > /dev/null 2>&1
     
@@ -465,7 +466,7 @@ usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1
-echo -e "${YELLOW}Installing docker...${NC}"
+echo -e "{ARROW} ${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
@@ -509,7 +510,7 @@ fi
 # groupadd docker
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Adding $usernew to docker group...${NC}"
-adduser "$usernew" docker
+adduser "$usernew" docker > /dev/null 2>&1
 echo -e "${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
