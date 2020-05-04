@@ -358,7 +358,6 @@ fi
 
 }
 
-
 function analyzer_and_fixer(){
 
 echo -e "${GREEN}Module: ZelNode analyzer and fixer${NC}"
