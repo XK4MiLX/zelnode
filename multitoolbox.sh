@@ -260,7 +260,6 @@ then
     exit
 fi
 
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
 
@@ -279,8 +278,7 @@ fi
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=590910
 BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo
-echo -e "${ARROW} ${CYAN}IP: ${PINK}$IP"
+echo -e "${ARROW} ${CYAN}IP: ${PINK}$WANIP"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
