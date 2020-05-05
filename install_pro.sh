@@ -18,12 +18,18 @@
 ###############################################################################################################################################################################################################
 
 ###### you must be logged in as a sudo user, not root #######
-COIN_NAME='zelcash'
-#wallet information
-UPDATE_FILE='update.sh'
+
+
+# Bootstrap settings
 BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap.zip'
-#BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+#BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
+BOOTSTRAP_URL_MONGOD='http://77.55.218.93/mongod_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
+
+#wallet information
+COIN_NAME='zelcash'
+UPDATE_FILE='update.sh'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 RPCPORT='16124'
@@ -380,17 +386,17 @@ echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
-echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}http://77.55.218.93/mongod_bootstrap.tar.gz${NC}"
-wget http://77.55.218.93/mongod_bootstrap.tar.gz -q --show-progress 
+echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
+wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-tar xvf mongod_bootstrap.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
+tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
 echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-sudo rm -rf mongod_bootstrap.tar.gz > /dev/null 2>&1  && sleep 1
+sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
 pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
