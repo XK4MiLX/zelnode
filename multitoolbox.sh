@@ -290,7 +290,7 @@ fi
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=590910
 BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e "${ARROW} ${CYAN}IP: ${PINK}$WANIP"
+echo -e "${ARROW} ${CYAN}IP: ${RED}$WANIP${NC}"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 echo -e ""
