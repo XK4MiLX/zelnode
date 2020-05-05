@@ -100,7 +100,6 @@ outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 
-echo
 echo -e "${ARROW} ${YELLOW}Install config summary:"
 
 if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
@@ -173,9 +172,8 @@ echo -e "${YELLOW}==============================================================
 
 
 if jq --version > /dev/null 2>&1; then
-echo -e ""
+sleep 0.2
 else
-echo -e ""
 echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
 sudo apt  install jq -y > /dev/null 2>&1
 
