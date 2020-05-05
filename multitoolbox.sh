@@ -6,8 +6,6 @@ BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='http://77.55.218.93/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
-
-
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 
