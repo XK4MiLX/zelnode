@@ -36,6 +36,22 @@ export NEWT_COLORS='
 title=black,
 '
 
+function spinning_timer() {
+    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
+    end=$((SECONDS+NUM))
+    while [ $SECONDS -lt $end ];
+    do
+        for i in "${animation[@]}";
+        do
+	    echo -e ""
+            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
+            sleep 0.1
+	    
+        done
+    done
+    echo -ne "${MSG2}"
+}
+
 function string_limit_check_mark() {
 if [[ -z "$2" ]]; then
 string="$1"
@@ -270,8 +286,6 @@ if ! pm2 -v > /dev/null 2>&1; then
    fi
 
 fi
-
-
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=590910
