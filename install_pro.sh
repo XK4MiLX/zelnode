@@ -38,6 +38,8 @@ COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
 COIN_PATH='/usr/local/bin'
 USERNAME="$(whoami)"
+
+#Install variable
 IMPORT_ZELCONF="0"
 IMPORT_ZELID="0"
 CORRUPTED="0"
