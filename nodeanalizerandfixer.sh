@@ -296,7 +296,6 @@ zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
 zelbench_getinfo=$(zelbench-cli getinfo)
 zelbench_version=$(jq -r '.version' <<< "$zelbench_getinfo")
 
-
 if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]; then
 zelbench_benchmark_color="${RED}$zelbench_benchmark"
 else
@@ -321,8 +320,6 @@ echo -e "${PIN} ${CYAN}Zelbench status: $zelbench_status_color${NC}"
 echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
 echo -e "${PIN} ${CYAN}ZelBack: $zelbench_zelback_color${NC}"
 echo -e "${NC}"
-
-
 
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${NC}"
