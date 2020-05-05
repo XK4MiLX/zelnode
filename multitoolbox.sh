@@ -155,7 +155,7 @@ else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
 string_limit_x_mark "Watchdog was not installed..........................................."
 fi
-
+echo
 }
 
 function zelcash_bootstrap() {
