@@ -83,6 +83,255 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
 
+function config_file() {
+
+if [[ -f /home/$USER/install_conf.json ]]; then
+import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
+ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
+firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
+bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
+bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
+swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
+mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
+watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
+use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
+prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
+outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
+index=$(cat /home/$USER/install_conf.json | jq -r '.index')
+ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+
+echo
+echo -e "${ARROW} ${YELLOW}Install config summary:"
+
+if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+echo -e "${PIN}${CYAN}Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+
+if [[ "$import_settings" == "1" ]]; then
+echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+fi
+
+if [[ "$ssh_port" != "" ]]; then
+echo -e "${PIN}${CYAN}SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+if [[ "$firewall_disable" == "1" ]]; then
+echo -e "${PIN}${CYAN}Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+echo -e "${PIN}${CYAN}Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+if [[ "$use_old_chain" == "1" ]]; then
+echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+
+else
+
+if [[ "$bootstrap_url" == "" ]]; then
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+echo -e "${PIN}${CYAN}Use Zelcash Bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+if [[ "$bootstrap_zip_del" == "1" ]]; then
+echo -e "${PIN}${CYAN}Remove Zelcash Bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+echo -e "${PIN}${CYAN}Leave Zelcash Bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+fi
+
+if [[ "$swapon" == "1" ]]; then
+echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+if [[ "$mongo_bootstrap" == "1" ]]; then
+echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
+if [[ "$watchdog" == "1" ]]; then
+echo -e "${PIN}${CYAN}Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+fi
+}
+
+
+
+function create_config() {
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
+echo -e "${GREEN}Module: Create zelnode installation config file${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+
+if jq --version > /dev/null 2>&1; then
+echo -e ""
+else
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
+sudo apt  install jq -y > /dev/null 2>&1
+
+  if jq --version > /dev/null 2>&1
+  then
+    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
+    echo
+  else
+    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+    string_limit_x_mark "JQ was not installed................................."
+    echo
+    exit
+  fi
+fi
+
+
+skip_zelcash_config='0'
+skip_bootstrap='0'
+
+
+if [[ -d /home/$USER/.zelcash ]]; then
+
+  if whiptail --yesno "Would you like import old settings from zelcash and zelflux?" 8 56; then
+     import_settings='1'
+     skip_zelcash_config='1'
+     sleep 1
+  else
+     import_settings='0'
+     sleep 1
+  fi
+
+  if whiptail --yesno "Would you like use exist zelcash chain?" 8 56; then
+    use_old_chain='1'
+    skip_bootstrap='1'
+    sleep 1
+  else
+    use_old_chain='0'
+    sleep 1
+  fi
+
+
+fi
+
+if [[ "$skip_zelcash_config" == "1" ]]; then
+prvkey=""
+outpoint=""
+index=""
+zelid=""
+else
+
+prvkey=$(whiptail --inputbox "Enter your ZelNode Private Key from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+sleep 1
+outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+sleep 1
+index=$(whiptail --inputbox "Enter your ZelNode Output Index from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+sleep 1
+zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 43 3>&1 1>&2 2>&3)
+sleep 1
+
+fi
+
+ssh_port=$(whiptail --inputbox "Enter port you are using for SSH (default 22)" 8 43 3>&1 1>&2 2>&3)
+sleep 1
+
+
+pettern='^[0-9]+$'
+if [[ $ssh_port =~ $pettern ]] ; then
+sleep 1
+else
+echo -e "${ARROW} ${CYAN}SSH port must be integer................[${X_MARK}${CYAN}]${NC}}"
+echo
+exit
+fi
+
+
+if whiptail --yesno "Would you like disable firewall diuring installation?" 8 56; then
+firewall_disable='1'
+sleep 1
+else
+firewall_disable='0'
+sleep 1
+fi
+
+
+if [[ "$skip_bootstrap" == "0" ]]; then
+
+if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 56; then
+bootstrap_url='http://77.55.218.93/zel-bootstrap.zip'
+sleep 1
+else
+bootstrap_url=$(whiptail --inputbox "Enter your zelcash bootstrap URL" 8 43 3>&1 1>&2 2>&3)
+sleep 1
+fi
+
+if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 56; then
+bootstrap_zip_del='1'
+sleep 1
+else
+bootstrap_zip_del='0'
+sleep 1
+fi
+fi
+
+if whiptail --yesno "Would you like create swapfile?" 8 56; then
+swapon='1'
+sleep 1
+else
+swapon='0'
+sleep 1
+fi
+
+
+if whiptail --yesno "Would you like use mongod bootstrap file?" 8 56; then
+mongo_bootstrap='1'
+sleep 1
+else
+mongo_bootstrap='0'
+sleep 1
+fi
+
+
+if whiptail --yesno "Would you like install zelnode watchdog?" 8 56; then
+watchdog='1'
+sleep 1
+else
+watchdog='0'
+sleep 1
+fi
+
+rm /home/$USER/install_conf.json > /dev/null 2>&1
+sudo touch /home/$USER/install_conf.json
+sudo chown $USER:$USER /home/$USER/install_conf.json
+    cat << EOF > /home/$USER/install_conf.json
+{
+  "import_settings": "${import_settings}",
+  "prvkey": "${prvkey}",
+  "outpoint": "${outpoint}",
+  "index": "${index}",
+  "zelid": "${zelid}",
+  "ssh_port": "${ssh_port}",
+  "firewall_disable": "${firewall_disable}",
+  "bootstrap_url": "${bootstrap_url}",
+  "bootstrap_zip_del": "${bootstrap_zip_del}",
+  "swapon": "${swapon}",
+  "mongo_bootstrap": "${mongo_bootstrap}",
+  "use_old_chain": "${use_old_chain}",
+  "watchdog": "${watchdog}"
+}
+EOF
+config_file
+echo
+
+
+
+}
 
 function pm2_install(){
 
@@ -569,9 +818,10 @@ echo -e "${YELLOW}==============================================================
 echo -e "${CYAN}1 - Install Docker${NC}"
 echo -e "${CYAN}2 - Install ZelNode${NC}"
 echo -e "${CYAN}3 - ZelNode analyzer and fixer${NC}"
-echo -e "${CYAN}4 - Install watchdog for zelnode${NC}"
+echo -e "${CYAN}4 - Install watchdog for ZelNode${NC}"
 echo -e "${CYAN}5 - Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${CYAN}6 - Restore Zelcash blockchain from bootstrap${NC}"
+echo -e "${CYAN}7 - Create ZelNode installation config file${NC}"
 #echo -e "${CYAN}7 - Fix your lxc.conf file on host${NC}"
 #echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -611,6 +861,11 @@ read -p "Pick an option: " -n 1 -r
     sleep 1
     zelcash_bootstrap     
  ;; 
+  7)
+    clear
+    sleep 1
+    create_config
+ ;;
  #7)
    # clear
   #  sleep 1
