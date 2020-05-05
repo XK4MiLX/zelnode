@@ -2,6 +2,12 @@
 
 BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+#BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
+BOOTSTRAP_URL_MONGOD='http://77.55.218.93/mongod_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
+
+
+
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 
@@ -23,7 +29,9 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-dversion="v3.7"
+dversion="v4.0"
+
+PM2_INSTALL="0"
 
 #dialog color
 export NEWT_COLORS='
@@ -33,14 +41,14 @@ title=black,
 function string_limit_check_mark() {
 if [[ -z "$2" ]]; then
 string="$1"
-string=${string::40}
+string=${string::50}
 else
 string=$1
 string_color=$2
 string_leght=${#string}
 string_leght_color=${#string_color}
 string_diff=$((string_leght_color-string_leght))
-string=${string_color::40+string_diff}
+string=${string_color::50+string_diff}
 fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
@@ -48,48 +56,18 @@ echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 function string_limit_x_mark() {
 if [[ -z "$2" ]]; then
 string="$1"
-string=${string::40}
+string=${string::50}
 else
 string=$1
 string_color=$2
 string_leght=${#string}
 string_leght_color=${#string_color}
 string_diff=$((string_leght_color-string_leght))
-string=${string_color::40+string_diff}
+string=${string_color::50+string_diff}
 fi
 echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
-function pm2_install_watchdog(){
-
-    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
-    npm install pm2@latest -g > /dev/null 2>&1
-    
-    if pm2 -v > /dev/null 2>&1
-    then
-        rm restart_zelflux.sh > /dev/null 2>&1
-     	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
-   	pm2 startup systemd -u $USER > /dev/null 2>&1
-   	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
-	pm2 install pm2-logrotate > /dev/null 2>&1
-	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
-	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
-	 echo -e "${NC}"
-    else
-   	 #echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
-	 string_limit_x_mark "PM2 was not installed................................."
-	 echo
-    fi 
-
-}
 
 
 function pm2_install(){
@@ -113,46 +91,20 @@ function pm2_install(){
     	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
 	source ~/.bashrc
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................." 
-	 echo -e "${NC}"
-         DB_HIGHT=572200
-         IP=$(wget http://ipecho.net/plain -O - -q)
-         BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-         echo -e "${ARROW} ${CYAN}IP: ${PINK}$IP"
-         echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-         echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-         echo -e ""
+	string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
+  	PM2_INSTALL="1"
 
-      if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-       then
-       
-        echo -e "${ARROW} ${CYAN}Downloading db for mongo...${NC}"
-        wget http://77.55.218.93/fluxdb_dump.tar.gz
-        echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-        tar xvf fluxdb_dump.tar.gz -C /home/$USER > /dev/null 2>&1 && sleep 1
-        echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
-        pm2 stop zelflux > /dev/null 2>&1
-        echo -e "${ARROW} ${CYAN}Importing mongo db...${NC}"
-        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        sudo rm -rf /home/$USER/dump && sleep 1
-        sudo rm -rf fluxdb_dump.tar.gz && sleep 1
-	pm2 start zelflux > /dev/null 2>&1
-
-      else
-
-      echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-      echo -e ""
-
-     fi
-	  
     else
-   	 #echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
-	 string_limit_x_mark "PM2 was not installed................................."
+
+	 string_limit_x_mark "PM2 was not installed....................................................."
 	 echo
     fi 
 
 }
+
+
+
+
 
 function install_watchdog() {
 
@@ -170,24 +122,38 @@ echo -e "${YELLOW}==============================================================
 
 if ! pm2 -v > /dev/null 2>&1
 then
-pm2_install_watchdog
+pm2_install
+ if [[ "$PM2_INSTALL" == "0" ]]; then
+   exit
+ fi
 echo -e ""
 fi
 
-if pm2 -v > /dev/null 2>&1
-then
+echo -e "${ARROW} ${YELLOW}Install watchdog for zelnode...${NC}"
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
+
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git
-echo -e "${ARROW} ${CYAN}Installing module auto-update....${NC}"
-wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge
-mv post-merge /home/$USER/watchdog/.git/hooks/post-merge 
-sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge  
+cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
+wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge > /dev/null 2>&1
+mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
+sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
+echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
-pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
+pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1 
+pm2 save > /dev/null 2>&1
+if [[ -f /home/$USER/watchdog/watchdog.js ]]
+then
+current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+#echo -e "${ARROW} ${CYAN}Watchdog ${GREEN}v$current_ver${CYAN} installed successful.${NC}"
+string_limit_check_mark "Watchdog v$current_ver installed..........................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed..........................................."
+else
+#echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
+string_limit_x_mark "Watchdog was not installed..........................................."
 fi
 
 }
@@ -206,80 +172,87 @@ then
     exit
 fi
 
-echo -e "${NC}"
+
+
+echo -e "${ARROW} ${YELLOW}Installing bootstrap for zelcash...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping zelcash service${NC}"
+sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-echo -e "${YELLOW}Stopping zelcash...${NC}"
-sudo systemctl stop zelcash
-sudo fuser -k 16125/tcp > /dev/null 2>&1
-echo -e "${YELLOW}Cleaning...${NC}"
-rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/database ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/peers.dat	
-fi 
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
+fi
+
+
+if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
+
+
+if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
+then
+echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+else
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+rm -rf zel-bootstrap.zip
+fi
+fi
+
 
 if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
 then
-echo -e "${YELLOW}Local bootstrap file detected...${NC}"
-echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
+echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 else
 
-echo -e ""
-echo -e "${GREEN}Choose a method how to get bootstrap file${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-echo -e "${NC}1 - Download from source build in script${NC}"
-echo -e "${NC}2 - Download from own source${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-read -p "Pick an option: " -n 1 -r
-echo -e "${NC}"
-while true
 
-do
-    case "$REPLY" in
+CHOICE=$(
+whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+        "1)" "Download from source build in script" \
+        "2)" "Download from own source" 3>&2 2>&1 1>&3
+)
 
-    1 ) 
 
-	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
-	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
-	break
-;;
-    2 )
-    
-	BOOTSTRAP_ZIP="$(whiptail --title "Restore Zelcash block chain form bootstrap" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-	echo -e "${YELLOW}Downloading File: $BOOTSTRAP_ZIP ${NC}"
-	wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP
-	echo -e "${YELLOW}Installing wallet bootstrap please be patient...${NC}"
-	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR
-	break
-;;
+case $CHOICE in
+	"1)")   
+		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+       		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+       		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
 
-     *) echo "Invalid option $REPLY try again...";;
 
-    esac
-
-done
+	;;
+	"2)")   
+  		BOOTSTRAP_ZIP="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+	;;
+esac
 
 fi
-echo -e "${NC}"
-read -p "Would you like remove bootstrap file Y/N?" -n 1 -r
-echo -e "${NC}"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-rm -rf $BOOTSTRAP_ZIPFILE
+
+if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+    rm -rf $BOOTSTRAP_ZIPFILE
 fi
-read -p "Would you like to start zelcash daemon Y/N?" -n 1 -r
-echo -e "${NC}"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-echo -e "${YELLOW}Starting zelcash...${NC}"
-zelcashd -daemon
-fi
+
+echo -e "${ARROW} ${CYAN}Starting zelcash service${NC}"
+sudo systemctl start zelcash > /dev/null 2>&1 && sleep 2
+echo
 
 }
 
 function mongodb_bootstrap(){
 
-echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap && Install PM2${NC}"
+echo -e "${GREEN}Module: Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" ]]
@@ -291,50 +264,74 @@ then
     exit
 fi
 
-
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
 
-if ! pm2 -v > /dev/null 2>&1; then 
-  pm2_install  
-else
-##echo -e "${YELLOW}PM2 installation skipped...${NC}"
-echo -e "${NC}"
-DB_HIGHT=572200
-IP=$(wget http://ipecho.net/plain -O - -q)
-BLOCKHIGHT=$(wget -nv -qO - http://"$IP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-echo -e "${PIN} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-echo -e "${PIN} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-echo -e ""
+if ! pm2 -v > /dev/null 2>&1; then
+ 
+   pm2_install 
+   echo -e ""
 
-if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-    then
-    DB_INTALL="1"
-    echo -e "${YELLOW}Downloading db for mongo...${NC}"
-    wget http://77.55.218.93/mongod_bootstrap.tar.gz
-    echo -e "${YELLOW}Unpacking...${NC}"
-    tar xvf mongod_bootstrap.tar.gz -C /home/$USER && sleep 1
-    echo -e "${YELLOW}Stoping zelflux...${NC}"
-    pm2 stop zelflux > /dev/null 2>&1
-    echo -e "${YELLOW}Importing mongo db...${NC}"
-    mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-    echo -e "${YELLOW}Cleaning...${NC}"
-    sudo rm -rf /home/$USER/dump && sleep 1
-    sudo rm -rf mongod_bootstrap.tar.gz && sleep 1
-    echo -e "${YELLOW}Starting Zelflux...${NC}"
-    pm2 start zelflux > /dev/null 2>&1
-    
-    else
-
-    echo -e "${X_MARK} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-    echo -e ""
-
+   if [[ "$PM2_INSTALL" == "0" ]]; then
+    exit
    fi
-
 
 fi
 
+echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
+echo
+WANIP=$(wget http://ipecho.net/plain -O - -q)
+DB_HIGHT=590910
+BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo -e "${ARROW} ${CYAN}IP: ${PINK}$IP"
+echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e ""
+
+if [[ "$BLOCKHIGHT" != "" ]]; then
+
+if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
+then
+echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
+wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
+echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
+pm2 stop zelflux > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
+pm2 start zelflux > /dev/null 2>&1
+pm2 save > /dev/null 2>&1
+
+NUM='120'
+MSG1='Zelflux starting...'
+MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo
+BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
+then
+#echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+string_limit_check_mark "Mongo bootstrap installed successful.................................."
+echo -e ""
+else
+#echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+string_limit_x_mark "Mongo bootstrap installation failed.................................."
+echo -e ""
+fi
+else
+echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+echo -e ""
+fi
+
+else
+string_limit_x_mark "Local Explorer not responding........................................"
+echo -e ""
+fi
 }
 
 function install_kernel(){
