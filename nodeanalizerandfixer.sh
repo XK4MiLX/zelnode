@@ -240,7 +240,7 @@ event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 echo -e "${PIN} ${CYAN}Last error time: ${SEA}$event_human_time_local${NC} / ${GREEN}$event_human_time_utc${NC}"
-event_time=$(date --date "$event_human_time_utc" +%s)
+event_time="$event_time_uxtime"
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
