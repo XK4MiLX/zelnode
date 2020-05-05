@@ -72,7 +72,7 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 
 function pm2_install(){
 
-    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
+    echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     
     if pm2 -v > /dev/null 2>&1
@@ -129,7 +129,6 @@ pm2_install
 echo -e ""
 fi
 
-echo -e "${ARROW} ${YELLOW}Install watchdog for zelnode...${NC}"
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 pm2 del watchdog  > /dev/null 2>&1
 pm2 save  > /dev/null 2>&1
@@ -172,9 +171,6 @@ then
     exit
 fi
 
-
-
-echo -e "${ARROW} ${YELLOW}Installing bootstrap for zelcash...${NC}"
 echo -e "${ARROW} ${CYAN}Stopping zelcash service${NC}"
 sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
@@ -264,13 +260,13 @@ then
     exit
 fi
 
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
 sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
 
 if ! pm2 -v > /dev/null 2>&1; then
  
    pm2_install 
-   echo -e ""
 
    if [[ "$PM2_INSTALL" == "0" ]]; then
     exit
@@ -278,11 +274,12 @@ if ! pm2 -v > /dev/null 2>&1; then
 
 fi
 
-echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-echo
+
+
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=590910
 BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo
 echo -e "${ARROW} ${CYAN}IP: ${PINK}$IP"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
@@ -473,21 +470,21 @@ echo -e "{ARROW} ${YELLOW}Installing docker...${NC}"
 if [[ $(lsb_release -d) = *Debian* ]]
 then
 
-sudo apt-get remove docker docker-engine docker.io containerd runc -y 
-sudo apt-get update -y 
+sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1 
+sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg-agent \
     software-properties-common -y > /dev/null 2>&1
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/debian \
    $(lsb_release -cs) \
-   stable"
-sudo apt-get update -y 
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
+   stable" > /dev/null 2>&1
+sudo apt-get update -y  > /dev/null 2>&1
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1  
 
 else
 
@@ -497,14 +494,14 @@ sudo apt-get install \
     ca-certificates \
     curl \
     gnupg-agent \
-    software-properties-common -y 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    software-properties-common -y > /dev/null 2>&1 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
-   stable"
-sudo apt-get update -y 
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
+   stable" > /dev/null 2>&1
+sudo apt-get update -y > /dev/null 2>&1 
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1  
 
 fi
 
@@ -534,12 +531,6 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-read -p "Would you like to reboot pc Y/N?" -n 1 -r
-echo -e "${NC}"
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-sudo reboot -n
-fi
 read -p "Would you like switch to user accont Y/N?" -n 1 -r
 echo -e "${NC}"
 if [[ $REPLY =~ ^[Yy]$ ]]
