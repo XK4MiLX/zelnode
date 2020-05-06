@@ -845,14 +845,13 @@ then
     exit
 fi
 
-echo -e "${NC}"
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
 adduser --gecos "" "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
-apt update -y > /dev/null 2>&1 && apt upgrade -y
+apt update -y && apt upgrade -y
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
@@ -895,7 +894,6 @@ fi
 
 # echo -e "${YELLOW}Creating docker group..${NC}"
 # groupadd docker
-echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Adding $usernew to docker group...${NC}"
 adduser "$usernew" docker > /dev/null 2>&1
 echo -e "${NC}"
