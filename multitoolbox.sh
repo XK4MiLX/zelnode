@@ -147,7 +147,7 @@ fi
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN}SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}SSH port ${GREEN}$ssh_port ${CYAN}set...................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
