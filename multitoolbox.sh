@@ -363,7 +363,7 @@ skip_bootstrap='0'
 
 if [[ -d /home/$USER/.zelcash ]]; then
 
-  if whiptail --yesno "Would you like import old settings from zelcash and zelflux?" 8 56; then
+  if whiptail --yesno "Would you like import old settings from zelcash and zelflux?" 8 70; then
      import_settings='1'
      skip_zelcash_config='1'
      sleep 1
@@ -372,7 +372,7 @@ if [[ -d /home/$USER/.zelcash ]]; then
      sleep 1
   fi
 
-  if whiptail --yesno "Would you like use exist zelcash chain?" 8 56; then
+  if whiptail --yesno "Would you like use exist zelcash chain?" 8 70; then
     use_old_chain='1'
     skip_bootstrap='1'
     sleep 1
@@ -416,7 +416,7 @@ exit
 fi
 
 
-if whiptail --yesno "Would you like disable firewall diuring installation?" 8 56; then
+if whiptail --yesno "Would you like disable firewall diuring installation?" 8 70; then
 firewall_disable='1'
 sleep 1
 else
@@ -427,7 +427,7 @@ fi
 
 if [[ "$skip_bootstrap" == "0" ]]; then
 
-if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 56; then
+if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 70; then
 bootstrap_url='http://77.55.218.93/zel-bootstrap.zip'
 sleep 1
 else
@@ -435,7 +435,7 @@ bootstrap_url=$(whiptail --inputbox "Enter your zelcash bootstrap URL" 8 43 3>&1
 sleep 1
 fi
 
-if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 56; then
+if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 70; then
 bootstrap_zip_del='1'
 sleep 1
 else
@@ -444,7 +444,7 @@ sleep 1
 fi
 fi
 
-if whiptail --yesno "Would you like create swapfile?" 8 56; then
+if whiptail --yesno "Would you like create swapfile?" 8 70; then
 swapon='1'
 sleep 1
 else
@@ -453,7 +453,7 @@ sleep 1
 fi
 
 
-if whiptail --yesno "Would you like use mongod bootstrap file?" 8 56; then
+if whiptail --yesno "Would you like use mongod bootstrap file?" 8 70; then
 mongo_bootstrap='1'
 sleep 1
 else
@@ -462,7 +462,7 @@ sleep 1
 fi
 
 
-if whiptail --yesno "Would you like install zelnode watchdog?" 8 56; then
+if whiptail --yesno "Would you like install zelnode watchdog?" 8 70; then
 watchdog='1'
 sleep 1
 else
