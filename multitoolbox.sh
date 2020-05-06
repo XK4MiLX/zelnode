@@ -232,7 +232,6 @@ while true
 
 fi
 
-
 touch /home/$USER/zelflux/config/userconfig.js
     cat << EOF > /home/$USER/zelflux/config/userconfig.js
 module.exports = {
