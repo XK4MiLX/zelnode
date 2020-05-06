@@ -171,7 +171,6 @@ function ip_confirm() {
     
 }
 
-
 function install_flux() {
 
 echo -e "${GREEN}Module: Re-install ZelFluxr${NC}"
@@ -245,7 +244,6 @@ module.exports = {
     }
 EOF
 
-
 if [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
 string_limit_check_mark "Zelflux configuration successfull..........................................."
 else
@@ -253,7 +251,6 @@ string_limit_x_mark "Zelflux installation failed, missing config file...........
 echo
 exit
 fi
-
 
  if pm2 -v > /dev/null 2>&1; then 
  
@@ -264,6 +261,7 @@ fi
    echo
    pm2 start /home/$USER/zelflux/start.sh --name zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
+   pm2 list
 
  else
  
@@ -271,6 +269,7 @@ fi
     if [[ "$PM2_INSTALL" == "1" ]]; then
       echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
       echo
+      pm2 list
     fi
  fi
 
