@@ -852,8 +852,8 @@ adduser --gecos "" "$usernew"
 usermod -aG sudo "$usernew"
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
-apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1
-echo -e "{ARROW} ${YELLOW}Installing docker...${NC}"
+apt update -y > /dev/null 2>&1 && apt upgrade -y
+echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
