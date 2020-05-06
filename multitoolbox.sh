@@ -162,7 +162,7 @@ fi
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-string_limit_check_mark_port "SSH port $ssh_port set................................................................." "SSH port ${GREEN}$ssh_port ${CYAN}set................................................................."
+string_limit_check_mark_port "SSH port $ssh_port ...................................................................." "SSH port ${GREEN}$ssh_port ${CYAN}...................................................................."
 sleep 1
 fi
 
