@@ -274,7 +274,7 @@ while true
       break
     else
       string_limit_x_mark "Zel ID is not valid try again..........................................."
-      sleep 4
+      sleep 2
    fi
 
  done
