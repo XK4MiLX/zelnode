@@ -204,7 +204,7 @@ function ip_confirm() {
 
 function install_flux() {
 
-echo -e "${GREEN}Module: Re-install ZelFluxr${NC}"
+echo -e "${GREEN}Module: Re-install ZelFlux${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" ]]
