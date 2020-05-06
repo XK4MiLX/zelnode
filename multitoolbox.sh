@@ -308,10 +308,8 @@ sudo apt  install jq -y > /dev/null 2>&1
   fi
 fi
 
-
 skip_zelcash_config='0'
 skip_bootstrap='0'
-
 
 if [[ -d /home/$USER/.zelcash ]]; then
 
