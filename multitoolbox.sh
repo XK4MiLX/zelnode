@@ -306,6 +306,7 @@ fi
    pm2 del zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
+   echo -e "${ARROW} ${CYAN}ZelFlux loading will take 2-3min....${NC}"
    echo
    pm2 start /home/$USER/zelflux/start.sh --name zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
@@ -316,6 +317,7 @@ fi
     pm2_install()
     if [[ "$PM2_INSTALL" == "1" ]]; then
       echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
+      echo -e "${ARROW} ${CYAN}ZelFlux loading will take 2-3min....${NC}"
       echo
       pm2 list
     fi
