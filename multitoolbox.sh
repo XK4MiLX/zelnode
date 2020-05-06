@@ -363,7 +363,7 @@ skip_bootstrap='0'
 
 if [[ -d /home/$USER/.zelcash ]]; then
 
-  if whiptail --yesno "Would you like import old settings from zelcash and zelflux?" 8 70; then
+  if whiptail --yesno "Would you like import old settings from zelcash and zelflux?" 8 65; then
      import_settings='1'
      skip_zelcash_config='1'
      sleep 1
@@ -372,7 +372,7 @@ if [[ -d /home/$USER/.zelcash ]]; then
      sleep 1
   fi
 
-  if whiptail --yesno "Would you like use exist zelcash chain?" 8 70; then
+  if whiptail --yesno "Would you like use exist zelcash chain?" 8 65; then
     use_old_chain='1'
     skip_bootstrap='1'
     sleep 1
@@ -391,18 +391,18 @@ index=""
 zelid=""
 else
 
-prvkey=$(whiptail --inputbox "Enter your ZelNode Private Key from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+prvkey=$(whiptail --inputbox "Enter your ZelNode Private Key from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-index=$(whiptail --inputbox "Enter your ZelNode Output Index from Zelcore/Zelmate" 8 43 3>&1 1>&2 2>&3)
+index=$(whiptail --inputbox "Enter your ZelNode Output Index from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 43 3>&1 1>&2 2>&3)
+zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 65 3>&1 1>&2 2>&3)
 sleep 1
 
 fi
 
-ssh_port=$(whiptail --inputbox "Enter port you are using for SSH (default 22)" 8 43 3>&1 1>&2 2>&3)
+ssh_port=$(whiptail --inputbox "Enter port you are using for SSH (default 22)" 8 65 3>&1 1>&2 2>&3)
 sleep 1
 
 
@@ -416,7 +416,7 @@ exit
 fi
 
 
-if whiptail --yesno "Would you like disable firewall diuring installation?" 8 70; then
+if whiptail --yesno "Would you like disable firewall diuring installation?" 8 65; then
 firewall_disable='1'
 sleep 1
 else
@@ -427,15 +427,15 @@ fi
 
 if [[ "$skip_bootstrap" == "0" ]]; then
 
-if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 70; then
+if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 65; then
 bootstrap_url='http://77.55.218.93/zel-bootstrap.zip'
 sleep 1
 else
-bootstrap_url=$(whiptail --inputbox "Enter your zelcash bootstrap URL" 8 43 3>&1 1>&2 2>&3)
+bootstrap_url=$(whiptail --inputbox "Enter your zelcash bootstrap URL" 8 65 3>&1 1>&2 2>&3)
 sleep 1
 fi
 
-if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 70; then
+if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 65; then
 bootstrap_zip_del='1'
 sleep 1
 else
@@ -444,7 +444,7 @@ sleep 1
 fi
 fi
 
-if whiptail --yesno "Would you like create swapfile?" 8 70; then
+if whiptail --yesno "Would you like create swapfile?" 8 65; then
 swapon='1'
 sleep 1
 else
@@ -453,7 +453,7 @@ sleep 1
 fi
 
 
-if whiptail --yesno "Would you like use mongod bootstrap file?" 8 70; then
+if whiptail --yesno "Would you like use mongod bootstrap file?" 8 65; then
 mongo_bootstrap='1'
 sleep 1
 else
@@ -462,7 +462,7 @@ sleep 1
 fi
 
 
-if whiptail --yesno "Would you like install zelnode watchdog?" 8 70; then
+if whiptail --yesno "Would you like install zelnode watchdog?" 8 65; then
 watchdog='1'
 sleep 1
 else
