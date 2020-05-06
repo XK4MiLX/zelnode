@@ -241,14 +241,22 @@ fi
 
 
 echo -e "${ARROW} ${CYAN}ZelFlux downloading...${NC}"
-git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
+git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/zelflux ]
 then
-current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+
+if [[ -f /home/$USER/zelflux/package.json ]]; then
+  current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+else
+  string_limit_x_mark "Zelflux was not downloaded, run script again..........................................."
+  echo
+  exit
+fi
+
 string_limit_check_mark "Zelflux v$current_ver downloaded..........................................." "Zelflux ${GREEN}v$current_ver${CYAN} downloaded..........................................."
 else
-string_limit_x_mark "Zelflux was not downloaded..........................................."
+string_limit_x_mark "Zelflux was not downloaded, run script again..........................................."
 echo
 exit
 fi
