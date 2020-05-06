@@ -30,6 +30,7 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 dversion="v4.0"
 
 PM2_INSTALL="0"
+zelflux_setting_import="0"
 
 #dialog color
 export NEWT_COLORS='
@@ -155,7 +156,125 @@ fi
 fi
 }
 
+function ip_confirm() {
+    echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
+    WANIP=$(wget http://ipecho.net/plain -O - -q) 
+    if [[ "$WANIP" == "" ]]; then
+     WANIP=$(curl ifconfig.me)     
+         if [[ "$WANIP" == "" ]]; then
+      	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+	 echo
+	 exit
+    	 fi
+    fi
+   string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................."
+    
+}
 
+
+function install_flux() {
+
+echo -e "${GREEN}Module: Re-install ZelFluxr${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
+if [ -d /home/$USER/zelflux ]; then
+
+    echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
+    zel_id=$(grep -w zelid /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+    WANIP=$(grep -w ipaddress /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
+    echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$zel_id${NC}" && sleep 1
+    echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}" && sleep 1   
+    echo 
+    echo -e "${ARROW} ${CYAN}Removing any instances of zelflux....${NC}"
+    sudo rm -rf zelflux
+    zelflux_setting_import="1"
+
+fi
+
+echo -e "${ARROW} ${CYAN}ZelFlux downloading...${NC}"
+git clone https://github.com/zelcash/zelflux.git
+
+if [ -d /home/$USER/zelflux ]
+then
+current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+string_limit_check_mark "Zelflux v$current_ver downloaded..........................................." "Zelflux ${GREEN}v$current_ver${CYAN} downloaded..........................................."
+else
+string_limit_x_mark "Zelflux was not downloaded..........................................."
+echo
+exit
+fi
+
+
+if [[ "$zelflux_setting_import" == "0" ]]; then
+
+ip_confirm
+
+while true
+  do
+    zel_id="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+    if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ]; then
+      string_limit_check_mark "Zel ID is valid..........................................."
+      break
+    else
+      string_limit_x_mark "Zel ID is not valid try again..........................................."
+      sleep 4
+   fi
+
+ done
+
+fi
+
+
+touch /home/$USER/zelflux/config/userconfig.js
+    cat << EOF > /home/$USER/zelflux/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '$WANIP',
+        zelid: '$zel_id',
+        testnet: false
+      }
+    }
+EOF
+
+
+if [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
+string_limit_check_mark "Zelflux configuration successfull..........................................."
+else
+string_limit_x_mark "Zelflux installation failed, missing config file..........................................."
+echo
+exit
+fi
+
+
+ if pm2 -v > /dev/null 2>&1 
+ 
+   rm restart_zelflux.sh > /dev/null 2>&1
+   pm2 del zelflux > /dev/null 2>&1
+   pm2 save > /dev/null 2>&1
+   echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
+   echo
+   pm2 start /home/$USER/zelflux/start.sh --name zelflux > /dev/null 2>&1
+   pm2 save > /dev/null 2>&1
+
+ else
+ 
+    pm2_install()
+    if [[ "$PM2_INSTALL" == "1" ]]; then
+      echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
+      echo
+    fi
+ fi
+
+}
 
 function create_config() {
 if [[ "$USER" == "root" ]]
@@ -820,6 +939,7 @@ echo -e "${CYAN}4 - Install watchdog for ZelNode${NC}"
 echo -e "${CYAN}5 - Restore Mongodb datatable from bootstrap${NC}"
 echo -e "${CYAN}6 - Restore Zelcash blockchain from bootstrap${NC}"
 echo -e "${CYAN}7 - Create ZelNode installation config file${NC}"
+echo -e "${CYAN}8 - Re-install ZelFlux${NC}"
 #echo -e "${CYAN}7 - Fix your lxc.conf file on host${NC}"
 #echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -863,6 +983,11 @@ read -p "Pick an option: " -n 1 -r
     clear
     sleep 1
     create_config
+ ;;
+   8)
+    clear
+    sleep 1
+    install_flux
  ;;
  #7)
    # clear
