@@ -393,11 +393,11 @@ else
 
 prvkey=$(whiptail --inputbox "Enter your ZelNode Private Key from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
+outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zelmate" 8 72 3>&1 1>&2 2>&3)
 sleep 1
 index=$(whiptail --inputbox "Enter your ZelNode Output Index from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 65 3>&1 1>&2 2>&3)
+zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
 sleep 1
 
 fi
