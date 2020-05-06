@@ -194,13 +194,14 @@ if [ -d /home/$USER/zelflux ]; then
     echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}" && sleep 1   
     echo 
     echo -e "${ARROW} ${CYAN}Removing any instances of zelflux....${NC}"
-    sudo rm -rf zelflux
+    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
     zelflux_setting_import="1"
 
 fi
 
 echo -e "${ARROW} ${CYAN}ZelFlux downloading...${NC}"
-git clone https://github.com/zelcash/zelflux.git
+git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
 
 if [ -d /home/$USER/zelflux ]
 then
