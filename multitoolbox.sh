@@ -480,9 +480,6 @@ function pm2_install(){
 }
 
 
-
-
-
 function install_watchdog() {
 
 if [[ "$USER" == "root" ]]
