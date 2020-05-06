@@ -190,7 +190,6 @@ fi
 }
 
 function ip_confirm() {
-    echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
     WANIP=$(wget http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
      WANIP=$(curl ifconfig.me)     
@@ -200,8 +199,7 @@ function ip_confirm() {
 	 exit
     	 fi
     fi
-   string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................."
-    
+   string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................." 
 }
 
 function install_flux() {
