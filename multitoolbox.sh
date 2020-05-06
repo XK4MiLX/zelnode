@@ -426,7 +426,7 @@ pettern='^[0-9]+$'
 if [[ $ssh_port =~ $pettern ]] ; then
 sleep 1
 else
-echo -e "${ARROW} ${CYAN}SSH port must be integer................[${X_MARK}${CYAN}]${NC}}"
+echo -e "${ARROW} ${CYAN}SSH port must be integer.................................[${X_MARK}${CYAN}]${NC}"
 echo
 exit
 fi
