@@ -255,7 +255,7 @@ exit
 fi
 
 
- if pm2 -v > /dev/null 2>&1 
+ if pm2 -v > /dev/null 2>&1; then 
  
    rm restart_zelflux.sh > /dev/null 2>&1
    pm2 del zelflux > /dev/null 2>&1
