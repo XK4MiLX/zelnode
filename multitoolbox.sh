@@ -53,6 +53,21 @@ function spinning_timer() {
     echo -ne "${MSG2}"
 }
 
+function string_limit_check_mark_port() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::65}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::65+string_diff}
+fi
+echo -e "${PIN}${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
 function string_limit_check_mark() {
 if [[ -z "$2" ]]; then
 string="$1"
@@ -147,7 +162,8 @@ fi
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN}SSH port ${GREEN}$ssh_port ${CYAN}set...................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+string_limit_check_mark_port "SSH port $ssh_port set................................................................." "SSH port ${GREEN}$ssh_port ${CYAN}set................................................................."
+sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
