@@ -147,7 +147,7 @@ echo -e "${YELLOW}Restarting service${NC}"
 
 function check_listen_ports(){
 
-if ! lsof -v; then
+if ! lsof -v > /dev/null 2>&1; then
 sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 2
 fi
 
