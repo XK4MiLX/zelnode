@@ -147,6 +147,11 @@ echo -e "${YELLOW}Restarting service${NC}"
 
 function check_listen_ports(){
 
+if ! lsof -v; then
+sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 2
+fi
+
+
 if sudo lsof -i  -n | grep LISTEN | grep 27017 | grep mongod > /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN} Mongod listen on port 27017${NC}"
