@@ -418,6 +418,23 @@ echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid or explorer.zel.cash is 
 fi
 fi
 
+url_to_check="https://explorer.zel.cash/api/tx/$txhash"
+type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
+
+if [[ $type == ?(-)+([0-9]) ]]; then
+
+
+		case $type in
+ 		 "10000") echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}BASIC${NC}" ;;
+ 		 "25000")  echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}SUPER${NC}";;
+	 	 "100000") echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}BAMF${NC}";;
+		esac
+
+
+fi
+
+
+
 fi
 
 echo -e "${NC}"
