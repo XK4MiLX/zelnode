@@ -425,9 +425,9 @@ if [[ $type == ?(-)+([0-9]) ]]; then
 
 
 		case $type in
- 		 "10000") echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}BASIC${NC}" ;;
- 		 "25000")  echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}SUPER${NC}";;
-	 	 "100000") echo -e "${ARROW}  ${CYAN}Tire: ${GREEN}BAMF${NC}";;
+ 		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BASIC${NC}" ;;
+ 		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}SUPER${NC}";;
+	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
 		esac
 
 
