@@ -407,9 +407,9 @@ if [[ "$txhash" != "" ]]; then
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
 stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
-
+echo "info: $stak_info"
 if [[ "$stak_info" != "" ]]; then
-
+echo "test1"
 if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
 index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
