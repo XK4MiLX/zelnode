@@ -404,8 +404,11 @@ txhash=$(sed -n "2p" <<< "$txhash")
 txhash=$(egrep "\w{10,50}" <<< "$txhash")
 
 if [[ "$txhash" != "" ]]; then
-url_to_check="https://explorer.zel.cash/api/tx/$txhash"
-conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
+
+#url_to_check="https://explorer.zel.cash/api/tx/$txhash"
+#conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
+
+conf=$(zelcash-cli gettxout $txhash 0 | jq .confirmations)
 
 if [[ $conf == ?(-)+([0-9]) ]]; then
 if [ "$conf" -ge "100" ]; then
@@ -418,19 +421,18 @@ echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid or explorer.zel.cash is 
 fi
 fi
 
-url_to_check="https://explorer.zel.cash/api/tx/$txhash"
-type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
+#url_to_check="https://explorer.zel.cash/api/tx/$txhash"
+#type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
+
+type=$(zelcash-cli gettxout $txhash 0 | jq .value)
 
 if [[ $type == ?(-)+([0-9]) ]]; then
-
 
 		case $type in
  		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BASIC${NC}" ;;
  		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}SUPER${NC}";;
 	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
 		esac
-
-
 fi
 
 
