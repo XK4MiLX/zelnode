@@ -410,7 +410,7 @@ stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $tx
 
 if [[ "$stak_info" != "" ]]; then
 
-if [[ -f home/$USER/.zelcash/zelcash.conf ]]; then
+if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
 index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
 collateral_index=$(awk '{print $1}' <<< "$stak_info")
