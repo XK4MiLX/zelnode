@@ -408,8 +408,7 @@ if [[ "$txhash" != "" ]]; then
 
 stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
 
-if [[ "$stak_info" != "" ]; then
-
+if [[ "$stak_info" != "" ]]; then
 
 if [[ -f home/$USER/.zelcash/zelcash.conf ]]; then
 
