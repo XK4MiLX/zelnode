@@ -406,58 +406,57 @@ if [[ "$txhash" != "" ]]; then
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
-stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
-echo "info: $stak_info"
-if [[ "$stak_info" != "" ]]; then
-echo "test1"
-if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
+	stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
 
-index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-collateral_index=$(awk '{print $1}' <<< "$stak_info")
+	if [[ "$stak_info" != "" ]]; then
 
-if [[ "$index_from_file" == "$collateral_index" ]]; then
-echo -e "${CHECK_MARK} ${CYAN} Zelnodeindex is correct"
-else
-echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
-fi
+		if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
-else
-collateral_index=$(awk '{print $1}' <<< "$stak_info")
-fi
+		index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+		collateral_index=$(awk '{print $1}' <<< "$stak_info")
 
-type=$(awk '{print $2}' <<< "$stak_info")
-conf=$(zelcash-cli gettxout $txhash $collateral_index | jq .confirmations)
+			if [[ "$index_from_file" == "$collateral_index" ]]; then
+			echo -e "${CHECK_MARK} ${CYAN} Zelnodeindex is correct"
+			else
+			echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
+			fi
 
-if [[ $conf == ?(-)+([0-9]) ]]; then
-    if [ "$conf" -ge "100" ]; then
-      echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
-    else
-      echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
-    fi
-else
-echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
-fi
+		else
+		collateral_index=$(awk '{print $1}' <<< "$stak_info")
+		fi
 
-fi
+		type=$(awk '{print $2}' <<< "$stak_info")
+		conf=$(zelcash-cli gettxout $txhash $collateral_index | jq .confirmations)
 
-
-#url_to_check="https://explorer.zel.cash/api/tx/$txhash"
-#type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
-#type=$(zelcash-cli gettxout $txhash 0 | jq .value)
-
-if [[ $type == ?(-)+([0-9]) ]]; then
+		if [[ $conf == ?(-)+([0-9]) ]]; then
+    			if [ "$conf" -ge "100" ]; then
+     			 echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
+    			else
+      			echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
+   			 fi
+		else
+		echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
+		fi
+		
+		
+		if [[ $type == ?(-)+([0-9]) ]]; then
 
 		case $type in
  		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BASIC${NC}" ;;
  		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}SUPER${NC}";;
 	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
 		esac
-fi
+		
+                fi
 
-else
-echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
-fi
+	else
+	echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
+	fi
+#url_to_check="https://explorer.zel.cash/api/tx/$txhash"
+#type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
+#type=$(zelcash-cli gettxout $txhash 0 | jq .value)
 
+fi
 fi
 
 echo -e "${NC}"
