@@ -445,7 +445,6 @@ fi
 
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
-
 #type=$(zelcash-cli gettxout $txhash 0 | jq .value)
 
 if [[ $type == ?(-)+([0-9]) ]]; then
