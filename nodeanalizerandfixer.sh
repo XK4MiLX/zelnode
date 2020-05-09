@@ -412,7 +412,7 @@ if [[ "$stak_info" != "" ]]; then
 
 if [[ -f home/$USER/.zelcash/zelcash.conf ]]; then
 
-index_from_file=$(grep -w zelnodeindex home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
 collateral_index=$(awk '{print $1}' <<< "$stak_info")
 
 if [[ "$index_from_file" == "$collateral_index" ]]; then
@@ -423,7 +423,6 @@ fi
 
 else
 collateral_index=$(awk '{print $1}' <<< "$stak_info")
-echo "hmm"
 fi
 
 type=$(awk '{print $2}' <<< "$stak_info")
