@@ -398,7 +398,7 @@ echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 
-echo -e "${BOOK} ${YELLOW}Checking collateral confirmations:${NC}"
+echo -e "${BOOK} ${YELLOW}Checking collateral information:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
 txhash=$(sed -n "2p" <<< "$txhash")
 txhash=$(egrep "\w{10,50}" <<< "$txhash")
@@ -408,23 +408,43 @@ if [[ "$txhash" != "" ]]; then
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
-conf=$(zelcash-cli gettxout $txhash 0 | jq .confirmations)
+stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
+
+if [[ -f home/$USER/.zelcash/zelcash.conf ]]; then
+
+index_from_file=$(grep -w zelnodeindex home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+collateral_index=$(awk '{print $1}' <<< "$stak_info")
+
+if [[ "$index_from_file" == "$collateral_index" ]]; then
+echo -e "${CHECK_MARK} ${CYAN} Zelnodeindex is correct"
+else
+echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
+fi
+
+else
+collateral_index=$(awk '{print $1}' <<< "$stak_info")
+fi
+
+type=$(awk '{print $2}' <<< "$stak_info")
+conf=$(zelcash-cli gettxout $txhash $collateral_index | jq .confirmations)
 
 if [[ $conf == ?(-)+([0-9]) ]]; then
-if [ "$conf" -ge "100" ]; then
-echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
+    if [ "$conf" -ge "100" ]; then
+      echo -e "${CHECK_MARK} ${CYAN} Confirmations numbers >= 100($conf)${NC}"
+    else
+      echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
+    fi
 else
-echo -e "${X_MARK} ${CYAN} Confirmations numbers < 100($conf)${NC}"
+echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
 fi
-else
-echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid or explorer.zel.cash is unavailable${NC}"
+
 fi
-fi
+
 
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
 
-type=$(zelcash-cli gettxout $txhash 0 | jq .value)
+#type=$(zelcash-cli gettxout $txhash 0 | jq .value)
 
 if [[ $type == ?(-)+([0-9]) ]]; then
 
