@@ -396,7 +396,7 @@ echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
 
-echo -e "${BOOK} ${YELLOW}Checking collateral information:${NC}"
+echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
 txhash=$(sed -n "2p" <<< "$txhash")
 txhash=$(egrep "\w{10,50}" <<< "$txhash")
