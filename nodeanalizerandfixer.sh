@@ -423,6 +423,7 @@ fi
 
 else
 collateral_index=$(awk '{print $1}' <<< "$stak_info")
+echo "hmm"
 fi
 
 type=$(awk '{print $2}' <<< "$stak_info")
