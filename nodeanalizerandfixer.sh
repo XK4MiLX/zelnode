@@ -319,7 +319,6 @@ else
 zelbench_zelback_color="${RED}$zelbench_zelback"
 fi
 
-
 echo -e "${PIN} ${CYAN}Zelbench version: ${SEA}$zelbench_version${NC}"
 echo -e "${PIN} ${CYAN}Zelbench status: $zelbench_status_color${NC}"
 echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
@@ -333,7 +332,6 @@ fi
 if [[ "$zelbench_benchmark" == "failed" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBench problem detected, check zelbenchmark debug.log${NC}"
 fi
-
 
 if [[ "$zelbench_benchmark" == "toaster" ]]; then
 BTEST="1"
