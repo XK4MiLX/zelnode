@@ -471,7 +471,7 @@ if [[ "$txhash" != "" ]]; then
 	 			 "100000") zelbench_benchmark_value_name="BAMF";;
 				esac
 			
-			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$type${NC}"
+			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$zelbench_benchmark_value_name${NC}"
 			fi
   		 fi
 			
