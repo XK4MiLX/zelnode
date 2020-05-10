@@ -447,8 +447,33 @@ if [[ "$txhash" != "" ]]; then
 	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
 		esac
 		
-                fi
+		case $zelbench_benchmark in
+ 		 "BASIC")  zelbench_benchmark_value=10000 ;;
+ 		 "SUPER")  zelbench_benchmark_value=25000;;
+	 	 "BAMF") zelbench_benchmark_value=100000;;
+		esac
 
+   		 if [[ -z zelbench_benchmark_value ]]; then
+  		  echo -e ""
+   		 else
+		 
+		 	if [[ "$type" <= "$zelbench_benchmark_value" ]]; then
+			 echo -en ""
+			else
+			
+				case zelbench_benchmark_valu in
+ 				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
+ 				 "25000")  zelbench_benchmark_value_name="SUPER";;
+	 			 "100000") zelbench_benchmark_value_name="BAMF";;
+				esac
+			
+			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN}  requested ${RED}$zelbench_benchmark_value_name${NC}"
+			fi
+    
+  		 fi
+			
+              fi
+		
 	else
 	echo -e "${X_MARK} ${CYAN} Zelnodeoutpoint is not valid${NC}"
 	fi
