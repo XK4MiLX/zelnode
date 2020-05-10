@@ -461,7 +461,7 @@ if [[ "$txhash" != "" ]]; then
 			 echo -en ""
 			else
 			
-				case zelbench_benchmark_valu in
+				case $zelbench_benchmark_value in
  				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
  				 "25000")  zelbench_benchmark_value_name="SUPER";;
 	 			 "100000") zelbench_benchmark_value_name="BAMF";;
