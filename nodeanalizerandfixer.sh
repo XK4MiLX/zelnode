@@ -460,8 +460,14 @@ if [[ "$txhash" != "" ]]; then
    		 else
 		 
 		 	if [[ "$zelbench_benchmark_value" -ge "$type" ]]; then
-			 echo -e "$zelbench_benchmark_value"
-			 echo -e "$type"
+			
+				case $type in
+ 				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
+ 				 "25000")  zelbench_benchmark_value_name="SUPER" ;;
+	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
+				esac
+			
+			 echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$zelbench_benchmark_value_name${NC}"
 			else
 			
 				case $type in
