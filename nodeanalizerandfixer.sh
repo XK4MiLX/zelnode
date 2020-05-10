@@ -449,9 +449,12 @@ if [[ "$txhash" != "" ]]; then
 		
 		case $zelbench_benchmark in
  		 "BASIC")  zelbench_benchmark_value=10000 ;;
- 		 "SUPER")  zelbench_benchmark_value=25000;;
-	 	 "BAMF") zelbench_benchmark_value=100000;;
+ 		 "SUPER")  zelbench_benchmark_value=25000 ;;
+	 	 "BAMF") zelbench_benchmark_value=100000 ;;
 		esac
+		
+		echo -e "$zelbench_benchmark_value"
+	        echo -e "$type"
 
    		 if [[ -z zelbench_benchmark_value ]]; then
   		  echo -e ""
@@ -468,7 +471,7 @@ if [[ "$txhash" != "" ]]; then
 	 			 "100000") zelbench_benchmark_value_name="BAMF";;
 				esac
 			
-			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN}  requested ${RED}$zelbench_benchmark_value_name${NC}"
+			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$zelbench_benchmark_value_name${NC}"
 			fi
     
   		 fi
