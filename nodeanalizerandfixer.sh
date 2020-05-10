@@ -391,7 +391,6 @@ fi
 
 fi
 
-
 echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
 echo -e ""
@@ -483,7 +482,6 @@ if [[ "$txhash" != "" ]]; then
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
 #type=$(zelcash-cli gettxout $txhash 0 | jq .value)
-
 fi
 fi
 
