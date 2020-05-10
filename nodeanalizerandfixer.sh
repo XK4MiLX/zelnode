@@ -467,7 +467,7 @@ if [[ "$txhash" != "" ]]; then
 	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
 				esac
 			
-			  echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${GREEN}$zelbench_benchmark_value_name${NC}"
+			  echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${GREEN}$zelbench_benchmark_value_name${NC}"
 			else
 			
 				case $type in
@@ -476,7 +476,7 @@ if [[ "$txhash" != "" ]]; then
 	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
 				esac
 			
-			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$zelbench_benchmark_value_name${NC}"
+			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"
 			fi
   		 fi
 			
