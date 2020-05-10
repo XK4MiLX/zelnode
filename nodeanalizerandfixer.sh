@@ -457,7 +457,7 @@ if [[ "$txhash" != "" ]]; then
   		  echo -e ""
    		 else
 		 
-		 	if [[ "$type" <= "$zelbench_benchmark_value" ]]; then
+		 	if [[ "$type" -ge "$zelbench_benchmark_value" ]]; then
 			 echo -en ""
 			else
 			
