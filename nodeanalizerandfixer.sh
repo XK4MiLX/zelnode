@@ -466,8 +466,8 @@ if [[ "$txhash" != "" ]]; then
 			
 				case $type in
  				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
- 				 "25000")  zelbench_benchmark_value_name="SUPER";;
-	 			 "100000") zelbench_benchmark_value_name="BAMF";;
+ 				 "25000")  zelbench_benchmark_value_name="SUPER" ;;
+	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
 				esac
 			
 			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$zelbench_benchmark_value_name${NC}"
