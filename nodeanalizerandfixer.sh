@@ -473,7 +473,6 @@ if [[ "$txhash" != "" ]]; then
 			
 			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} requested ${RED}$type${NC}"
 			fi
-    
   		 fi
 			
               fi
