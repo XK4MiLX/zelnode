@@ -278,6 +278,20 @@ check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
 fi
 
+if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
+lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
+lc_numeric_need='"en_US.UTF-8"'
+
+if [ "$lc_numeric_var" == "$lc_numeric_need" ]
+then
+echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC is correct${NC}"
+else
+echo -e "${X_MARK} ${CYAN}You need set LC_NUMERIC to en_US.UTF-8${NC}"
+LC_CHECK="1"
+fi
+
+fi
+
 if [[ "$zelbench_zelback" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBack does not work properly${NC}"
 fi
@@ -730,5 +744,20 @@ MSG1=' Restarting zelcash serivce...'
 MSG2="${CYAN}............[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo -e ""
+fi
+fi
+
+if [ "$LC_CHECK" == "1" ]; then
+read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
+echo -e ""
+echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
+read -p "Would you like to reboot pc Y/N?" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+sudo reboot -n
+fi
 fi
 fi
