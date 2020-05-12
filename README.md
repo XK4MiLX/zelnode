@@ -7,7 +7,7 @@ if this way not working you can try:
 ```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh && chmod +x multitoolbox.sh && ./multitoolbox.sh```   
 
 <b>1) Menu:</b>    
-![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/picm1v3.jpg) 
+![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/multitoolbox01.jpg) 
 
 <b>2) HOW USE MULTITOOLBOX TO SETUP ZELNODE:</b>    
  
