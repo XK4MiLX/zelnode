@@ -637,6 +637,24 @@ fi
 
 fi
 
+if [[ -f /home/$USER/watchdog/package.json ]]; then
+echo
+echo -e "${BOOK} ${YELLOW}Checking Watchdog:${NC}"
+
+current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+required_ver=$(curl -sS https://raw.githubusercontent.com/XK4MiLX/watchdog/master/package.json | jq -r '.version')
+
+  if [[ "$required_ver" != "" ]]; then
+     if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
+        echo -e "${CHECK_MARK} ${CYAN} You have the current version of Watchdog ${GREEN}(v$required_ver)${NC}"     
+     else
+        echo -e "${HOT} ${CYAN}New version of Watchdog available ${SEA}$required_ver${NC}"
+     fi
+  fi
+
+fi
+
+
 if [[ -f /home/$USER/watchdog/watchdog_error.log ]]; then
 echo
 echo -e "${BOOK} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
