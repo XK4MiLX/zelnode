@@ -294,7 +294,6 @@ fi
 
 if [[ "$zelbench_zelback" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBack does not work properly${NC}"
-fi
 
 
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
@@ -316,6 +315,12 @@ if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
   fi
 
 fi
+
+
+fi
+
+
+
 
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
