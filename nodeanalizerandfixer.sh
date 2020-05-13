@@ -296,6 +296,35 @@ if [[ "$zelbench_zelback" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBack does not work properly${NC}"
 fi
 
+
+
+WANIP=$(wget http://ipecho.net/plain -O - -q) 
+if [[ "$WANIP" == "" ]]; then
+  WANIP=$(curl ifconfig.me)     
+fi
+
+local_device_ip=$(ip addr | grep -A 3 'BROADCAST,MULTICAST,UP,LOWER_UP' | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" | head -n1)
+
+if [[ "$WANIP" != "" ]]; then
+
+  if [[ "$local_device_ip" == "$WANIP" ]]; then
+
+    echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device IP(${GREEN}$local_device_ip${CYAN})${NC}"
+
+  else
+
+
+    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device IP(${GREEN}$local_device_ip${CYAN})${NC}"
+   ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
+   ## sudo ip addr add "$WANPI" dev "$dev_name"
+
+  fi
+
+fi
+
+
+
+
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
 zelcash_getinfo=$(zelcash-cli getinfo)
