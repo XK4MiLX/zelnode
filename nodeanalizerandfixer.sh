@@ -316,11 +316,7 @@ if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
 
 fi
 
-
 fi
-
-
-
 
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
