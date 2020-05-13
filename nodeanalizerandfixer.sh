@@ -297,14 +297,10 @@ echo -e "${X_MARK} ${CYAN} ZelBack does not work properly${NC}"
 fi
 
 
-
-
-
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
 if [[ "$WANIP" == "" ]]; then
   WANIP=$(curl ifconfig.me)     
 fi
-
 
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://')
 local_device_ip=$(ip a list $device_name | grep -o $WANIP )
@@ -317,17 +313,13 @@ if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
 
   else
 
-
-    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device IP${NC}"
+   echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device IP${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
 
   fi
 
 fi
-
-
-
 
 
 echo -e "${NC}"
