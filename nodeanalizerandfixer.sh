@@ -308,7 +308,7 @@ local_device_ip=$(ip a list $device_name | grep -o $WANIP )
 if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
 
   if [[ "$local_device_ip" == "$WANIP" ]]; then
-    echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN})) IP(${GREEN}$local_device_ip${CYAN})${NC}"
+    echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN}) IP(${GREEN}$local_device_ip${CYAN})${NC}"
   else
    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device(${GREEN}$device_name${CYAN}) IP${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
@@ -316,7 +316,6 @@ if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
   fi
 
 fi
-
 
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Zalcash deamon information:${NC}"
