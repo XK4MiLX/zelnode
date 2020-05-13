@@ -304,7 +304,7 @@ fi
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 local_device_ip=$(ip a list $device_name | grep -o $WANIP )
 
-if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
+if [[ "$WANIP" != "" ]]; then
 
   if [[ "$local_device_ip" == "$WANIP" ]]; then
     echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN}) IP(${GREEN}$local_device_ip${CYAN})${NC}"
@@ -313,7 +313,9 @@ if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
   fi
-
+  
+else 
+echo -e "${ARROW} ${CYAN} Local device(${GREEN}$device_name${CYAN}) IP veryfication failed...${NC}"
 fi
 
 fi
