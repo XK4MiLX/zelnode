@@ -310,6 +310,7 @@ if [[ "$WANIP" != "" ]]; then
     echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN}) IP(${GREEN}$local_device_ip${CYAN})${NC}"
   else
    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device(${GREEN}$device_name${CYAN}) IP${NC}"
+   echo -e "${ARROW} ${CYAN} If you under NAT try type: sudo ip addr add "$WANPI" dev "$dev_name":0 ${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
   fi
