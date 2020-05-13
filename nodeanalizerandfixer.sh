@@ -298,14 +298,18 @@ fi
 
 
 
+
+
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
 if [[ "$WANIP" == "" ]]; then
   WANIP=$(curl ifconfig.me)     
 fi
 
-local_device_ip=$(ip addr | grep -A 3 'BROADCAST,MULTICAST,UP,LOWER_UP' | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}" | head -n1)
 
-if [[ "$WANIP" != "" ]]; then
+device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://')
+local_device_ip=$(ip a list $device_name | grep $WANIP )
+
+if [[ "$WANIP" != "" && "$local_device_ip" != "" ]]; then
 
   if [[ "$local_device_ip" == "$WANIP" ]]; then
 
@@ -314,13 +318,14 @@ if [[ "$WANIP" != "" ]]; then
   else
 
 
-    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device IP(${GREEN}$local_device_ip${CYAN})${NC}"
+    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device IP${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
 
   fi
 
 fi
+
 
 
 
