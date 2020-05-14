@@ -314,7 +314,6 @@ if [[ "$WANIP" != "" ]]; then
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
   fi
-  
 else 
 echo -e "${ARROW} ${CYAN} Local device(${GREEN}$device_name${CYAN}) IP veryfication failed...${NC}"
 fi
