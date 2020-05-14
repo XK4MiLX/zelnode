@@ -693,7 +693,6 @@ required_ver=$(curl -sS https://raw.githubusercontent.com/XK4MiLX/watchdog/maste
 
 fi
 
-
 if [[ -f /home/$USER/watchdog/watchdog_error.log ]]; then
 echo
 echo -e "${BOOK} ${YELLOW}Watchdog watchdog_error.log file detected, check ~/watchdog/watchdog_error.log"
