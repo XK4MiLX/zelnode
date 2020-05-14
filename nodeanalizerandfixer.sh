@@ -284,9 +284,9 @@ lc_numeric_need='"en_US.UTF-8"'
 
 if [ "$lc_numeric_var" == "$lc_numeric_need" ]
 then
-echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC is correct${NC}"
+echo -e "${CHECK_MARK} ${CYAN} LC_NUMERIC is correct${NC}"
 else
-echo -e "${X_MARK} ${CYAN}You need set LC_NUMERIC to en_US.UTF-8${NC}"
+echo -e "${X_MARK} ${CYAN} You need set LC_NUMERIC to en_US.UTF-8${NC}"
 LC_CHECK="1"
 fi
 
