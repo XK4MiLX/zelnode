@@ -579,7 +579,7 @@ echo -e "${X_MARK} ${CYAN} Tmux session does not exists${NC}"
 fi
 fi
 
-if [[ $(curl -s --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
+if [[ $(curl -s --max-time 10 --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} ZelFront is working${NC}"
 else
@@ -593,7 +593,7 @@ if [ -f "$FILE" ]
 then
 
  current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
- required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+ required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
