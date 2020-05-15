@@ -311,7 +311,7 @@ if [[ "$WANIP" != "" ]]; then
     echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN}) IP(${GREEN}$local_device_ip${CYAN})${NC}"
   else
    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device(${GREEN}$device_name${CYAN}) IP${NC}"
-   echo -e "${ARROW} ${CYAN} If you under NAT try type: ${GREEN}sudo ip addr add $WANIP dev $device_name:0 ${NC}"
+   echo -e "${ARROW} ${CYAN} If you under NAT try add your public IP to netplan${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
    IP_FIX="1"
@@ -775,8 +775,10 @@ fi
 
 if [ "$IP_FIX" == "1" ]; then
 
+if [[ netplan info > /dev/null 2>&1 ]]; then
+
 if [[ ! -f /etc/netplan/666-static.yaml ]]; then
-read -p "Would you like to add yuor public ip to netplan? (recommended for NAT users)" -n 1 -r
+read -p "Would you like to add yuor public ip to netplan? (recommended for NAT users) Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 
@@ -797,6 +799,8 @@ network:
 EOF
 sudo chown root:root /etc/netplan/666-static.yaml
 fi 
+
+fi
 
 fi
 
