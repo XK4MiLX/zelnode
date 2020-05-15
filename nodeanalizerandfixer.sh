@@ -11,6 +11,7 @@ ZELFLUX_PORT1="0"
 ZELFLUX_PORT2="0"
 FLUX_UPDATE="0"
 OWNER="0"
+IP_FIX="0"
 SCVESION=v4.0
 
 #color codes
@@ -313,7 +314,9 @@ if [[ "$WANIP" != "" ]]; then
    echo -e "${ARROW} ${CYAN} If you under NAT try type: ${GREEN}sudo ip addr add $WANIP dev $device_name:0 ${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
+   IP_FIX="1"
   fi
+  
 else 
 echo -e "${ARROW} ${CYAN} Local device(${GREEN}$device_name${CYAN}) IP veryfication failed...${NC}"
 fi
@@ -769,6 +772,36 @@ spinning_timer
 echo -e ""
 fi
 fi
+
+if [ "$IP_FIX" == "1" ]; then
+
+if [[ ! -f /etc/netplan/666-static.yaml ]]; then
+read -p "Would you like to add yuor public ip to netplan? (recommended for NAT users)" -n 1 -r
+echo -e ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+ip_address=$(ip a list $device_name | grep -o $WANIP.* | awk '{printf $1}')
+
+
+sudo touch /etc/netplan/666-static.yaml
+sudo chown $USER:$USER /etc/netplan/666-static.yaml
+sudo cat << EOF > /etc/netplan/666-static.yaml
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    $device_name:
+      addresses:
+        - $ip_address
+EOF
+sudo chown root:root /etc/netplan/666-static.yaml
+fi 
+
+fi
+
+fi
+
 
 if [ "$LC_CHECK" == "1" ]; then
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
