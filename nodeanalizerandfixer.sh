@@ -806,7 +806,6 @@ fi
 
 fi
 
-
 if [ "$LC_CHECK" == "1" ]; then
 read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
 echo -e ""
