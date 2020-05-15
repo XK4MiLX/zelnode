@@ -174,11 +174,11 @@ sudo apt install bc > /dev/null 2>&1
 
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking zelbenchmark debug.log${NC}"
-if [[ $(egrep -ac -wi --color 'warning|error|critical|Failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
-echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|Failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
+if [[ $(egrep -ac --color 'Failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
-error_line=$(egrep -a -wi --color 'warning|error|critical|Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -a -wi --color 'warning|error|critical|Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+error_line=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -189,7 +189,7 @@ now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
 echo -e "${PIN} ${CYAN}Creating zelbenchmark_debug_error.log${NC}"
-egrep -a -wi --color 'warning|error|critical|Failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
+egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
