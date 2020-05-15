@@ -775,7 +775,7 @@ fi
 
 if [ "$IP_FIX" == "1" ]; then
 
-if [[ netplan info > /dev/null 2>&1 ]]; then
+if [[ netplan > /dev/null 2>&1 ]]; then
 
 if [[ ! -f /etc/netplan/666-static.yaml ]]; then
 read -p "Would you like to add yuor public ip to netplan? (recommended for NAT users) Y/N?" -n 1 -r
