@@ -777,7 +777,7 @@ if [ "$IP_FIX" == "1" ]; then
 
 netplan_io=$(dpkg -l netplan.io | grep -w 'netplan.io' | awk '{print $3}')
 
-if [[ netplan_io != "" ]]; then
+if [[ "$netplan_io" != "" ]]; then
 
 if [[ ! -f /etc/netplan/666-static.yaml ]]; then
 read -p "Would you like to add your public ip to netplan.io? (recommended for NAT users) Y/N?" -n 1 -r
