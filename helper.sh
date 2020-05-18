@@ -31,7 +31,7 @@ export PATH
 
 call_type="$1"
 
-echo -e "${BOOK} ${CYAN}Helper action: ${GREEN}$1${NC}"
+echo -e "${BOOK} ${YELLOW}Helper action: ${GREEN}$1${NC}"
 
 function install_package()
 {
