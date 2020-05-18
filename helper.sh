@@ -151,4 +151,4 @@ restart_zelcash
 reindex
 ;;
 
-                esac
+esac
