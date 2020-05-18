@@ -138,8 +138,8 @@ sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelbench -y >/dev/null 2>&1
 sudo chmod 755 "$COIN_PATH"/zelbench*
 sleep 2
-dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
+dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$dpkg_version_before_install${NC}"
 echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
@@ -149,7 +149,7 @@ install_package zelbench
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
   if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Zelbench update successful${NC}"
+    echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
 start_zelcash
@@ -158,7 +158,7 @@ else
 
   if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
   
-    echo -e "${ARROW} ${CYAN}Zelbench update successful${NC}"
+    echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
   fi
 
@@ -167,7 +167,7 @@ else
     dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
     if [[ "$dpkg_version_after_install" != "" ]]; then
-      echo -e "${ARROW} ${CYAN}Zelbench update successful${NC}"
+      echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
     start_zelcash
@@ -187,6 +187,7 @@ sudo apt-get install --only-upgrade zelcash -y >/dev/null 2>&1
 sudo chmod 755 "$COIN_PATH"/zelcash*
 sleep 2
 
+dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
 echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
@@ -196,7 +197,7 @@ install_package zelcash
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 
   if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Zelcash update successful${NC}"
+    echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
 start_zelcash
@@ -205,7 +206,7 @@ else
 
   if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
   
-    echo -e "${ARROW} ${CYAN}Zelcash update successful${NC}"
+    echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
   fi
 
@@ -214,7 +215,7 @@ else
     dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
     
     if [[ "$dpkg_version_after_install" != "" ]]; then
-      echo -e "${ARROW} ${CYAN}Zelcash update successful${NC}"
+      echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
     start_zelcash
