@@ -116,8 +116,16 @@ fi
 
 function restart_zelcash()
 {
+
+echo -e "${ARROW} ${CYAN}Restarting zelcash...${NC}"
+serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
+if [[ "$serive_check" != "" ]]; then
+sudo systemctl restart zelcash >/dev/null 2>&1 && sleep 3
+else
 stop_zelcash
 start_zelcash
+fi
+
 }
 
 function zelbench_update()
