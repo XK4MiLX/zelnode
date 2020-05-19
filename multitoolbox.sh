@@ -1050,10 +1050,10 @@ fi
 echo -e ""
 sudo systemctl start zelcash
 NUM='35'
-MSG1=' Restarting zelcash serivce...'
-MSG2="${CYAN}...........................[${CHECK_MARK}${CYAN}]${NC}"
+MSG1='Restarting zelcash serivce...'
+MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo -e ""
+echo -e "" && echo -e ""
 
 }
 
