@@ -991,7 +991,7 @@ echo
 exit
 fi
 
-echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 
@@ -1003,7 +1003,7 @@ echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} {CYAN}Zelnodeprivkey replaced successful................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Zelnodeprivkey replaced successful................[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 
@@ -1016,7 +1016,7 @@ echo -e "\c"
         else
         sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} {CYAN}Zelnodeoutpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Zelnodeoutpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 
@@ -1029,7 +1029,7 @@ echo -e "\c"
         else
         sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} {CYAN}Zelnodeindex replaced successful.................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Zelnodeindex replaced successful.................[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 
@@ -1042,7 +1042,7 @@ echo -e "\c"
         else
         sed -i "s/$(grep -w externalip ~/.zelcash/zelcash.conf)/externalip=$externalip/" ~/.zelcash/zelcash.conf
                 if [[ "externalip=$externalip" == $(grep -w externalip ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "{ARROW} ${CYAN}Zelnod IP replaced successful...................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Zelnod IP replaced successful...................[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 fi
