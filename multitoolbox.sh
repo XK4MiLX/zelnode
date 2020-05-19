@@ -991,7 +991,6 @@ echo
 exit
 fi
 
-
 echo -e "${YELLOW}Stopping Zelcash serivce...${NC}"
 sudo systemctl stop zelcash && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1
