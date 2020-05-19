@@ -137,11 +137,14 @@ dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{prin
 
 if [[ "$remote_version" == "" ]]; then
 echo -e "${ARROW} ${CYAN}Problem with checking remote version...${NC}"
+echo
 exit
 fi
 
 if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+echo
+exit
 fi
 
 echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
