@@ -40,6 +40,7 @@ echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
 
 sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
 sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
+echo -e "${ARROW} ${CYAN}Adding apt sources...{NC}"
 echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
 gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D
 gpg --export 4B69CA27A986265D | sudo apt-key add -
@@ -131,8 +132,19 @@ fi
 function zelbench_update()
 {
 
-echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
+remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
 dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+
+if [[ "$remote_version" == "" ]]; then
+echo -e "${ARROW} ${CYAN}Problem with checking remote version...${NC}"
+exit
+fi
+
+if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
+echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+fi
+
+echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
 stop_zelcash
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelbench -y >/dev/null 2>&1
@@ -179,6 +191,7 @@ fi
 
 function zelcash_update()
 {
+
 dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 
 stop_zelcash
