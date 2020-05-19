@@ -1047,7 +1047,6 @@ echo -e "\c"
 fi
 fi
 
-echo -e ""
 sudo systemctl start zelcash
 NUM='35'
 MSG1='Restarting zelcash serivce...'
