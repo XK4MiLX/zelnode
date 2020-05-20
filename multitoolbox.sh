@@ -206,9 +206,9 @@ fi
 }
 
 function ip_confirm() {
-    WANIP=$(wget http://ipecho.net/plain -O - -q) 
+    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
-     WANIP=$(curl ifconfig.me)     
+     WANIP=$(curl -s -m 3  ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
       	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
 	 echo
@@ -683,7 +683,7 @@ fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=590910
-BLOCKHIGHT=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e "${ARROW} ${CYAN}IP: ${RED}$WANIP${NC}"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
@@ -712,7 +712,7 @@ MSG1='Zelflux starting...'
 MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
-BLOCKHIGHT_AFTER_BOOTSTRAP=$(wget -nv -qO - http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
 then
