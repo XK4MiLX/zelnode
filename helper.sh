@@ -173,17 +173,18 @@ else
   
     echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
-  fi
+  else
 
-  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
-    install_package zelbench
-    dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+    if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+      install_package zelbench
+      dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
-    if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
-      echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+      if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
+        echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+      fi
+      start_zelcash
     fi
-    
-    start_zelcash
+  
   fi
 
 fi
