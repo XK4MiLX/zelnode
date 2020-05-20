@@ -77,7 +77,6 @@ if ! gpg --list-keys Zel >/dev/null; then
 fi
 }
 
-
 start_zelcash() {
 serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
 
@@ -101,7 +100,6 @@ sleep 2
 
 
 # main function
-
 function reindex()
 {
 echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
@@ -113,7 +111,6 @@ stop_zelcash
 start_zelcash
 fi
 }
-
 
 function restart_zelcash()
 {
@@ -171,17 +168,17 @@ start_zelcash
 
 else
 
-  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+  if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
   
     echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
   fi
 
-  if ! [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
     install_package zelbench
     dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
-    if [[ "$dpkg_version_after_install" != "" ]]; then
+    if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
       echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
@@ -220,17 +217,17 @@ start_zelcash
 
 else
 
-  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+  if [[ "$dpkg_version_before_install" != "$dpkg_version_after_install" ]]; then
   
     echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
   fi
 
-  if ! [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
     install_package zelcash
     dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
     
-    if [[ "$dpkg_version_after_install" != "" ]]; then
+    if [[ "$dpkg_version_after_install" != "$dpkg_version_before_install" ]]; then
       echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
