@@ -30,6 +30,7 @@ PATH=$PATH:"$COIN_PATH"
 export PATH
 
 call_type="$1"
+type="$2"
 
 echo -e "${BOOK} ${YELLOW}Helper action: ${GREEN}$1${NC}"
 
@@ -138,7 +139,7 @@ echo
 exit
 fi
 
-if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
+if [[ "$remote_version" == "$dpkg_version_before_install" && "$type" != "force" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
 echo
 exit
