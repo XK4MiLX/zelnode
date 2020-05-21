@@ -136,8 +136,7 @@ dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{prin
 
 if [[ "$remote_version" == "" ]]; then
 echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
-echo
-exit
+return
 fi
 
 if [[ "$type" == "force" ]]; then
@@ -150,15 +149,13 @@ if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
 echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
 fi
 start_zelcash
-echo
-exit
+return
 fi
 
 
 if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
-echo
-exit
+return
 fi
 
 echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
@@ -216,9 +213,8 @@ required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/z
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${ARROW} ${CYAN} You have the current version of Zelflux ${GREEN}($required_ver)${NC}"    
-      echo
-      exit 
+      echo -e "${ARROW} ${CYAN} You have the current version of Zelflux ${GREEN}($required_ver)${NC}"  
+      return 
    else
       echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
       FLUX_UPDATE="1"
@@ -231,7 +227,6 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
   required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
     if [[ "$required_ver" == "$current_ver" ]]; then
       echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
-      echo -e ""
     else
       echo -e "${ARROW} ${CYAN}Zelfux was not updated.${NC}"
       echo -e "${ARROW} ${CYAN}Zelfux force update....${NC}"
@@ -266,8 +261,7 @@ dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print
 echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
 echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_zelcash
-echo
-exit
+return
 fi
 
 local_version=$(zelcash-cli getinfo | jq -r .version)
@@ -275,14 +269,12 @@ remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
 echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
-echo
-exit
+return
 fi
 
 if [[ "$local_version" == "$remote_version" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
-echo
-exit
+return
 fi
 
 dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
@@ -332,6 +324,15 @@ fi
 }
 
 case $call_type in
+
+                 "update_all")
+zelflux_update
+echo
+zelbench_update
+echo
+zelcash_update
+echo
+;;
 
                  "zelcash_update")
 zelcash_update
