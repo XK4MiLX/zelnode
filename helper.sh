@@ -210,7 +210,6 @@ fi
 function zelflux_update()
 {
 
-
 FLUX_UPDATE="0"
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
@@ -257,8 +256,6 @@ fi
 
 function zelcash_update()
 {
-
-
 
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
