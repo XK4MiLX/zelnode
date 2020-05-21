@@ -105,9 +105,10 @@ function reindex()
 {
 echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
 stop_zelcash
-"$COIN_DAEMON" -reindex && sleep 5
+"$COIN_DAEMON" -reindex
 serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
 if [[ "$serive_check" != "" ]]; then
+sleep 5
 stop_zelcash
 start_zelcash
 fi
