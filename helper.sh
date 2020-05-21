@@ -238,7 +238,6 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
         if [[ "$required_ver" == "$current_ver" ]]; then
           echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
         fi
-
     fi
 
 else
