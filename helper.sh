@@ -139,7 +139,22 @@ echo
 exit
 fi
 
-if [[ "$remote_version" == "$dpkg_version_before_install" && "$type" != "force" ]]; then
+if [[ "$type" == "force" ]]; then
+echo -e "${ARROW} ${CYAN}Force zelbench updating...${NC}"
+stop_zelcash
+install_package zelbench
+dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$dpkg_version_before_install${NC}"
+if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
+echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+fi
+start_zelcash
+echo
+exit
+fi
+
+
+if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
 echo
 exit
@@ -154,7 +169,7 @@ sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$dpkg_version_before_install${NC}"
-echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
+#echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
 
@@ -195,8 +210,23 @@ function zelcash_update()
 {
 
 dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-
 stop_zelcash
+
+if [[ "$type" == "force" ]]; then
+echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
+stop_zelcash
+install_package zelcash
+dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
+if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
+echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+fi
+start_zelcash
+echo
+exit
+fi
+
+
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelcash -y >/dev/null 2>&1
 sudo chmod 755 "$COIN_PATH"/zelcash*
@@ -204,7 +234,7 @@ sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
-echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
+#echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
 
