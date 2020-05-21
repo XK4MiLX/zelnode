@@ -210,23 +210,38 @@ fi
 function zelcash_update()
 {
 
-dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-stop_zelcash
+
 
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
+dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 stop_zelcash
 install_package zelcash
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
-if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
-echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-fi
+echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_zelcash
 echo
 exit
 fi
 
+local_version=$(zelcash-cli getinfo | jq -r .version)
+remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
+
+if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...${NC}"
+echo
+exit
+fi
+
+if [[ "$local_version" == "$remote_version" ]]; then
+echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
+echo
+exit
+fi
+
+dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
+stop_zelcash
 
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelcash -y >/dev/null 2>&1
