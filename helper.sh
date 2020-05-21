@@ -41,7 +41,7 @@ echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
 
 sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
 sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${CYAN}Adding apt sources...${NC}"
+echo -e "${ARROW} ${CYAN}Adding apt source...${NC}"
 echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
 gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D >/dev/null 2>&1
 gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
@@ -135,7 +135,7 @@ remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -
 dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
 if [[ "$remote_version" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Problem with checking remote version...${NC}"
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
 echo
 exit
 fi
@@ -207,6 +207,54 @@ fi
 
 }
 
+function zelflux_update()
+{
+
+
+FLUX_UPDATE="0"
+current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+if [[ "$required_ver" != "" ]]; then
+   if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
+      echo -e "${ARROW} ${CYAN} You have the current version of Zelflux ${GREEN}($required_ver)${NC}"    
+      echo
+      exit 
+   else
+      echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
+      FLUX_UPDATE="1"
+   fi
+ fi
+
+if [[ "$FLUX_UPDATE" == "1" ]]; then
+  cd /home/$USER/zelflux && git pull > /dev/null 2>&1 && cd
+  current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+  required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+    if [[ "$required_ver" == "$current_ver" ]]; then
+      echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
+      echo -e ""
+    else
+      echo -e "${ARROW} ${CYAN}Zelfux was not updated.${NC}"
+      echo -e "${ARROW} ${CYAN}Zelfux force update....${NC}"
+      cd /home/$USER/zelflux && npm run hardupdatezelflux
+
+      current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+      required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+        if [[ "$required_ver" == "$current_ver" ]]; then
+          echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
+        fi
+
+    fi
+
+else
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelflux installation skipped...${NC}"
+fi
+
+
+}
+
+
 function zelcash_update()
 {
 
@@ -229,7 +277,7 @@ local_version=$(zelcash-cli getinfo | jq -r .version)
 remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...${NC}"
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
 echo
 exit
 fi
@@ -294,6 +342,10 @@ echo
 ;;
                  "zelbench_update")
 zelbench_update
+echo
+;;
+                 "zelflux_update")
+zelflux_update
 echo
 ;;
                  "zelcash_restart")
