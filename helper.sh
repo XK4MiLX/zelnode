@@ -32,7 +32,7 @@ export PATH
 call_type="$1"
 type="$2"
 
-echo -e "${BOOK} ${YELLOW}Helper action: ${GREEN}$1${NC}"
+echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
 function install_package()
 {
@@ -213,7 +213,7 @@ required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/z
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${ARROW} ${CYAN} You have the current version of Zelflux ${GREEN}($required_ver)${NC}"  
+      echo -e "${ARROW} ${CYAN}You have the current version of Zelflux ${GREEN}($required_ver)${NC}"  
       return 
    else
       echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
@@ -327,9 +327,7 @@ case $call_type in
 
                  "update_all")
 zelflux_update
-echo
 zelbench_update
-echo
 zelcash_update
 echo
 ;;
