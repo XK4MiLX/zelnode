@@ -360,7 +360,9 @@ fi
 stop_zelcash
 echo -e "${ARROW} ${CYAN}Zelcash stopped...${NC}"
 
-if zip >/dev/null 2>&1; then
+check_zip=$(zip -L | head -n1)
+
+if [[ "$check_zip" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 rm -rf /home/$USER/.zelcash/zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
