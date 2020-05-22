@@ -360,7 +360,7 @@ fi
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
 stop_zelcash
 if zip >/dev/null 2>&1 ; then
-rm -rf /home/$USER/.zelcash/zip zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
+rm -rf /home/$USER/.zelcash/zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
 cd /home/$USER/.zelcash && zip zel-bootstrap1.zip -r blocks chainstate determ_zelnodes
 cd
