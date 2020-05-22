@@ -342,7 +342,7 @@ echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight
 explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
 echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
- if [[ "$explorer_network_hight" != "" && "$local_network_hight" != "" ]]; then
+ if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
  echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...${NC}"
  exit
  fi
