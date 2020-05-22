@@ -356,6 +356,7 @@ exit
 fi
 
 stop_zelcash
+echo -e "${ARROW} ${CYAN}Zelcash stopped...${NC}"
 if zip >/dev/null 2>&1 ; then
 rm -rf /home/$USER/.zelcash/zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
