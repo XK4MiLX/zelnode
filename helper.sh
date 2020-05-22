@@ -371,9 +371,9 @@ cd /home/$USER/.zelcash && zip zel-bootstrap1.zip -r blocks chainstate determ_ze
 cd
 
 if [[ -f /home/$USER/.zelcash/zel-bootstrap1.zip ]]; then
-echo -e "${ARROW} ${CYAN}Zelcash bootstrap create successful${NC}"
+echo -e "${ARROW} ${CYAN}Zelcash bootstrap created successful ${GREEN}($local_network_hight)${NC}"
 else
-echo -e "${ARROW} ${CYAN}Zelcash bootstrap create failed${NC}"
+echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating failed${NC}"
 fi
 
 fi
