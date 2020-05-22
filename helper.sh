@@ -143,31 +143,30 @@ fi
 function zelbench_update()
 {
 
-
-remote_version_check zelbench
-#remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
-dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-
-if [[ "$remote_version" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
-return
-fi
+local_version=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force zelbench updating...${NC}"
 stop_zelcash
 install_package zelbench
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$dpkg_version_before_install${NC}"
-if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
-echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-fi
+echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_zelcash
 return
 fi
 
+remote_version_check zelbench
+#remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
 
-if [[ "$remote_version" == "$dpkg_version_before_install" ]]; then
+
+if [[ "$remote_version" == "" ]]; then
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
+return
+fi
+
+
+if [[ "$remote_version" == "$local_version" ]]; then
 echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
 return
 fi
@@ -202,7 +201,7 @@ else
     start_zelcash
   else
 
-    if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+    if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
       install_package zelbench
       dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
@@ -221,7 +220,7 @@ function zelflux_update()
 
 FLUX_UPDATE="0"
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
@@ -236,7 +235,7 @@ if [[ "$required_ver" != "" ]]; then
 if [[ "$FLUX_UPDATE" == "1" ]]; then
   cd /home/$USER/zelflux && git pull > /dev/null 2>&1 && cd
   current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-  required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+  required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
     if [[ "$required_ver" == "$current_ver" ]]; then
       echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
     else
@@ -245,7 +244,7 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
       cd /home/$USER/zelflux && npm run hardupdatezelflux
 
       current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
-      required_ver=$(curl -sS --max-time 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+      required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
         if [[ "$required_ver" == "$current_ver" ]]; then
           echo -e "${ARROW} ${CYAN}Zelfux updated successfully ${GREEN}($required_ver)${NC}"
@@ -263,13 +262,14 @@ fi
 function zelcash_update()
 {
 
+local_version=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
+
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
-dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 stop_zelcash
 install_package zelcash
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
+echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$local_version${NC}"
 echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_zelcash
 return
@@ -277,7 +277,6 @@ fi
 
 
 remote_version_check zelcash
-local_version=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 #local_version=$(zelcash-cli getinfo | jq -r .version)
 #remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
 
