@@ -34,8 +34,6 @@ type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
-
-
 function remote_version_check(){
 #variable null
 remote_version=""
