@@ -339,6 +339,9 @@ fi
 
 function create_bootstrap()
 {
+
+if zelcash-cli getinfo > /dev/null 2>&1; then
+
 local_network_hight=$(zelcash-cli getinfo | jq -r .blocks)
 echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
 explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
@@ -375,6 +378,12 @@ fi
 
 fi
 start_zelcash
+
+else
+echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...zelcash daemon not working...${NC}"
+echo
+fi
+
 }
 
 case $call_type in
