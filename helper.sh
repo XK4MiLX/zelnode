@@ -45,10 +45,8 @@ fi
 
 }
 
-
 function install_package()
 {
-
 echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
 
 sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
