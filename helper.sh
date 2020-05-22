@@ -344,9 +344,9 @@ fi
 function create_bootstrap()
 {
 local_network_hight=$(zelcash-cli getinfo | jq -r .blocks)
-echo -e "${ARROW} ${CYAN}Local Network Block Hight: $local_network_hight${NC}"
+echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
 explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
-echo -e "${ARROW} ${CYAN}Global Network Block Hight: $explorer_network_hight${NC}"
+echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
  if [[ "$explorer_network_hight" != "" && "$local_network_hight" != "" ]]
  echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...${NC}"
@@ -364,7 +364,7 @@ fi
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
 stop_zelcash
 if zip >/dev/null 2>&1 ; then
-rm -rf /home/$USER/.zelcash/zip zel-bootstrap1.zip && sleep 5
+rm -rf /home/$USER/.zelcash/zip zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
 cd /home/$USER/.zelcash && zip zel-bootstrap1.zip -r blocks chainstate determ_zelnodes
 cd
