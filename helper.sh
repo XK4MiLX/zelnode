@@ -358,8 +358,6 @@ exit
 fi
 
 stop_zelcash
-echo -e "${ARROW} ${CYAN}Zelcash stopped...${NC}"
-
 check_zip=$(zip -L | head -n1)
 
 if [[ "$check_zip" != "" ]]; then
