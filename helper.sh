@@ -209,9 +209,7 @@ else
       fi
       start_zelcash
     fi
-  
   fi
-
 fi
 
 }
