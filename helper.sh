@@ -367,7 +367,7 @@ echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
 cd /home/$USER/.zelcash && zip zel-bootstrap1.zip -r blocks chainstate determ_zelnodes
 cd
 
-if [[ -f /home/$USER/.zelcash && zip zel-bootstrap1.zip ]]; then
+if [[ -f /home/$USER/.zelcash/zip zel-bootstrap1.zip ]]; then
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap create successful${NC}"
 else
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap create failed${NC}"
