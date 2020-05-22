@@ -103,8 +103,8 @@ fi
 stop_zelcash() {
 
 echo -e "${ARROW} ${CYAN}Stopping zelcash...${NC}"
-sudo systemctl stop zelcash >/dev/null 2>&1 && sleep 5
-"$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
+sudo systemctl stop zelcash >/dev/null 2>&1 && sleep 3
+"$COIN_CLI" stop >/dev/null 2>&1 && sleep 3
 sudo killall "$COIN_DAEMON" >/dev/null 2>&1
 sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sleep 2
@@ -376,7 +376,7 @@ echo -e "${ARROW} ${CYAN}Zelcash bootstrap create failed${NC}"
 fi
 
 fi
-
+start_zelcash
 }
 
 case $call_type in
