@@ -34,6 +34,20 @@ type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
+
+
+function remote_version_check(){
+#variable null
+remote_version=""
+package_name=""
+remote_version=$(curl -s -m 3 https://apt.zel.cash/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
+if [[ "$remote_version" != "" ]]; then
+package_name=$(echo "$1_"$remote_version"_all.deb")
+fi
+
+}
+
+
 function install_package()
 {
 
@@ -131,7 +145,9 @@ fi
 function zelbench_update()
 {
 
-remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
+
+remote_version_check zelbench
+#remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
 dpkg_version_before_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
 if [[ "$remote_version" == "" ]]; then
@@ -263,8 +279,11 @@ start_zelcash
 return
 fi
 
-local_version=$(zelcash-cli getinfo | jq -r .version)
-remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
+
+remote_version_check zelcash
+local_version=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
+#local_version=$(zelcash-cli getinfo | jq -r .version)
+#remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
 echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
