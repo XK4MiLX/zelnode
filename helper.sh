@@ -179,7 +179,7 @@ sudo chmod 755 "$COIN_PATH"/zelbench*
 sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$dpkg_version_before_install${NC}"
+echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$local_version${NC}"
 #echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
