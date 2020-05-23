@@ -232,6 +232,11 @@ then
     exit
 fi
 
+ if pm2 -v > /dev/null 2>&1; then
+ pm2 stop zelflux
+ fi
+
+
 if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
 
     echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
@@ -246,6 +251,8 @@ if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
     zelflux_setting_import="1"
 
 fi
+
+
 
 if [ -d /home/$USER/zelflux ]; then
 
@@ -319,7 +326,6 @@ fi
  if pm2 -v > /dev/null 2>&1; then 
  
    rm restart_zelflux.sh > /dev/null 2>&1
-   pm2 stop zelflux && sleep 2  > /dev/null 2>&1
    pm2 del zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
