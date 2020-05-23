@@ -336,7 +336,7 @@ fi
 
 }
 
-function create_bootstrap()
+function create_zel_bootstrap()
 {
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
@@ -385,6 +385,56 @@ fi
 
 }
 
+function create_mongod_bootstrap()
+{
+
+
+    echo -e "${ARROW} ${YELLOW}Detecting IP address...${NC}"
+    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
+    if [[ "$WANIP" == "" ]]; then
+      WANIP=$(curl -s -m 3 ifconfig.me)     
+         if [[ "$WANIP" == "" ]]; then
+      	   echo -e "${ARROW} ${CYAN}IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+	         echo
+	         exit
+    	   fi
+    fi
+
+local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
+explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
+
+ if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
+ echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...${NC}"
+ return
+ fi
+
+ if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
+  echo -e "${ARROW} ${CYAN}Mongod is full synced with Zelcash Network...${NC}"
+ else
+  echo -e "${ARROW} ${CYAN}Mongod is not full synced with Zelcash Network...${NC}"
+  return
+ fi
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+
+sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
+sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
+
+echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
+mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/
+echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
+tar -cvzf mongod_bootstrap.tar.gz /home/$USER/dump/
+
+if [[ -f /home/$USER/mongod_bootstrap.tar.gz ]]; then
+echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+else
+echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
+fi
+
+
+}
+
 case $call_type in
 
                  "update_all")
@@ -414,8 +464,13 @@ echo
 reindex
 echo
 ;;
-                "create_bootstrap")
-create_bootstrap
+                "create_zel_bootstrap")
+create_zel_bootstrap
+echo
+;;
+
+                "create_mongod_bootstrap")
+create_mongod_bootstrap
 echo
 ;;
 
