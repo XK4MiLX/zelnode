@@ -14,6 +14,7 @@ SEA="\\033[38;5;49m"
 GREEN='\033[1;32m'
 CYAN='\033[1;36m'
 NC='\033[0m'
+FLUX_UPDATE="0"
 
 #emoji codes
 CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
@@ -33,6 +34,10 @@ call_type="$1"
 type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
+
+function local_version_check() {
+local_version=$(dpkg -l $1 | grep -w $1 | awk '{print $3}')
+}
 
 function remote_version_check(){
 #variable null
@@ -159,16 +164,18 @@ fi
 remote_version_check zelbench
 #remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
 
+if [[ "$call_type" != "update_all" ]]; then
 
-if [[ "$remote_version" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
-return
-fi
+  if [[ "$remote_version" == "" ]]; then
+   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
+   return
+  fi
 
+  if [[ "$remote_version" == "$local_version" ]]; then
+   echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+   return
+  fi
 
-if [[ "$remote_version" == "$local_version" ]]; then
-echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
-return
 fi
 
 echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
@@ -218,16 +225,15 @@ fi
 function zelflux_update()
 {
 
-FLUX_UPDATE="0"
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
 required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
-if [[ "$required_ver" != "" ]]; then
+if [[ "$required_ver" != "" && "$call_type" != "update_all" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
       echo -e "${ARROW} ${CYAN}You have the current version of Zelflux ${GREEN}($required_ver)${NC}"  
       return 
    else
-      echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
+      #echo -e "${HOT} ${CYAN}New version of Zelflux available ${SEA}$required_ver${NC}"
       FLUX_UPDATE="1"
    fi
  fi
@@ -280,14 +286,18 @@ remote_version_check zelcash
 #local_version=$(zelcash-cli getinfo | jq -r .version)
 #remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
 
-if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
-return
-fi
+if [[ "$call_type" != "update_all" ]]; then
 
-if [[ "$local_version" == "$remote_version" ]]; then
-echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
-return
+  if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
+   return
+  fi
+
+  if [[ "$local_version" == "$remote_version" ]]; then
+   echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
+   return
+  fi
+
 fi
 
 dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
@@ -333,6 +343,69 @@ else
   fi
 
 fi
+
+}
+
+function check_update() {
+
+update_zelbench="0"
+update_zelcash="0"
+update_zelflux="0"
+
+local_version_check zelcash
+remote_version_check zelcash
+
+if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
+else
+
+  if [[ "$local_version" != "$remote_version" ]]; then
+  echo -e "${RED}${HOT}${CYAN}New version of Zelcash available ${SEA}$remote_version${NC}"
+  update_zelcash="1"
+  else
+  echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
+  fi
+  
+fi
+
+local_version_check zelbench
+remote_version_check zelbench
+
+if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
+else
+
+  if [[ "$local_version" != "$remote_version" ]]; then
+  echo -e "${RED}${HOT}${CYAN}New version of Zelbench available ${SEA}$remote_version${NC}"
+  update_zelbench="1"
+  else
+  echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+  fi
+
+fi
+
+local_version=$(jq -r '.version' /home/$USER/zelflux/package.json)
+remote_version=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelflux installation skipped...${NC}"
+else
+
+  if [[ "$local_version" != "$remote_version" ]]; then
+  echo -e "${RED}${HOT}${CYAN}New version of ZelFlux available ${SEA}$remote_version${NC}"
+  update_zelflux="1"
+  FLUX_UPDATE="1"
+  else
+  echo -e "${ARROW} ${CYAN}You have the current version of ZelFlux ${GREEN}($remote_version)${NC}"
+  fi
+
+fi
+
+if [[ "$update_zelbench" == "1" || "$update_zelcash" == "1" || "$update_zelflux" == "1" ]]; then
+echo -e ""
+fi
+
+
 
 }
 
@@ -438,9 +511,19 @@ fi
 case $call_type in
 
                  "update_all")
+		 
+check_update
+if [[ update_zelflux == "1" ]]; then
 zelflux_update
+fi
+
+if [[ update_zelbench == "1" ]]; then
 zelbench_update
+fi
+
+if [[ update_zelcash == "1" ]]; then
 zelcash_update
+fi
 echo
 ;;
 
