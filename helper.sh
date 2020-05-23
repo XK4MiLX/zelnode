@@ -299,7 +299,7 @@ sudo chmod 755 "$COIN_PATH"/zelcash*
 sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$dpkg_version_before_install${NC}"
+echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$local_version${NC}"
 #echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
@@ -315,17 +315,17 @@ start_zelcash
 
 else
 
-  if [[ "$dpkg_version_before_install" != "$dpkg_version_after_install" ]]; then
+  if [[ "$local_version" != "$dpkg_version_after_install" ]]; then
   
     echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
   fi
 
-  if [[ "$dpkg_version_before_install" == "$dpkg_version_after_install" ]]; then
+  if [[ "local_version" == "$dpkg_version_after_install" ]]; then
     install_package zelcash
     dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
     
-    if [[ "$dpkg_version_after_install" != "$dpkg_version_before_install" ]]; then
+    if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
       echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
