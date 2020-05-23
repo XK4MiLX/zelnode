@@ -233,7 +233,7 @@ then
 fi
 
  if pm2 -v > /dev/null 2>&1; then
- pm2 stop zelflux
+ pm2 stop zelflux > /dev/null 2>&1
  fi
 
 
