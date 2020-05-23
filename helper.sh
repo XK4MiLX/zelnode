@@ -513,15 +513,15 @@ case $call_type in
                  "update_all")
 		 
 check_update
-if [[ update_zelflux == "1" ]]; then
+if [[ "$update_zelflux" == "1" ]]; then
 zelflux_update
 fi
 
-if [[ update_zelbench == "1" ]]; then
+if [[ "$update_zelbench" == "1" ]]; then
 zelbench_update
 fi
 
-if [[ update_zelcash == "1" ]]; then
+if [[ "$update_zelcash" == "1" ]]; then
 zelcash_update
 fi
 echo
