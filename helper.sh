@@ -395,9 +395,9 @@ function create_mongod_bootstrap()
       WANIP=$(curl -s -m 3 ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
       	   echo -e "${ARROW} ${CYAN}IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
-	         echo
-	         exit
-    	   fi
+	   echo
+	   exit
+    	 fi
     fi
 
 local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -416,8 +416,8 @@ echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_h
   echo -e "${ARROW} ${CYAN}Mongod is not full synced with Zelcash Network...${NC}"
   return
  fi
+ 
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-
 sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
 sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
 
