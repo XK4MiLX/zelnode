@@ -364,12 +364,12 @@ check_zip=$(zip -L | head -n1)
 
 if [[ "$check_zip" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf /home/$USER/.zelcash/zel-bootstrap1.zip >/dev/null 2>&1 && sleep 5
+rm -rf /home/$USER/zel-bootstrap.zip >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
-cd /home/$USER/.zelcash && zip zel-bootstrap1.zip -r blocks chainstate determ_zelnodes
+cd /home/$USER/.zelcash && zip /home/$USER/zel-bootstrap.zip -r blocks chainstate determ_zelnodes
 cd
 
-if [[ -f /home/$USER/.zelcash/zel-bootstrap1.zip ]]; then
+if [[ -f /home/$USER/zel-bootstrap.zip ]]; then
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap created successful ${GREEN}($local_network_hight)${NC}"
 else
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating failed${NC}"
@@ -424,7 +424,7 @@ sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
 mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/
 echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
-tar -cvzf mongod_bootstrap.tar.gz /home/$USER/dump/
+tar -cvzf /home/$USER/mongod_bootstrap.tar.gz /home/$USER/dump/
 
 if [[ -f /home/$USER/mongod_bootstrap.tar.gz ]]; then
 echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
