@@ -319,6 +319,7 @@ fi
  if pm2 -v > /dev/null 2>&1; then 
  
    rm restart_zelflux.sh > /dev/null 2>&1
+   pm2 stop zelflux && sleep 2  > /dev/null 2>&1
    pm2 del zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    echo -e "${ARROW} ${CYAN}Starting ZelFlux....${NC}"
