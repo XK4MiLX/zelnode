@@ -268,7 +268,6 @@ fi
 
 }
 
-
 function zelcash_update()
 {
 
@@ -409,8 +408,6 @@ if [[ "$update_zelbench" == "1" || "$update_zelcash" == "1" || "$update_zelflux"
 echo -e ""
 fi
 
-
-
 }
 
 function create_zel_bootstrap()
@@ -464,8 +461,6 @@ fi
 
 function create_mongod_bootstrap()
 {
-
-
     echo -e "${ARROW} ${YELLOW}Detecting IP address...${NC}"
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
