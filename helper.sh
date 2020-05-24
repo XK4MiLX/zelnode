@@ -180,7 +180,8 @@ fi
 
 echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
 #stop_zelcash
-zelbench-cli stop && sleep 2
+echo -e "${ARROW} ${CYAN}Zelbench server stopping...${NC}"
+zelbench-cli stop && sleep 2 >/dev/null 2>&1 && sleep 1
 sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelbench -y >/dev/null 2>&1
@@ -201,14 +202,16 @@ dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print
   fi
 
 #start_zelcash
-zelbenchd -daemon
+echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+zelbenchd -daemon >/dev/null 2>&1
 else
 
   if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
   
     echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     #start_zelcash
-    zelbenchd -daemon
+    echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+    zelbenchd -daemon >/dev/null 2>&1
   else
 
     if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
@@ -219,7 +222,8 @@ else
         echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
       fi
       #start_zelcash
-      zelbenchd -daemon
+      echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+      zelbenchd -daemon >/dev/null 2>&1
     fi
   fi
 fi
