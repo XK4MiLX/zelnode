@@ -554,7 +554,6 @@ echo
 create_zel_bootstrap
 echo
 ;;
-
                 "create_mongod_bootstrap")
 create_mongod_bootstrap
 echo
