@@ -181,7 +181,7 @@ fi
 echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
 #stop_zelcash
 echo -e "${ARROW} ${CYAN}Zelbench server stopping...${NC}"
-zelbench-cli stop && sleep 2 >/dev/null 2>&1 && sleep 1
+zelbench-cli stop >/dev/null 2>&1 && sleep 2
 sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelbench -y >/dev/null 2>&1
