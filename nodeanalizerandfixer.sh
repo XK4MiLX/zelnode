@@ -264,6 +264,11 @@ echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
 echo -e "${PIN} ${CYAN}ZelBack: $zelbench_zelback_color${NC}"
 echo -e "${NC}"
 
+if [[ "$zelbench_benchmark" == "running" ]]; then
+echo -e "${ARROW} ${CYAN}Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
+fi
+
+
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${NC}"
 fi
@@ -279,27 +284,42 @@ check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
 fi
 
-if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
-lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
-lc_numeric_need='"en_US.UTF-8"'
+#if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
+##lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
+##lc_numeric_need='"en_US.UTF-8"'
 
-if [ "$lc_numeric_var" == "$lc_numeric_need" ]
-then
-echo -e "${CHECK_MARK} ${CYAN} LC_NUMERIC is correct${NC}"
-else
-echo -e "${X_MARK} ${CYAN} You need set LC_NUMERIC to en_US.UTF-8${NC}"
-LC_CHECK="1"
-fi
+##if [ "$lc_numeric_var" == "$lc_numeric_need" ]
+##then
+##echo -e "${CHECK_MARK} ${CYAN} LC_NUMERIC is correct${NC}"
+##else
+##echo -e "${X_MARK} ${CYAN} You need set LC_NUMERIC to en_US.UTF-8${NC}"
+##LC_CHECK="1"
+##fi
 
-fi
+#fi
 
 if [[ "$zelbench_zelback" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBack does not work properly${NC}"
 
-
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
 if [[ "$WANIP" == "" ]]; then
   WANIP=$(curl ifconfig.me)     
+fi
+
+if [[ "$WANIP" != "" ]]; then
+zelback_error_check=$(curl -s -m 3 http://77.55.218.98:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
+
+if [[ "$zelback_error_check" == "" ]]; then
+sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+sudo ufw allow out to any port 16127 > /dev/null 2>&1
+sudo ufw reload > /dev/null 2>&1
+else
+
+if [[ "$zelback_error_check" != "0" ]]; 
+zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
+echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
+fi
+
 fi
 
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
@@ -454,8 +474,18 @@ if [[ "$txhash" != "" ]]; then
  				 "25000")  zelbench_benchmark_value_name="SUPER" ;;
 	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
 				esac
-			
-			  echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"
+				
+				if [[ "$zelbench_benchmark" == "running" ]]; then
+					echo -e "${ARROW} ${CYAN}Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
+				else
+				
+				      if [[ "$zelbench_benchmark" == "failed" ]]; then
+				         echo -e "${X_MARK} ${CYAN} Benchmark status: ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"	
+				      else    
+				         echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"	
+				      fi
+				   		      	
+				 fi
 			fi
   		 fi
 			
@@ -582,7 +612,7 @@ echo -e "${X_MARK} ${CYAN} Tmux session does not exists${NC}"
 fi
 fi
 
-if [[ $(curl -s --max-time 10 --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
+if [[ $(curl -s -m 5 --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} ZelFront is working${NC}"
 else
@@ -808,17 +838,17 @@ fi
 
 fi
 
-if [ "$LC_CHECK" == "1" ]; then
-read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
-echo -e ""
-echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
-read -p "Would you like to reboot pc Y/N?" -n 1 -r
-echo -e ""
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-sudo reboot -n
-fi
-fi
-fi
+#if [ "$LC_CHECK" == "1" ]; then
+#read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
+#echo -e ""
+#if [[ $REPLY =~ ^[Yy]$ ]]; then
+#sudo bash -c 'echo "LC_NUMERIC="en_US.UTF-8"" >>/etc/default/locale'
+#echo -e ""
+#echo -e "${CHECK_MARK} ${CYAN}LC_NUMERIC changed to en_US.UTF-8 now you need restart pc${NC}"
+#read -p "Would you like to reboot pc Y/N?" -n 1 -r
+#echo -e ""
+#if [[ $REPLY =~ ^[Yy]$ ]]; then
+#sudo reboot -n
+#fi
+#fi
+#fi
