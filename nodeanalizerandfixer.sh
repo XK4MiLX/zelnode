@@ -315,7 +315,7 @@ sudo ufw allow out to any port 16127 > /dev/null 2>&1
 sudo ufw reload > /dev/null 2>&1
 else
 
-if [[ "$zelback_error_check" != "0" ]]; 
+if [[ "$zelback_error_check" != "0" ]]; then
 zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
 echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
 fi
