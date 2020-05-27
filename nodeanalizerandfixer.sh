@@ -316,6 +316,11 @@ zelback_error_check=$(curl -s -m 3 http://77.55.218.98:16127/zelid/loginphrase |
     if [[ "$zelback_error_check" != "0" ]]; then
      zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
      echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
+     
+        sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+        sudo ufw allow out to any port 16127 > /dev/null 2>&1
+        sudo ufw reload > /dev/null 2>&1
+     
     fi
 
   fi
@@ -476,11 +481,11 @@ if [[ "$txhash" != "" ]]; then
 				esac
 				
 				if [[ "$zelbench_benchmark" == "running" ]]; then
-					echo -e "${ARROW} ${CYAN} Benchmark required skipped...${NC}"
+					echo -en ""
 				else
 				
 				      if [[ "$zelbench_benchmark" == "failed" ]]; then
-				         echo -e "${X_MARK} ${CYAN} Benchmark status: ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"	
+				         echo -en ""	
 				      else    
 				         echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"	
 				      fi
