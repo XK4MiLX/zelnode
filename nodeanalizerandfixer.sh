@@ -320,6 +320,8 @@ else
 
 fi
 
+fi
+
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 local_device_ip=$(ip a list $device_name | grep -o $WANIP )
 
