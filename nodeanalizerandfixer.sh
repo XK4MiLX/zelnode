@@ -307,18 +307,18 @@ if [[ "$WANIP" != "" ]]; then
 
 zelback_error_check=$(curl -s -m 3 http://77.55.218.98:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
 
-if [[ "$zelback_error_check" == "" ]]; then
-sudo ufw allow from any to any port 16127 > /dev/null 2>&1
-sudo ufw allow out to any port 16127 > /dev/null 2>&1
-sudo ufw reload > /dev/null 2>&1
-else
+  if [[ "$zelback_error_check" == "" ]]; then
+   sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+   sudo ufw allow out to any port 16127 > /dev/null 2>&1
+   sudo ufw reload > /dev/null 2>&1
+  else
 
-  if [[ "$zelback_error_check" != "0" ]]; then
-    zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
-    echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
+    if [[ "$zelback_error_check" != "0" ]]; then
+     zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
+     echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
+    fi
+
   fi
-
-fi
 
 fi
 
