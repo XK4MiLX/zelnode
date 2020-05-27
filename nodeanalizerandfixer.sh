@@ -265,7 +265,7 @@ echo -e "${PIN} ${CYAN}ZelBack: $zelbench_zelback_color${NC}"
 echo -e "${NC}"
 
 if [[ "$zelbench_benchmark" == "running" ]]; then
-echo -e "${ARROW} ${CYAN}Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
+echo -e "${ARROW} ${CYAN} Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
 fi
 
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
@@ -476,7 +476,7 @@ if [[ "$txhash" != "" ]]; then
 				esac
 				
 				if [[ "$zelbench_benchmark" == "running" ]]; then
-					echo -e "${ARROW} ${CYAN}Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
+					echo -e "${ARROW} ${CYAN} Benchmark required skipped...${NC}"
 				else
 				
 				      if [[ "$zelbench_benchmark" == "failed" ]]; then
