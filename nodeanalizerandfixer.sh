@@ -322,9 +322,7 @@ zelback_error_check=$(curl -s -m 3 http://77.55.218.98:16127/zelid/loginphrase |
         sudo ufw reload > /dev/null 2>&1
      
     fi
-
   fi
-
 fi
 
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
