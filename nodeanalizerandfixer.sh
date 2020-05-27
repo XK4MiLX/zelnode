@@ -268,7 +268,6 @@ if [[ "$zelbench_benchmark" == "running" ]]; then
 echo -e "${ARROW} ${CYAN}Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
 fi
 
-
 if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} ZelBench working correct, all requirements met.${NC}"
 fi
@@ -316,10 +315,10 @@ sudo ufw allow out to any port 16127 > /dev/null 2>&1
 sudo ufw reload > /dev/null 2>&1
 else
 
-if [[ "$zelback_error_check" != "0" ]]; then
-zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
-echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
-fi
+  if [[ "$zelback_error_check" != "0" ]]; then
+    zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
+    echo -e "${X_MARK} ${CYAN} ZelBack error: ${RED}$zelback_error${NC}"
+  fi
 
 fi
 
