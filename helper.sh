@@ -281,7 +281,7 @@ if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
 stop_zelcash
 install_package zelcash
-dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$local_version${NC}"
 echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_zelcash
