@@ -523,7 +523,6 @@ mongod_inactive=$(systemctl status mongod 2> /dev/null | egrep 'inactive|failed'
 zelcash_running=$(systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
 zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-
 if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker(SNAP) service running ${SEA}$snap_docker_running${NC}"
 docker_working=1
