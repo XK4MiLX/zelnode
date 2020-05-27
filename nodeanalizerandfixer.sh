@@ -286,7 +286,6 @@ fi
 #if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
 ##lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
 ##lc_numeric_need='"en_US.UTF-8"'
-
 ##if [ "$lc_numeric_var" == "$lc_numeric_need" ]
 ##then
 ##echo -e "${CHECK_MARK} ${CYAN} LC_NUMERIC is correct${NC}"
@@ -294,7 +293,6 @@ fi
 ##echo -e "${X_MARK} ${CYAN} You need set LC_NUMERIC to en_US.UTF-8${NC}"
 ##LC_CHECK="1"
 ##fi
-
 #fi
 
 if [[ "$zelbench_zelback" == "disconnected" ]]; then
