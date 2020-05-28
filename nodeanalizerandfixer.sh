@@ -276,7 +276,9 @@ if [[ "$zelbench_benchmark" == "failed" ]]; then
 echo -e "${X_MARK} ${CYAN} ZelBench problem detected, check zelbenchmark debug.log${NC}"
 fi
 
-if [[ "$zelbench_benchmark" == "toaster" ]]; then
+core=$(zelbench-cli getbenchmarks | jq '.cores')
+
+if [[ "$zelbench_benchmark" == "failed" && "$core" > "0" ]]; then
 BTEST="1"
 echo -e "${X_MARK} ${CYAN} ZelBench working correct but minimum system requirements not met.${NC}"
 check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
