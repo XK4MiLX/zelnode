@@ -105,9 +105,9 @@ else
 echo -e "${X_MARK} ${CYAN} Zelcash not listen${NC}"
 fi
 
-if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelbenchd > /dev/null 2>&1
+if sudo lsof -i  -n | grep LISTEN | grep 16224 | grep zelbenchd > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${CYAN} Zelbench listen on port 16125${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Zelbench listen on port 16224${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Zelbench not listen${NC}"
 fi
