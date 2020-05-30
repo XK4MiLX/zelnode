@@ -201,17 +201,17 @@ dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print
     echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
-#start_zelcash
+start_zelcash
 echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
-zelbenchd -daemon >/dev/null 2>&1
+#zelbenchd -daemon >/dev/null 2>&1
 else
 
   if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
   
     echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-    #start_zelcash
+    start_zelcash
     echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
-    zelbenchd -daemon >/dev/null 2>&1
+    #zelbenchd -daemon >/dev/null 2>&1
   else
 
     if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
@@ -221,9 +221,9 @@ else
       if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
         echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
       fi
-      #start_zelcash
+      start_zelcash
       echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
-      zelbenchd -daemon >/dev/null 2>&1
+      #zelbenchd -daemon >/dev/null 2>&1
     fi
   fi
 fi
