@@ -255,7 +255,9 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
     else
       echo -e "${ARROW} ${CYAN}Zelfux was not updated.${NC}"
       echo -e "${ARROW} ${CYAN}Zelfux force update....${NC}"
-      cd /home/$USER/zelflux && npm run hardupdatezelflux
+      #cd /home/$USER/zelflux && npm run hardupdatezelflux
+      cd /home/$USER/zelflux && git reset --hard HEAD && git clean -f -d && git pull
+
 
       current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
       required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
