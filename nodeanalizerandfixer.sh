@@ -307,7 +307,7 @@ fi
 
 if [[ "$WANIP" != "" ]]; then
 
-zelback_error_check=$(curl -s -m 3 http://77.55.218.98:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
+zelback_error_check=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
 
   if [[ "$zelback_error_check" == "" ]]; then
   
