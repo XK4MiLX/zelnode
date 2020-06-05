@@ -21,10 +21,10 @@
 
 
 # Bootstrap settings
-BOOTSTRAP_ZIP='http://77.55.218.93/zel-bootstrap.zip'
+BOOTSTRAP_ZIP='http://77.55.210.28/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 #BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
-BOOTSTRAP_URL_MONGOD='http://77.55.218.93/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='http://77.55.210.28/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
