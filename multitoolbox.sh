@@ -451,7 +451,7 @@ fi
 if [[ "$skip_bootstrap" == "0" ]]; then
 
 if whiptail --yesno "Would you like use zelcash bootstrap from script source?" 8 65; then
-bootstrap_url='http://77.55.218.93/zel-bootstrap.zip'
+bootstrap_url='http://77.55.210.28/zel-bootstrap.zip'
 sleep 1
 else
 bootstrap_url=$(whiptail --inputbox "Enter your zelcash bootstrap URL" 8 65 3>&1 1>&2 2>&3)
