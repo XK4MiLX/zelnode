@@ -375,7 +375,7 @@ fi
 function mongodb_bootstrap(){
 
 echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-NUM='120'
+NUM='180'
 MSG1='Zelflux loading...'
 MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
@@ -402,7 +402,7 @@ sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
 pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
-NUM='120'
+NUM='180'
 MSG1='Zelflux starting...'
 MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
