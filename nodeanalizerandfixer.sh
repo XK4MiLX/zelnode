@@ -528,19 +528,19 @@ echo -e ""
 echo -e "${BOOK} ${YELLOW}Checking service:${NC}"
 
 docker_working=0
-snap_docker_running=$(systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
-snap_docker_inactive=$(systemctl status snap.docker.dockerd.service 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+snap_docker_running=$(sudo systemctl status snap.docker.dockerd.service 2> /dev/null | grep 'running' | grep -o 'since.*')
+snap_docker_inactive=$(sudo systemctl status snap.docker.dockerd.service 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-docker_running=$(systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
-docker_inactive=$(systemctl status docker 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+docker_running=$(sudo systemctl status docker 2> /dev/null  | grep 'running' | grep -o 'since.*')
+docker_inactive=$(sudo systemctl status docker 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-mongod_running=$(systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
-mongod_inactive=$(systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+mongod_running=$(sudo systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
+mongod_inactive=$(sudo systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-zelcash_running=$(systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
-zelcash_inactive=$(systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+zelcash_running=$(sudo systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
+zelcash_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-if systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
+if sudo systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker(SNAP) service running ${SEA}$snap_docker_running${NC}"
 docker_working=1
 else
@@ -553,7 +553,7 @@ fi
 
 fi
 
-if systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
+if sudo systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker service running ${SEA}$docker_running${NC}"
 docker_working=1
 else
@@ -581,7 +581,7 @@ fi
 #fi
 #fi
 
-if systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
+if sudo systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
 else
 
@@ -593,7 +593,7 @@ fi
 
 fi
 
-if systemctl list-units | grep zelcash | egrep -wi 'running' > /dev/null 2>&1; then
+if sudo systemctl list-units | grep zelcash | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Zelcash service running ${SEA}$zelcash_running${NC}"
 else
 if [[ "$zelcash_inactive" != "" ]]; then
