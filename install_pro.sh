@@ -380,7 +380,7 @@ MSG1='Zelflux loading...'
 MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
-DB_HIGHT=590910
+DB_HIGHT=622194
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
