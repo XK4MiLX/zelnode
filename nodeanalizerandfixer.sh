@@ -440,7 +440,6 @@ fi
 			#else
 			#echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
 			#fi
-
 		#else
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
 		#fi
