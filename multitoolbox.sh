@@ -702,11 +702,11 @@ then
 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
 wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER && sleep 1
+tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
 echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
 pm2 stop zelflux > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop 
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
