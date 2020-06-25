@@ -440,7 +440,6 @@ fi
 		#else
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
 		#fi
-
 		type=$(awk '{print $1}' <<< "$stak_info")
 		conf=$(zelcash-cli gettxout $txhash $index_from_file | jq .confirmations)
 
