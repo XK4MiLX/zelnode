@@ -419,10 +419,8 @@ if [[ "$txhash" != "" ]]; then
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 stak_info=""
 if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
-		index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+	index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
-
-
 	#stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
         stak_info=$(curl -s -m 5 https://explorer.zel.cash/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 fi
