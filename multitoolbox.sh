@@ -262,7 +262,6 @@ if [ -d /home/$USER/zelflux ]; then
     
 fi
 
-
 echo -e "${ARROW} ${CYAN}ZelFlux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1 && sleep 2
 
