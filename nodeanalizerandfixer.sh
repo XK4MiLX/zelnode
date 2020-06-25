@@ -419,26 +419,32 @@ if [[ "$txhash" != "" ]]; then
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 
-	stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
+if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
+		index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+		collateral_index=$(awk '{print $1}' <<< "$stak_info")
+fi
+
+	#stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
+        stak_info=$(curl -s -m 5 https://explorer.zel.cash/api/tx/$txhash | jq -r ".vout[$collateral_index]? | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 
 	if [[ "$stak_info" != "" ]]; then
 
 		if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
-		index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
-		collateral_index=$(awk '{print $1}' <<< "$stak_info")
+		#index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+		#collateral_index=$(awk '{print $2}' <<< "$stak_info")
 
-			if [[ "$index_from_file" == "$collateral_index" ]]; then
-			echo -e "${CHECK_MARK} ${CYAN} Zelnodeindex is correct"
-			else
-			echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
-			fi
+			#if [[ "$index_from_file" == "$collateral_index" ]]; then
+			#echo -e "${CHECK_MARK} ${CYAN} Zelnodeindex is correct"
+			#else
+			#echo -e "${X_MARK} ${CYAN} Zelnodeindex is not correct, correct one is $collateral_index"
+			#fi
 
-		else
-		collateral_index=$(awk '{print $1}' <<< "$stak_info")
-		fi
+		#else
+		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
+		#fi
 
-		type=$(awk '{print $2}' <<< "$stak_info")
+		type=$(awk '{print $1}' <<< "$stak_info")
 		conf=$(zelcash-cli gettxout $txhash $collateral_index | jq .confirmations)
 
 		if [[ $conf == ?(-)+([0-9]) ]]; then
