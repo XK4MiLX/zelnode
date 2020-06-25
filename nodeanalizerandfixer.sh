@@ -444,7 +444,7 @@ fi
 		#fi
 
 		type=$(awk '{print $1}' <<< "$stak_info")
-		conf=$(zelcash-cli gettxout $txhash $collateral_index | jq .confirmations)
+		conf=$(zelcash-cli gettxout $txhash $index_from_file | jq .confirmations)
 
 		if [[ $conf == ?(-)+([0-9]) ]]; then
     			if [ "$conf" -ge "100" ]; then
