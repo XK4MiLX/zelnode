@@ -502,7 +502,7 @@ sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
 mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/
 echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
-tar -cvzf /home/$USER/mongod_bootstrap.tar.gz /home/$USER/dump/
+tar -cvzf mongod_bootstrap.tar.gz /home/$USER/dump/
 
 if [[ -f /home/$USER/mongod_bootstrap.tar.gz ]]; then
 echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
