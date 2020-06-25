@@ -948,7 +948,6 @@ fi
 
 }
 
-
 function zelcash_reconfiguration()
 {
 
