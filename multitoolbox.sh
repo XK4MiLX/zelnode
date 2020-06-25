@@ -688,7 +688,7 @@ if ! pm2 -v > /dev/null 2>&1; then
 fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-DB_HIGHT=622194
+DB_HIGHT=628459
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e "${ARROW} ${CYAN}IP: ${RED}$WANIP${NC}"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
