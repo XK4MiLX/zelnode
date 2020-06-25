@@ -406,7 +406,7 @@ fi
 fi
 
 echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
-echo -e "${PIN} ${CYAN}Collateral: ${SEA}$collateral${NC}"
+echo -e "${PIN} ${CYAN}Collateral1: ${SEA}$collateral${NC}"
 echo -e ""
 
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
