@@ -13,6 +13,7 @@ BLUE="\\033[38;5;27m"
 SEA="\\033[38;5;49m"
 GREEN='\033[1;32m'
 CYAN='\033[1;36m'
+ORANGE='\e[38;5;202m'
 NC='\033[0m'
 FLUX_UPDATE="0"
 
@@ -513,6 +514,28 @@ fi
 
 }
 
+function send_to_host () {
+
+if [[ "$1" == "" ]]; then
+exit
+fi
+
+echo -e "${ARROW} ${CYAN}RSYNC configuration...${NC}"
+
+read -p 'IP: ' ipservar
+read -p 'USERNAME: ' uservar
+
+if [[ "$1" == "zelcash" ]]; then
+rsync -rv ~/zel-bootstrap.zip -e ssh "$uservar"@"$ipservar":~/zel-bootstrap.zip
+echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/zel-bootstrap.zip -e ssh${NC}"
+fi
+
+if [[ "$1" == "mongod" ]]; then
+rsync -rv ~/mongod_bootstrap.tar.gz -e ssh "$uservar"@"$ipservar":~/mongod_bootstrap.tar.gz
+echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/mongod_bootstrap.tar.gz -e ssh${NC}"
+fi
+}
+
 case $call_type in
 
                  "update_all")
@@ -558,6 +581,11 @@ echo
 ;;
                 "create_mongod_bootstrap")
 create_mongod_bootstrap
+echo
+;;
+
+                "send_to_host")
+send_to_host $type
 echo
 ;;
 
