@@ -519,18 +519,20 @@ function send_to_host () {
 if [[ "$1" == "" ]]; then
 exit
 fi
-
-echo -e "${ARROW} ${CYAN}RSYNC configuration...${NC}"
+sudo ufw disable >/dev/null 2>&1
+echo -e "${CYAN}RSYNC configuration...${NC}"
 
 read -p 'IP: ' ipservar
 read -p 'USERNAME: ' uservar
 
 if [[ "$1" == "zelcash" ]]; then
+echo "rsync -rv ~/zel-bootstrap.zip -e ssh "$uservar"@"$ipservar":~/zel-bootstrap.zip"
 rsync -rv ~/zel-bootstrap.zip -e ssh "$uservar"@"$ipservar":~/zel-bootstrap.zip
 echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/zel-bootstrap.zip -e ssh${NC}"
 fi
 
 if [[ "$1" == "mongod" ]]; then
+echo "rsync -rv ~/mongod_bootstrap.tar.gz -e ssh "$uservar"@"$ipservar":~/mongod_bootstrap.tar.gz"
 rsync -rv ~/mongod_bootstrap.tar.gz -e ssh "$uservar"@"$ipservar":~/mongod_bootstrap.tar.gz
 echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/mongod_bootstrap.tar.gz -e ssh${NC}"
 fi
