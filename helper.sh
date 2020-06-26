@@ -511,7 +511,6 @@ else
 echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
 fi
 
-
 }
 
 function send_to_host () {
