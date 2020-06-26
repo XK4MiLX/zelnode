@@ -521,8 +521,8 @@ exit
 fi
 
 sudo ufw disable >/dev/null 2>&1
-echo -e "${CYAN}RSYNC Configuration...${NC}"
 echo
+echo -e "${CYAN}RSYNC Configuration...${NC}"
 read -p 'IP: ' ipservar
 read -p 'USERNAME: ' uservar
 
