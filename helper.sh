@@ -256,6 +256,7 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
     else
       echo -e "${ARROW} ${CYAN}Zelfux was not updated.${NC}"
       echo -e "${ARROW} ${CYAN}Zelfux force update....${NC}"
+      rm /home/$USER/zelflux/.git/HEAD.lock
       #cd /home/$USER/zelflux && npm run hardupdatezelflux
       cd /home/$USER/zelflux && git reset --hard HEAD && git clean -f -d && git pull
 
