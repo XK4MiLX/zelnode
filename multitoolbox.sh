@@ -693,7 +693,7 @@ BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.da
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
 message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
-echo -e "${ARROW} ${CYAN}MongoDB error: ${RED}$message${NC}"
+echo -e "${ARROW} ${CYAN}Zelflux explorer error: ${RED}$message${NC}"
 echo
 exit
 fi
