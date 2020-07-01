@@ -384,50 +384,55 @@ DB_HIGHT=622194
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
+
 message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
 echo -e "${ARROW} ${CYAN}MongoDB error: ${RED}$message${NC}"
-echo
-exit
-fi
+echo -e ""
 
-#echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-echo -e ""
-if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-then
-echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
-wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
-echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
-pm2 stop zelflux > /dev/null 2>&1
-echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-pm2 start zelflux > /dev/null 2>&1
-pm2 save > /dev/null 2>&1
+else
 
-NUM='180'
-MSG1='Zelflux starting...'
-MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo
-BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
-if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
-then
-echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
-echo -e ""
-else
-echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
-echo -e ""
-fi
-else
-echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-echo -e ""
+  #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
+  echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
+  echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+  echo -e ""
+
+  if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
+    echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
+    wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
+    echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+    tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
+    pm2 stop zelflux > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+    mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+    sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+    sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
+    pm2 start zelflux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+
+    NUM='180'
+    MSG1='Zelflux starting...'
+    MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo
+    BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+    echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+  
+    if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
+    then
+      echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+      echo -e ""
+    else
+      echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+      echo -e ""
+    fi
+  
+  else
+     echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+     echo -e ""
+  fi
+
 fi
 
 }
