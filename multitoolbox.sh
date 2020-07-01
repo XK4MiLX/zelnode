@@ -690,6 +690,14 @@ fi
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=628459
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+
+if [[ "$BLOCKHIGHT" == "null" ]]; then
+message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
+echo -e "${ARROW} ${CYAN}MongoDB error: ${RED}$message${NC}"
+echo
+exit
+fi
+
 echo -e "${ARROW} ${CYAN}IP: ${RED}$WANIP${NC}"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
