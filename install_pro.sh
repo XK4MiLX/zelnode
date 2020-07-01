@@ -382,6 +382,14 @@ spinning_timer
 echo
 DB_HIGHT=622194
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+
+if [[ "$BLOCKHIGHT" == "null" ]]; then
+message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
+echo -e "${ARROW} ${CYAN}MongoDB error: ${RED}$message${NC}"
+echo
+exit
+fi
+
 #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
 echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
