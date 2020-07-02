@@ -458,10 +458,10 @@ sleep 1
 fi
 
 if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 65; then
-bootstrap_zip_del='1'
+bootstrap_zip_del='0'
 sleep 1
 else
-bootstrap_zip_del='0'
+bootstrap_zip_del='1'
 sleep 1
 fi
 fi
