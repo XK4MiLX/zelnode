@@ -516,12 +516,12 @@ fi
 
 function send_to_host () {
 
-if [[ "$1" == "" ]]; then
+if [[ "$1" != "mongod" || "$1" != "zelcash" ]]; then
 exit
 fi
 
 sudo ufw disable >/dev/null 2>&1
-echo
+echo -e "${CYAN}Firewall Stopping...${NC}"
 echo -e "${CYAN}RSYNC Configuration...${NC}"
 read -p 'IP: ' ipservar
 read -p 'USERNAME: ' uservar
@@ -529,15 +529,17 @@ read -p 'USERNAME: ' uservar
 if [[ "$1" == "zelcash" ]]; then
 rsync -rv ~/zel-bootstrap.zip -e ssh "$uservar"@"$ipservar":~/zel-bootstrap.zip
 echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/zel-bootstrap.zip -e ssh${NC}"
-echo
-read -p 'Awaiting for input...' firewall
-sudo ufw --force enable
 fi
 
 if [[ "$1" == "mongod" ]]; then
 rsync -rv ~/mongod_bootstrap.tar.gz -e ssh "$uservar"@"$ipservar":~/mongod_bootstrap.tar.gz
 echo -e "${ARROW} ${CYAN}Type on destination server: ${ORANGE}rsync -rv ~/mongod_bootstrap.tar.gz -e ssh${NC}"
 fi
+
+echo
+read -p 'Awaiting for input to enable firewall...' firewall
+sudo ufw --force enable
+
 }
 
 case $call_type in
