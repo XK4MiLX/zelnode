@@ -514,12 +514,12 @@ fi
 
 }
 
-function send_to_host () {
+function send_to_host() {
 
-if [[ "$1" != "mongod" || "$1" != "zelcash" ]]; then
-echo "$1"
-exit
-fi
+#if [[ "$1" != "mongod" || "$1" != "zelcash" ]]; then
+#echo "$1"
+#exit
+#fi
 
 sudo ufw disable >/dev/null 2>&1
 echo -e "${CYAN}Firewall Stopping...${NC}"
