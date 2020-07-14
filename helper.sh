@@ -517,7 +517,8 @@ fi
 function send_to_host () {
 
 if [[ "$1" != "mongod" || "$1" != "zelcash" ]]; then
-echo "..."
+echo "$1"
+echo "$0"
 exit
 fi
 
@@ -592,7 +593,7 @@ echo
 ;;
 
                 "send_to_host")
-		echo "...."
+		
 send_to_host $type
 echo
 ;;
