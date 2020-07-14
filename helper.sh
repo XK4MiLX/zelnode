@@ -592,6 +592,7 @@ echo
 ;;
 
                 "send_to_host")
+		echo "...."
 send_to_host $type
 echo
 ;;
