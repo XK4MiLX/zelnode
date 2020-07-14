@@ -518,7 +518,6 @@ function send_to_host () {
 
 if [[ "$1" != "mongod" || "$1" != "zelcash" ]]; then
 echo "$1"
-echo "$0"
 exit
 fi
 
