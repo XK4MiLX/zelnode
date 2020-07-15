@@ -36,6 +36,68 @@ type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
+
+function spinning_timer() {
+    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
+    end=$((SECONDS+NUM))
+    while [ $SECONDS -lt $end ];
+    do
+        for i in "${animation[@]}";
+        do
+	    echo -e ""
+            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
+            sleep 0.1
+	    
+        done
+    done
+    echo -ne "${MSG2}"
+}
+
+function string_limit_check_mark_port() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::65}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::65+string_diff}
+fi
+echo -e "${PIN}${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
+function string_limit_check_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::50}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::50+string_diff}
+fi
+echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
+function string_limit_x_mark() {
+if [[ -z "$2" ]]; then
+string="$1"
+string=${string::50}
+else
+string=$1
+string_color=$2
+string_leght=${#string}
+string_leght_color=${#string_color}
+string_diff=$((string_leght_color-string_leght))
+string=${string_color::50+string_diff}
+fi
+echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
+}
+
 function local_version_check() {
 local_version=$(dpkg -l $1 | grep -w $1 | awk '{print $3}')
 }
@@ -553,8 +615,62 @@ echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
 sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Starting MongoDB...${NC}"
 sudo systemctl start mongod >/dev/null 2>&1 && sleep 2
-echo -e "${ARROW} ${CYAN}Starting Zelflux...${NC}"
-pm2 start zelflux
+mongodb_bootstrap
+}
+
+
+function mongodb_bootstrap(){
+
+BLOCKHIGHT=100
+DB_HIGHT=642106
+
+echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+echo -e ""
+
+if [[ "$BLOCKHIGHT" != "" ]]; then
+
+if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
+then
+echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
+wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
+echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
+pm2 stop zelflux > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
+pm2 start zelflux > /dev/null 2>&1
+pm2 save > /dev/null 2>&1
+
+NUM='120'
+MSG1='Zelflux starting...'
+MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo
+BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
+then
+#echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+string_limit_check_mark "Mongo bootstrap installed successful.................................."
+echo -e ""
+else
+#echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+string_limit_x_mark "Mongo bootstrap installation failed.................................."
+echo -e ""
+fi
+else
+echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+echo -e ""
+fi
+
+else
+string_limit_x_mark "Local Explorer not responding........................................"
+echo -e ""
+fi
 }
 
 case $call_type in
