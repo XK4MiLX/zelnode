@@ -28,7 +28,7 @@ HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
 BOOTSTRAP_URL_MONGOD='http://77.55.210.28/mongod_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz
+BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 # add to path
 PATH=$PATH:"$COIN_PATH"
 export PATH
@@ -621,6 +621,7 @@ mongodb_bootstrap
 
 function mongodb_bootstrap(){
 
+WANIP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=100
 DB_HIGHT=642106
 
