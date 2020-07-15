@@ -100,7 +100,8 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 
 
 function pm2_install(){
-
+    
+    tmux kill-server > /dev/null 2>&1 && sleep 1
     echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     
