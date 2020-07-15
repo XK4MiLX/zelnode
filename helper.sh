@@ -628,7 +628,6 @@ BLOCKHIGHT=100
 DB_HIGHT=642106
 
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-echo -e ""
 
 if [[ "$BLOCKHIGHT" != "" ]]; then
 
