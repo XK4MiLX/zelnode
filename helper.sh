@@ -543,7 +543,7 @@ sudo ufw --force enable
 
 }
 
-function re_install_mongod() {
+function clean_mongod() {
 echo ""
 echo -e "${ARROW} ${CYAN}Stopping Zelflux...${NC}"
 pm2 stop zelflux >/dev/null 2>&1 && sleep 2
@@ -605,16 +605,12 @@ create_mongod_bootstrap
 echo
 ;;
 
-                "send_to_host")
-		
+                "send_to_host")	
 send_to_host $type
 echo
 ;;
-
-                "re_install_mongod")
-		
-
-
+                "clean_mongod")
+clean_mongod
 echo
 ;;
 
