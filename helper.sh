@@ -335,7 +335,6 @@ else
 echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelflux installation skipped...${NC}"
 fi
 
-
 }
 
 function zelcash_update()
