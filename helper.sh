@@ -649,7 +649,9 @@ spinning_timer
 echo
 BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
-if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
+
+if [[ "$BLOCKHIGHT" != "" ]]; then
+if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
 #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
 string_limit_check_mark "Mongo bootstrap installed successful.................................."
