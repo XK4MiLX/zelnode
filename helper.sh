@@ -543,6 +543,20 @@ sudo ufw --force enable
 
 }
 
+function re_install_mongod() {
+echo ""
+echo -e "${ARROW} ${CYAN}Stopping Zelflux...${NC}"
+pm2 stop zelflux >/dev/null 2>&1 && sleep 2
+echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
+sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
+echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
+sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
+echo -e "${ARROW} ${CYAN}Starting MongoDB...${NC}"
+sudo systemctl start mongod >/dev/null 2>&1 && sleep 2
+echo -e "${ARROW} ${CYAN}Starting Zelflux...${NC}"
+pm2 start zelflux
+}
+
 case $call_type in
 
                  "update_all")
@@ -594,6 +608,13 @@ echo
                 "send_to_host")
 		
 send_to_host $type
+echo
+;;
+
+                "re_install_mongod")
+		
+
+
 echo
 ;;
 
