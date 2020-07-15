@@ -29,6 +29,7 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
 BOOTSTRAP_URL_MONGOD='http://77.55.210.28/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
+
 # add to path
 PATH=$PATH:"$COIN_PATH"
 export PATH
@@ -178,7 +179,6 @@ sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sleep 2
 
 }
-
 
 # main function
 function reindex()
