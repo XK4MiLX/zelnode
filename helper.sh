@@ -667,7 +667,6 @@ else
 echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
 fi
-
 }
 
 case $call_type in
