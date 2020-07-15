@@ -651,25 +651,23 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scanned
 echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 
 if [[ "$BLOCKHIGHT" != "" ]]; then
-if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-then
+
+ if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
+ then
 #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
 string_limit_check_mark "Mongo bootstrap installed successful.................................."
 echo -e ""
-else
+ else
 #echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
 string_limit_x_mark "Mongo bootstrap installation failed.................................."
 echo -e ""
-fi
+ fi
+ 
 else
 echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
 fi
 
-else
-string_limit_x_mark "Local Explorer not responding........................................"
-echo -e ""
-fi
 }
 
 case $call_type in
