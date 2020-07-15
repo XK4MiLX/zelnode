@@ -612,8 +612,7 @@ echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
 sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
 sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
-echo -e "${ARROW} ${CYAN}Starting MongoDB...${NC}"
-sudo systemctl start mongod >/dev/null 2>&1 && sleep 2
+install_mongod
 mongodb_bootstrap
 }
 
@@ -666,6 +665,29 @@ else
 fi
 fi
 
+}
+
+function install_mongod() {
+echo
+echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
+sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
+sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
+sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
+echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
+sudo apt-get update -y > /dev/null 2>&1
+sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
+sudo systemctl enable mongod > /dev/null 2>&1
+sudo systemctl start  mongod > /dev/null 2>&1
+if mongod --version > /dev/null 2>&1 
+then
+ #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
+ string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+ echo
+else
+ #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
+ string_limit_x_mark "MongoDB was not installed................................."
+ echo
+fi
 }
 
 case $call_type in
