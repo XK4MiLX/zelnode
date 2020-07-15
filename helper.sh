@@ -111,7 +111,6 @@ remote_version=$(curl -s -m 3 https://apt.zel.cash/pool/main/z/"$1"/ | grep -o '
 if [[ "$remote_version" != "" ]]; then
 package_name=$(echo "$1_"$remote_version"_all.deb")
 fi
-
 }
 
 function install_package()
