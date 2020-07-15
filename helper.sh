@@ -624,7 +624,6 @@ WANIP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=100
 DB_HIGHT=642106
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-if [[ "$BLOCKHIGHT" != "" ]]; then
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
 then
@@ -667,6 +666,9 @@ else
 echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 echo -e ""
 fi
+
+fi
+
 }
 
 case $call_type in
