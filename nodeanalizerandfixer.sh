@@ -174,11 +174,11 @@ sudo apt install bc > /dev/null 2>&1
 
 if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking zelbenchmark debug.log${NC}"
-if [[ $(egrep -ac --color 'Failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
+if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
-error_line=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+error_line=$(egrep -ac -wi --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -ac -wi --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -206,8 +206,8 @@ if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != 
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to benchmark${NC}"
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}ZelBench errors info:${NC}"
-error_line=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+error_line=$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
