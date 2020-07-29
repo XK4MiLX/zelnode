@@ -845,12 +845,11 @@ then
     exit
 fi
 
-if sudo docker run hello-world > /dev/null 2>&1
+if docker run hello-world > /dev/null 2>&1
 then
 echo -e "${NC}"
 else
-echo -e "${WORNING}${CYAN}Docker is not installed.${NC}"
-echo -e "${WORNING}${CYAN}First install docker from root accont.${NC}"
+echo -e "${WORNING}${CYAN}Docker is not working correct or is not installed.${NC}"
 exit
 fi
 
