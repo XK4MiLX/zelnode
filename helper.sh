@@ -705,6 +705,36 @@ else
 fi
 }
 
+function swapon_create()
+{
+ MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    gb=$(awk "BEGIN {print $MEM/1048576}")
+    GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
+    if [ "$GB" -lt 2 ]; then
+        (( swapsize=GB*2 ))
+        swap="$swapsize"G
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
+    elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
+        swap=4G
+       # echo -e "${YELLOW}Swap set at $swap...${NC}"
+    elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
+        swap=2G
+        #echo -e "${YELLOW}Swap set at $swap...${NC}"
+    fi
+    if ! grep -q "swapfile" /etc/fstab; then
+        if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+            sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
+            sudo chmod 600 /swapfile > /dev/null 2>&1
+            sudo mkswap /swapfile > /dev/null 2>&1
+            sudo swapon /swapfile > /dev/null 2>&1
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
+            echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
+        else
+            echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
+        fi
+fi
+}
+
 case $call_type in
 
                  "update_all")
@@ -759,6 +789,11 @@ echo
 ;;
                 "clean_mongod")
 clean_mongod
+echo
+;;
+
+               "swapon_create")
+swapon_create
 echo
 ;;
 
