@@ -621,7 +621,7 @@ function mongodb_bootstrap(){
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=100
-DB_HIGHT=652590
+DB_HIGHT=681816
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
