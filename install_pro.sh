@@ -21,7 +21,7 @@
 
 
 # Bootstrap settings
-BOOTSTRAP_ZIP='http://77.55.210.28/zel-bootstrap.zip'
+BOOTSTRAP_ZIP='http://161.97.145.233/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 #BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='http://77.55.210.28/mongod_bootstrap.tar.gz'
