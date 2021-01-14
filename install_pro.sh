@@ -374,12 +374,12 @@ fi
 
 function mongodb_bootstrap(){
 
-echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-NUM='180'
-MSG1='Zelflux loading...'
-MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo
+#echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
+#NUM='180'
+#MSG1='Zelflux loading...'
+#MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
+#spinning_timer
+#echo
 DB_HIGHT=681816
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
@@ -1433,8 +1433,8 @@ else
    	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
-	NUM='90'
-   	MSG1='Starting Zelflux....'
+	NUM='180'
+   	MSG1='Zelflux Loading....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         echo && spinning_timer
         echo && echo
