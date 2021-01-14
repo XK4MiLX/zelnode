@@ -1422,7 +1422,6 @@ else
 	
         if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
 	    echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-	    echo
             break
         fi
     done
@@ -1433,7 +1432,7 @@ else
    	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
-	NUM='180'
+	NUM='150'
    	MSG1='Zelflux Loading....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         echo && spinning_timer
@@ -1505,8 +1504,8 @@ EOF
 
 
 function check() {
-    NUM='90'
-    MSG1='Finalizing installation please be patient this will take about 2min...'
+    NUM='60'
+    MSG1='Finalizing installation please be patient this will take about 1min...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && spinning_timer
     echo && echo
