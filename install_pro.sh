@@ -1434,7 +1434,7 @@ else
     	pm2 save > /dev/null 2>&1
 	
 	NUM='90'
-   	MSG1='${ARROW} ${YELLOW}Starting Zelflux...${NC}'
+   	MSG1='Starting Zelflux....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         echo && spinning_timer
         echo && echo
