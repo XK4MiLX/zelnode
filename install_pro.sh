@@ -1090,8 +1090,12 @@ function pm2_install(){
      	echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
    	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
+	
+
+   	#pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    	#pm2 save > /dev/null 2>&1
+	
+	
 	pm2 install pm2-logrotate > /dev/null 2>&1
 	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
 	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
@@ -1424,6 +1428,17 @@ else
     done
     
     fi
+    
+       
+   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    	pm2 save > /dev/null 2>&1
+	
+	NUM='90'
+   	MSG1='${ARROW} ${YELLOW}Starting Zelflux...${NC}'
+   	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+        echo && spinning_timer
+        echo && echo
+    
 
   if [[ -z "$mongo_bootstrap" ]]; then
     
@@ -1490,8 +1505,8 @@ EOF
 
 
 function check() {
-    NUM='60'
-    MSG1='Finalizing installation please be patient this will take about 1min...'
+    NUM='90'
+    MSG1='Finalizing installation please be patient this will take about 2min...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && spinning_timer
     echo && echo
