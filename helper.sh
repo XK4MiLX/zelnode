@@ -108,7 +108,7 @@ function remote_version_check(){
 #variable null
 remote_version=""
 package_name=""
-remote_version=$(curl -s -m 3 https://apt.zel.cash/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
+remote_version=$(curl -s -m 3 https://apt.zel.network/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
 if [[ "$remote_version" != "" ]]; then
 package_name=$(echo "$1_"$remote_version"_all.deb")
 fi
@@ -121,7 +121,7 @@ echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
 sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
 sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
 echo -e "${ARROW} ${CYAN}Adding apt source...${NC}"
-echo 'deb https://apt.zel.cash/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
+echo 'deb https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
 gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D >/dev/null 2>&1
 gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
 sudo apt-get update >/dev/null 2>&1
