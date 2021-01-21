@@ -780,10 +780,10 @@ txindex=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=explorer.zel.cash
-addnode=explorer2.zel.cash
+addnode=explorer.zel.network
+addnode=explorer2.zel.network
 addnode=explorer.zel.zelcore.io
-addnode=blockbook.zel.network
+addnode=explorer.zelcash.online
 maxconnections=256
 EOF
     sleep 2
@@ -798,7 +798,7 @@ function zel_package() {
 }
 
 function install_zel() {
-    echo 'deb https://apt.zel.cash/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+    echo 'deb https://apt.zel.network/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
         echo 'deb https://zelcash.github.io/aptrepo/ all main' 2> /dev/null | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
