@@ -482,6 +482,8 @@ fi
 function create_zel_bootstrap()
 {
 
+sudo apt install zip >/dev/null 2>&1
+
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
 local_network_hight=$(zelcash-cli getinfo | jq -r .blocks)
