@@ -27,7 +27,7 @@ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
-BOOTSTRAP_URL_MONGOD='http://161.97.145.233/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='https://zelnodebootstrap.xyz/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 # add to path
@@ -488,7 +488,7 @@ if zelcash-cli getinfo > /dev/null 2>&1; then
 
 local_network_hight=$(zelcash-cli getinfo | jq -r .blocks)
 echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
-explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
 echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
  if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
@@ -545,7 +545,7 @@ function create_mongod_bootstrap()
 
 local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 echo -e "${ARROW} ${CYAN}Mongod Network Block Hight: ${GREEN}$local_network_hight${NC}"
-explorer_network_hight=$(curl -s -m 3 https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
 echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
  if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
