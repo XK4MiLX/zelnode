@@ -486,6 +486,7 @@ sudo apt install zip >/dev/null 2>&1
 
 if zelcash-cli getinfo > /dev/null 2>&1; then
 
+
 local_network_hight=$(zelcash-cli getinfo | jq -r .blocks)
 echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
 explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
@@ -503,7 +504,7 @@ else
  echo
 exit
 fi
-
+data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
 stop_zelcash
 check_zip=$(zip -L | head -n1)
 
@@ -516,6 +517,18 @@ cd
 
 if [[ -f /home/$USER/zel-bootstrap.zip ]]; then
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+rm -rf /home/$USER/zel-bootstrap.json >/dev/null 2>&1
+
+sudo touch /home/$USER/zel-bootstrap.json
+sudo chown $USER:$USER /home/$USER/zel-bootstrap.json
+    cat << EOF > /home/$USER/zel-bootstrap.json
+{
+  "blocks_height": "${explorer_network_hight}",
+  "time": "${data}"
+}
+EOF
+
+
 else
 echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating failed${NC}"
 fi
@@ -559,7 +572,7 @@ echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_h
   echo -e "${ARROW} ${CYAN}Mongod is not full synced with Zelcash Network...${NC}"
   return
  fi
- 
+data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
 sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
@@ -571,6 +584,18 @@ tar -cvzf /home/$USER/mongod_bootstrap.tar.gz dump
 
 if [[ -f /home/$USER/mongod_bootstrap.tar.gz ]]; then
 echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+
+rm -rf /home/$USER/mongodb-bootstrap.json >/dev/null 2>&1
+
+sudo touch /home/$USER/mongodb-bootstrap.json
+sudo chown $USER:$USER /home/$USER/mongodb-bootstrap.json
+    cat << EOF > /home/$USER/mongodb-bootstrap.json
+{
+  "blocks_height": "${explorer_network_hight}",
+  "time": "${data}"
+}
+EOF
+
 else
 echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
 fi
