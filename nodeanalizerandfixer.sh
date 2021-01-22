@@ -371,7 +371,7 @@ echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
-if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
+if [[ $(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks') == "$blocks_hight" ]]; then
 echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
 else
 echo -e "${PIN} ${CYAN}Status: ${RED}not synced${NC}"
@@ -422,7 +422,7 @@ if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
 	#stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
-        stak_info=$(curl -s -m 5 https://explorer.zel.cash/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+        stak_info=$(curl -s -m 5 https://explorer.zel.network/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 fi
 
 	if [[ "$stak_info" != "" ]]; then
