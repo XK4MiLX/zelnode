@@ -1618,6 +1618,6 @@ function display_banner() {
     install_zelflux
     start_daemon
     log_rotate
-    update_script
+    #update_script
     basic_security
     status_loop
