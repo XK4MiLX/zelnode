@@ -21,10 +21,10 @@
 
 
 # Bootstrap settings
-BOOTSTRAP_ZIP='http://161.97.145.233/zel-bootstrap.zip'
+BOOTSTRAP_ZIP='https://zelnodebootstrap.xyz/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 #BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
-BOOTSTRAP_URL_MONGOD='http://161.97.145.233/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='https://zelnodebootstrap.xyz/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
@@ -1348,11 +1348,11 @@ fi
 
 function status_loop() {
 
-if [[ $(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+if [[ $(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
 
-EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
@@ -1375,7 +1375,7 @@ else
     while true
     do
         
-        EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.cash/api/status?q=getInfo | jq '.info.blocks')
+        EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
