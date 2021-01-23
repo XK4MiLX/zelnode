@@ -23,7 +23,6 @@
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://zelnodebootstrap.xyz/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
-#BOOTSTRAP_ZIP='https://www.dropbox.com/s/kyqe8ji3g1yetfx/zel-bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://zelnodebootstrap.xyz/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -1106,8 +1105,7 @@ function pm2_install(){
 	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
 	 string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................."
 	 echo
-    else
-   	 echo -e "${ARROW} ${CYAN}PM2 was not installed${NC}"
+    else  	 
 	 string_limit_x_mark "PM2 was not installed................................."
 	 echo
     fi 
