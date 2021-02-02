@@ -1444,7 +1444,7 @@ else
    	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
-	NUM='150'
+	NUM='190'
    	MSG1='Zelflux Loading....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         echo && spinning_timer
@@ -1516,8 +1516,8 @@ EOF
 
 
 function check() {
-    NUM='60'
-    MSG1='Finalizing installation please be patient this will take about 1min...'
+    NUM='120'
+    MSG1='Finalizing installation please be patient this will take about 2min...'
     MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
     echo && spinning_timer
     echo && echo
