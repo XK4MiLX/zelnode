@@ -688,7 +688,7 @@ if ! pm2 -v > /dev/null 2>&1; then
 fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-DB_HIGHT=681816
+DB_HIGHT=$(curl -s -m 3 https://zelnodebootstrap.xyz/mongodb-bootstrap.json | jq -r '.blocks_height')
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
