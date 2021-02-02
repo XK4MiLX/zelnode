@@ -1220,7 +1220,6 @@ function install_zelflux() {
         zelflux
 	
     else
-    
    	  echo -e "${WORNING}${CYAN}ERROR: OS version not supported: $(lsb_release -d)"
    	  echo -e "${WORNING}${CYAN}Installation stopped..."
 	  echo
