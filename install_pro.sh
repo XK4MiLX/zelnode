@@ -373,7 +373,7 @@ fi
 
 function mongodb_bootstrap(){
 
-#echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
+echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 #NUM='180'
 #MSG1='Zelflux loading...'
 #MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
