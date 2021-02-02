@@ -1188,27 +1188,33 @@ function install_zelflux() {
     fi
 
     sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
-    if [[ $(lsb_release -r) = *16.04* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" 2> /dev/null| sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+    if [[ $(lsb_release -r) = *16.* ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
-    elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *20.* || $(lsb_release -r) = *19.*  ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+    elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *19.*  ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+        install_mongod
+        install_nodejs
+        zelflux
+    elif [[ $(lsb_release -r) = *20.*   ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
         zelflux
