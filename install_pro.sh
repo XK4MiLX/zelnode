@@ -235,6 +235,13 @@ then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+
+
+KDA_A=$(grep -w kadena ~/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+if [[ "$KDA_A" != "" ]]; then
+echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+fi
+
 fi
 fi
 
@@ -257,6 +264,13 @@ then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+
+KDA_A=$(grep -w kadena ~/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+if [[ "$KDA_A" != "" ]]; then
+echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+fi
+
+
 fi
 fi
 
@@ -379,7 +393,7 @@ echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 #MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 #spinning_timer
 #echo
-DB_HIGHT=$(curl -s -m 3 https://zelnodebootstrap.xyz/mongodb-bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb-bootstrap.json | jq -r '.blocks_height')
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
@@ -1329,7 +1343,21 @@ function zelflux() {
         done
 
         fi
-      
+  
+
+if [[ "$KDA_A" != "" ]]; then
+  touch ~/zelflux/config/userconfig.js
+    cat << EOF > ~/zelflux/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '${WANIP}',
+        zelid: '${ZELID}',
+	kadena: '${KDA_A}',
+        testnet: false
+      }
+    }
+EOF
+else
     touch ~/zelflux/config/userconfig.js
     cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
@@ -1340,6 +1368,7 @@ module.exports = {
       }
     }
 EOF
+fi
 
 if [ -d ~/zelflux ]
 then
