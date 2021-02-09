@@ -762,6 +762,26 @@ function swapon_create()
 fi
 }
 
+
+
+function unlock_node()
+{
+
+echo
+echo -e "${ARROW} ${YELLOW}Stopping all zelflux application${NC}" && sleep 1
+docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
+while read line; do
+sudo docker stop $line && sleep 1
+done
+echo
+echo -e "${ARROW} ${YELLOW}Unmonting all locked zelflux resource${NC}" && sleep 1
+df | egrep 'zelflux' | awk '{ print $1}' |
+while read line; do
+sudo unmont $line && sleep 1
+done
+
+}
+
 case $call_type in
 
                  "update_all")
@@ -821,6 +841,11 @@ echo
 
                "swapon_create")
 swapon_create
+echo
+;;
+
+               "unlock_node")
+unlock_node
 echo
 ;;
 
