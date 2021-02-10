@@ -147,7 +147,7 @@ use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
-zelid=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 
 echo -e "${ARROW} ${YELLOW}Install config summary:"
 
@@ -482,7 +482,7 @@ outpoint=$(whiptail --inputbox "Enter your ZelNode Output TX ID from Zelcore/Zel
 sleep 1
 index=$(whiptail --inputbox "Enter your ZelNode Output Index from Zelcore/Zelmate" 8 65 3>&1 1>&2 2>&3)
 sleep 1
-zelid=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
+zel_id=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
 sleep 1
 
 fi
@@ -564,7 +564,7 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "prvkey": "${prvkey}",
   "outpoint": "${outpoint}",
   "index": "${index}",
-  "zelid": "${zelid}",
+  "zelid": "${zel_id}",
   "ssh_port": "${ssh_port}",
   "firewall_disable": "${firewall_disable}",
   "bootstrap_url": "${bootstrap_url}",
