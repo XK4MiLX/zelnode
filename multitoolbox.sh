@@ -246,7 +246,6 @@ docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
 sudo docker stop $line && sleep 1
 done
-echo
 fi
 
 if [[ $resource_check != 0 ]]; then
@@ -256,7 +255,6 @@ df | egrep 'zelflux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
 done
-echo
 fi
 
 if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
