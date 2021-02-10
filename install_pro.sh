@@ -489,14 +489,14 @@ function wipe_clean() {
     pm2 save > /dev/null 2>&1 && sleep 1
     pm2 kill > /dev/null 2>&1  && sleep 1
     npm remove pm2 -g > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
+    #echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
+    echo -e "${ARROW} ${CYAN}Removing others files and scripts...${NC}"
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
     #sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
 
     
     sudo rm -rf .zelbenchmark && sleep 1
     ## rm -rf $BOOTSTRAP_ZIPFILE && sleep 1
-    echo -e "${ARROW} ${CYAN}Removing others files and scripts...${NC}"
     rm $UPDATE_FILE > /dev/null 2>&1
     rm restart_zelflux.sh > /dev/null 2>&1
     rm zelnodeupdate.sh > /dev/null 2>&1
