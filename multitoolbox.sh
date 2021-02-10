@@ -235,7 +235,7 @@ fi
  if pm2 -v > /dev/null 2>&1; then
  pm2 stop zelflux > /dev/null 2>&1
  fi
-
+ 
 docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
 resource_check=$(df | egrep 'zelflux' | awk '{ print $1}' | wc -l)
 
@@ -249,7 +249,6 @@ done
 echo
 fi
 
-
 if [[ $resource_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Unmounting locked zelflux resource${NC}" && sleep 1
@@ -259,7 +258,6 @@ sudo unmont $line && sleep 1
 done
 echo
 fi
-
 
 if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
 
