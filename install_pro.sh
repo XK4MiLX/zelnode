@@ -10,11 +10,14 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 COIN_NAME='zelcash'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
+
 BENCH_NAME='zelbench'
 BENCH_CLI='zelbench-cli'
+
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
 COIN_PATH='/usr/local/bin'
+
 USERNAME="$(whoami)"
 FLUX_DIR='zelflux'
 
@@ -201,7 +204,7 @@ if [[ -f ~/.zelcash/zelcash.conf ]]; then
 
 if [[ -z "$import_settings" ]]; then
 
-if whiptail --yesno "Would you like to import data from zelcash.conf and userconfig.js Y/N?" 8 60; then
+if whiptail --yesno "Would you like to import data from config files Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
