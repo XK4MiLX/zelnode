@@ -491,7 +491,7 @@ function wipe_clean() {
     npm remove pm2 -g > /dev/null 2>&1 && sleep 1
     echo -e "${ARROW} ${CYAN}Removing Zelflux...${NC}"
     sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
-    sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
+    #sudo rm -rf zelflux > /dev/null 2>&1  && sleep 1
 
     
     sudo rm -rf .zelbenchmark && sleep 1
@@ -1313,6 +1313,27 @@ fi
 }
 
 function zelflux() {
+   
+ docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
+ resource_check=$(df | egrep 'zelflux' | awk '{ print $1}' | wc -l)
+
+if [[ $docker_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
+docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
+while read line; do
+sudo docker stop $line && sleep 1
+done
+fi
+
+if [[ $resource_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Unmounting locked zelflux resource${NC}" && sleep 1
+df | egrep 'zelflux' | awk '{ print $1}' |
+while read line; do
+sudo umount $line && sleep 1
+done
+fi
    
     if [ -d "./zelflux" ]; then
          echo -e "${ARROW} ${YELLOW}Removing any instances of zelflux....${NC}"
