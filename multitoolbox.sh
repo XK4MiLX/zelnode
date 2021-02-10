@@ -236,13 +236,48 @@ fi
  pm2 stop zelflux > /dev/null 2>&1
  fi
 
+docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
+resource_check=$(df | egrep 'zelflux' | awk '{ print $1}' | wc -l)
+
+if [[ $docker_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
+docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
+while read line; do
+sudo docker stop $line && sleep 1
+done
+echo
+fi
+
+
+if [[ $resource_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Unmounting locked zelflux resource${NC}" && sleep 1
+df | egrep 'zelflux' | awk '{ print $1}' |
+while read line; do
+sudo unmont $line && sleep 1
+done
+echo
+fi
+
 
 if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
 
     echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
     zel_id=$(grep -w zelid /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
     WANIP=$(grep -w ipaddress /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
+    
     echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$zel_id${NC}" && sleep 1
+    
+    KDA_A=$(grep -w kadena /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+    
+    if [[ "$KDA_A" != "" ]]; then
+    
+    echo -e "${PIN}${CYAN}Kadena address = ${GREEN}$KDA_A${NC}" && sleep 1
+    
+    fi
+    
+   
     echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}" && sleep 1   
     echo 
     echo -e "${ARROW} ${CYAN}Removing any instances of zelflux....${NC}"
@@ -300,20 +335,52 @@ while true
    fi
 
  done
-
-fi
-
-touch /home/$USER/zelflux/config/userconfig.js
-    cat << EOF > /home/$USER/zelflux/config/userconfig.js
+ 
+ 
+  touch ~/zelflux/config/userconfig.js
+    cat << EOF > ~/zelflux/config/userconfig.js
 module.exports = {
       initial: {
-        ipaddress: '$WANIP',
-        zelid: '$zel_id',
+        ipaddress: '${WANIP}',
+        zelid: '${ZELID}',
         testnet: false
       }
     }
 EOF
 
+else
+
+if [[ "$KDA_A" != "" ]]; then
+
+  touch ~/zelflux/config/userconfig.js
+    cat << EOF > ~/zelflux/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '${WANIP}',
+        zelid: '${ZELID}',
+	kadena: '${KDA_A}',
+        testnet: false
+      }
+    }
+EOF
+
+else
+
+  touch ~/zelflux/config/userconfig.js
+    cat << EOF > ~/zelflux/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '${WANIP}',
+        zelid: '${ZELID}',
+        testnet: false
+      }
+    }
+EOF
+
+fi
+
+fi
+   
 if [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
 string_limit_check_mark "Zelflux configuration successfull..........................................."
 else
