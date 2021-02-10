@@ -157,21 +157,21 @@ if ! gpg --list-keys Zel >/dev/null; then
 fi
 }
 
-start_zelcash() {
+start_fluxdaemon() {
 serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
 
 if [[ "$serive_check" != "" ]]; then
-echo -e "${ARROW} ${CYAN}Starting zelcash service...${NC}"
+echo -e "${ARROW} ${CYAN}Starting Flux daemon service...${NC}"
   sudo systemctl start zelcash >/dev/null 2>&1
 else
-echo -e "${ARROW} ${CYAN}Starting zelcash daemon process...${NC}"
+echo -e "${ARROW} ${CYAN}Starting Flux daemon process...${NC}"
   "$COIN_DAEMON" >/dev/null 2>&1
 fi
 }
 
-stop_zelcash() {
+stop_fluxdaemon() {
 
-echo -e "${ARROW} ${CYAN}Stopping zelcash...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping Flux daemon...${NC}"
 sudo systemctl stop zelcash >/dev/null 2>&1 && sleep 5
 "$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
 sudo killall "$COIN_DAEMON" >/dev/null 2>&1
@@ -184,43 +184,43 @@ sleep 4
 function reindex()
 {
 echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
-stop_zelcash
+stop_fluxdaemon
 "$COIN_DAEMON" -reindex
 serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
 if [[ "$serive_check" != "" ]]; then
 sleep 60
-stop_zelcash
-start_zelcash
+stop_fluxdaemon
+start_fluxdaemon
 fi
 }
 
-function restart_zelcash()
+function restart_fluxdaemon()
 {
 
-echo -e "${ARROW} ${CYAN}Restarting zelcash...${NC}"
+echo -e "${ARROW} ${CYAN}Restarting Flux daemon...${NC}"
 serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
 if [[ "$serive_check" != "" ]]; then
 sudo systemctl restart zelcash >/dev/null 2>&1 && sleep 3
 else
-stop_zelcash
-start_zelcash
+stop_fluxdaemon
+start_fluxdaemon
 fi
 
 }
 
-function zelbench_update()
+function fluxbench_update()
 {
 
 local_version=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
-echo -e "${ARROW} ${CYAN}Force zelbench updating...${NC}"
-stop_zelcash
+echo -e "${ARROW} ${CYAN}Force FluxBench updating...${NC}"
+stop_fluxdaemon
 install_package zelbench
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$local_version${NC}"
-echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
-start_zelcash
+echo -e "${ARROW} ${CYAN}FluxBench version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}FluxBench version after update: ${GREEN}$dpkg_version_after_install${NC}"
+start_fluxdaemon
 return
 fi
 
@@ -230,20 +230,20 @@ remote_version_check zelbench
 if [[ "$call_type" != "update_all" ]]; then
 
   if [[ "$remote_version" == "" ]]; then
-   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
+   echo -e "${ARROW} ${CYAN}Problem with version veryfication...FluxBench installation skipped...${NC}"
    return
   fi
 
   if [[ "$remote_version" == "$local_version" ]]; then
-   echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+   echo -e "${ARROW} ${CYAN}You have the current version of FluxBench ${GREEN}($remote_version)${NC}"
    return
   fi
 
 fi
 
-echo -e "${ARROW} ${CYAN}Updating zelbench...${NC}"
+echo -e "${ARROW} ${CYAN}Updating FluxBench...${NC}"
 #stop_zelcash
-echo -e "${ARROW} ${CYAN}Zelbench server stopping...${NC}"
+echo -e "${ARROW} ${CYAN}FluxBench stopping...${NC}"
 zelbench-cli stop >/dev/null 2>&1 && sleep 2
 sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sudo apt-get update >/dev/null 2>&1
@@ -252,7 +252,7 @@ sudo chmod 755 "$COIN_PATH"/zelbench*
 sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelbench version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}FluxBench version before update: ${GREEN}$local_version${NC}"
 #echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
@@ -261,19 +261,19 @@ install_package zelbench
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
   if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
-start_zelcash
-echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+start_fluxdaemon
+echo -e "${ARROW} ${CYAN}FluxBench starting...${NC}"
 #zelbenchd -daemon >/dev/null 2>&1
 else
 
   if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
   
-    echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_zelcash
-    echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+    echo -e "${ARROW} ${CYAN}FuxBench server starting...${NC}"
     #zelbenchd -daemon >/dev/null 2>&1
   else
 
@@ -282,10 +282,10 @@ else
       dpkg_version_after_install=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
     
       if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
-        echo -e "${ARROW} ${CYAN}Zelbench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+        echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
       fi
-      start_zelcash
-      echo -e "${ARROW} ${CYAN}Zelbench server starting...${NC}"
+      start_fluxdaemon
+      echo -e "${ARROW} ${CYAN}FluxBench server starting...${NC}"
       #zelbenchd -daemon >/dev/null 2>&1
     fi
   fi
@@ -293,7 +293,7 @@ fi
 
 }
 
-function zelflux_update()
+function flux_update()
 {
 
 current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
@@ -332,24 +332,24 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
     fi
 
 else
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelflux installation skipped...${NC}"
+echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
 fi
 
 }
 
-function zelcash_update()
+function fluxdaemon_update()
 {
 
 local_version=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
-echo -e "${ARROW} ${CYAN}Force zelcash updating...${NC}"
-stop_zelcash
+echo -e "${ARROW} ${CYAN}Force Flux daemon updating...${NC}"
+stop_fluxdaemon
 install_package zelcash
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$local_version${NC}"
-echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
-start_zelcash
+echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
+start_fluxdaemon
 return
 fi
 
@@ -361,19 +361,19 @@ remote_version_check zelcash
 if [[ "$call_type" != "update_all" ]]; then
 
   if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
+   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
    return
   fi
 
   if [[ "$local_version" == "$remote_version" ]]; then
-   echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
+   echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
    return
   fi
 
 fi
 
 dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-stop_zelcash
+stop_fluxdaemon
 
 sudo apt-get update >/dev/null 2>&1
 sudo apt-get install --only-upgrade zelcash -y >/dev/null 2>&1
@@ -381,7 +381,7 @@ sudo chmod 755 "$COIN_PATH"/zelcash*
 sleep 2
 
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Zelcash version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
 #echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
@@ -390,17 +390,17 @@ install_package zelcash
 dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
 
   if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
-start_zelcash
+start_fluxdaemon
 
 else
 
   if [[ "$local_version" != "$dpkg_version_after_install" ]]; then
   
-    echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-    start_zelcash
+    echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    start_fluxdaemon
   fi
 
   if [[ "local_version" == "$dpkg_version_after_install" ]]; then
@@ -408,10 +408,10 @@ else
     dpkg_version_after_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
     
     if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
-      echo -e "${ARROW} ${CYAN}Zelcash update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+      echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     fi
     
-    start_zelcash
+    start_fluxdaemon
   fi
 
 fi
@@ -420,22 +420,22 @@ fi
 
 function check_update() {
 
-update_zelbench="0"
-update_zelcash="0"
-update_zelflux="0"
+update_fluxbench="0"
+update_fluxdaemon="0"
+update_flux="0"
 
 local_version_check zelcash
 remote_version_check zelcash
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelcash installation skipped...${NC}"
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
 else
 
   if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of Zelcash available ${SEA}$remote_version${NC}"
-  update_zelcash="1"
+  echo -e "${RED}${HOT}${CYAN}New version of Flux daemon available ${SEA}$remote_version${NC}"
+  update_fluxdaemon="1"
   else
-  echo -e "${ARROW} ${CYAN}You have the current version of Zelcash ${GREEN}($remote_version)${NC}"
+  echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
   fi
   
 fi
@@ -444,14 +444,14 @@ local_version_check zelbench
 remote_version_check zelbench
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelbench installation skipped...${NC}"
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...FluxBench installation skipped...${NC}"
 else
 
   if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of Zelbench available ${SEA}$remote_version${NC}"
-  update_zelbench="1"
+  echo -e "${RED}${HOT}${CYAN}New version of FluxBench available ${SEA}$remote_version${NC}"
+  update_fluxbench="1"
   else
-  echo -e "${ARROW} ${CYAN}You have the current version of Zelbench ${GREEN}($remote_version)${NC}"
+  echo -e "${ARROW} ${CYAN}You have the current version of FluxBench ${GREEN}($remote_version)${NC}"
   fi
 
 fi
@@ -460,26 +460,26 @@ local_version=$(jq -r '.version' /home/$USER/zelflux/package.json)
 remote_version=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Zelflux installation skipped...${NC}"
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
 else
 
   if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of ZelFlux available ${SEA}$remote_version${NC}"
-  update_zelflux="1"
+  echo -e "${RED}${HOT}${CYAN}New version of Flux available ${SEA}$remote_version${NC}"
+  update_flux="1"
   FLUX_UPDATE="1"
   else
-  echo -e "${ARROW} ${CYAN}You have the current version of ZelFlux ${GREEN}($remote_version)${NC}"
+  echo -e "${ARROW} ${CYAN}You have the current version of Flux ${GREEN}($remote_version)${NC}"
   fi
 
 fi
 
-if [[ "$update_zelbench" == "1" || "$update_zelcash" == "1" || "$update_zelflux" == "1" ]]; then
+if [[ "$update_fluxbench" == "1" || "$update_fluxdaemon" == "1" || "$update_flux" == "1" ]]; then
 echo -e ""
 fi
 
 }
 
-function create_zel_bootstrap()
+function create_flux_bootstrap()
 {
 
 sudo apt install zip >/dev/null 2>&1
@@ -498,25 +498,25 @@ echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_h
  fi
  
 if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
- echo -e "${ARROW} ${CYAN}Node is full synced with Zelcash Network...${NC}"
+ echo -e "${ARROW} ${CYAN}Node is full synced with Flux Network...${NC}"
 else
- echo -e "${ARROW} ${CYAN}Node is not full synced with Zelcash Network...${NC}"
+ echo -e "${ARROW} ${CYAN}Node is not full synced with Flux Network...${NC}"
  echo
 exit
 fi
 data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
-stop_zelcash
+stop_fluxdaemon
 check_zip=$(zip -L | head -n1)
 
 if [[ "$check_zip" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 rm -rf /home/$USER/zel-bootstrap.zip >/dev/null 2>&1 && sleep 5
-echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating...${NC}"
+echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
 cd /home/$USER/.zelcash && zip /home/$USER/zel-bootstrap.zip -r blocks chainstate determ_zelnodes
 cd
 
 if [[ -f /home/$USER/zel-bootstrap.zip ]]; then
-echo -e "${ARROW} ${CYAN}Zelcash bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+echo -e "${ARROW} ${CYAN}Flux daemon bootstrap created successful ${GREEN}($local_network_hight)${NC}"
 rm -rf /home/$USER/zel-bootstrap.json >/dev/null 2>&1
 
 sudo touch /home/$USER/zel-bootstrap.json
@@ -530,14 +530,14 @@ EOF
 
 
 else
-echo -e "${ARROW} ${CYAN}Zelcash bootstrap creating failed${NC}"
+echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating failed${NC}"
 fi
 
 fi
-start_zelcash
+start_fluxdaemon
 
 else
-echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...zelcash daemon not working...${NC}"
+echo -e "${ARROW} ${CYAN}Flux network veryfication failed...Flux daemon not working...${NC}"
 echo
 fi
 
@@ -562,14 +562,14 @@ explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=
 echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
  if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
- echo -e "${ARROW} ${CYAN}Zelcash network veryfication failed...${NC}"
+ echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
  return
  fi
 
  if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
-  echo -e "${ARROW} ${CYAN}Mongod is full synced with Zelcash Network...${NC}"
+  echo -e "${ARROW} ${CYAN}Mongod is full synced with Flux Network...${NC}"
  else
-  echo -e "${ARROW} ${CYAN}Mongod is not full synced with Zelcash Network...${NC}"
+  echo -e "${ARROW} ${CYAN}Mongod is not full synced with Flux Network...${NC}"
   return
  fi
 data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
@@ -633,7 +633,7 @@ sudo ufw --force enable
 
 function clean_mongod() {
 echo ""
-echo -e "${ARROW} ${CYAN}Stopping Zelflux...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
 pm2 stop zelflux >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
 sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
@@ -666,7 +666,7 @@ pm2 start zelflux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
-MSG1='Zelflux starting...'
+MSG1='Flux starting...'
 MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
@@ -766,7 +766,6 @@ fi
 
 function unlock_node()
 {
-
 echo
 echo -e "${ARROW} ${YELLOW}Stopping all zelflux application${NC}" && sleep 1
 docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
@@ -779,7 +778,6 @@ df | egrep 'zelflux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
 done
-
 }
 
 case $call_type in
@@ -787,42 +785,42 @@ case $call_type in
                  "update_all")
 		 
 check_update
-if [[ "$update_zelflux" == "1" ]]; then
-zelflux_update
+if [[ "$update_flux" == "1" ]]; then
+flux_update
 fi
 
-if [[ "$update_zelbench" == "1" ]]; then
-zelbench_update
+if [[ "$update_fluxbench" == "1" ]]; then
+fluxbench_update
 fi
 
-if [[ "$update_zelcash" == "1" ]]; then
-zelcash_update
+if [[ "$update_fluxdaemon" == "1" ]]; then
+fluxdaemon_update
 fi
 echo
 ;;
 
-                 "zelcash_update")
-zelcash_update
+                 "fluxdaemon_update")
+fluxdaemon_update
 echo
 ;;
-                 "zelbench_update")
-zelbench_update
+                 "fluxbench_update")
+fluxbench_update
 echo
 ;;
-                 "zelflux_update")
-zelflux_update
+                 "flux_update")
+flux_update
 echo
 ;;
-                 "zelcash_restart")
-restart_zelcash
+                 "flux_restart")
+restart_fluxdaemon
 echo
 ;;
-                 "zelcash_reindex")
+                 "flux_reindex")
 reindex
 echo
 ;;
-                "create_zel_bootstrap")
-create_zel_bootstrap
+                "create_flux_bootstrap")
+create_flux_bootstrap
 echo
 ;;
                 "create_mongod_bootstrap")
