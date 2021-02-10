@@ -1327,7 +1327,7 @@ done
 fi
 
 if [[ $resource_check != 0 ]]; then
-echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}" && sleep 1
+echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Unmounting locked zelflux resource${NC}" && sleep 1
 df | egrep 'zelflux' | awk '{ print $1}' |
 while read line; do
@@ -1336,10 +1336,9 @@ done
 fi
    
     if [ -d "./zelflux" ]; then
-         echo -e "${ARROW} ${YELLOW}Removing any instances of zelflux....${NC}"
+         echo -e "${ARROW} ${YELLOW}Removing any instances of zelflux{NC}"
          sudo rm -rf zelflux
     fi
-
 
 
     echo -e "${ARROW} ${YELLOW}Zelflux installing...${NC}"
