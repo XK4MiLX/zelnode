@@ -338,7 +338,7 @@ while true
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
-        zelid: '${ZELID}',
+        zelid: '${zel_id}',
         testnet: false
       }
     }
@@ -353,7 +353,7 @@ if [[ "$KDA_A" != "" ]]; then
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
-        zelid: '${ZELID}',
+        zelid: '${zel_id}',
 	kadena: '${KDA_A}',
         testnet: false
       }
@@ -367,7 +367,7 @@ else
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
-        zelid: '${ZELID}',
+        zelid: '${zel_id}',
         testnet: false
       }
     }
