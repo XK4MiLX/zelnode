@@ -147,7 +147,7 @@ use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
-ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+zelid=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 
 echo -e "${ARROW} ${YELLOW}Install config summary:"
 
