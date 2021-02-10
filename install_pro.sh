@@ -1,25 +1,5 @@
 #!/bin/bash
 
-###############################################################################################################################################################################################################
-# IF PLANNING TO RUN ZELNODE FROM HOME/OFFICE/PERSONAL EQUIPMENT & NETWORK!!!
-# You must understand the implications of running a ZelNode on your on equipment and network. There are many possible security issues. DYOR!!!
-# Running a ZelNode from home should only be done by those with experience/knowledge of how to set up the proper security.
-# It is recommended for most operators to use a VPS to run a ZelNode
-#
-# **Potential Issues (not an exhaustive list):**
-# 1. Your home network IP address will be displayed to the world. Without proper network security in place, a malicious person sniff around your IP for vulnerabilities to access your network.
-# 2. Port forwarding: The p2p port for ZelCash will need to be open.
-# 3. DDOS: VPS providers typically provide mitigation tools to resist a DDOS attack, while home networks typically don't have these tools.
-# 4. Zelcash daemon is ran with sudo permissions, meaning the daemon has elevated access to your system. **Do not run a ZelNode on equipment that also has a funded wallet loaded.**
-# 5. Static vs. Dynamic IPs: If you have a revolving IP, every time the IP address changes, the ZelNode will fail and need to be stood back up.
-# 6. Home connections typically have a monthly data cap. ZelNodes will use 2.5 - 6 TB monthly usage depending on ZelNode tier, which can result in overage charges. Check your ISP agreement.
-# 7. Many home connections provide adequate download speeds but very low upload speeds. ZelNodes require 100mbps (12.5MB/s) download **AND** upload speeds. Ensure your ISP plan can provide this continually.
-# 8. ZelNodes can saturate your network at times. If you are sharing the connection with other devices at home, its possible to fail a benchmark if network is saturated.
-###############################################################################################################################################################################################################
-
-###### you must be logged in as a sudo user, not root #######
-
-
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/zel-bootstrap.zip'
 BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
