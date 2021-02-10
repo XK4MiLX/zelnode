@@ -777,7 +777,7 @@ echo
 echo -e "${ARROW} ${YELLOW}Unmonting all locked zelflux resource${NC}" && sleep 1
 df | egrep 'zelflux' | awk '{ print $1}' |
 while read line; do
-sudo unmont $line && sleep 1
+sudo umount $line && sleep 1
 done
 
 }
