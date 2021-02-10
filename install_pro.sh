@@ -8,15 +8,15 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
 COIN_NAME='zelcash'
-UPDATE_FILE='update.sh'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
-RPCPORT='16124'
-PORT='16125'
+BENCH_NAME='zelbench'
+BENCH_CLI='zelbench-cli'
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
 COIN_PATH='/usr/local/bin'
 USERNAME="$(whoami)"
+FLUX_DIR='zelflux'
 
 #Install variable
 IMPORT_ZELCONF="0"
@@ -30,6 +30,8 @@ ZELFRONTPORT=16126
 LOCPORT=16127
 ZELNODEPORT=16128
 MDBPORT=27017
+RPCPORT=16124
+PORT=16125
 
 #color codes
 RED='\033[1;31m'
@@ -203,21 +205,21 @@ if whiptail --yesno "Would you like to import data from zelcash.conf and usercon
 IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
+zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeprivkey=//')
 echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
+zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
 echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeindex=//')
 echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
-if [[ -f ~/zelflux/config/userconfig.js ]]
+if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
-ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
 
-KDA_A=$(grep -w kadena ~/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 if [[ "$KDA_A" != "" ]]; then
 echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
 fi
@@ -232,20 +234,20 @@ if [[ "$import_settings" == "1" ]]; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-zelnodeprivkey=$(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//')
+zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeprivkey=//')
 echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
+zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeoutpoint=//')
 echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex=$(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/zelcash.conf | sed -e 's/zelnodeindex=//')
 echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
-if [[ -f ~/zelflux/config/userconfig.js ]]
+if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
-ZELID=$(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
-KDA_A=$(grep -w kadena ~/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 if [[ "$KDA_A" != "" ]]; then
 echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
 fi
@@ -379,7 +381,7 @@ BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.da
 if [[ "$BLOCKHIGHT" == "null" ]]; then
 
 message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
-echo -e "${ARROW} ${CYAN}Zelflux explorer error: ${RED}$message${NC}"
+echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
 echo -e ""
 
 else
@@ -394,18 +396,18 @@ else
     wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
     echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
     tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
-    pm2 stop zelflux > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Stoping Flux...${NC}"
+    pm2 stop $FLUX_DIR > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
     mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
     sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
     sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-    pm2 start zelflux > /dev/null 2>&1
+    pm2 start $FLUX_DIR > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
 
     NUM='180'
-    MSG1='Zelflux starting...'
+    MSG1='Flux starting...'
     MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
     spinning_timer
     echo
@@ -444,10 +446,10 @@ function wipe_clean() {
     
     echo -e "${ARROW} ${CYAN}Stopping all services and running processes...${NC}"
     sudo killall nano > /dev/null 2>&1
-    "$COIN_CLI" stop > /dev/null 2>&1 && sleep 2
+    $COIN_CLI stop > /dev/null 2>&1 && sleep 2
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL $COIN_DAEMON > /dev/null 2>&1 && sleep 2
-    zelbench-cli stop > /dev/null 2>&1 && sleep 2
+    $BENCH_CLI stop > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL zelbenchd > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
@@ -461,7 +463,7 @@ function wipe_clean() {
     sudo rm -rf /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
     tmux kill-server > /dev/null 2>&1 && sleep 1
     echo -e "${ARROW} ${CYAN}Removing PM2...${NC}"
-    pm2 del zelflux > /dev/null 2>&1 && sleep 1
+    pm2 del $FLUX_DIR > /dev/null 2>&1 && sleep 1
     pm2 del watchdog > /dev/null 2>&1 && sleep 1
     pm2 save > /dev/null 2>&1
     pm2 unstartup > /dev/null 2>&1 && sleep 1
@@ -489,7 +491,7 @@ function wipe_clean() {
     
     if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
     echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-    sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
     sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     else
         BOOTSTRAP_SKIP="1"
@@ -524,7 +526,7 @@ function wipe_clean() {
     else
     
       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-      sudo rm -rf /home/$USER/.zelcash  > /dev/null 2>&1 && sleep 2
+      sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
       sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     
     fi
@@ -535,6 +537,8 @@ fi
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
+    sudo rm -rf /home/$USER/stop_flux_service.sh > /dev/null 2>&1
+    sudo rm -rf /home/$USER/start_flux_service.sh > /dev/null 2>&1
     echo -e ""
 
    # if [ ! -d "/home/$USER/$CONFIG_DIR" ]; then
@@ -735,7 +739,7 @@ function install_packages() {
 }
 
 function create_conf() {
-    echo -e "${ARROW} ${YELLOW}Creating zelcash config file...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating Flux daemon config file...${NC}"
     if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
         echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
         mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
@@ -782,15 +786,15 @@ EOF
     sleep 2
 }
 
-function zel_package() {
+function flux_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
-    echo -e "${ARROW} ${YELLOW}Zelcash && Zelbench installing...${NC}"
-    sudo apt install zelcash zelbench -y > /dev/null 2>&1 && sleep 2
+    echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
+    sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
     integration_check
 }
 
-function install_zel() {
+function install_daemon() {
     echo 'deb https://apt.zel.network/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
@@ -798,27 +802,27 @@ function install_zel() {
     fi
     gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-    zel_package && sleep 2
+    flux_package && sleep 2
     if ! gpg --list-keys Zel > /dev/null; then
         echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
         gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
         gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-        zel_package && sleep 2
+        flux_package && sleep 2
         if ! gpg --list-keys Zel > /dev/null; then
             echo -e "${YELLOW}Second keyserver also failed will try a different keyserver.${NC}"
             gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
             gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-            zel_package && sleep 2
+            flux_package && sleep 2
             if ! gpg --list-keys Zel > /dev/null; then
                 echo -e "${YELLOW}Third keyserver also failed will try a different keyserver.${NC}"
                 gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
                 gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-                zel_package && sleep 2
+                flux_package && sleep 2
                 if ! gpg --list-keys Zel > /dev/null; then
                     echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
                     gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
                     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-                    zel_package && sleep 2
+                    flux_package && sleep 2
                 fi
             fi
         fi
@@ -1007,16 +1011,16 @@ exit
 EOF
 
 
-sudo touch /home/$USER/stop_zelcash_service.sh
-sudo chown $USER:$USER /home/$USER/stop_zelcash_service.sh
-    cat <<'EOF' > /home/$USER/stop_zelcash_service.sh
+sudo touch /home/$USER/stop_flux_service.sh
+sudo chown $USER:$USER /home/$USER/stop_flux_service.sh
+    cat <<'EOF' > /home/$USER/stop_flux_service.sh
 #!/bin/bash
 bash -c "zelcash-cli stop"
 exit
 EOF
 
-sudo chmod +x /home/$USER/stop_zelcash_service.sh
-sudo chmod +x /home/$USER/start_zelcash_service.sh
+sudo chmod +x /home/$USER/stop_flux_service.sh
+sudo chmod +x /home/$USER/start_flux_service.sh
 
 }
 
@@ -1033,8 +1037,8 @@ Type=forking
 User=$USER
 Group=$USER
 WorkingDirectory=/home/$USER/$CONFIG_DIR/
-ExecStart=/home/$USER/start_zelcash_service.sh
-ExecStop=-/home/$USER/stop_zelcash_service.sh
+ExecStart=/home/$USER/start_flux_service.sh
+ExecStop=-/home/$USER/stop_flux_service.sh
 Restart=always
 RestartSec=10
 PrivateTmp=true
@@ -1109,7 +1113,7 @@ function pm2_install(){
 function start_daemon() {
 
     sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl start zelcash > /dev/null 2>&1
+    sudo systemctl start $COIN_NAME > /dev/null 2>&1
     
     NUM='120'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
@@ -1126,7 +1130,7 @@ function start_daemon() {
 	string_limit_check_mark "Flux daemon v$zelcash_version installed................................." "Flux daemon ${GREEN}v$zelcash_version${CYAN} installed................................."
 	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
 	zelbench_version=$(zelbench-cli getinfo | jq -r '.version')
-	string_limit_check_mark "Fluxbench v$zelbench_version installed................................." "Fluxbench ${GREEN}v$zelbench_version${CYAN} installed................................."
+	string_limit_check_mark "FluxBench v$zelbench_version installed................................." "Fluxbench ${GREEN}v$zelbench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
 	pm2_install
@@ -1167,7 +1171,7 @@ EOF
     sudo chown root:root /etc/logrotate.d/zeldebuglog
 }
 
-function install_zelflux() {
+function install_process() {
     #echo 
     echo -e "${ARROW} ${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
@@ -1187,31 +1191,31 @@ function install_zelflux() {
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
-        zelflux
+        install_flux
     elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *19.*  ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
-        zelflux
+        install_flux
     elif [[ $(lsb_release -r) = *20.*   ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
-        zelflux
+        install_flux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
-        zelflux
+        install_flux
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
         echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
         install_mongod
         install_nodejs
-        zelflux
+        install_flux
 	
     else
    	  echo -e "${WORNING}${CYAN}ERROR: OS version not supported: $(lsb_release -d)"
@@ -1292,10 +1296,10 @@ fi
 
 }
 
-function zelflux() {
+function install_flux() {
    
  docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
- resource_check=$(df | egrep 'zelflux' | awk '{ print $1}' | wc -l)
+ resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
 
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
@@ -1309,13 +1313,13 @@ fi
 if [[ $resource_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
-df | egrep 'zelflux' | awk '{ print $1}' |
+df | egrep 'flux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
 done
 fi
    
-    if [ -d "./zelflux" ]; then
+    if [ -d "./$FLUX_DIR" ]; then
          echo -e "${ARROW} ${YELLOW}Removing any instances of Flux{NC}"
          sudo rm -rf zelflux
     fi
@@ -1323,7 +1327,7 @@ fi
 
     echo -e "${ARROW} ${YELLOW}Flux installing...${NC}"
     git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1
-    echo -e "${ARROW} ${YELLOW}Creating zelflux configuration file...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
     
             if [[ "$IMPORT_ZELID" == "0" ]]
@@ -1346,8 +1350,8 @@ fi
   
 
 if [[ "$KDA_A" != "" ]]; then
-  touch ~/zelflux/config/userconfig.js
-    cat << EOF > ~/zelflux/config/userconfig.js
+  touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
@@ -1358,8 +1362,8 @@ module.exports = {
     }
 EOF
 else
-    touch ~/zelflux/config/userconfig.js
-    cat << EOF > ~/zelflux/config/userconfig.js
+    touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
@@ -1370,9 +1374,9 @@ module.exports = {
 EOF
 fi
 
-if [ -d ~/zelflux ]
+if [ -d ~/$FLUX_DIR ]
 then
-current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 
 string_limit_check_mark "Flux v$current_ver installed................................." "Zelflux ${GREEN}v$current_ver${CYAN} installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
@@ -1391,7 +1395,7 @@ function status_loop() {
 
 if [[ $(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
-echo -e "${CLOCK}${GREEN}ZELNODE SYNCING...${NC}"
+echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
 
 EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
@@ -1407,7 +1411,7 @@ echo && echo
 else
 	
    echo
-   echo -e "${CLOCK}${GREEN}FLUXNODE SYNCING...${NC}"
+   echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
    
    f=0
    start_sync=`date +%s`
@@ -1470,7 +1474,7 @@ else
     fi
     
        
-   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+   	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
 	NUM='190'
@@ -1517,32 +1521,6 @@ else
     check
     display_banner
 }
-
-function update_script() {
-    echo -e "${ARROW} ${YELLOW}Creating a script to update binaries for future updates...${NC}"
-    touch /home/"$USERNAME"/update.sh
-    cat << EOF > /home/"$USERNAME"/update.sh
-#!/bin/bash
-COIN_NAME='zelcash'
-COIN_DAEMON='zelcashd'
-COIN_CLI='zelcash-cli'
-COIN_PATH='/usr/local/bin'
-\$COIN_CLI stop > /dev/null 2>&1 && sleep 2
-sudo killall \$COIN_DAEMON > /dev/null 2>&1
-sudo apt-get update
-sudo apt-get install --only-upgrade \$COIN_NAME -y
-sudo chmod 755 \${COIN_PATH}/\${COIN_NAME}*
-\$COIN_DAEMON > /dev/null 2>&1
-EOF
-
-#sudo chmod +x update.sh
-#echo "cd /home/$USER/zelflux" >> "/home/$USER/update-zelflux.sh"
-#echo "git pull" >> "/home/$USER/update-zelflux.sh"
-#chmod +x "/home/$USER/update-zelflux.sh"
-#(crontab -l -u "$USER" 2>/dev/null; echo "0 0 * * 0 /home/$USER/update-zelflux.sh") | crontab -
-
-}
-
 
 function check() {
     NUM='120'
@@ -1593,14 +1571,14 @@ function display_banner() {
     echo -e "${CYAN}COURTESY OF DK808/XK4MiLX${NC}"
     echo
     if pm2 -v > /dev/null 2>&1; then
-	pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
-	if [[ "$pm2_zelflux_status" == "online" ]]; then
-	pm2_zelflux_uptime=$(pm2 info zelflux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
-	pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-	echo -e "${BOOK} ${CYAN}Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${CYAN}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}$pm2_zelflux_restarts${NC}" 
+	pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
+	if [[ "$pm2_flux_status" == "online" ]]; then
+	pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+	pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+	echo -e "${BOOK} ${CYAN}Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
 	else
-		if [[ "$pm2_zelflux_status" != "" ]]; then
-		echo -e "${PIN} ${CYAN}PM2 Zelflux status: ${RED}$pm2_zelflux_status ${NC}" 
+		if [[ "$pm2_flux_status" != "" ]]; then
+		echo -e "${PIN} ${CYAN}PM2 Flux status: ${RED}$pm2_flux_status ${NC}" 
 		fi
 	fi
 	    echo
@@ -1618,10 +1596,10 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
-    echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info zelflux${NC}"
+    echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info flux${NC}"
     echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
-    echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop zelflux${NC}"
-    echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start zelflux${NC}"
+    echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop flux${NC}"
+    echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start flux${NC}"
     echo
     if [[ "$WATCHDOG_INSTALL" == "1" ]]; then
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE WATCHDOG.${NC}"
@@ -1649,14 +1627,14 @@ function display_banner() {
     create_swap
     install_packages
     create_conf
-    install_zel
+    install_daemon
     zk_params
     if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
     bootstrap
     fi
     create_service_scripts
     create_service
-    install_zelflux
+    install_process
     start_daemon
     log_rotate
     #update_script
