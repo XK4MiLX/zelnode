@@ -262,8 +262,8 @@ echo -e "${ARROW} ${CYAN}FluxBench version before update: ${GREEN}$local_version
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
 
-install_package $BENCH_NAME
-dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME' | awk '{print $3}')
+install_package "$BENCH_NAME"
+dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
   if [[ "$dpkg_version_after_install" != "" ]]; then
     echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
