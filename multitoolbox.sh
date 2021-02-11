@@ -740,7 +740,7 @@ then
 fi
 
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
-sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
+sudo rm /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD  > /dev/null 2>&1
 
 if ! pm2 -v > /dev/null 2>&1; then
  
@@ -753,7 +753,7 @@ if ! pm2 -v > /dev/null 2>&1; then
 fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-DB_HIGHT=$(curl -s -m 3 https://zelnodebootstrap.xyz/mongodb-bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
