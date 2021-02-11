@@ -488,7 +488,7 @@ fi
 
 }
 
-function create_flux_bootstrap()
+function create_daemon_bootstrap()
 {
 
 sudo apt install zip >/dev/null 2>&1
@@ -809,8 +809,8 @@ echo
 reindex
 echo
 ;;
-                "create_flux_bootstrap")
-create_flux_bootstrap
+                "create_daemon_bootstrap")
+create_daemon_bootstrap
 echo
 ;;
                 "create_mongod_bootstrap")
