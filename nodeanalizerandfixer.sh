@@ -121,9 +121,9 @@ fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16224 | grep "$BENCH_DAEMON" > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${CYAN} FluxBench listen on port 16224${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux benchmark listen on port 16224${NC}"
 else
-echo -e "${X_MARK} ${CYAN} FluxBench not listen${NC}"
+echo -e "${X_MARK} ${CYAN} Flux benchmark not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
@@ -203,7 +203,7 @@ now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
 echo -e "${PIN} ${CYAN}Creating Flux benchmark_debug_error.log${NC}"
-egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log > /home/$USER/zelbenchmark_debug_error.log
+egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log > /home/$USER/benchmark_debug_error.log
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -218,7 +218,7 @@ if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking Flux daemon debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
-if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
+if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}FluxBench errors info:${NC}"
 error_line=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
@@ -553,8 +553,8 @@ docker_inactive=$(sudo systemctl status docker 2> /dev/null | egrep 'inactive|fa
 mongod_running=$(sudo systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
 mongod_inactive=$(sudo systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-zelcash_running=$(sudo systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
-zelcash_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+daemon_running=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | grep 'running' | grep -o 'since.*')
+daemon_inactive=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 if sudo systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker(SNAP) service running ${SEA}$snap_docker_running${NC}"
@@ -610,7 +610,7 @@ fi
 fi
 
 if sudo systemctl list-units | grep $COIN_NAME | egrep -wi 'running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Flux daemon service running ${SEA}$zelcash_running${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux daemon service running ${SEA}$daemon_running${NC}"
 else
 if [[ "$daemon_inactive" != "" ]]; then
 echo -e "${X_MARK} ${CYAN} Flux daemon service not running ${RED}$daemon_inactive${NC}"
