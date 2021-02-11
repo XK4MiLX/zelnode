@@ -250,7 +250,7 @@ echo -e "${BOOK} ${YELLOW}Flux benchmark status:${NC}"
 bench_getatus=$($BENCH_CLI getstatus)
 bench_status=$(jq -r '.status' <<< "$bench_getatus")
 bench_benchmark=$(jq -r '.benchmarking' <<< "$bench_getatus")
-bench_zelback=$(jq -r '.zelback' <<< "$bench_getatus")
+bench_back=$(jq -r '.zelback' <<< "$bench_getatus")
 bench_getinfo=$($BENCH_CLI getinfo)
 bench_version=$(jq -r '.version' <<< "$bench_getinfo")
 
