@@ -187,7 +187,7 @@ sleep 1
 sudo apt install bc > /dev/null 2>&1
 
 if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
-echo -e "${BOOK} ${YELLOW}Checking FluxBenchmark debug.log${NC}"
+echo -e "${BOOK} ${YELLOW}Checking Flux benchmark debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
