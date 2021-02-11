@@ -229,7 +229,7 @@ start_fluxdaemon
 return
 fi
 
-remote_version_check zelbench
+remote_version_check "$BENCH_NAME"
 #remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
 
 if [[ "$call_type" != "update_all" ]]; then
@@ -359,7 +359,7 @@ return
 fi
 
 
-remote_version_check zelcash
+remote_version_check "$COIN_NAME"
 #local_version=$($COIN_CLI getinfo | jq -r .version)
 #remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
 
@@ -429,8 +429,8 @@ update_fluxbench="0"
 update_fluxdaemon="0"
 update_flux="0"
 
-local_version_check $COIN_NAME
-remote_version_check $COIN_NAME
+local_version_check "$COIN_NAME"
+remote_version_check "$COIN_NAME"
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
 echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
