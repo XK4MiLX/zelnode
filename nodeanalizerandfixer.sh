@@ -185,7 +185,7 @@ then
 fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
-
+echo -e "${NC}"
 if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking Flux benchmark debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
