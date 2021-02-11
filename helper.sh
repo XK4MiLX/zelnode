@@ -629,7 +629,7 @@ function mongodb_bootstrap(){
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=0
-DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb-bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
