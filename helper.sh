@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #information
+$FLUX_DIR='zelflux'
+
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
@@ -219,12 +221,12 @@ function fluxbench_update()
 local_version=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
-echo -e "${ARROW} ${CYAN}Force FluxBench updating...${NC}"
+echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
 stop_fluxdaemon
 install_package $BENCH_NAME
 dpkg_version_after_install=$(dpkg -l zelbench | grep -w "$BENCH_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}FluxBench version before update: ${GREEN}$local_version${NC}"
-echo -e "${ARROW} ${CYAN}FluxBench version after update: ${GREEN}$dpkg_version_after_install${NC}"
+echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_fluxdaemon
 return
 fi
@@ -235,20 +237,20 @@ remote_version_check "$BENCH_NAME"
 if [[ "$call_type" != "update_all" ]]; then
 
   if [[ "$remote_version" == "" ]]; then
-   echo -e "${ARROW} ${CYAN}Problem with version veryfication...FluxBench installation skipped...${NC}"
+   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
    return
   fi
 
   if [[ "$remote_version" == "$local_version" ]]; then
-   echo -e "${ARROW} ${CYAN}You have the current version of FluxBench ${GREEN}($remote_version)${NC}"
+   echo -e "${ARROW} ${CYAN}You have the current version of Flux benchamrk ${GREEN}($remote_version)${NC}"
    return
   fi
 
 fi
 
-echo -e "${ARROW} ${CYAN}Updating FluxBench...${NC}"
+echo -e "${ARROW} ${CYAN}Updating Flux benchmark...${NC}"
 #stop_zelcash
-echo -e "${ARROW} ${CYAN}FluxBench stopping...${NC}"
+echo -e "${ARROW} ${CYAN}Flux benchmark stopping...${NC}"
 $BENCH_CLI stop >/dev/null 2>&1 && sleep 2
 sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
 sudo apt-get update >/dev/null 2>&1
@@ -257,7 +259,7 @@ sudo chmod 755 "$COIN_PATH"/$BENCH_NAME*
 sleep 2
 
 dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}FluxBench version before update: ${GREEN}$local_version${NC}"
+echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
 #echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
@@ -266,19 +268,19 @@ install_package "$BENCH_NAME"
 dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
   if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
   fi
 
 start_fluxdaemon
-echo -e "${ARROW} ${CYAN}FluxBench starting...${NC}"
+echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
 #zelbenchd -daemon >/dev/null 2>&1
 else
 
   if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
   
-    echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
     start_fluxdaemon
-    echo -e "${ARROW} ${CYAN}FuxBench server starting...${NC}"
+    echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
     #zelbenchd -daemon >/dev/null 2>&1
   else
 
@@ -287,10 +289,10 @@ else
       dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
       if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
-        echo -e "${ARROW} ${CYAN}FluxBench update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+        echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
       fi
       start_fluxdaemon
-      echo -e "${ARROW} ${CYAN}FluxBench server starting...${NC}"
+      echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
       #zelbenchd -daemon >/dev/null 2>&1
     fi
   fi
@@ -449,14 +451,14 @@ local_version_check "$BENCH_NAME"
 remote_version_check "$BENCH_NAME"
 
 if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...FluxBench installation skipped...${NC}"
+echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
 else
 
   if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of FluxBench available ${SEA}$remote_version${NC}"
+  echo -e "${RED}${HOT}${CYAN}New version of Flux benchmark available ${SEA}$remote_version${NC}"
   update_fluxbench="1"
   else
-  echo -e "${ARROW} ${CYAN}You have the current version of FluxBench ${GREEN}($remote_version)${NC}"
+  echo -e "${ARROW} ${CYAN}You have the current version of Flux benchmark ${GREEN}($remote_version)${NC}"
   fi
 
 fi
