@@ -636,7 +636,7 @@ fi
 echo
 }
 
-function zelcash_bootstrap() {
+function flux_daemon_bootstrap() {
 
 echo -e "${GREEN}Module: Restore Flux blockchain form bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -895,7 +895,7 @@ fi
 
 }
 
-function install_zelnode(){
+function install_node(){
 
 echo -e "${GREEN}Module: Install FluxNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -1176,7 +1176,7 @@ read -p "Pick an option: " -n 1 -r
  2) 
     clear
     sleep 1
-    install_zelnode
+    install_node
  ;;
  3)     
     clear
@@ -1197,7 +1197,7 @@ read -p "Pick an option: " -n 1 -r
   6)  
     clear
     sleep 1
-    zelcash_bootstrap     
+    flux_daemon_bootstrap     
  ;; 
   7)
     clear
