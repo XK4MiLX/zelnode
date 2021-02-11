@@ -35,7 +35,7 @@ HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
+BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
