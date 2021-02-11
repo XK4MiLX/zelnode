@@ -34,7 +34,9 @@ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
-BOOTSTRAP_URL_MONGOD='https://zelnodebootstrap.xyz/mongod_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
+BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 # add to path
@@ -165,7 +167,7 @@ fi
 }
 
 start_fluxdaemon() {
-serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
+serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
 
 if [[ "$serive_check" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Starting Flux daemon service...${NC}"
@@ -193,7 +195,7 @@ function reindex()
 echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
 stop_fluxdaemon
 "$COIN_DAEMON" -reindex
-serive_check=$(sudo systemctl list-units --full -all | grep -o 'zelcash.service' | head -n1)
+serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAM.service" | head -n1)
 if [[ "$serive_check" != "" ]]; then
 sleep 60
 stop_fluxdaemon
@@ -218,13 +220,13 @@ fi
 function fluxbench_update()
 {
 
-local_version=$(dpkg -l zelbench | grep -w 'zelbench' | awk '{print $3}')
+local_version=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
 stop_fluxdaemon
 install_package $BENCH_NAME
-dpkg_version_after_install=$(dpkg -l zelbench | grep -w "$BENCH_NAME" | awk '{print $3}')
+dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
 echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
 start_fluxdaemon
@@ -347,7 +349,7 @@ fi
 function fluxdaemon_update()
 {
 
-local_version=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
+local_version=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
 
 if [[ "$type" == "force" ]]; then
 echo -e "${ARROW} ${CYAN}Force Flux daemon updating...${NC}"
@@ -379,7 +381,7 @@ if [[ "$call_type" != "update_all" ]]; then
 
 fi
 
-dpkg_version_before_install=$(dpkg -l zelcash | grep -w 'zelcash' | awk '{print $3}')
+dpkg_version_before_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
 stop_fluxdaemon
 
 sudo apt-get update >/dev/null 2>&1
@@ -389,7 +391,7 @@ sleep 2
 
 dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
 echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
-#echo -e "${ARROW} ${CYAN}Zelcash version after update: ${GREEN}$dpkg_version_after_install${NC}"
+#echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
 if [[ "$dpkg_version_after_install" == "" ]]; then
 
@@ -516,18 +518,19 @@ stop_fluxdaemon
 check_zip=$(zip -L | head -n1)
 if [[ "$check_zip" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf /home/$USER/zel-bootstrap.zip >/dev/null 2>&1 && sleep 5
+rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 5
 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
-cd /home/$USER/$CONFIG_DIR && zip /home/$USER/zel-bootstrap.zip -r blocks chainstate determ_zelnodes
+cd /home/$USER/$CONFIG_DIR  
+zip /home/$USER/$BOOTSTRAP_ZIPFILE -r blocks chainstate determ_zelnodes
 cd
 
-if [[ -f /home/$USER/zel-bootstrap.zip ]]; then
+if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE ]]; then
 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap created successful ${GREEN}($local_network_hight)${NC}"
-rm -rf /home/$USER/zel-bootstrap.json >/dev/null 2>&1
+rm -rf /home/$USER/daemon_bootstrap.json >/dev/null 2>&1
 
-sudo touch /home/$USER/zel-bootstrap.json
-sudo chown $USER:$USER /home/$USER/zel-bootstrap.json
-    cat << EOF > /home/$USER/zel-bootstrap.json
+sudo touch /home/$USER/daemon_bootstrap.json
+sudo chown $USER:$USER /home/$USER/daemon_bootstrap.json
+    cat << EOF > /home/$USER/daemon_bootstrap.json
 {
   "blocks_height": "${explorer_network_hight}",
   "time": "${data}"
@@ -581,21 +584,21 @@ echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_h
 data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
-sudo rm -rf /home/$USER/mongod_bootstrap.tar.gz >/dev/null 2>&1 && sleep 2
+sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
 
 echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
 mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/
 echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
-tar -cvzf /home/$USER/mongod_bootstrap.tar.gz dump
+tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
 
-if [[ -f /home/$USER/mongod_bootstrap.tar.gz ]]; then
+if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
 echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
 
-rm -rf /home/$USER/mongodb-bootstrap.json >/dev/null 2>&1
+rm -rf /home/$USER/mongodb_bootstrap.json >/dev/null 2>&1
 
-sudo touch /home/$USER/mongodb-bootstrap.json
-sudo chown $USER:$USER /home/$USER/mongodb-bootstrap.json
-    cat << EOF > /home/$USER/mongodb-bootstrap.json
+sudo touch /home/$USER/mongodb_bootstrap.json
+sudo chown $USER:$USER /home/$USER/mongodb_bootstrap.json
+    cat << EOF > /home/$USER/mongodb_bootstrap.json
 {
   "blocks_height": "${explorer_network_hight}",
   "time": "${data}"
@@ -624,8 +627,8 @@ mongodb_bootstrap
 function mongodb_bootstrap(){
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-BLOCKHIGHT=100
-DB_HIGHT=681816
+BLOCKHIGHT=0
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb-bootstrap.json | jq -r '.blocks_height')
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
@@ -672,22 +675,32 @@ fi
 }
 
 function install_mongod() {
-
-sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
-    if [[ $(lsb_release -r) = *16.04* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.2 multiverse" 2> /dev/null| sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
-    elif [[ $(lsb_release -r) = *18.04* || $(lsb_release -r) = *20.04*  ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+   
+    sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
+    if [[ $(lsb_release -r) = *16.* ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+    elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *19.*  ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+    elif [[ $(lsb_release -r) = *20.*   ]]; then
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list > /dev/null 2>&1
+        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
+        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+	
+    else
+   	  echo -e "${WORNING}${CYAN}ERROR: OS version not supported: $(lsb_release -d)"
+   	  echo -e "${WORNING}${CYAN}Installation stopped..."
+	  echo
+   	  exit
     fi
     sleep 2
+    
 echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
 sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
@@ -741,7 +754,7 @@ fi
 
 
 
-function unlock_node()
+function unlock_flux_resouce()
 {
 echo
 echo -e "${ARROW} ${YELLOW}Stopping Flux dockered appz${NC}" && sleep 1
@@ -815,8 +828,8 @@ swapon_create
 echo
 ;;
 
-               "unlock_node")
-unlock_node
+               "unlock_flux_resouce")
+unlock_flux_resouce
 echo
 ;;
 
