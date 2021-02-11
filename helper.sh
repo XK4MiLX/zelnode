@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #information
-$FLUX_DIR='zelflux'
+FLUX_DIR='zelflux'
 
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
