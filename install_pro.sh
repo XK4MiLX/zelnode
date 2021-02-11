@@ -1627,8 +1627,8 @@ function display_banner() {
     create_service
     install_process
     start_daemon
-    log_rotate( "Benchmark", "bench_debug_log", "/home/$USER/$BENCH_DIR_LOG/debug.log", "monthly", 2)
-    log_rotate( "Daemon", "daemon_debug_log", "/home/$USER/$CONFIG_DIR/debug.log", "daily", 7)
-    log_rotate( "MongoDB", "mongod_debug_log", "/var/log/mongodb/*.log", "daily", 14)
+    log_rotate "Benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
+    log_rotate "Daemon" "daemon_debug_log" "/home/$USER/$CONFIG_DIR/debug.log" "daily" "7")
+    log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
     basic_security
     status_loop
