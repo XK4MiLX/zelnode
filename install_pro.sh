@@ -205,7 +205,7 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
 
 if [[ -z "$import_settings" ]]; then
 
-if whiptail --yesno "Would you like to import data from daemon and flux config files Y/N?" 8 60; then
+if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
