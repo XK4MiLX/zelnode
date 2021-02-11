@@ -295,8 +295,8 @@ core=$($BENCH_CLI getbenchmarks | jq '.cores')
 if [[ "$bench_benchmark" == "failed" && "$core" > "0" ]]; then
 BTEST="1"
 echo -e "${X_MARK} ${CYAN} Flux benchmark working correct but minimum system requirements not met.${NC}"
-check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
-check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
+check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
+check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
 fi
 
 #if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
