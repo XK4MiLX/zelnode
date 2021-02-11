@@ -7,6 +7,8 @@ COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
 COIN_PATH='/usr/local/bin'
+CONFIG_DIR='.zelcash'
+CONFIG_FILE='zelcash.conf'
 
 BENCH_NAME='zelbench'
 BENCH_DAEMON='zelbenchd'
