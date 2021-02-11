@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/zel-bootstrap.zip'
-BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -144,7 +144,7 @@ echo -e "${PIN}${CYAN}Import settings from install_conf.json....................
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Import settings from Flux..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -205,7 +205,7 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
 
 if [[ -z "$import_settings" ]]; then
 
-if whiptail --yesno "Would you like to import data from config files Y/N?" 8 60; then
+if whiptail --yesno "Would you like to import data from daemon and flux config files Y/N?" 8 60; then
 IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
@@ -266,80 +266,7 @@ sleep 1
 echo
 }
 
-#end of required details
-#
-#Suppressing password prompts for this user so zelnode can operate
-start_install=`date +%s`
-sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
-echo -e "${CYAN}APRIL 2020, created by dk808 improved by XK4MiLX from Flux's team."
-echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
-echo -e "FluxNode setup starting, press [CTRL+C] to cancel.${NC}"
-sleep 2
 
-if jq --version > /dev/null 2>&1; then
-echo -e ""
-else
-echo -e ""
-echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
-sudo apt  install jq -y > /dev/null 2>&1
-
-  if jq --version > /dev/null 2>&1
-  then
-    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
-    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
-    echo
-  else
-    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
-    string_limit_x_mark "JQ was not installed................................."
-    echo
-    exit
-  fi
-fi
-
-if [ "$USERNAME" = "root" ]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
-    sleep 4
-    exit
-fi
-
-start_dir=$(pwd)
-correct_dir="/home/$USER"
-echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
-if [[ "$start_dir" == "$correct_dir" ]]
-then
-echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
-else
-echo -e "${ARROW} ${CYAN}Bad directory switching...${NC}"
-cd
-echo -e "${ARROW} ${CYAN}Current directory ${GREEN}$(pwd)${CYAN}${NC}"
-fi
-sleep 1
-
-config_file
-
-
-if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
-import_date
-else
-
-if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != ""  && "$ZELID" != ""  ]]; then
-echo
-IMPORT_ZELCONF="1"
-IMPORT_ZELID="1"
-echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
-zelnodeprivkey="$prvkey"
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint="$outpoint"
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex="$index"
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
-echo
-fi
-
-fi
-
-#functions
 function install_watchdog() {
 echo -e "${ARROW} ${YELLOW}Install watchdog for FluxNode${NC}"
 if pm2 -v > /dev/null 2>&1
@@ -450,7 +377,7 @@ function wipe_clean() {
     
     echo -e "${ARROW} ${CYAN}Stopping all services and running processes...${NC}"
     
-    # NEW CLEANUP
+    # NEW CLEAN_UP
     
     sudo killall nano > /dev/null 2>&1
     $COIN_CLI stop > /dev/null 2>&1 && sleep 2
@@ -492,7 +419,7 @@ function wipe_clean() {
     rm zelnodeupdate.sh > /dev/null 2>&1
     rm start.sh > /dev/null 2>&1
     rm update-zelflux.sh > /dev/null 2>&1  
-    sudo systemctl stop zelcash> /dev/null 2>&1 && sleep 2
+    sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
     zelcash-cli stop > /dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL zelcashd > /dev/null 2>&1
     zelbench-cli stop > /dev/null 2>&1
@@ -502,8 +429,8 @@ function wipe_clean() {
     sudo apt-get autoremove -y > /dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1 && sleep 1
     sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 1
-   #sudo rm -rf ~/.zelcash/determ_zelnodes ~/.zelcash/sporks ~/$CONFIG_DIR/database ~/.zelcash/blocks ~/.zelcashchainstate  > /dev/null 2>&1 && sleep 1
-   #sudo rm -rf ~/.zelcash  > /dev/null 2>&1 && sleep 1
+    #sudo rm -rf ~/.zelcash/determ_zelnodes ~/.zelcash/sporks ~/$CONFIG_DIR/database ~/.zelcash/blocks ~/.zelcashchainstate  > /dev/null 2>&1 && sleep 1
+    #sudo rm -rf ~/.zelcash  > /dev/null 2>&1 && sleep 1
     sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
@@ -1124,11 +1051,11 @@ function start_daemon() {
         spinning_timer
         echo && echo
 	
-	zelcash_version=$($COIN_CLI getinfo | jq -r '.version')
-	string_limit_check_mark "Flux daemon v$zelcash_version installed................................." "Flux daemon ${GREEN}v$zelcash_version${CYAN} installed................................."
+	daemon_version=$($COIN_CLI getinfo | jq -r '.version')
+	string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
 	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
-	zelbench_version=$($BENCH_CLI getinfo | jq -r '.version')
-	string_limit_check_mark "Flux benchmark v$zelbench_version installed................................." "Flux benchmark ${GREEN}v$zelbench_version${CYAN} installed................................."
+	bench_version=$($BENCH_CLI getinfo | jq -r '.version')
+	string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
 	pm2_install
@@ -1268,7 +1195,7 @@ echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
  # git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
 #) && \. "$NVM_DIR/nvm.sh"
 #cd
-curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash > /dev/null 2>&1
+curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash > /dev/null 2>&1
 . ~/.profile
 . ~/.bashrc
 sleep 1
@@ -1610,8 +1537,86 @@ function display_banner() {
     exec bash
 }
 
+
+function start_install() {
+
+#Suppressing password prompts for this user so zelnode can operate
+start_install=`date +%s`
+echo
+sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
+echo -e "${CYAN}February 2021, created by dk808 improved by XK4MiLX from Flux's team."
+echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
+echo -e "FluxNode setup starting, press [CTRL+C] to cancel.${NC}"
+sleep 2
+
+if jq --version > /dev/null 2>&1; then
+echo -e ""
+else
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
+sudo apt  install jq -y > /dev/null 2>&1
+
+  if jq --version > /dev/null 2>&1
+  then
+    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
+    echo
+  else
+    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+    string_limit_x_mark "JQ was not installed................................."
+    echo
+    exit
+  fi
+fi
+
+if [ "$USER" = "root" ]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}root${CYAN}, please switch to the username you just created.${NC}"
+    sleep 4
+    exit
+fi
+
+start_dir=$(pwd)
+correct_dir="/home/$USER"
+echo -e "${ARROW} ${YELLOW}Checking directory....${NC}"
+if [[ "$start_dir" == "$correct_dir" ]]
+then
+echo -e "${ARROW} ${CYAN}Correct directory ${GREEN}$(pwd)${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
+else
+echo -e "${ARROW} ${CYAN}Bad directory switching...${NC}"
+cd
+echo -e "${ARROW} ${CYAN}Current directory ${GREEN}$(pwd)${CYAN}${NC}"
+fi
+sleep 1
+
+config_file
+
+
+if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
+import_date
+else
+
+if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != ""  && "$ZELID" != ""  ]]; then
+echo
+IMPORT_ZELCONF="1"
+IMPORT_ZELID="1"
+echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
+zelnodeprivkey="$prvkey"
+echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+zelnodeoutpoint="$outpoint"
+echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+zelnodeindex="$index"
+echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+echo
+fi
+
+fi
+
+}
+
 #end of functions
-#run functions
+
+    start_install
     wipe_clean
     ssh_port
     ip_confirm
