@@ -112,7 +112,7 @@ function pm2_install(){
      	echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
    	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/$FLUX_DIR/start.sh --name $FLUX_DIR > /dev/null 2>&1
+   	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	pm2 install pm2-logrotate > /dev/null 2>&1
 	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
@@ -235,7 +235,9 @@ then
 fi
 
  if pm2 -v > /dev/null 2>&1; then
- pm2 stop $FLUX_DIR > /dev/null 2>&1
+ pm2 del zelflux > /dev/null 2>&1
+ pm2 del flux > /dev/null 2>&1
+ pm2 save > /dev/null 2>&1
  fi
  
 docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
@@ -390,12 +392,13 @@ fi
  if pm2 -v > /dev/null 2>&1; then 
  
    rm restart_zelflux.sh > /dev/null 2>&1
-   pm2 del $FLUX_DIR > /dev/null 2>&1
+   pm2 del flux > /dev/null 2>&1
+   pm2 del zelflux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    echo -e "${ARROW} ${CYAN}Starting Flux....${NC}"
    echo -e "${ARROW} ${CYAN}Flux loading will take 2-3min....${NC}"
    echo
-   pm2 start /home/$USER/$FLUX_DIR/start.sh --name $FLUX_DIR > /dev/null 2>&1
+   pm2 start /home/$USER/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    pm2 list
 
@@ -780,14 +783,14 @@ echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
 wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${CYAN}Stoping $FLUX_DIR...${NC}"
-pm2 stop $FLUX_DIR > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Stoping Flux...${NC}"
+pm2 stop flux > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-pm2 start $FLUX_DIR > /dev/null 2>&1
+pm2 start flux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
