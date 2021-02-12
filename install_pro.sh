@@ -1479,9 +1479,10 @@ fi
 function display_banner() {
     echo -e "${BLUE}"
     figlet -t -k "FLUXNODE"
+    figlet -t -k "INSTALLATION COMPLITED"
     echo -e "${YELLOW}================================================================================================================================"
-    echo -e "FLUXNODE INSTALATION COMPLITED${NC}"
-    echo -e "${CYAN}COURTESY OF DK808/XK4MiLX${NC}"
+    #echo -e "FLUXNODE INSTALATION COMPLITED${NC}"
+    #echo -e "${CYAN}COURTESY OF DK808/XK4MiLX${NC}"
     echo
     if pm2 -v > /dev/null 2>&1; then
 	pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
@@ -1608,7 +1609,6 @@ fi
 }
 
 #end of functions
-
     start_install
     wipe_clean
     ssh_port
