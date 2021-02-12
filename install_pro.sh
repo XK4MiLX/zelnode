@@ -1534,7 +1534,6 @@ function display_banner() {
 
 
 function start_install() {
-
 #Suppressing password prompts for this user so zelnode can operate
 start_install=`date +%s`
 echo
@@ -1584,7 +1583,6 @@ fi
 sleep 1
 
 config_file
-
 
 if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
 import_date
