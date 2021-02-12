@@ -1584,7 +1584,8 @@ sleep 1
 
 config_file
 
-if [[ -z "$index" || -z "$outpoint" || -z "$index" ]]; then
+if [[ -z "$index" || -z "$outpoint" || -z "$prvkey" ]]; then
+echo -e "Import OLD settings..."
 import_date
 else
 
