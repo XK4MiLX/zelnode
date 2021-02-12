@@ -719,9 +719,13 @@ if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
     rm -rf $BOOTSTRAP_ZIPFILE
 fi
 
-echo -e "${ARROW} ${CYAN}Starting Flux daemon service${NC}"
-sudo systemctl start $COIN_NAME > /dev/null 2>&1 && sleep 2
-echo
+sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+NUM='35'
+MSG1='Starting Flux daemon service...'
+MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo -e "" && echo -e ""
+
 
 }
 
@@ -1076,7 +1080,7 @@ exit
 fi
 
 echo -e "${ARROW} ${CYAN}Stopping Flux daemon serivce...${NC}"
-sudo systemctl stop $COIN_NAME && sleep 2
+sudo systemctl stop $COIN_NAME  > /dev/null 2>&1 && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 
 
@@ -1133,7 +1137,7 @@ echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${
 fi
 fi
 
-sudo systemctl start $COIN_NAME
+sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
 NUM='35'
 MSG1='Restarting daemon serivce...'
 MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
