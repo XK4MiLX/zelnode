@@ -434,12 +434,7 @@ function wipe_clean() {
     sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
-
-}
-    
-    
-    
-    
+   
     
  if [[ -d /home/$USER/$CONFIG_DIR ]]; then
     
