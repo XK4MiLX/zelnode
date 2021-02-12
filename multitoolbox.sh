@@ -158,7 +158,7 @@ echo -e "${PIN}${CYAN}Import settings from install_conf.json....................
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from $CONFIG_FILE and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Import settings from exist config files..........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -180,15 +180,15 @@ echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use.............
 else
 
 if [[ "$bootstrap_url" == "" ]]; then
-echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts..................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Use Flux Bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Flux Bootstrap from own source...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN}Remove Flux Bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Remove Flux Bootstrap archive file...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Leave Flux Bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Leave Flux Bootstrap archive file................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
