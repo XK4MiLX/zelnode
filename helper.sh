@@ -615,7 +615,7 @@ fi
 function clean_mongod() {
 echo ""
 echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
-pm2 stop $FLUX_DIR >/dev/null 2>&1 && sleep 2
+pm2 stop flux >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
 sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
@@ -643,7 +643,7 @@ mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-pm2 start $FLUX_DIR > /dev/null 2>&1
+pm2 start flux > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
