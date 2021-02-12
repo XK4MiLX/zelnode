@@ -1050,18 +1050,22 @@ sleep 1
 
 if [[ "$zelnodeprivkey" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}FluxNode privkey skipped............................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeoutpoint" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}FluxNode outpoint skipped ..........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeindex" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$externalip" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 
@@ -1079,7 +1083,7 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 if [[ "$zelnodeprivkey" != "" ]]; then
 
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}FluxNode privkey skipped................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}FluxNode privkey skipped............................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
@@ -1092,7 +1096,7 @@ fi
 if [[ "$zelnodeoutpoint" != "" ]]; then
 
 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}FluxNode outpoint skipped ...............[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}FluxNode outpoint skipped ..........................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
@@ -1105,11 +1109,11 @@ fi
 if [[ "$zelnodeindex" != "" ]]; then
 
 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped...................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode index replaced successful.................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}FluxNode index replaced successful..................[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 
@@ -1118,11 +1122,12 @@ fi
 if [[ "$externalip" != "" ]]; then
 
 if [[ "externalip=$externalip" == $(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped...................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE)/externalip=$externalip/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "externalip=$externalip" == $(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode IP replaced successful...................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}FluxNode IP replaced successful.....................[${CHECK_MARK}${CYAN}]${NC}"
+			
                 fi
 fi
 fi
