@@ -1585,7 +1585,6 @@ sleep 1
 config_file
 
 if [[ -z "$index" || -z "$outpoint" || -z "$prvkey" ]]; then
-echo -e "Import OLD settings..."
 import_date
 else
 
@@ -1611,7 +1610,6 @@ fi
 #end of functions
 
     start_install
-    exit
     wipe_clean
     ssh_port
     ip_confirm
