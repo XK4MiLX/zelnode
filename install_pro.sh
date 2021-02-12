@@ -1062,23 +1062,23 @@ function start_daemon() {
     fi
 }
 
-function log_rotate( label, filename, path, type, rotate_time) {
-    echo -e "${ARROW} ${YELLOW}Configuring log rotate function for ${label} debug logs...${NC}"
+function log_rotate() {
+    echo -e "${ARROW} ${YELLOW}Configuring log rotate function for $1 debug logs...${NC}"
     sleep 1
-    if [ -f /etc/logrotate.d/$filename ]; then
-        sudo rm -rf /etc/logrotate.d/$filename
+    if [ -f /etc/logrotate.d/$2 ]; then
+        sudo rm -rf /etc/logrotate.d/$2
         sleep 2
     fi
 
-    sudo touch /etc/logrotate.d/$filename
-    sudo chown $USER:$USER /etc/logrotate.d/$filename
-    cat << EOF > /etc/logrotate.d/$filename
-$path {
+    sudo touch /etc/logrotate.d/$2
+    sudo chown $USER:$USER /etc/logrotate.d/$2
+    cat << EOF > /etc/logrotate.d/$2
+$3 {
   compress
   copytruncate
   missingok
-  $type
-  rotate $rotate_time
+  $4
+  rotate $5
 }
 EOF
     sudo chown root:root /etc/logrotate.d/$filename
