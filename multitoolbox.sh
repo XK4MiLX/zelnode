@@ -1135,7 +1135,7 @@ fi
 sudo systemctl start $COIN_NAME
 NUM='35'
 MSG1='Restarting daemon serivce...'
-MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
+MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo -e "" && echo -e ""
 
