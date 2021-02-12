@@ -1081,7 +1081,7 @@ $3 {
   rotate $5
 }
 EOF
-    sudo chown root:root /etc/logrotate.d/$filename
+    sudo chown root:root /etc/logrotate.d/$2
 }
 
 function install_process() {
