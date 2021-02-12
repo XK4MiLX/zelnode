@@ -328,13 +328,13 @@ else
     echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
     tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
     echo -e "${ARROW} ${CYAN}Stoping Flux...${NC}"
-    pm2 stop $FLUX_DIR > /dev/null 2>&1
+    pm2 stop flux > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
     mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
     sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
     sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-    pm2 start $FLUX_DIR > /dev/null 2>&1
+    pm2 start flux > /dev/null 2>&1
     pm2 save > /dev/null 2>&1
 
     NUM='180'
@@ -398,9 +398,9 @@ function wipe_clean() {
     
     echo -e "${ARROW} ${CYAN}Removing PM2...${NC}"
     pm2 stop zelflux > /dev/null 2>&1 && sleep 1
-    pm2 stop $FLUX_DIR > /dev/null 2>&1 && sleep 1
+    pm2 stop flux > /dev/null 2>&1 && sleep 1
     pm2 del zelflux > /dev/null 2>&1 && sleep 1
-    pm2 del $FLUX_DIR > /dev/null 2>&1 && sleep 1
+    pm2 del flux > /dev/null 2>&1 && sleep 1
     pm2 del watchdog > /dev/null 2>&1 && sleep 1
     pm2 save > /dev/null 2>&1
     pm2 unstartup > /dev/null 2>&1 && sleep 1
