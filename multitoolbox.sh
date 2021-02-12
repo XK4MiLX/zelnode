@@ -158,7 +158,7 @@ echo -e "${PIN}${CYAN}Import settings from install_conf.json....................
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Import settings from $CONFIG_FILE and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
