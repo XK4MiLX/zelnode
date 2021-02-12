@@ -397,8 +397,6 @@ function wipe_clean() {
     tmux kill-server > /dev/null 2>&1 && sleep 1
     
     echo -e "${ARROW} ${CYAN}Removing PM2...${NC}"
-    pm2 stop zelflux > /dev/null 2>&1 && sleep 1
-    pm2 stop flux > /dev/null 2>&1 && sleep 1
     pm2 del zelflux > /dev/null 2>&1 && sleep 1
     pm2 del flux > /dev/null 2>&1 && sleep 1
     pm2 del watchdog > /dev/null 2>&1 && sleep 1
