@@ -1611,6 +1611,7 @@ fi
 #end of functions
 
     start_install
+    exit
     wipe_clean
     ssh_port
     ip_confirm
