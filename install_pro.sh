@@ -1291,7 +1291,7 @@ if [ -d ~/$FLUX_DIR ]
 then
 current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 
-string_limit_check_mark "Flux v$current_ver installed................................." "Zelflux ${GREEN}v$current_ver${CYAN} installed................................."
+string_limit_check_mark "Flux v$current_ver installed................................." "Flux ${GREEN}v$current_ver${CYAN} installed................................."
 #echo -e "${ARROW} ${CYAN}Zelflux version: ${GREEN}v$current_ver${CYAN} installed${NC}"
 
 echo
