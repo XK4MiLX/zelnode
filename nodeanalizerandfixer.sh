@@ -33,6 +33,20 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 ARROW="${CYAN}\xE2\x96\xB6${NC}"
 
+FLUX_DIR='zelflux'
+COIN_NAME='zelcash'
+COIN_DAEMON='zelcashd'
+COIN_CLI='zelcash-cli'
+CONFIG_DIR='.zelcash'
+CONFIG_FILE='zelcash.conf'
+
+BENCH_DIR_LOG='.zelbenchmark'
+BENCH_DAEMON='zelbenchd'
+BENCH_NAME='zelbench'
+BENCH_CLI='zelbench-cli'
+
+
+
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -98,18 +112,18 @@ else
 echo -e "${X_MARK} ${CYAN} Mongod not listen${NC}"
 fi
 
-if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1
+if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep "$COIN_DAEMON"> /dev/null 2>&1
 then
 echo -e "${CHECK_MARK} ${CYAN} Flux daemon listen on port 16125${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Flux daemon not listen${NC}"
 fi
 
-if sudo lsof -i  -n | grep LISTEN | grep 16224 | grep zelbenchd > /dev/null 2>&1
+if sudo lsof -i  -n | grep LISTEN | grep 16224 | grep "$BENCH_DAEMON" > /dev/null 2>&1
 then
-echo -e "${CHECK_MARK} ${CYAN} FluxBench listen on port 16224${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux benchmark listen on port 16224${NC}"
 else
-echo -e "${X_MARK} ${CYAN} FluxBench not listen${NC}"
+echo -e "${X_MARK} ${CYAN} Flux benchmark not listen${NC}"
 fi
 
 if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
@@ -151,7 +165,7 @@ done
 }
 
 function check_benchmarks() {
- var_benchmark=$(zelbench-cli getbenchmarks | jq ".$1")
+ var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
  limit=$2
  if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]
  then
@@ -171,14 +185,14 @@ then
 fi
 sleep 1
 sudo apt install bc > /dev/null 2>&1
-
-if [ -f /home/$USER/.zelbenchmark/debug.log ]; then
-echo -e "${BOOK} ${YELLOW}Checking FluxBenchmark debug.log${NC}"
-if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/.zelbenchmark/debug.log) != "0" ]]; then
-echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/.zelbenchmark/debug.log)${CYAN} error events${NC}"
+echo -e "${NC}"
+if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
+echo -e "${BOOK} ${YELLOW}Checking Flux benchmark debug.log${NC}"
+if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
-error_line=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+error_line=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -188,8 +202,8 @@ event_time="$event_time_uxtime"
 now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
-echo -e "${PIN} ${CYAN}Creating fluxbenchmark_debug_error.log${NC}"
-egrep -a --color 'Failed' /home/$USER/.zelbenchmark/debug.log > /home/$USER/zelbenchmark_debug_error.log
+echo -e "${PIN} ${CYAN}Creating Flux benchmark_debug_error.log${NC}"
+egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log > /home/$USER/benchmark_debug_error.log
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -200,14 +214,14 @@ fi
 #echo
 fi
 
-if [ -f /home/$USER/.zelcash/debug.log ]; then
+if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking Flux daemon debug.log${NC}"
-if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log) != "0" ]]; then
-echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/.zelcash/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) ${CYAN}related to benchmark${NC}"
-if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/.zelcash/debug.log) != "0" ]]; then
+if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log) != "0" ]]; then
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
+if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}FluxBench errors info:${NC}"
-error_line=$(egrep -a --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
-event_date=$(egrep -a --color 'benchmarking' /home/$USER/.zelcash/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
+error_line=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+event_date=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -218,8 +232,8 @@ now_date=$(date +%s)
 tdiff=$((now_date-event_time))
 show_time "$tdiff"
 fi
-echo -e "${PIN} ${CYAN}Creating flux_debug_error.log${NC}"
-egrep -a --color 'error|failed' /home/$USER/.zelcash/debug.log > /home/$USER/zelcash_debug_error.log
+echo -e "${PIN} ${CYAN}Creating flux_daemon_debug_error.log${NC}"
+egrep -a --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log > /home/$USER/flux_daemon_debug_error.log
 echo
 else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
@@ -230,59 +244,59 @@ fi
 #echo
 fi
 
-if zelcash-cli getinfo > /dev/null 2>&1; then
+if $COIN_CLI getinfo > /dev/null 2>&1; then
 
-echo -e "${BOOK} ${YELLOW}FluxBench status:${NC}"
-zelbench_getatus=$(zelbench-cli getstatus)
-zelbench_status=$(jq -r '.status' <<< "$zelbench_getatus")
-zelbench_benchmark=$(jq -r '.benchmarking' <<< "$zelbench_getatus")
-zelbench_zelback=$(jq -r '.zelback' <<< "$zelbench_getatus")
-zelbench_getinfo=$(zelbench-cli getinfo)
-zelbench_version=$(jq -r '.version' <<< "$zelbench_getinfo")
+echo -e "${BOOK} ${YELLOW}Flux benchmark status:${NC}"
+bench_getatus=$($BENCH_CLI getstatus)
+bench_status=$(jq -r '.status' <<< "$bench_getatus")
+bench_benchmark=$(jq -r '.benchmarking' <<< "$bench_getatus")
+bench_back=$(jq -r '.zelback' <<< "$bench_getatus")
+bench_getinfo=$($BENCH_CLI getinfo)
+bench_version=$(jq -r '.version' <<< "$bench_getinfo")
 
-if [[ "$zelbench_benchmark" == "failed" || "$zelbench_benchmark" == "toaster" ]]; then
-zelbench_benchmark_color="${RED}$zelbench_benchmark"
+if [[ "$bench_benchmark" == "failed" || "$bench_benchmark" == "toaster" ]]; then
+bench_benchmark_color="${RED}$bench_benchmark"
 else
-zelbench_benchmark_color="${SEA}$zelbench_benchmark"
+bench_benchmark_color="${SEA}$bench_benchmark"
 fi
 
-if [[ "$zelbench_status" == "online" ]]; then
-zelbench_status_color="${SEA}$zelbench_status"
+if [[ "$bench_status" == "online" ]]; then
+bench_status_color="${SEA}$bench_status"
 else
-zelbench_status_color="${RED}$zelbench_status"
+bench_status_color="${RED}$bench_status"
 fi
 
-if [[ "$zelbench_zelback" == "connected" ]]; then
-zelbench_zelback_color="${SEA}$zelbench_zelback"
+if [[ "$bench_back" == "connected" ]]; then
+bench_back_color="${SEA}$bench_back"
 else
-zelbench_zelback_color="${RED}$zelbench_zelback"
+bench_back_color="${RED}$bench_back"
 fi
 
-echo -e "${PIN} ${CYAN}FluxBench version: ${SEA}$zelbench_version${NC}"
-echo -e "${PIN} ${CYAN}FluxBench status: $zelbench_status_color${NC}"
-echo -e "${PIN} ${CYAN}Benchmark: $zelbench_benchmark_color${NC}"
-echo -e "${PIN} ${CYAN}FluxBack: $zelbench_zelback_color${NC}"
+echo -e "${PIN} ${CYAN}Flux benchmark version: ${SEA}$bench_version${NC}"
+echo -e "${PIN} ${CYAN}Flux benchmark status: $bench_status_color${NC}"
+echo -e "${PIN} ${CYAN}Benchmark: $bench_benchmark_color${NC}"
+echo -e "${PIN} ${CYAN}FluxBack: $bench_back_color${NC}"
 echo -e "${NC}"
 
-if [[ "$zelbench_benchmark" == "running" ]]; then
+if [[ "$bench_benchmark" == "running" ]]; then
 echo -e "${ARROW} ${CYAN} Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
 fi
 
-if [[ "$zelbench_benchmark" == "BASIC" || "$zelbench_benchmark" == "SUPER" || "$zelbench_benchmark" == "BAMF" ]]; then
-echo -e "${CHECK_MARK} ${CYAN} FluxBench working correct, all requirements met.${NC}"
+if [[ "$bench_benchmark" == "BASIC" || "$bench_benchmark" == "SUPER" || "$bench_benchmark" == "BAMF" ]]; then
+echo -e "${CHECK_MARK} ${CYAN} Flux benchmark working correct, all requirements met.${NC}"
 fi
 
-if [[ "$zelbench_benchmark" == "failed" ]]; then
-echo -e "${X_MARK} ${CYAN} FluxBench problem detected, check zelbenchmark debug.log${NC}"
+if [[ "$bench_benchmark" == "failed" ]]; then
+echo -e "${X_MARK} ${CYAN} Flux benchmark problem detected, check benchmark debug.log${NC}"
 fi
 
-core=$(zelbench-cli getbenchmarks | jq '.cores')
+core=$($BENCH_CLI getbenchmarks | jq '.cores')
 
-if [[ "$zelbench_benchmark" == "failed" && "$core" > "0" ]]; then
+if [[ "$bench_benchmark" == "failed" && "$core" > "0" ]]; then
 BTEST="1"
-echo -e "${X_MARK} ${CYAN} FluxBench working correct but minimum system requirements not met.${NC}"
-check_benchmarks "eps" "89.99" "CPU speed" "< 90.00 events per second"
-check_benchmarks "ddwrite" "159.99" "Disk write speed" "< 160.00 events per second"
+echo -e "${X_MARK} ${CYAN} Flux benchmark working correct but minimum system requirements not met.${NC}"
+check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
+check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
 fi
 
 #if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
@@ -297,7 +311,7 @@ fi
 ##fi
 #fi
 
-if [[ "$zelbench_zelback" == "disconnected" ]]; then
+if [[ "$bench_back" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} FluxBack does not work properly${NC}"
 
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
@@ -307,9 +321,9 @@ fi
 
 if [[ "$WANIP" != "" ]]; then
 
-zelback_error_check=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
+back_error_check=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
 
-  if [[ "$zelback_error_check" == "" ]]; then
+  if [[ "$back_error_check" == "" ]]; then
   
    sudo ufw allow from any to any port 16127 > /dev/null 2>&1
    sudo ufw allow out to any port 16127 > /dev/null 2>&1
@@ -317,18 +331,18 @@ zelback_error_check=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r
    
   else
 
-    if [[ "$zelback_error_check" == "7" ]]; then
-        zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
-        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$zelback_error${NC}"
+    if [[ "$back_error_check" == "7" ]]; then
+        back_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
+        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
         sudo ufw allow from any to any port 16127 > /dev/null 2>&1
         sudo ufw allow out to any port 16127 > /dev/null 2>&1
         sudo ufw reload > /dev/null 2>&1
      
     fi
     
-    if [[ "$zelback_error_check" == "3" ]]; then
-        zelback_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message)
-        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$zelback_error${NC}"
+    if [[ "$back_error_check" == "3" ]]; then
+        back_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message)
+        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
         sudo ufw allow from any to any port 16127 > /dev/null 2>&1
         sudo ufw allow out to any port 16127 > /dev/null 2>&1
         sudo ufw reload > /dev/null 2>&1
@@ -360,11 +374,11 @@ fi
 
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Flux deamon information:${NC}"
-zelcash_getinfo=$(zelcash-cli getinfo)
-version=$(jq -r '.version' <<< "$zelcash_getinfo")
-blocks_hight=$(jq -r '.blocks' <<< "$zelcash_getinfo")
-protocolversion=$(jq -r '.protocolversion' <<< "$zelcash_getinfo")
-connections=$(jq -r '.connections' <<< "$zelcash_getinfo")
+daemon_getinfo=$($COIN_CLI getinfo)
+version=$(jq -r '.version' <<< "$daemon_getinfo")
+blocks_hight=$(jq -r '.blocks' <<< "$daemon_getinfo")
+protocolversion=$(jq -r '.protocolversion' <<< "$daemon_getinfo")
+connections=$(jq -r '.connections' <<< "$daemon_getinfo")
 
 echo -e "${PIN} ${CYAN}Version: ${SEA}$version${NC}"
 echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
@@ -379,9 +393,9 @@ fi
 
 echo -e ""
 echo -e "${BOOK} ${YELLOW}Checking node status:${NC}"
-zelcash_getzelnodestatus=$(zelcash-cli getzelnodestatus)
-node_status=$(jq -r '.status' <<< "$zelcash_getzelnodestatus")
-collateral=$(jq -r '.collateral' <<< "$zelcash_getzelnodestatus")
+getzelnodestatus=$($COIN_CLI getzelnodestatus)
+node_status=$(jq -r '.status' <<< "$getzelnodestatus")
+collateral=$(jq -r '.collateral' <<< "$getzelnodestatus")
 
 if [ "$node_status" == "CONFIRMED" ]
 then
@@ -396,11 +410,11 @@ fi
 if [ "$node_status" != "CONFIRMED" ]
 then
 
-if whiptail --yesno "Would you like to verify zelcash.conf Y/N?" 8 60; then
+if whiptail --yesno "Would you like to verify $CONFIG_FILE Y/N?" 8 60; then
 ZELCONF="1"
-zelnodeprivkey="$(whiptail --title "FluxNode ANALYZER/FiXER $SCVESION" --inputbox "Enter your FluxNode Private Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)"
-zelnodeoutpoint="$(whiptail --title "FluxNode ANALYZER/FiXER $SCVESION" --inputbox "Enter your FluxNode Output TX ID" 8 72 3>&1 1>&2 2>&3)"
-zelnodeindex="$(whiptail --title "FluxNode ANALYZER/FiXER $SCVESION" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
+zelnodeprivkey="$(whiptail --title "Deamon configuration" --inputbox "Enter your FluxNode Private Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)"
+zelnodeoutpoint="$(whiptail --title "Deamon configuration" --inputbox "Enter your FluxNode Output TX ID" 8 72 3>&1 1>&2 2>&3)"
+zelnodeindex="$(whiptail --title "Deamon configuration" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
 fi
 
 fi
@@ -418,8 +432,8 @@ if [[ "$txhash" != "" ]]; then
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #conf=$(wget -nv -qO - $url_to_check | jq '.confirmations')
 stak_info=""
-if [[ -f /home/$USER/.zelcash/zelcash.conf ]]; then
-	index_from_file=$(grep -w zelnodeindex /home/$USER/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//')
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
 	#stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
         stak_info=$(curl -s -m 5 https://explorer.zel.network/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
@@ -441,7 +455,7 @@ fi
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
 		#fi
 		type=$(awk '{print $1}' <<< "$stak_info")
-		conf=$(zelcash-cli gettxout $txhash $index_from_file | jq .confirmations)
+		conf=$($COIN_CLI gettxout $txhash $index_from_file | jq .confirmations)
 
 		if [[ $conf == ?(-)+([0-9]) ]]; then
     			if [ "$conf" -ge "100" ]; then
@@ -462,44 +476,44 @@ fi
 	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
 		esac
 		
-		case $zelbench_benchmark in
- 		 "BASIC")  zelbench_benchmark_value=10000 ;;
- 		 "SUPER")  zelbench_benchmark_value=25000 ;;
-	 	 "BAMF") zelbench_benchmark_value=100000 ;;
+		case $bench_benchmark in
+ 		 "BASIC")  bench_benchmark_value=10000 ;;
+ 		 "SUPER")  bench_benchmark_value=25000 ;;
+	 	 "BAMF") bench_benchmark_value=100000 ;;
 		esac
 		
 		#echo -e "$zelbench_benchmark_value" -> 10000 BASIC
 	       # echo -e "$type" -> 25000 SUPER
 
-   		 if [[ -z zelbench_benchmark_value ]]; then
+   		 if [[ -z bench_benchmark_value ]]; then
   		  echo -e ""
    		 else
 		 
-		 	if [[ "$zelbench_benchmark_value" -ge "$type" ]]; then
+		 	if [[ "$bench_benchmark_value" -ge "$type" ]]; then
 			
 				case $type in
- 				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
- 				 "25000")  zelbench_benchmark_value_name="SUPER" ;;
-	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
+ 				 "10000")  bench_benchmark_value_name="BASIC" ;;
+ 				 "25000")  bench_benchmark_value_name="SUPER" ;;
+	 			 "100000") bench_benchmark_value_name="BAMF" ;;
 				esac
 			
-			  echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${GREEN}$zelbench_benchmark_value_name${NC}"
+			  echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${GREEN}$bench_benchmark_value_name${NC}"
 			else
 			
 				case $type in
- 				 "10000")  zelbench_benchmark_value_name="BASIC" ;;
- 				 "25000")  zelbench_benchmark_value_name="SUPER" ;;
-	 			 "100000") zelbench_benchmark_value_name="BAMF" ;;
+ 				 "10000")  bench_benchmark_value_name="BASIC" ;;
+ 				 "25000")  bench_benchmark_value_name="SUPER" ;;
+	 			 "100000") bench_benchmark_value_name="BAMF" ;;
 				esac
 				
-				if [[ "$zelbench_benchmark" == "running" ]]; then
+				if [[ "$bench_benchmark" == "running" ]]; then
 					echo -en ""
 				else
 				
-				      if [[ "$zelbench_benchmark" == "failed" ]]; then
+				      if [[ "$bench_benchmark" == "failed" ]]; then
 				         echo -en ""	
 				      else    
-				         echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$zelbench_benchmark${CYAN} required ${RED}$zelbench_benchmark_value_name${NC}"	
+				         echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${RED}$bench_benchmark_value_name${NC}"	
 				      fi
 				   		      	
 				 fi
@@ -539,8 +553,8 @@ docker_inactive=$(sudo systemctl status docker 2> /dev/null | egrep 'inactive|fa
 mongod_running=$(sudo systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
 mongod_inactive=$(sudo systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-zelcash_running=$(sudo systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
-zelcash_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+daemon_running=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | grep 'running' | grep -o 'since.*')
+daemon_inactive=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 if sudo systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker(SNAP) service running ${SEA}$snap_docker_running${NC}"
@@ -595,11 +609,11 @@ fi
 
 fi
 
-if sudo systemctl list-units | grep zelcash | egrep -wi 'running' > /dev/null 2>&1; then
-echo -e "${CHECK_MARK} ${CYAN} Flux daemon service running ${SEA}$zelcash_running${NC}"
+if sudo systemctl list-units | grep $COIN_NAME | egrep -wi 'running' > /dev/null 2>&1; then
+echo -e "${CHECK_MARK} ${CYAN} Flux daemon service running ${SEA}$daemon_running${NC}"
 else
-if [[ "$zelcash_inactive" != "" ]]; then
-echo -e "${X_MARK} ${CYAN} Flux daemon service not running ${RED}$zelcash_inactive${NC}"
+if [[ "$daemon_inactive" != "" ]]; then
+echo -e "${X_MARK} ${CYAN} Flux daemon service not running ${RED}$daemon_inactive${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Flux daemon service is not installed${NC}"
 fi
@@ -609,14 +623,14 @@ echo -e ""
 echo -e "${BOOK} ${YELLOW}Checking Flux:${NC}"
 
 if pm2 -v > /dev/null 2>&1; then
-pm2_zelflux_status=$(pm2 info zelflux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
-if [[ "$pm2_zelflux_status" == "online" ]]; then
-pm2_zelflux_uptime=$(pm2 info zelflux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
-pm2_zelflux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-echo -e "${CHECK_MARK} ${CYAN} Pm2 Zelflux info => status: ${GREEN}$pm2_zelflux_status${CYAN}, uptime: ${GREEN}$pm2_zelflux_uptime${NC} ${SEA}$pm2_zelflux_restarts${NC}" 
+pm2_flux_status=$(pm2 info $FLUX_DIR 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
+if [[ "$pm2_flux_status" == "online" ]]; then
+pm2_flux_uptime=$(pm2 info $FLUX_DIR | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+pm2_flux_restarts=$(pm2 info $FLUX_DIR | grep 'restarts' | sed -r 's/│//gi' | xargs)
+echo -e "${CHECK_MARK} ${CYAN} Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
 else
-if [[ "$pm2_zelflux_status" != "" ]]; then
-echo -e "${X_MARK} ${CYAN} Pm2 Flux status: ${RED}$pm2_zelflux_status ${NC}" 
+if [[ "$pm2_flux_status" != "" ]]; then
+echo -e "${X_MARK} ${CYAN} Pm2 Flux status: ${RED}$pm2_flux_status ${NC}" 
 fi
 fi
 else
@@ -635,13 +649,13 @@ else
 echo -e "${X_MARK} ${CYAN} Flux front is not working${NC}"
 fi
 
-if [ -d ~/zelflux ]
+if [ -d ~/$FLUX_DIR ]
 then
-FILE=~/zelflux/config/userconfig.js
+FILE=~/$FLUX_DIR/config/userconfig.js
 if [ -f "$FILE" ]
 then
 
- current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+ current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
  required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
 if [[ "$required_ver" != "" ]]; then
@@ -653,9 +667,9 @@ if [[ "$required_ver" != "" ]]; then
    fi
  fi
 
-echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/zelflux/config/userconfig.js exists${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
 
-ZELIDLG=`echo -n $(grep -w zelid ~/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
+ZELIDLG=`echo -n $(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
 if [ "$ZELIDLG" -eq "36" ] || [ "$ZELIDLG" -eq "35" ]
 then
 echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
@@ -663,14 +677,14 @@ else
 echo -e "${X_MARK} ${CYAN} Zel ID is not valid${NC}"
 fi
 
-if [ -f ~/zelflux/error.log ]
+if [ -f ~/$FLUX_DIR/error.log ]
 then
 echo
 echo -e "${BOOK} ${YELLOW}Flux error.log file detected, check ~/zelflux/error.log"
-echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/zelflux/error.log)${CYAN} error events${NC}"
-error_line=$(cat /home/$USER/zelflux/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
+echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/$FLUX_DIR/error.log)${CYAN} error events${NC}"
+error_line=$(cat /home/$USER/$FLUX_DIR/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
-event_date=$(cat /home/$USER/zelflux/error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
+event_date=$(cat /home/$USER/$FLUX_DIR/error.log | grep 'Error' | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z')
 event_time_uxtime=$(date -d "$event_date" +"%s")
 event_human_time_local=$(date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
 event_human_time_utc=$(TZ=GMT date -d @"$event_time_uxtime" +'%Y-%m-%d %H:%M:%S [%z]')
@@ -680,25 +694,25 @@ tdiff=$((now_date-event_time_uxtime))
 show_time "$tdiff"
 fi
 
-if [ ! -f ~/zelflux/ZelFront/dist/index.html ]
+if [ ! -f ~/$FLUX_DIR/ZelFront/dist/index.html ]
 then
-echo -e "${WORNING} ${CYAN}Flux problem detected, missing ~/zelflux/ZelFront/dist/index.html"
+echo -e "${WORNING} ${CYAN}Flux problem detected, missing ~/$FLUX_DIR/ZelFront/dist/index.html"
 fi
 
 else
 FLUXCONF="1"
-    echo -e "${X_MARK} ${CYAN}Flux config ~/zelflux/config/userconfig.js does not exists${NC}"
+    echo -e "${X_MARK} ${CYAN}Flux config ~/$FLUX_DIR/config/userconfig.js does not exists${NC}"
 fi
 
 else
-    echo -e "${X_MARK} ${CYAN}Directory ~/zelflux does not exists${CYAN}"
+    echo -e "${X_MARK} ${CYAN}Directory ~/$FLUX_DIR does not exists${CYAN}"
 fi
 
 if [[ "$ZELCONF" == "1" ]]
 then
 echo 
-echo -e "${BOOK} ${YELLOW}Checking ~/.zelcash/zelcash.conf${NC}"
-if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf | sed -e 's/zelnodeprivkey=//') ]]
+echo -e "${BOOK} ${YELLOW}Checking ~/$COIN_DIR/$CONFIG_FILE${NC}"
+if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} FluxNode privkey matches${NC}"
 else
@@ -706,7 +720,7 @@ REPLACE="1"
 echo -e "${X_MARK} ${CYAN} FluxNode privkey does not match${NC}"
 fi
 
-if [[ $zelnodeoutpoint == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf | sed -e 's/zelnodeoutpoint=//') ]]
+if [[ $zelnodeoutpoint == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} FluxNode outpoint matches${NC}"
 else
@@ -714,7 +728,7 @@ REPLACE="1"
 echo -e "${X_MARK} ${CYAN} FluxNode outpoint does not match${NC}"
 fi
 
-if [[ $zelnodeindex == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf | sed -e 's/zelnodeindex=//') ]]
+if [[ $zelnodeindex == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} FluxNode index matches${NC}"
 else
@@ -763,8 +777,8 @@ if [[ "$FLUX_UPDATE" == "1" ]]; then
 read -p "Would you like to update Flux Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-cd /home/$USER/zelflux && git pull > /dev/null 2>&1 && cd
-current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
+current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 if [[ "$required_ver" == "$current_ver" ]]; then
 echo -e "${CHECK_MARK} ${CYAN}Flux updated successfully.${NC}"
@@ -777,40 +791,40 @@ fi
 fi
 
 if [[ "$REPLACE" == "1" ]]; then
-read -p "Would you like to correct zelcash.conf errors Y/N?" -n 1 -r
+read -p "Would you like to correct daemon config errors Y/N?" -n 1 -r
 echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 echo -e "${YELLOW}Stopping Flux daemon serivce...${NC}"
-sudo systemctl stop zelcash
+sudo systemctl stop "$COIN_NAME"
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 echo -e ""
 
-if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
+if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
 echo -e "\c"
         else
-        sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
+        sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e " ${CYAN}FluxNode privkey replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
-if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
+if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
 echo -e "\c"
         else
-        sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
+        sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e " ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
-if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
+if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
 echo -e "\c"
         else
-        sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
+        sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e " ${CYAN}FluxNode index replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
 echo -e ""
-sudo systemctl start zelcash
+sudo systemctl start "$COIN_NAME"
 NUM='35'
 MSG1=' Restarting Flux daemon serivce...'
 MSG2="${CYAN}............[${CHECK_MARK}${CYAN}]${NC}"
@@ -854,6 +868,7 @@ fi
 
 fi
 
+echo
 #if [ "$LC_CHECK" == "1" ]; then
 #read -p "Would you like to change LC_NUMERIC to en_US.UTF-8 Y/N?" -n 1 -r
 #echo -e ""

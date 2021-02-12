@@ -1,12 +1,14 @@
 #!/bin/bash
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
-BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
+COIN_NAME='zelcash'
+FLUX_DIR='zelflux'
 
 #color codes
 RED='\033[1;31m'
@@ -110,7 +112,7 @@ function pm2_install(){
      	echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
    	pm2 startup systemd -u $USER > /dev/null 2>&1
    	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+   	pm2 start ~/$FLUX_DIR/start.sh --name $FLUX_DIR > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	pm2 install pm2-logrotate > /dev/null 2>&1
 	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
@@ -156,7 +158,7 @@ echo -e "${PIN}${CYAN}Import settings from install_conf.json....................
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from zelcash.conf and userconfig.js..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Import settings from exist config files..........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -178,15 +180,15 @@ echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use.............
 else
 
 if [[ "$bootstrap_url" == "" ]]; then
-echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts..................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Use Flux Bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Use Flux Bootstrap from own source...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN}Remove Flux Bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Remove Flux Bootstrap archive file...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Leave Flux Bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Leave Flux Bootstrap archive file................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -233,11 +235,11 @@ then
 fi
 
  if pm2 -v > /dev/null 2>&1; then
- pm2 stop zelflux > /dev/null 2>&1
+ pm2 stop $FLUX_DIR > /dev/null 2>&1
  fi
  
 docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
-resource_check=$(df | egrep 'zelflux' | awk '{ print $1}' | wc -l)
+resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
 
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
@@ -251,21 +253,21 @@ fi
 if [[ $resource_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
-df | egrep 'zelflux' | awk '{ print $1}' |
+df | egrep 'flux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
 done
 fi
 
-if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
+if [ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]; then
 
     echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
-    zel_id=$(grep -w zelid /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-    WANIP=$(grep -w ipaddress /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
+    zel_id=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+    WANIP=$(grep -w ipaddress /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
     
     echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$zel_id${NC}" && sleep 1
     
-    KDA_A=$(grep -w kadena /home/$USER/zelflux/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+    KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
     
     if [[ "$KDA_A" != "" ]]; then
     
@@ -277,30 +279,30 @@ if [ -f /home/$USER/zelflux/config/userconfig.js ]; then
     echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}" && sleep 1   
     echo 
     echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
-    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
-    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 2
+    #sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
     zelflux_setting_import="1"
 
 fi
 
 
 
-if [ -d /home/$USER/zelflux ]; then
+if [ -d /home/$USER/$FLUX_DIR ]; then
 
     echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
-    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
-    sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
+    #sudo rm -rf zelflux  > /dev/null 2>&1 && sleep 2
+    sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 2
     
 fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
 git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1 && sleep 2
 
-if [ -d /home/$USER/zelflux ]
+if [ -d /home/$USER/$FLUX_DIR ]
 then
 
-if [[ -f /home/$USER/zelflux/package.json ]]; then
-  current_ver=$(jq -r '.version' /home/$USER/zelflux/package.json)
+if [[ -f /home/$USER/$FLUX_DIR/package.json ]]; then
+  current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 else
   string_limit_x_mark "Flux was not downloaded, run script again..........................................."
   echo
@@ -333,8 +335,8 @@ while true
  done
  
  
-  touch ~/zelflux/config/userconfig.js
-    cat << EOF > ~/zelflux/config/userconfig.js
+  touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
@@ -348,8 +350,8 @@ else
 
 if [[ "$KDA_A" != "" ]]; then
 
-  touch ~/zelflux/config/userconfig.js
-    cat << EOF > ~/zelflux/config/userconfig.js
+  touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
@@ -362,8 +364,8 @@ EOF
 
 else
 
-  touch ~/zelflux/config/userconfig.js
-    cat << EOF > ~/zelflux/config/userconfig.js
+  touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
@@ -377,7 +379,7 @@ fi
 
 fi
    
-if [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
+if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
 string_limit_check_mark "Flux configuration successfull..........................................."
 else
 string_limit_x_mark "Flux installation failed, missing config file..........................................."
@@ -388,12 +390,12 @@ fi
  if pm2 -v > /dev/null 2>&1; then 
  
    rm restart_zelflux.sh > /dev/null 2>&1
-   pm2 del zelflux > /dev/null 2>&1
+   pm2 del $FLUX_DIR > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    echo -e "${ARROW} ${CYAN}Starting Flux....${NC}"
    echo -e "${ARROW} ${CYAN}Flux loading will take 2-3min....${NC}"
    echo
-   pm2 start /home/$USER/zelflux/start.sh --name zelflux > /dev/null 2>&1
+   pm2 start /home/$USER/$FLUX_DIR/start.sh --name $FLUX_DIR > /dev/null 2>&1
    pm2 save > /dev/null 2>&1
    pm2 list
 
@@ -446,7 +448,7 @@ fi
 skip_zelcash_config='0'
 skip_bootstrap='0'
 
-if [[ -d /home/$USER/.zelcash ]]; then
+if [[ -d /home/$USER/$CONFIG_DIR ]]; then
 
   if whiptail --yesno "Would you like import old settings from daemon and Flux?" 8 65; then
      import_settings='1'
@@ -634,7 +636,7 @@ fi
 echo
 }
 
-function zelcash_bootstrap() {
+function flux_daemon_bootstrap() {
 
 echo -e "${GREEN}Module: Restore Flux blockchain form bootstrap${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -649,7 +651,7 @@ then
 fi
 
 echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
-sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 
 if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
@@ -663,7 +665,7 @@ echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
 echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
 
 
-if unzip -t zel-bootstrap.zip | grep 'No errors' > /dev/null 2>&1
+if unzip -t $BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
 then
 echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
 else
@@ -674,7 +676,7 @@ printf '\e[A\e[K'
 printf '\e[A\e[K'
 printf '\e[A\e[K'
 echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-rm -rf zel-bootstrap.zip
+rm -rf $BOOTSTRAP_ZIPFILE
 fi
 fi
 
@@ -687,7 +689,7 @@ else
 
 
 CHOICE=$(
-whiptail --title "ZELNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
         "1)" "Download from source build in script" \
         "2)" "Download from own source" 3>&2 2>&1 1>&3
 )
@@ -717,15 +719,19 @@ if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
     rm -rf $BOOTSTRAP_ZIPFILE
 fi
 
-echo -e "${ARROW} ${CYAN}Starting Flux daemon service${NC}"
-sudo systemctl start zelcash > /dev/null 2>&1 && sleep 2
-echo
+sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+NUM='35'
+MSG1='Starting Flux daemon service...'
+MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo -e "" && echo -e ""
+
 
 }
 
 function mongodb_bootstrap(){
 
-echo -e "${GREEN}Module: Restore Flux mongodb datatable for explorer from bootstrap${NC}"
+echo -e "${GREEN}Module: Restore Flux mongodb datatable from bootstrap (explorer only)${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" ]]
@@ -738,7 +744,7 @@ then
 fi
 
 sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
-sudo rm /home/$USER/mongod_bootstrap.tar.gz  > /dev/null 2>&1
+sudo rm /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD  > /dev/null 2>&1
 
 if ! pm2 -v > /dev/null 2>&1; then
  
@@ -751,7 +757,7 @@ if ! pm2 -v > /dev/null 2>&1; then
 fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-DB_HIGHT=$(curl -s -m 3 https://zelnodebootstrap.xyz/mongodb-bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
@@ -774,14 +780,14 @@ echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
 wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${CYAN}Stoping zelflux...${NC}"
-pm2 stop zelflux > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Stoping $FLUX_DIR...${NC}"
+pm2 stop $FLUX_DIR > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-pm2 start zelflux > /dev/null 2>&1
+pm2 start $FLUX_DIR > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='120'
@@ -893,7 +899,7 @@ fi
 
 }
 
-function install_zelnode(){
+function install_node(){
 
 echo -e "${GREEN}Module: Install FluxNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
@@ -1018,7 +1024,7 @@ fi
 
 }
 
-function zelcash_reconfiguration()
+function daemon_reconfiguration()
 {
 
 echo -e "${GREEN}Module: Flux Daemon Reconfiguration${NC}"
@@ -1033,30 +1039,37 @@ then
     exit
 fi
 
+echo
+echo -e "${ARROW} ${YELLOW}Fill in all the fields that you want to replace${NC}"
+sleep 4
 skip_change='4'
-zelnodeprivkey="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your FluxNode Private Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)"
+zelnodeprivkey="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Private Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)"
 sleep 1
-zelnodeoutpoint="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your FluxNode Output TX ID" 8 72 3>&1 1>&2 2>&3)"
+zelnodeoutpoint="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Output TX ID" 8 72 3>&1 1>&2 2>&3)"
 sleep 1
-zelnodeindex="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
+zelnodeindex="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
 sleep 1
-externalip="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your FluxNode IP" 8 60 3>&1 1>&2 2>&3)"
+externalip="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode IP" 8 60 3>&1 1>&2 2>&3)"
 sleep 1
 
 if [[ "$zelnodeprivkey" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode privkey skipped....................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeoutpoint" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeindex" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$externalip" == "" ]]; then
 skip_change=$((skip_change-1))
+echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 
@@ -1067,18 +1080,18 @@ exit
 fi
 
 echo -e "${ARROW} ${CYAN}Stopping Flux daemon serivce...${NC}"
-sudo systemctl stop zelcash && sleep 2
+sudo systemctl stop $COIN_NAME  > /dev/null 2>&1 && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 
 
 if [[ "$zelnodeprivkey" != "" ]]; then
 
-if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
-echo -e "\c"
+if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+echo -e "${ARROW} ${CYAN}Replace FluxNode privkey skipped....................[${CHECK_MARK}${CYAN}]${NC}"
         else
-        sed -i "s/$(grep -e zelnodeprivkey ~/.zelcash/zelcash.conf)/zelnodeprivkey=$zelnodeprivkey/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode privkey replaced successful................[${CHECK_MARK}${CYAN}]${NC}"
+        sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+                        echo -e "${ARROW} ${CYAN}FluxNode privkey replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
                 fi
 fi
 
@@ -1086,11 +1099,11 @@ fi
 
 if [[ "$zelnodeoutpoint" != "" ]]; then
 
-if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
-echo -e "\c"
+if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
         else
-        sed -i "s/$(grep -e zelnodeoutpoint ~/.zelcash/zelcash.conf)/zelnodeoutpoint=$zelnodeoutpoint/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/.zelcash/zelcash.conf) ]]; then
+        sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e "${ARROW} ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 fi
@@ -1099,12 +1112,13 @@ fi
 
 if [[ "$zelnodeindex" != "" ]]; then
 
-if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
-echo -e "\c"
+if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
         else
-        sed -i "s/$(grep -w zelnodeindex ~/.zelcash/zelcash.conf)/zelnodeindex=$zelnodeindex/" ~/.zelcash/zelcash.conf
-                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode index replaced successful.................[${CHECK_MARK}${CYAN}]${NC}"
+        sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+                        echo -e "${ARROW} ${CYAN}FluxNode index replaced successful..................[${CHECK_MARK}${CYAN}]${NC}"
+			
                 fi
 fi
 
@@ -1112,20 +1126,21 @@ fi
 
 if [[ "$externalip" != "" ]]; then
 
-if [[ "externalip=$externalip" == $(grep -w externalip ~/.zelcash/zelcash.conf) ]]; then
-echo -e "\c"
+if [[ "externalip=$externalip" == $(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${CHECK_MARK}${CYAN}]${NC}"
         else
-        sed -i "s/$(grep -w externalip ~/.zelcash/zelcash.conf)/externalip=$externalip/" ~/.zelcash/zelcash.conf
-                if [[ "externalip=$externalip" == $(grep -w externalip ~/.zelcash/zelcash.conf) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode IP replaced successful...................[${CHECK_MARK}${CYAN}]${NC}"
+        sed -i "s/$(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE)/externalip=$externalip/" ~/$CONFIG_DIR/$CONFIG_FILE
+                if [[ "externalip=$externalip" == $(grep -w externalip ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+                        echo -e "${ARROW} ${CYAN}FluxNode IP replaced successful.....................[${CHECK_MARK}${CYAN}]${NC}"
+			
                 fi
 fi
 fi
 
-sudo systemctl start zelcash
+sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
 NUM='35'
-MSG1='Restarting zelcash serivce...'
-MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
+MSG1='Restarting daemon serivce...'
+MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo -e "" && echo -e ""
 
@@ -1174,7 +1189,7 @@ read -p "Pick an option: " -n 1 -r
  2) 
     clear
     sleep 1
-    install_zelnode
+    install_node
  ;;
  3)     
     clear
@@ -1195,7 +1210,7 @@ read -p "Pick an option: " -n 1 -r
   6)  
     clear
     sleep 1
-    zelcash_bootstrap     
+    flux_daemon_bootstrap     
  ;; 
   7)
     clear
@@ -1210,7 +1225,7 @@ read -p "Pick an option: " -n 1 -r
  9)
    clear
    sleep 1
-   zelcash_reconfiguration
+   daemon_reconfiguration
    
  ;;
  

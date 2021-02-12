@@ -9,7 +9,6 @@ COIN_CLI='zelcash-cli'
 COIN_PATH='/usr/local/bin'
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
-
 BENCH_NAME='zelbench'
 BENCH_DAEMON='zelbenchd'
 BENCH_CLI='zelbench-cli'
@@ -37,7 +36,7 @@ HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
-BOOTSTRAP_ZIPFILE='zel-bootstrap.zip'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -630,7 +629,7 @@ function mongodb_bootstrap(){
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 BLOCKHIGHT=0
-DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb-bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
 echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
 if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
