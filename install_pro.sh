@@ -320,9 +320,9 @@ else
   #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
   echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
   echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-  echo -e ""
 
   if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
+    echo -e ""
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
     wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
     echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
@@ -341,7 +341,7 @@ else
     MSG1='Flux starting...'
     MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
     spinning_timer
-    echo
+    echo -e ""
     BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
   
@@ -1319,7 +1319,7 @@ NUM='2'
 MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo && echo
+echo
 
 else
 	
@@ -1390,10 +1390,11 @@ else
    	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
+	echo
 	NUM='190'
    	MSG1='Flux Loading....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-        echo && spinning_timer
+        spinning_timer
         echo && echo
     
 
