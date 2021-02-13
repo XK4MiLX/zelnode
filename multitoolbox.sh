@@ -244,7 +244,7 @@ docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
 resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
 mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
-if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
+if [[ "$mongod_check" != "" || "$mongod_check" != "null" ]]; then
 echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB localapps collection ...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux localapps collection...${NC}" && sleep 1
 echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
