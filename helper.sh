@@ -788,7 +788,7 @@ fi
 echo
 }
 
-max(){
+function max(){
     local m="$1"
     for n in "$@"
     do
