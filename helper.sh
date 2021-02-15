@@ -761,7 +761,7 @@ function unlock_flux_resouce()
  mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
 
-if [[ "$mongod_check" != "" && "$mongod_check" != "null" $1 == "clean_db" ]]; then
+if [[ "$mongod_check" != "" && "$mongod_check" != "null" && "$1" == "clean_db" ]]; then
 echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
 echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
