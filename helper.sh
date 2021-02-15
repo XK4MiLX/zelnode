@@ -791,6 +791,7 @@ echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
 kda_height = $(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
+echo -e "${ARROW} ${CYAN}Kadena Node Height: ${GREEN}$kda_height${NC}"
 
 sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
 
@@ -800,7 +801,7 @@ docker_check = $(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
 
 if [[ "$docker_check" != "" ]]; then
 
-echo -e ${ARROW} ${CYAN}Stopping Kadena Node...${NC}
+echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
 echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
@@ -832,10 +833,8 @@ fi
 
 if [[ "$kda_bootstrap_daemon" == "0" ]]; then
 echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed${NC}"
-echo
 else
 echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
-echo
 fi
 
 
