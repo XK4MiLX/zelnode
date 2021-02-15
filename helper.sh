@@ -894,19 +894,8 @@ fi
 
 function kda_bootstrap() {
 
-echo -e "${GREEN}Module: Restore Kadena blockchain form bootstrap${NC}"
-echo -e "${YELLOW}================================================================${NC}"
 
-if [[ "$USER" == "root" ]]
-then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
-fi
-
-
+echo -e ""
 echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
