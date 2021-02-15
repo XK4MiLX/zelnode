@@ -857,7 +857,7 @@ echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
 echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-cd /home/$USER/$FLUX_DIR/ZelApps/zelKadenaChainWebNode  
+cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  
 zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
 cd
 
