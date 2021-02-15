@@ -788,7 +788,7 @@ echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
     	 fi
     fi
     
-kda_height = $(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
+kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
 echo -e "${ARROW} ${CYAN}Kadena Node Height: ${GREEN}$kda_height${NC}"
