@@ -817,7 +817,7 @@ sudo touch /home/$USER/kda_bootstrap.json
 sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
     cat << EOF > /home/$USER/kda_bootstrap.json
 {
-  "blocks_height": "${kda_height}",
+  "block_height": "${kda_height}",
   "time": "${data}",
   "unix_timestamp": "${unix}"
 }
