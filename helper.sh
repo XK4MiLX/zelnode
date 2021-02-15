@@ -828,15 +828,16 @@ docker start zelKadenaChainWebNode > /dev/null 2>&1
 
 fi
 
+fi
+
 if [[ "$kda_bootstrap_daemon" == "0" ]]; then
-echo -e "${ARROW} ${CYAN}Kadena bootstrap creating failed${NC}"
+echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed${NC}"
+echo
 else
 echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
-fi
-
 echo
-
 fi
+
 
 }
 
