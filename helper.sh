@@ -894,7 +894,7 @@ fi
 
 function kda_bootstrap() {
 
-
+sudo chown $USER:$USER /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode
 echo -e ""
 echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
