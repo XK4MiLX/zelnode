@@ -795,11 +795,19 @@ network_height_node_02=$(curl -sk https://us-e2.chainweb.com/chainweb/0.0/mainne
 
 network_height=$(max "$network_height_node_01" "$network_height_node_02")
 echo -e "${ARROW} ${CYAN}Kadena Network Node Height: ${GREEN}$network_height${NC}"
-exit    
-    
 kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 
-if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
+check_height=$((network_height-kda_height))
+
+if [[ "$check_height" -lt 0 ]]; then
+check_height=$((check_height*-1))
+fi
+
+echo "$check_height"
+exit
+
+
+if [[ "$kda_height" != "" && "$kda_height" != "null"  &&  ]]; then
 echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
 sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
