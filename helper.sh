@@ -756,18 +756,35 @@ fi
 
 function unlock_flux_resouce()
 {
-echo
-echo -e "${ARROW} ${YELLOW}Stopping Flux dockered appz${NC}" && sleep 1
-docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
+ docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
+ resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
+ mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
+
+
+if [[ "$mongod_check" != "" && "$mongod_check" != "null" $1 == "clean_db" ]]; then
+echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
+echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
+fi
+
+if [[ $docker_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
+docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
 sudo docker stop $line && sleep 1
 done
-echo
-echo -e "${ARROW} ${YELLOW}Unmonting all locked Flux resource${NC}" && sleep 1
+fi
+
+if [[ $resource_check != 0 ]]; then
+echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
+echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
 df | egrep 'flux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
 done
+fi
+echo
 }
 
 function max() {
@@ -924,7 +941,7 @@ echo
 ;;
 
                "unlock_flux_resouce")
-unlock_flux_resouce
+unlock_flux_resouce "$type"
 echo
 ;;
 
