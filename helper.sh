@@ -830,7 +830,7 @@ fi
 fi
 
 if [[ "$kda_bootstrap_daemon" == "0" ]]; then
-echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed${NC}"
+echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed1${NC}"
 else
 echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
 fi
