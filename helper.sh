@@ -792,7 +792,7 @@ network_height_node_01=$(curl -sk https://us-e1.chainweb.com/chainweb/0.0/mainne
 network_height_node_02=$(curl -sk https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
 
 network_height=$(max "$network_height_node_01" "$network_height_node_02")
-echo -e "${ARROW} ${CYAN}Kadena Network Node Height: ${GREEN}$network_height${NC}"
+echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
 kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
@@ -811,7 +811,6 @@ echo
 exit
 fi
 
-exit
 
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
 
