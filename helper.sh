@@ -190,7 +190,6 @@ sudo killall -s SIGKILL $BENCH_NAME >/dev/null 2>&1 && sleep 1
 sleep 4
 
 }
-
 # main function
 function reindex()
 {
