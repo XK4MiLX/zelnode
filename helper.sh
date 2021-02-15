@@ -958,7 +958,7 @@ case $CHOICE in
 		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
 		wget -O $KDA_BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode> /dev/null 2>&1
+		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 	;;
 esac
 
