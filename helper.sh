@@ -815,7 +815,6 @@ fi
 
 exit
 
-
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
 echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
