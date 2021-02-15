@@ -771,6 +771,10 @@ sudo umount $line && sleep 1
 done
 }
 
+function max() {
+   [ "$1" -gt "$2" ] && echo $1 || echo $2
+}
+
 function create_kda_bootstrap {
 
 kda_bootstrap_daemon="0"
@@ -786,10 +790,17 @@ echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
     	 fi
     fi
     
+network_height_node_01=$(curl -sk https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+network_height_node_02=$(curl -sk https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+
+network_height=$(max "$network_height_node_01" "$network_height_node_02")
+echo -e "${ARROW} ${CYAN}Kadena Network Node Height: ${GREEN}$network_height${NC}"
+exit    
+    
 kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
-echo -e "${ARROW} ${CYAN}Kadena Node Height: ${GREEN}$kda_height${NC}"
+echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
 sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
 
