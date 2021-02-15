@@ -795,7 +795,7 @@ sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
 
 data=$(date -u)
 unix=$(date +%s)
-docker_check = $(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
+docker_check=$(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
 
 if [[ "$docker_check" != "" &&  "$docker_check" != "0" ]]; then
 
