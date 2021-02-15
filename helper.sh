@@ -803,7 +803,8 @@ if [[ "$check_height" -lt 0 ]]; then
 check_height=$((check_height*-1))
 fi
 
-echo "$check_height"
+echo -e "$check_height"
+echo
 exit
 
 
