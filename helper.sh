@@ -788,8 +788,13 @@ fi
 echo
 }
 
-function max() {
-   [ "$1" -gt "$2" ] && echo $1 || echo $2
+max(){
+    local m="$1"
+    for n in "$@"
+    do
+        [ "$n" -gt "$m" ] && m="$n"
+    done
+    echo "$m"
 }
 
 function create_kda_bootstrap {
@@ -812,11 +817,11 @@ echo
 exit
 fi
     
-    
-network_height_node_01=$(curl -sk https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
-network_height_node_02=$(curl -sk https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+network_height_node_01=$(curl -sk -m 3 https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+network_height_node_02=$(curl -sk -m 3 https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+network_height_node_03=$(curl -sk -m 3 https://fr1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
 
-network_height=$(max "$network_height_node_01" "$network_height_node_02")
+network_height=$(max "$network_height_node_01" "$network_height_node_02" "$network_height_node_03")
 echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
 kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
 echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
