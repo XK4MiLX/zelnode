@@ -816,7 +816,7 @@ fi
 exit
 
 
-if [[ "$kda_height" != "" && "$kda_height" != "null"  &&  ]]; then
+if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
 echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
 sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
