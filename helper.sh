@@ -803,8 +803,16 @@ if [[ "$check_height" -lt 0 ]]; then
 check_height=$((check_height*(-1)))
 fi
 
-echo -e "$check_height"
-echo "..."
+echo -e "${ARROW} ${CYAN} Diff: $check_height"
+if [[ "$check_height" -lt 2000 ]]; then
+echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+echo
+else
+echo -e "${ARROW} ${CYAN}Local and Global network are not synced try again later, diff: ${GREEN}$check_height${NC}"
+echo
+exit
+fi
+
 exit
 
 
