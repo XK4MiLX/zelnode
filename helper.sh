@@ -835,7 +835,6 @@ else
 echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
 fi
 
-
 }
 
 case $call_type in
