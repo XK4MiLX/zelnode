@@ -824,7 +824,7 @@ sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
 EOF
 fi
 
-echo -e "${ARROW} ${CYAN}Starting Kadena Node created...${NC}"
+echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
 docker start zelKadenaChainWebNode > /dev/null 2>&1
 
 fi
