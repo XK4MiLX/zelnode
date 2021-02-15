@@ -776,15 +776,14 @@ function max() {
 }
 
 function create_kda_bootstrap {
-
-kda_bootstrap_daemon="0"
 echo
-echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
+kda_bootstrap_daemon="0"
+
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
       WANIP=$(curl -s -m 3 ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
-      	   echo -e "${ARROW} ${CYAN}IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+      	   echo -e "${ARROW} ${CYAN}Local IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
 	   echo
 	   exit
     	 fi
