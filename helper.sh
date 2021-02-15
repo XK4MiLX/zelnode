@@ -39,6 +39,7 @@ BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.zip'
 
 # add to path
 PATH=$PATH:"$COIN_PATH"
@@ -771,6 +772,74 @@ sudo umount $line && sleep 1
 done
 }
 
+
+function create_kda_bootstrap {
+
+kda_bootstrap_daemon="0"
+echo
+echo -e "${ARROW} ${CYAN}Detecting IP address...${NC}"
+    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
+    if [[ "$WANIP" == "" ]]; then
+      WANIP=$(curl -s -m 3 ifconfig.me)     
+         if [[ "$WANIP" == "" ]]; then
+      	   echo -e "${ARROW} ${CYAN}IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+	   echo
+	   exit
+    	 fi
+    fi
+    
+kda_height = $(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
+
+if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
+
+sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
+
+data=$(date -u)
+unix=$(date +%s)
+docker_check = $(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
+
+if [[ "$docker_check" != "" ]]; then
+
+echo -e ${ARROW} ${CYAN}Stopping Kadena Node...${NC}
+docker stop zelKadenaChainWebNode > /dev/null 2>&1
+
+echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
+cd /home/$USER/$FLUX_DIR/ZelApps/zelKadenaChainWebNode  
+zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
+cd
+
+if [[ -f /home/$USER/$KDA_BOOTSTRAP_ZIPFILE ]]; then
+kda_bootstrap_daemon="1"
+rm -rf /home/$USER/kda_bootstrap.json >/dev/null 2>&1
+
+sudo touch /home/$USER/kda_bootstrap.json
+sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
+    cat << EOF > /home/$USER/kda_bootstrap.json
+{
+  "blocks_height": "${kda_height}",
+  "time": "${data}",
+  "unix_timestamp": "${unix}"
+}
+EOF
+fi
+
+echo -e "${ARROW} ${CYAN}Starting Kadena Node created...${NC}"
+docker start zelKadenaChainWebNode > /dev/null 2>&1
+
+fi
+
+if [[ "$kda_bootstrap_daemon" == "0" ]]; then
+echo -e "${ARROW} ${CYAN}Kadena bootstrap creating failed${NC}"
+else
+echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
+fi
+
+echo
+
+fi
+
+}
+
 case $call_type in
 
                  "update_all")
@@ -816,6 +885,10 @@ echo
 ;;
                 "create_mongod_bootstrap")
 create_mongod_bootstrap
+echo
+;;
+                "create_kda_bootstrap")
+create_kda_bootstrap
 echo
 ;;
            
