@@ -797,7 +797,7 @@ data=$(date -u)
 unix=$(date +%s)
 docker_check = $(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
 
-if [[ "$docker_check" != "" ]]; then
+if [[ "$docker_check" != "" &&  "$docker_check" != "0" ]]; then
 
 echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
