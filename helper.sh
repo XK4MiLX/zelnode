@@ -40,6 +40,7 @@ BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.zip'
+KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.zip'
 
 # add to path
 PATH=$PATH:"$COIN_PATH"
@@ -891,6 +892,103 @@ fi
 
 }
 
+function kda_bootstrap() {
+
+echo -e "${GREEN}Module: Restore Kadena blockchain form bootstrap${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+if [[ "$USER" == "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+
+
+echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
+docker stop zelKadenaChainWebNode > /dev/null 2>&1
+
+echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}"
+
+if [[ -e /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+rm -rf /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
+fi
+
+
+if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
+
+
+if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
+then
+echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+else
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+printf '\e[A\e[K'
+echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+rm -rf $KDA_BOOTSTRAP_ZIPFILE
+fi
+fi
+
+
+if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]
+then
+echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+else
+
+
+CHOICE=$(
+whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+        "1)" "Download from source build in script" \
+        "2)" "Download from own source" 3>&2 2>&1 1>&3
+)
+
+
+case $CHOICE in
+	"1)")   
+	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+       		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
+       		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        	unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+
+
+	;;
+	"2)")   
+  		BOOTSTRAP_ZIP="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+		wget -O $KDA_BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode> /dev/null 2>&1
+	;;
+esac
+
+fi
+
+if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+    rm -rf $KDA_BOOTSTRAP_ZIPFILE
+fi
+
+docker start zelKadenaChainWebNode > /dev/null 2>&1
+NUM='15'
+MSG1='Starting Kadena Node...'
+MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo -e "" && echo -e ""
+
+}
+
+
 case $call_type in
 
                  "update_all")
@@ -955,6 +1053,11 @@ echo
 
                "unlock_flux_resouce")
 unlock_flux_resouce "$type"
+echo
+;;
+
+               "kda_bootstrap")
+kda_bootstrap
 echo
 ;;
 
