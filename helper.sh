@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #information
+FLUX_APPS_DIR='ZelApps'
 FLUX_DIR='zelflux'
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
@@ -804,6 +805,13 @@ kda_bootstrap_daemon="0"
 	   exit
     	 fi
     fi
+    
+if [ ! -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db ]; then
+echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
+echo
+exit
+fi
+    
     
 network_height_node_01=$(curl -sk https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
 network_height_node_02=$(curl -sk https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
