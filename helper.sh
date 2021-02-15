@@ -800,11 +800,11 @@ kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.hei
 check_height=$((network_height-kda_height))
 
 if [[ "$check_height" -lt 0 ]]; then
-check_height=$((check_height*-1))
+check_height=$((check_height*(-1)))
 fi
 
 echo -e "$check_height"
-echo
+echo "..."
 exit
 
 
