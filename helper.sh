@@ -772,7 +772,6 @@ sudo umount $line && sleep 1
 done
 }
 
-
 function create_kda_bootstrap {
 
 kda_bootstrap_daemon="0"
