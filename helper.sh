@@ -956,7 +956,7 @@ case $CHOICE in
 	"2)")   
   		KDA_BOOTSTRAP_ZIP="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
 		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
-		wget -O $KDA_BOOTSTRAP_ZIPFILE KDA_BOOTSTRAP_ZIP -q --show-progress
+		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
 		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 	;;
