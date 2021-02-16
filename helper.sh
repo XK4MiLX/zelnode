@@ -894,16 +894,16 @@ fi
 
 function kda_bootstrap() {
 
-sudo chown $USER:$USER /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode
+
 echo -e ""
 echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
 echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}"
 
-if [[ -e /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
+if [[ -e /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
+rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
 fi
 
 
@@ -931,7 +931,7 @@ fi
 if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]
 then
 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 else
 
 
@@ -949,7 +949,7 @@ case $CHOICE in
 		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
        		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-        	unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+        	unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 
 
 	;;
@@ -958,7 +958,7 @@ case $CHOICE in
 		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
 		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
 		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 	;;
 esac
 
