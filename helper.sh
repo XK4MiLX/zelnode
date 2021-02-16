@@ -674,7 +674,9 @@ wget $BOOTSTRAP_URL_MONGOD -q --show-progress
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+mongo_output=$(mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop | grep 'done') 
+echo -e "Out: $mongo_output"
+# > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
 sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
