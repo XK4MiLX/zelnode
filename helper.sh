@@ -842,7 +842,6 @@ echo
 exit
 fi
 
-
 if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
 
 
