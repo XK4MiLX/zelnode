@@ -842,8 +842,9 @@ function max(){
 }
 
 function create_kda_bootstrap {
-echo
-kda_bootstrap_daemon="0"
+
+    echo
+    kda_bootstrap_daemon="0"
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
@@ -936,174 +937,179 @@ kda_bootstrap_daemon="0"
 
 function kda_bootstrap() {
 
-sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
-echo -e ""
-echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-docker stop zelKadenaChainWebNode > /dev/null 2>&1
+    sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
+    echo -e ""
+    echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
+    docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
-if [[ -e /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
-fi
-
-
-if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
-echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
+    if [[ -e /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
+    fi
 
 
-if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
-then
-echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
-else
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-rm -rf $KDA_BOOTSTRAP_ZIPFILE
-fi
-
-fi
+    if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+        echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+        echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
 
 
-if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]
-then
-echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
-else
-
-echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
-
-CHOICE=$(
-whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
-        "1)" "Download from source build in script" \
-        "2)" "Download from own source" 3>&2 2>&1 1>&3
-)
-
-
-case $CHOICE in
-	"1)")   
-	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
-		echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
-		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
-       		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
-       		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-        	unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+        if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
+        then
+            echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+        else
+            printf '\e[A\e[K'
+            printf '\e[A\e[K'
+            printf '\e[A\e[K'
+            printf '\e[A\e[K'
+            printf '\e[A\e[K'
+            printf '\e[A\e[K'
+            echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+            rm -rf $KDA_BOOTSTRAP_ZIPFILE
+        fi
+    fi
 
 
-	;;
-	"2)")   
-  		KDA_BOOTSTRAP_ZIP="$(whiptail --title "Kadena node bootstrap source" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
-		wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
-		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
-	;;
-esac
+    if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+    else
 
-fi
+        echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
 
-if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
-    rm -rf $KDA_BOOTSTRAP_ZIPFILE
-fi
+        CHOICE=$(
+        whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+            "1)" "Download from source build in script" \
+            "2)" "Download from own source" 3>&2 2>&1 1>&3
+        )
 
-docker start zelKadenaChainWebNode > /dev/null 2>&1
-NUM='15'
-MSG1='Starting Kadena Node...'
-MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo -e "" 
-echo -e "${ARROW} ${CYAN}Kadena Node initial process can take about ~15min. ${NC}"
-echo -e "" 
+
+            case $CHOICE in
+	    "1)")   
+	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
+       		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
+       		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        	 unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+
+
+	    ;;
+	    "2)")   
+  		 KDA_BOOTSTRAP_ZIP="$(whiptail --title "Kadena node bootstrap source" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
+		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
+		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+		 unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	    ;;
+            esac
+
+    fi
+
+    if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+        rm -rf $KDA_BOOTSTRAP_ZIPFILE
+    fi
+
+    docker start zelKadenaChainWebNode > /dev/null 2>&1
+    NUM='15'
+    MSG1='Starting Kadena Node...'
+    MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo -e "" 
+    echo -e "${ARROW} ${CYAN}Kadena Node initial process can take about ~15min. ${NC}"
+    echo -e "" 
 
 }
 
 
-case $call_type in
+    case $call_type in
 
-                 "update_all")
+        "update_all")
 		 
-check_update
-if [[ "$update_flux" == "1" ]]; then
-flux_update
-fi
+            check_update
+                if [[ "$update_flux" == "1" ]]; then
+                    flux_update
+                fi
 
-if [[ "$update_fluxbench" == "1" ]]; then
-fluxbench_update
-fi
+                if [[ "$update_fluxbench" == "1" ]]; then
+                    fluxbench_update
+                fi
 
-if [[ "$update_fluxdaemon" == "1" ]]; then
-fluxdaemon_update
-fi
-echo
-;;
+                if [[ "$update_fluxdaemon" == "1" ]]; then
+                   fluxdaemon_update
+                fi
+                echo
+        ;;
 
-                 "fluxdaemon_update")
-echo		 
-fluxdaemon_update
-echo
-;;
-                 "fluxbench_update")
-echo		 
-fluxbench_update
-echo
-;;
-                 "flux_update")
-echo		 
-flux_update
-echo
-;;
-                 "flux_restart")
-echo		 
-restart_fluxdaemon
-echo
-;;
-                 "flux_reindex")
-echo
-reindex
-echo
-;;
-                "create_daemon_bootstrap")
-echo
-create_daemon_bootstrap
-echo
-;;
-                "create_mongod_bootstrap")
-echo
-create_mongod_bootstrap
-echo
-;;
-                "create_kda_bootstrap")
-		
-create_kda_bootstrap
-echo
-;;
+        "fluxdaemon_update")
+            echo		 
+            fluxdaemon_update
+            echo
+        ;;
+	
+        "fluxbench_update")
+            echo		 
+            fluxbench_update
+            echo
+        ;;
+	
+        "flux_update")
+            echo		 
+            flux_update
+            echo
+        ;;
+	
+        "flux_restart")
+            echo		 
+            restart_fluxdaemon
+            echo
+        ;;
+	
+        "flux_reindex")
+            echo
+            reindex
+            echo
+        ;;
+	
+        "create_daemon_bootstrap")
+            echo
+            create_daemon_bootstrap
+            echo
+        ;;
+	
+        "create_mongod_bootstrap")
+            echo
+            create_mongod_bootstrap
+            echo
+        ;;
+
+        "create_kda_bootstrap")
+            echo	
+            create_kda_bootstrap
+            echo
+        ;;
            
-                "clean_mongod")
-echo
-clean_mongod
-echo
-;;
+        "clean_mongod")
+            echo
+            clean_mongod
+            echo
+        ;;
 
-               "swapon_create")
-echo
-swapon_create
-echo
-;;
+        "swapon_create")
+            echo
+            swapon_create
+            echo
+        ;;
 
-               "unlock_flux_resouce")
-echo
-unlock_flux_resouce "$type"
-echo
-;;
+        "unlock_flux_resouce")
+            echo
+            unlock_flux_resouce "$type"
+            echo
+        ;;
 
-               "kda_bootstrap")
-echo
-kda_bootstrap
-echo
-;;
+        "kda_bootstrap")
+            echo
+            kda_bootstrap
+            echo
+         ;;
 
-esac
+    esac
