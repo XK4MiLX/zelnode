@@ -619,8 +619,8 @@ sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
 sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
 
 echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
-mongo_dump_out=$(mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/ | grep 'done')
-echo -e "Out: $mongo_dump_out"
+mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/ >/dev/null 2>&1
+
 #echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
 
 tar_file_pack "dump" "mongod_bootstrap"
