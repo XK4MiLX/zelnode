@@ -639,11 +639,11 @@ function create_mongod_bootstrap()
 
         sudo touch /home/$USER/mongodb_bootstrap.json
         sudo chown $USER:$USER /home/$USER/mongodb_bootstrap.json
-        cat << EOF > /home/$USER/mongodb_bootstrap.json
-	    {
-              "blocks_height": "${explorer_network_hight}",
-              "time": "${data}"
-	    }
+	cat << EOF > /home/$USER/mongodb_bootstrap.json
+	{
+	"blocks_height": "${explorer_network_hight}",
+	"time": "${data}"
+	}
 EOF
     else
         echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
@@ -909,12 +909,12 @@ function create_kda_bootstrap {
 
                 sudo touch /home/$USER/kda_bootstrap.json
                 sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
-                cat << EOF > /home/$USER/kda_bootstrap.json
-                {
-                  "block_height": "${kda_height}",
-                  "time": "${data}",
-                  "unix_timestamp": "${unix}"
-                }
+		cat << EOF > /home/$USER/kda_bootstrap.json
+		{
+		"block_height": "${kda_height}",
+		"time": "${data}",
+		"unix_timestamp": "${unix}"
+		}
 EOF
             fi
 
