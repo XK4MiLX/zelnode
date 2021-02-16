@@ -644,8 +644,7 @@ function create_mongod_bootstrap()
               "blocks_height": "${explorer_network_hight}",
               "time": "${data}"
 	    }
-	EOF
-	
+EOF
     else
         echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
     fi
@@ -916,7 +915,7 @@ function create_kda_bootstrap {
                   "time": "${data}",
                   "unix_timestamp": "${unix}"
                 }
-                EOF
+EOF
             fi
 
             echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
