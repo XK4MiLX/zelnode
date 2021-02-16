@@ -490,6 +490,7 @@ fi
 
 }
 
+#tar_file_unpack file/file_path dir_to_compress
 function tar_file_unpack()
 {
     echo -e "${ARROW} ${YELLOW}Unpacking bootstrap archive file...${NC}"
@@ -497,7 +498,7 @@ function tar_file_unpack()
 }
 
 
-
+#tar_file_pack path file_name
 function tar_file_pack()
 {
     echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
@@ -507,7 +508,7 @@ function tar_file_pack()
 
 
 
-
+#check_tar file_name
 function check_tar()
 {
     echo -e "${ARROW} ${YELLOW}Checking  bootstrap archive file...${NC}"
@@ -586,72 +587,67 @@ fi
 
 function create_mongod_bootstrap()
 {
-    echo
+    
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
-      WANIP=$(curl -s -m 3 ifconfig.me)     
-         if [[ "$WANIP" == "" ]]; then
-      	   echo -e "${ARROW} ${CYAN}Public IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
-	   echo
-	   exit
-    	 fi
+        WANIP=$(curl -s -m 3 ifconfig.me)     
+        if [[ "$WANIP" == "" ]]; then
+            echo -e "${ARROW} ${CYAN}Public IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+            echo
+	    exit
+    	fi
     fi
 
-local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e "${ARROW} ${CYAN}Mongod Network Block Hight: ${GREEN}$local_network_hight${NC}"
-explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
+    local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+    echo -e "${ARROW} ${CYAN}Mongod Network Block Hight: ${GREEN}$local_network_hight${NC}"
+    explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+    echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
-if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
-echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
-return
-fi
+    if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
+        echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
+        return
+    fi
 
-check_height=$((explorer_network_hight-local_network_hight))
+    check_height=$((explorer_network_hight-local_network_hight))
 
-if [[ "$check_height" -lt 0 ]]; then
-check_height=$((check_height*(-1)))
-fi
+    if [[ "$check_height" -lt 0 ]]; then
+        check_height=$((check_height*(-1)))
+    fi
 
-if [[ "$check_height" -lt 15 ]]; then
-echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
-else
-echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
-return
-fi
+    if [[ "$check_height" -lt 15 ]]; then
+        echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+    else
+        echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
+        return
+    fi
 
-data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
-sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
+    data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
+    echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+    sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
+    sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
 
-echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
-mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/ >/dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
+    mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/ >/dev/null 2>&1
 
-#echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
+    tar_file_pack "dump" "mongod_bootstrap"
+    #tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
+    sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
 
-tar_file_pack "dump" "mongod_bootstrap"
-#tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
-sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
+    if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
+        echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+        rm -rf /home/$USER/mongodb_bootstrap.json >/dev/null 2>&1
 
-
-if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
-echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
-
-rm -rf /home/$USER/mongodb_bootstrap.json >/dev/null 2>&1
-
-sudo touch /home/$USER/mongodb_bootstrap.json
-sudo chown $USER:$USER /home/$USER/mongodb_bootstrap.json
-    cat << EOF > /home/$USER/mongodb_bootstrap.json
-{
-  "blocks_height": "${explorer_network_hight}",
-  "time": "${data}"
-}
-EOF
-
-else
-echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
-fi
+        sudo touch /home/$USER/mongodb_bootstrap.json
+        sudo chown $USER:$USER /home/$USER/mongodb_bootstrap.json
+        cat << EOF > /home/$USER/mongodb_bootstrap.json
+	    {
+              "blocks_height": "${explorer_network_hight}",
+              "time": "${data}"
+	    }
+	EOF
+    else
+        echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
+    fi
 
 }
 
@@ -681,6 +677,9 @@ echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
 wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
 echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
 tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+
+tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD" "/home/$USER" 
+
 echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
 mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
@@ -1041,54 +1040,66 @@ echo
 ;;
 
                  "fluxdaemon_update")
+echo		 
 fluxdaemon_update
 echo
 ;;
                  "fluxbench_update")
+echo		 
 fluxbench_update
 echo
 ;;
                  "flux_update")
+echo		 
 flux_update
 echo
 ;;
                  "flux_restart")
+echo		 
 restart_fluxdaemon
 echo
 ;;
                  "flux_reindex")
+echo
 reindex
 echo
 ;;
                 "create_daemon_bootstrap")
+echo
 create_daemon_bootstrap
 echo
 ;;
                 "create_mongod_bootstrap")
+echo
 create_mongod_bootstrap
 echo
 ;;
                 "create_kda_bootstrap")
+		
 create_kda_bootstrap
 echo
 ;;
            
                 "clean_mongod")
+echo
 clean_mongod
 echo
 ;;
 
                "swapon_create")
+echo
 swapon_create
 echo
 ;;
 
                "unlock_flux_resouce")
+echo
 unlock_flux_resouce "$type"
 echo
 ;;
 
                "kda_bootstrap")
+echo
 kda_bootstrap
 echo
 ;;
