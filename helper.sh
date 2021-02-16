@@ -602,17 +602,24 @@ echo -e "${ARROW} ${CYAN}Mongod Network Block Hight: ${GREEN}$local_network_high
 explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
 echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
- if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
- echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
- return
- fi
+if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
+echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
+return
+fi
 
- if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
-  echo -e "${ARROW} ${CYAN}Mongod is full synced with Flux Network...${NC}"
- else
-  echo -e "${ARROW} ${CYAN}Mongod is not full synced with Flux Network...${NC}"
-  return
- fi
+check_height=$((explorer_network_hight-local_network_hight))
+
+if [[ "$check_height" -lt 0 ]]; then
+check_height=$((check_height*(-1)))
+fi
+
+if [[ "$check_height" -lt 15 ]]; then
+echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+else
+echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
+return
+fi
+
 data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
