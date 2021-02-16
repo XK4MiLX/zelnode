@@ -645,6 +645,7 @@ function create_mongod_bootstrap()
               "time": "${data}"
 	    }
 	EOF
+	
     else
         echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
     fi
@@ -652,68 +653,69 @@ function create_mongod_bootstrap()
 }
 
 function clean_mongod() {
-echo ""
-echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
-pm2 stop flux >/dev/null 2>&1 && sleep 2
-echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
-sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
-echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
-sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
-install_mongod
-mongodb_bootstrap
+
+    echo ""
+    echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
+    pm2 stop flux >/dev/null 2>&1 && sleep 2
+    echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
+    sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
+    echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
+    sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
+    install_mongod
+    mongodb_bootstrap
+    
 }
 
 
 function mongodb_bootstrap(){
 
-WANIP=$(wget http://ipecho.net/plain -O - -q)
-BLOCKHIGHT=0
-DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
-echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+    WANIP=$(wget http://ipecho.net/plain -O - -q)
+    BLOCKHIGHT=0
+    DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
+    echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
-if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
-then
-echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
-wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
-echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+    if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
+    
+        echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
+        wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
+        echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+        #tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD" "/home/$USER" 
 
-tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD" "/home/$USER" 
+        echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+        sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
+        pm2 start flux > /dev/null 2>&1
+        pm2 save > /dev/null 2>&1
 
-echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-pm2 start flux > /dev/null 2>&1
-pm2 save > /dev/null 2>&1
+        NUM='120'
+        MSG1='Flux starting...'
+        MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
+        spinning_timer
+        echo
+        BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+        echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 
-NUM='120'
-MSG1='Flux starting...'
-MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo
-BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+        if [[ "$BLOCKHIGHT" != "" ]]; then
 
-if [[ "$BLOCKHIGHT" != "" ]]; then
-
- if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]
- then
-#echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
-string_limit_check_mark "Mongo bootstrap installed successful.................................."
-echo -e ""
- else
-#echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
-string_limit_x_mark "Mongo bootstrap installation failed.................................."
-echo -e ""
- fi
+            if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
+	    
+                #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+                string_limit_check_mark "Mongo bootstrap installed successful.................................."
+                echo -e ""
+            else
+                #echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+                string_limit_x_mark "Mongo bootstrap installation failed.................................."
+                echo -e ""
+            fi
  
-else
- echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
- echo -e ""
-fi
-fi
+        else
+            echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+            echo -e ""
+        fi
+    fi
 
 }
 
@@ -845,90 +847,90 @@ kda_bootstrap_daemon="0"
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
-      WANIP=$(curl -s -m 3 ifconfig.me)     
-         if [[ "$WANIP" == "" ]]; then
-      	   echo -e "${ARROW} ${CYAN}Local IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
-	   echo
-	   exit
+        WANIP=$(curl -s -m 3 ifconfig.me)     
+        if [[ "$WANIP" == "" ]]; then
+            echo -e "${ARROW} ${CYAN}Local IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+	    echo
+	    exit
     	 fi
     fi
     
-if [ ! -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db ]; then
-echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
-echo
-exit
-fi
+    if [ ! -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db ]; then
+        echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
+        echo
+        exit
+    fi
     
-network_height_node_01=$(curl -sk -m 3 https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
-network_height_node_02=$(curl -sk -m 3 https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
-network_height_node_03=$(curl -sk -m 3 https://fr1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_01=$(curl -sk -m 3 https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_02=$(curl -sk -m 3 https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_03=$(curl -sk -m 3 https://fr1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
 
-network_height=$(max "$network_height_node_01" "$network_height_node_02" "$network_height_node_03")
-echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
-kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
-echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
+    network_height=$(max "$network_height_node_01" "$network_height_node_02" "$network_height_node_03")
+    echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
+    kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
+    echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
-check_height=$((network_height-kda_height))
+    check_height=$((network_height-kda_height))
 
-if [[ "$check_height" -lt 0 ]]; then
-check_height=$((check_height*(-1)))
-fi
+    if [[ "$check_height" -lt 0 ]]; then
+        check_height=$((check_height*(-1)))
+    fi
 
-if [[ "$check_height" -lt 2000 ]]; then
-echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
-echo
-else
-echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
-echo
-exit
-fi
+    if [[ "$check_height" -lt 2000 ]]; then
+        echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+        echo
+    else
+        echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
+        echo
+        exit
+    fi
 
-if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
+    if [[ "$kda_height" != "" && "$kda_height" != "null" ]]; then
+
+        sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
+
+        data=$(date -u)
+        unix=$(date +%s)
+        docker_check=$(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
+
+        if [[ "$docker_check" != "" && "$docker_check" != "0" ]]; then
+
+            echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
+            docker stop zelKadenaChainWebNode > /dev/null 2>&1
+
+            echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
+            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  
+            zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
+            cd
+
+            if [[ -f /home/$USER/$KDA_BOOTSTRAP_ZIPFILE ]]; then
+                kda_bootstrap_daemon="1"
+                rm -rf /home/$USER/kda_bootstrap.json >/dev/null 2>&1
+
+                sudo touch /home/$USER/kda_bootstrap.json
+                sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
+                cat << EOF > /home/$USER/kda_bootstrap.json
+                {
+                  "block_height": "${kda_height}",
+                  "time": "${data}",
+                  "unix_timestamp": "${unix}"
+                }
+                EOF
+            fi
+
+            echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
+            docker start zelKadenaChainWebNode > /dev/null 2>&1
+
+        fi
+	
+    fi
 
 
-sudo rm -rf /home/$USER/$KDA_BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 2
-
-data=$(date -u)
-unix=$(date +%s)
-docker_check=$(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
-
-if [[ "$docker_check" != "" && "$docker_check" != "0" ]]; then
-
-echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-docker stop zelKadenaChainWebNode > /dev/null 2>&1
-
-echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  
-zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
-cd
-
-if [[ -f /home/$USER/$KDA_BOOTSTRAP_ZIPFILE ]]; then
-kda_bootstrap_daemon="1"
-rm -rf /home/$USER/kda_bootstrap.json >/dev/null 2>&1
-
-sudo touch /home/$USER/kda_bootstrap.json
-sudo chown $USER:$USER /home/$USER/kda_bootstrap.json
-    cat << EOF > /home/$USER/kda_bootstrap.json
-{
-  "block_height": "${kda_height}",
-  "time": "${data}",
-  "unix_timestamp": "${unix}"
-}
-EOF
-fi
-
-echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
-docker start zelKadenaChainWebNode > /dev/null 2>&1
-
-fi
-
-fi
-
-if [[ "$kda_bootstrap_daemon" == "0" ]]; then
-echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed...${NC}"
-else
-echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
-fi
+    if [[ "$kda_bootstrap_daemon" == "0" ]]; then
+        echo -e "${ARROW} ${CYAN}Kadena Node bootstrap creating failed...${NC}"
+    else
+        echo -e "${ARROW} ${CYAN}Kadena Node bootstrap created successful ${GREEN}($kda_height)${NC}"
+    fi
 
 }
 
