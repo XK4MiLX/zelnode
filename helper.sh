@@ -922,7 +922,7 @@ echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
 #printf '\e[A\e[K'
 #echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
 #rm -rf $KDA_BOOTSTRAP_ZIPFILE
-fi
+#fi
 fi
 
 
