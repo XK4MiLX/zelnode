@@ -498,11 +498,11 @@ function tar_file_unpack()
 }
 
 
-#tar_file_pack path file_name
+#tar_file_pack path_to_pack path_to_archive_file_to_save
 function tar_file_pack()
 {
     echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
-    tar -czf - "$1" | (pv -p --timer --rate --bytes > /home/$USER/$2.tar.gz) 2>&1
+    tar -czf - "$1" | (pv -p --timer --rate --bytes > $2) 2>&1
 }
 
 
@@ -629,7 +629,7 @@ function create_mongod_bootstrap()
     echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
     mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/ >/dev/null 2>&1
 
-    tar_file_pack "dump" "mongod_bootstrap"
+    tar_file_pack "dump" "/home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD"
     #tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
     sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
 
