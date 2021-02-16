@@ -490,6 +490,36 @@ fi
 
 }
 
+function tar_file_unpack()
+{
+    echo -e "${ARROW} ${YELLOW}Unpacking bootstrap archive file...${NC}"
+    pv $1 | tar -zx -C $2
+}
+
+
+
+function tar_file_pack()
+{
+    echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
+    tar -czf - "$1" | (pv -p --timer --rate --bytes > $2.tar.gz) 2>&1
+}
+
+
+
+
+
+function check_tar()
+{
+    echo -e "${ARROW} ${YELLOW}Checking  bootstrap archive file...${NC}"
+    if gzip -t "$1" &>/dev/null; then
+        echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+    else
+        echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+    fi
+
+}
+
+
 function create_daemon_bootstrap()
 {
 
@@ -591,7 +621,11 @@ sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
 echo -e "${ARROW} ${CYAN}Exporting Mongod datetable...${NC}"
 mongodump --port 27017 --db zelcashdata --out /home/$USER/dump/
 echo -e "${ARROW} ${CYAN}Creating bootstrap file...${NC}"
-tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
+
+tar_file_pack "/home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD" "dump"
+#tar -cvzf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD dump
+sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
+
 
 if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
 echo -e "${ARROW} ${CYAN}Mongod bootstrap created successful ${GREEN}($local_network_hight)${NC}"
