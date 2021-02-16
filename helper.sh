@@ -899,8 +899,6 @@ echo -e ""
 echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
 docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
-echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}"
-
 if [[ -e /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
 rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
@@ -934,6 +932,7 @@ echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 else
 
+echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
 
 CHOICE=$(
 whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
