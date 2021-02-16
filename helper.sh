@@ -928,7 +928,7 @@ fi
 if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]
 then
 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode 
+unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 else
 
 echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
