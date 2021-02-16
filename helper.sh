@@ -910,18 +910,18 @@ echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
 echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
 
 
-if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
-then
-echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
-else
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-rm -rf $KDA_BOOTSTRAP_ZIPFILE
+#if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
+#then
+#echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+#else
+#printf '\e[A\e[K'
+#printf '\e[A\e[K'
+#printf '\e[A\e[K'
+#printf '\e[A\e[K'
+#printf '\e[A\e[K'
+#printf '\e[A\e[K'
+#echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+#rm -rf $KDA_BOOTSTRAP_ZIPFILE
 fi
 fi
 
