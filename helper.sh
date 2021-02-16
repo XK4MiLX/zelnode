@@ -586,12 +586,12 @@ fi
 
 function create_mongod_bootstrap()
 {
-    echo -e "${ARROW} ${YELLOW}Detecting IP address...${NC}"
+    echo
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
       WANIP=$(curl -s -m 3 ifconfig.me)     
          if [[ "$WANIP" == "" ]]; then
-      	   echo -e "${ARROW} ${CYAN}IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+      	   echo -e "${ARROW} ${CYAN}Public IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
 	   echo
 	   exit
     	 fi
