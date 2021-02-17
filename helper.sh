@@ -35,12 +35,12 @@ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
+BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.zip'
-KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.zip'
+KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
 
 # add to path
 PATH=$PATH:"$COIN_PATH"
@@ -569,6 +569,7 @@ function check_tar()
     else
     
         echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+	rm -rf $1
 	
     fi
 
@@ -591,31 +592,45 @@ function create_daemon_bootstrap()
         if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
     
             echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
-            exit
+            return
 	
         fi
  
-        if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
-            echo -e "${ARROW} ${CYAN}Node is full synced with Flux Network...${NC}"
-        else
-            echo -e "${ARROW} ${CYAN}Node is not full synced with Flux Network...${NC}"
-            echo
-            exit
+
+        check_height=$((explorer_network_hight-local_network_hight))
+
+        if [[ "$check_height" -lt 0 ]]; then
+    
+                check_height=$((check_height*(-1)))	
+		
+        fi
+
+        if [[ "$check_height" -lt 15 ]]; then
+    
+                echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+	else
+    
+                echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
+                return	
         fi
     
-        data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
+        data=$(date -u)
+        unix=$(date +%s)
         stop_fluxdaemon
         check_zip=$(zip -L | head -n1)
     
         if [[ "$check_zip" != "" ]]; then
+	
             echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
             rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 5
-            echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
+            #echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
             cd /home/$USER/$CONFIG_DIR  
-            zip /home/$USER/$BOOTSTRAP_ZIPFILE -r blocks chainstate determ_zelnodes
+	    tar_file_pack "blocks chainstate determ_zelnodes" "/home/$USER/$BOOTSTRAP_ZIPFILE"
+            #zip /home/$USER/$BOOTSTRAP_ZIPFILE -r blocks chainstate determ_zelnodes
             cd
 
             if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE ]]; then
+	    
                 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap created successful ${GREEN}($local_network_hight)${NC}"
                 rm -rf /home/$USER/daemon_bootstrap.json >/dev/null 2>&1
 
@@ -623,8 +638,9 @@ function create_daemon_bootstrap()
                 sudo chown $USER:$USER /home/$USER/daemon_bootstrap.json
 	        cat << EOF > /home/$USER/daemon_bootstrap.json
 		{
-		  "blocks_height": "${explorer_network_hight}",
-		  "time": "${data}"
+		"block_height": "${explorer_network_hight}",
+		"time": "${data}",
+		"unix_timestamp": "${unix}"
 		}
 EOF
             else
@@ -670,8 +686,10 @@ function create_mongod_bootstrap()
     echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
     if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
+    
         echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
         return
+	
     fi
 
     check_height=$((explorer_network_hight-local_network_hight))
@@ -693,7 +711,8 @@ function create_mongod_bootstrap()
 	
     fi
 
-    data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
+    data=$(date -u)
+    unix=$(date +%s)
     echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
     sudo rm -rf /home/$USER/dump >/dev/null 2>&1 && sleep 2
     sudo rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD >/dev/null 2>&1 && sleep 2
@@ -713,8 +732,9 @@ function create_mongod_bootstrap()
         sudo chown $USER:$USER /home/$USER/mongodb_bootstrap.json
 	cat << EOF > /home/$USER/mongodb_bootstrap.json
 	{
-	"blocks_height": "${explorer_network_hight}",
-	"time": "${data}"
+	"block_height": "${explorer_network_hight}",
+	"time": "${data}",
+	"unix_timestamp": "${unix}"
 	}
 EOF
 	
@@ -985,8 +1005,9 @@ function create_kda_bootstrap {
             docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
             echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  
-            zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
+            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  	    
+            #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
+	    tar_file_pack "chainweb-db" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
             cd
 
             if [[ -f /home/$USER/$KDA_BOOTSTRAP_ZIPFILE ]]; then
@@ -1034,29 +1055,21 @@ function kda_bootstrap() {
 
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+    
         echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-        echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
-
-
-        if unzip -t $KDA_BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
-        then
-            echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
-        else
-            printf '\e[A\e[K'
-            printf '\e[A\e[K'
-            printf '\e[A\e[K'
-            printf '\e[A\e[K'
-            printf '\e[A\e[K'
-            printf '\e[A\e[K'
-            echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-            rm -rf $KDA_BOOTSTRAP_ZIPFILE
-        fi
+        echo -e "${ARROW} ${CYAN}Checking if archive file is corrupted...${NC}"
+        check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
+	
     fi
 
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+    
         echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-        unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
+	sleep 2
+        #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	
     else
 
         echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
@@ -1075,8 +1088,10 @@ function kda_bootstrap() {
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
        		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-        	 unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
-
+		 
+        	 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode" 
+		 sleep 2
 
 	    ;;
 	    "2)")   
@@ -1084,7 +1099,10 @@ function kda_bootstrap() {
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
 		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
 		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		 unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+		 
+		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
+		 sleep 2
+		 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 	    ;;
             esac
 
