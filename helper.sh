@@ -748,7 +748,6 @@ EOF
 
 function clean_mongod() {
 
-    echo ""
     echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
     pm2 stop flux >/dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
@@ -948,7 +947,6 @@ function max(){
 
 function create_kda_bootstrap {
 
-    echo
     kda_bootstrap_daemon="0"
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
@@ -1041,10 +1039,90 @@ EOF
 
 }
 
+function daemon_bootstrap() {
+
+
+    echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
+    sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+    sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+
+    if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
+    fi
+
+
+    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    
+        echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+        echo -e "${ARROW} ${CYAN}Checking if archive file is corrupted...${NC}"
+        check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"   
+	
+    fi
+
+
+    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    
+        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+	tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+	sleep 2
+        #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	
+    else
+
+        echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
+
+        CHOICE=$(
+        whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+            "1)" "Download from source build in script" \
+            "2)" "Download from own source" 3>&2 2>&1 1>&3
+        )
+
+
+            case $CHOICE in
+	    "1)")   
+	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+       		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+       		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+		 
+        	 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+		 tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+		 sleep 2
+
+	    ;;
+	    "2)")   
+  		 BOOTSTRAP_ZIP="$(whiptail --title "Flux daemon bootstrap source" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+		 
+		 tar_file_unpack "/home/$USER/BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+		 sleep 2
+		 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	    ;;
+            esac
+
+    fi
+
+    if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+        rm -rf $BOOTSTRAP_ZIPFILE
+    fi
+
+    sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+    NUM='35'
+    MSG1='Starting Flux daemon service...'
+    MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo -e "" && echo -e ""
+
+}
+
+
 function kda_bootstrap() {
 
     sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
-    echo -e ""
     echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
     docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
@@ -1176,6 +1254,18 @@ function kda_bootstrap() {
         "create_daemon_bootstrap")
             echo
             create_daemon_bootstrap
+            echo
+        ;;
+	
+	"daemon_bootstrap")
+            echo
+            daemon_bootstrap
+            echo
+        ;;
+	
+        "mongod_bootstrap")
+            echo
+            mongodb_bootstrap
             echo
         ;;
 	
