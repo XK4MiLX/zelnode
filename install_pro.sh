@@ -675,7 +675,7 @@ function install_packages() {
     sudo apt-get install software-properties-common -y > /dev/null 2>&1
     sudo apt-get update -y > /dev/null 2>&1
     sudo apt-get upgrade -y > /dev/null 2>&1
-    sudo apt-get install nano htop pwgen ufw figlet tmux jq zip gzip unzip git -y > /dev/null 2>&1
+    sudo apt-get install nano htop pwgen ufw figlet tmux jq zip gzip pv unzip git -y > /dev/null 2>&1
     sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
     sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
     sudo apt-get install autoconf ncurses-dev python python-zmq -y > /dev/null 2>&1
