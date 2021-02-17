@@ -1,7 +1,7 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.zip'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.zip'
+BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -99,6 +99,33 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
+function tar_file_unpack()
+{
+    echo -e "${ARROW} ${YELLOW}Unpacking bootstrap archive file...${NC}"
+    pv $1 | tar -zx -C $2
+}
+
+function tar_file_pack()
+{
+    echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
+    tar -czf - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
+}
+
+function check_tar()
+{
+    echo -e "${ARROW} ${YELLOW}Checking  bootstrap file integration...${NC}"
+    
+    if gzip -t "$1" &>/dev/null; then
+    
+        echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+	
+    else
+    
+        echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+	rm -rf $1
+	
+    fi
+}
 
 function pm2_install(){
     
@@ -648,95 +675,119 @@ echo
 
 function flux_daemon_bootstrap() {
 
-echo -e "${GREEN}Module: Restore Flux blockchain form bootstrap${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-
-if [[ "$USER" == "root" ]]
-then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${GREEN}Module: Restore Flux blockchain form bootstrap${NC}"
     echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
-fi
 
-echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
-sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
-sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+    if [[ "$USER" == "root" ]]; then
+    
+        echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+        echo -e "${CYAN}Please switch to the user accont.${NC}"
+        echo -e "${YELLOW}================================================================${NC}"
+        echo -e "${NC}"
+        exit
+    fi
 
-if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
-fi
+    echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
+    sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+    sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+
+    if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
+    fi
+
+    BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
+    
+    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then		   
+	
+        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
+	
+            echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
+            echo -e "${ARROW} ${YELLOW}Checking if zip file is corrupted...${NC}"
+	    
+            if unzip -t $BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
+            then
+                echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
+            else
+                printf '\e[A\e[K'
+                printf '\e[A\e[K'
+                printf '\e[A\e[K'
+                printf '\e[A\e[K'
+                printf '\e[A\e[K'
+                printf '\e[A\e[K'
+                echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+                rm -rf $BOOTSTRAP_ZIPFILE
+            fi
+	    
+        else	    
+                check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"
+        fi
+	    
+    fi
 
 
-if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
-echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-echo -e "${ARROW} ${CYAN}Checking if zip file is corrupted...${NC}"
+    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+	
+	
+        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
+            echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+            unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+        else
+            tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+            sleep 2  
+        fi
+	
+    else
+
+            CHOICE=$(
+            whiptail --title "FLUXNODE INSTALLATION" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+                "1)" "Download from source build in script" \
+                "2)" "Download from own source" 3>&2 2>&1 1>&3
+            )
 
 
-if unzip -t $BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
-then
-echo -e "${ARROW} ${CYAN}Bootstrap zip file is valid.............[${CHECK_MARK}${CYAN}]${NC}"
-else
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-printf '\e[A\e[K'
-echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-rm -rf $BOOTSTRAP_ZIPFILE
-fi
-fi
-
-
-if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]
-then
-echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
-else
-
-
-CHOICE=$(
-whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
-        "1)" "Download from source build in script" \
-        "2)" "Download from own source" 3>&2 2>&1 1>&3
-)
-
-
-case $CHOICE in
-	"1)")   
-		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+            case $CHOICE in
+	    "1)")   
+	        
+	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-       		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-        	unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
+		sleep 2
 
 
-	;;
-	"2)")   
-  		BOOTSTRAP_ZIP="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
-		echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
+
+	    ;;
+	    "2)")   
+  		BOOTSTRAP_ZIP="$(whiptail --title "Flux daemon bootstrap setup" --inputbox "Enter your URL (zip, tar.gz)" 8 72 3>&1 1>&2 2>&3)"
+		echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"		
+		BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
 		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
-	;;
-esac
+		
+	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
+ 		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+                    unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+		else	       
+		    tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
+		    sleep 2
+		fi
+	    ;;
+            esac
 
-fi
+    fi
+    
+    
+    if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+        rm -rf $BOOTSTRAP_ZIPFILE
+    fi
 
-if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
-    rm -rf $BOOTSTRAP_ZIPFILE
-fi
-
-sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
-NUM='35'
-MSG1='Starting Flux daemon service...'
-MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo -e "" && echo -e ""
-
-
+    sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+    NUM='35'
+    MSG1='Starting Flux daemon service...'
+    MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo -e "" && echo -e ""
 }
 
 function mongodb_bootstrap(){
@@ -1164,6 +1215,23 @@ then
 sudo apt-get update -y > /dev/null 2>&1
 sudo apt-get install -y figlet > /dev/null 2>&1
 fi
+
+if ! pv -V > /dev/null 2>&1
+then
+sudo apt-get install -y pv > /dev/null 2>&1
+fi
+
+if ! gzip -V > /dev/null 2>&1
+then
+sudo apt-get install -y gzip > /dev/null 2>&1
+fi
+
+if ! zip -v > /dev/null 2>&1
+then
+sudo apt-get install -y zip > /dev/null 2>&1
+fi
+
+
 
 clear
 sleep 1
