@@ -51,7 +51,8 @@ type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
-function spinning_timer() {
+function spinning_timer() 
+{
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
     while [ $SECONDS -lt $end ];
@@ -67,426 +68,474 @@ function spinning_timer() {
     echo -ne "${MSG2}"
 }
 
-function string_limit_check_mark_port() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::65}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::65+string_diff}
-fi
-echo -e "${PIN}${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+function string_limit_check_mark_port() 
+{
+
+    if [[ -z "$2" ]]; then
+        string="$1"
+        string=${string::65}
+    else
+        string=$1
+        string_color=$2
+        string_leght=${#string}
+        string_leght_color=${#string_color}
+        string_diff=$((string_leght_color-string_leght))
+        string=${string_color::65+string_diff}
+    fi
+    echo -e "${PIN}${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
-function string_limit_check_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::50}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::50+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+function string_limit_check_mark() 
+{
+
+    if [[ -z "$2" ]]; then
+        string="$1"
+        string=${string::50}
+    else
+        string=$1
+        string_color=$2
+        string_leght=${#string}
+        string_leght_color=${#string_color}
+        string_diff=$((string_leght_color-string_leght))
+        string=${string_color::50+string_diff}
+    fi
+    
+    echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
-function string_limit_x_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::50}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::50+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
+function string_limit_x_mark() 
+{
+
+    if [[ -z "$2" ]]; then
+        string="$1"
+        string=${string::50}
+    else
+        string=$1
+        string_color=$2
+        string_leght=${#string}
+        string_leght_color=${#string_color}
+        string_diff=$((string_leght_color-string_leght))
+        string=${string_color::50+string_diff}
+    fi
+    
+    echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
-function local_version_check() {
-local_version=$(dpkg -l $1 | grep -w $1 | awk '{print $3}')
+function local_version_check() 
+{
+
+    local_version=$(dpkg -l $1 | grep -w $1 | awk '{print $3}')  
 }
 
 function remote_version_check(){
-#variable null
-remote_version=""
-package_name=""
-remote_version=$(curl -s -m 3 https://apt.zel.network/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
-if [[ "$remote_version" != "" ]]; then
-package_name=$(echo "$1_"$remote_version"_all.deb")
-fi
+
+    #variable null
+    remote_version=""
+    package_name=""
+    
+    remote_version=$(curl -s -m 3 https://apt.zel.network/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
+    
+    if [[ "$remote_version" != "" ]]; then
+        package_name=$(echo "$1_"$remote_version"_all.deb")
+    fi
 }
 
 function install_package()
 {
-echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
 
-sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
-sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${CYAN}Adding apt source...${NC}"
-echo 'deb https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
-gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D >/dev/null 2>&1
-gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-sudo apt-get update >/dev/null 2>&1
-sudo apt-get install "$1" -y >/dev/null 2>&1
-sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-if ! gpg --list-keys Zel >/dev/null; then
-  gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
-  gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-  sudo apt-get update >/dev/null 2>&1 
-  sudo apt-get install "$1" -y >/dev/null 2>&1
-  sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-  if ! gpg --list-keys Zel >/dev/null; then
-    gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
+
+    sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
+    sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${CYAN}Adding apt source...${NC}"
+    echo 'deb https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
+    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D >/dev/null 2>&1
     gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
     sudo apt-get update >/dev/null 2>&1
     sudo apt-get install "$1" -y >/dev/null 2>&1
     sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
     if ! gpg --list-keys Zel >/dev/null; then
-      gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D >/dev/null 2>&1
-      gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-      sudo apt-get update >/dev/null 2>&1
-      sudo apt-get install "$1" -y >/dev/null 2>&1
-      sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-      if ! gpg --list-keys Zel >/dev/null; then
-        gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D >/dev/null 2>&1  
+        gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
         gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-        sudo apt-get update >/dev/null 2>&1
+        sudo apt-get update >/dev/null 2>&1 
         sudo apt-get install "$1" -y >/dev/null 2>&1
         sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-      fi
+        if ! gpg --list-keys Zel >/dev/null; then
+            gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
+            gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
+            sudo apt-get update >/dev/null 2>&1
+            sudo apt-get install "$1" -y >/dev/null 2>&1
+            sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
+            if ! gpg --list-keys Zel >/dev/null; then
+                gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D >/dev/null 2>&1
+                gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
+                sudo apt-get update >/dev/null 2>&1
+                sudo apt-get install "$1" -y >/dev/null 2>&1
+                sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
+                if ! gpg --list-keys Zel >/dev/null; then
+                    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D >/dev/null 2>&1  
+                    gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
+                    sudo apt-get update >/dev/null 2>&1
+                    sudo apt-get install "$1" -y >/dev/null 2>&1
+                    sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
+                fi
+            fi
+        fi
     fi
-  fi
-fi
+    
 }
 
-start_fluxdaemon() {
-serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
+start_fluxdaemon() 
+{
 
-if [[ "$serive_check" != "" ]]; then
-echo -e "${ARROW} ${CYAN}Starting Flux daemon service...${NC}"
-  sudo systemctl start $COIN_NAME >/dev/null 2>&1
-else
-echo -e "${ARROW} ${CYAN}Starting Flux daemon process...${NC}"
-  "$COIN_DAEMON" >/dev/null 2>&1
-fi
+    serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
+
+    if [[ "$serive_check" != "" ]]; then
+        echo -e "${ARROW} ${CYAN}Starting Flux daemon service...${NC}"
+        sudo systemctl start $COIN_NAME >/dev/null 2>&1
+    else
+        echo -e "${ARROW} ${CYAN}Starting Flux daemon process...${NC}"
+        "$COIN_DAEMON" >/dev/null 2>&1
+    fi
+    
 }
 
 stop_fluxdaemon() {
 
-echo -e "${ARROW} ${CYAN}Stopping Flux daemon...${NC}"
-sudo systemctl stop $COIN_NAME >/dev/null 2>&1 && sleep 5
-"$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
-sudo killall "$COIN_DAEMON" >/dev/null 2>&1
-sudo killall -s SIGKILL $BENCH_NAME >/dev/null 2>&1 && sleep 1
-sleep 4
+    echo -e "${ARROW} ${CYAN}Stopping Flux daemon...${NC}"
+    sudo systemctl stop $COIN_NAME >/dev/null 2>&1 && sleep 5
+    "$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
+    sudo killall "$COIN_DAEMON" >/dev/null 2>&1
+    sudo killall -s SIGKILL $BENCH_NAME >/dev/null 2>&1 && sleep 1
+    sleep 4
 
 }
-# main function
+
+
 function reindex()
 {
-echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
-stop_fluxdaemon
-"$COIN_DAEMON" -reindex
-serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAM.service" | head -n1)
-if [[ "$serive_check" != "" ]]; then
-sleep 60
-stop_fluxdaemon
-start_fluxdaemon
-fi
+    echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
+    stop_fluxdaemon
+    "$COIN_DAEMON" -reindex
+    serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAM.service" | head -n1)
+    if [[ "$serive_check" != "" ]]; then
+        sleep 60
+        stop_fluxdaemon
+        start_fluxdaemon
+    fi
 }
 
 function restart_fluxdaemon()
 {
 
-echo -e "${ARROW} ${CYAN}Restarting Flux daemon...${NC}"
-serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
-if [[ "$serive_check" != "" ]]; then
-sudo systemctl restart $COIN_NAME >/dev/null 2>&1 && sleep 3
-else
-stop_fluxdaemon
-start_fluxdaemon
-fi
+    echo -e "${ARROW} ${CYAN}Restarting Flux daemon...${NC}"
+    serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
+    if [[ "$serive_check" != "" ]]; then
+        sudo systemctl restart $COIN_NAME >/dev/null 2>&1 && sleep 3
+       else
+        stop_fluxdaemon
+        start_fluxdaemon
+    fi
 
 }
 
 function fluxbench_update()
 {
 
-local_version=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
+    local_version=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
 
-if [[ "$type" == "force" ]]; then
-echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
-stop_fluxdaemon
-install_package $BENCH_NAME
-dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
-echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
-start_fluxdaemon
-return
-fi
-
-remote_version_check "$BENCH_NAME"
-#remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
-
-if [[ "$call_type" != "update_all" ]]; then
-
-  if [[ "$remote_version" == "" ]]; then
-   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
-   return
-  fi
-
-  if [[ "$remote_version" == "$local_version" ]]; then
-   echo -e "${ARROW} ${CYAN}You have the current version of Flux benchamrk ${GREEN}($remote_version)${NC}"
-   return
-  fi
-
-fi
-
-echo -e "${ARROW} ${CYAN}Updating Flux benchmark...${NC}"
-#stop_zelcash
-echo -e "${ARROW} ${CYAN}Flux benchmark stopping...${NC}"
-$BENCH_CLI stop >/dev/null 2>&1 && sleep 2
-sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
-sudo apt-get update >/dev/null 2>&1
-sudo apt-get install --only-upgrade $BENCH_NAME -y >/dev/null 2>&1
-sudo chmod 755 "$COIN_PATH"/$BENCH_NAME*
-sleep 2
-
-dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
-#echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
-
-if [[ "$dpkg_version_after_install" == "" ]]; then
-
-install_package "$BENCH_NAME"
-dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
-    
-  if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-  fi
-
-start_fluxdaemon
-echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-#zelbenchd -daemon >/dev/null 2>&1
-else
-
-  if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
-  
-    echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-    start_fluxdaemon
-    echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-    #zelbenchd -daemon >/dev/null 2>&1
-  else
-
-    if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
-      install_package $BENCH_NAME
-      dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
-    
-      if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
-        echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-      fi
-      start_fluxdaemon
-      echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-      #zelbenchd -daemon >/dev/null 2>&1
+    if [[ "$type" == "force" ]]; then
+        echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
+        stop_fluxdaemon
+        install_package $BENCH_NAME
+        dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
+        echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
+        echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
+        start_fluxdaemon
+        return
     fi
-  fi
-fi
+
+    remote_version_check "$BENCH_NAME"
+    #remote_version=$(curl -s -m 3 https://zelcore.io/zelflux/zelbenchinfo.php | jq -r .version)
+
+    if [[ "$call_type" != "update_all" ]]; then
+
+        if [[ "$remote_version" == "" ]]; then
+            echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
+            return
+        fi
+
+        if [[ "$remote_version" == "$local_version" ]]; then
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux benchamrk ${GREEN}($remote_version)${NC}"
+            return
+        fi
+
+    fi
+
+    echo -e "${ARROW} ${CYAN}Updating Flux benchmark...${NC}"
+    #stop_zelcash
+    echo -e "${ARROW} ${CYAN}Flux benchmark stopping...${NC}"
+    $BENCH_CLI stop >/dev/null 2>&1 && sleep 2
+    sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
+    sudo apt-get update >/dev/null 2>&1
+    sudo apt-get install --only-upgrade $BENCH_NAME -y >/dev/null 2>&1
+    sudo chmod 755 "$COIN_PATH"/$BENCH_NAME*
+    sleep 2
+
+    dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
+    echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
+    #echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
+
+    if [[ "$dpkg_version_after_install" == "" ]]; then
+
+        install_package "$BENCH_NAME"
+        dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
+    
+        if [[ "$dpkg_version_after_install" != "" ]]; then
+            echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+        fi
+
+        start_fluxdaemon
+        echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
+        #zelbenchd -daemon >/dev/null 2>&1
+    else
+
+        if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
+  
+            echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+            start_fluxdaemon
+            echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
+            #zelbenchd -daemon >/dev/null 2>&1
+        else
+
+            if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
+	    
+                install_package $BENCH_NAME
+                dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
+    
+                if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
+		
+                    echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+		    
+                fi
+		
+                start_fluxdaemon
+		echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
+		#zelbenchd -daemon >/dev/null 2>&1
+            fi
+        fi
+    fi
 
 }
 
 function flux_update()
 {
 
-current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+	current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+	required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
-if [[ "$required_ver" != "" && "$call_type" != "update_all" ]]; then
-   if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${ARROW} ${CYAN}You have the current version of Flux ${GREEN}($required_ver)${NC}"  
-      return 
-   else
-      #echo -e "${HOT} ${CYAN}New version of Flux available ${SEA}$required_ver${NC}"
-      FLUX_UPDATE="1"
-   fi
- fi
-
-if [[ "$FLUX_UPDATE" == "1" ]]; then
-  cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
-  current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-  required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
-    if [[ "$required_ver" == "$current_ver" ]]; then
-      echo -e "${ARROW} ${CYAN}Flux updated successfully ${GREEN}($required_ver)${NC}"
-    else
-      echo -e "${ARROW} ${CYAN}Flux was not updated.${NC}"
-      echo -e "${ARROW} ${CYAN}Flux force update....${NC}"
-      rm /home/$USER/$FLUX_DIR/.git/HEAD.lock >/dev/null 2>&1
-      #cd /home/$USER/$FLUX_DIR && npm run hardupdatezelflux
-      cd /home/$USER/$FLUX_DIR && git reset --hard HEAD && git clean -f -d && git pull
-
-
-      current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-      required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
-
-        if [[ "$required_ver" == "$current_ver" ]]; then
-          echo -e "${ARROW} ${CYAN}Flux updated successfully ${GREEN}($required_ver)${NC}"
+    if [[ "$required_ver" != "" && "$call_type" != "update_all" ]]; then
+	
+        if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
+	    
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux ${GREEN}($required_ver)${NC}"  
+            return 
+	    
+        else
+            #echo -e "${HOT} ${CYAN}New version of Flux available ${SEA}$required_ver${NC}"
+            FLUX_UPDATE="1"
         fi
+       
     fi
 
-else
-echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
-fi
+    if [[ "$FLUX_UPDATE" == "1" ]]; then
+        cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
+        current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+        required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+        if [[ "$required_ver" == "$current_ver" ]]; then
+            echo -e "${ARROW} ${CYAN}Flux updated successfully ${GREEN}($required_ver)${NC}"
+        else
+            echo -e "${ARROW} ${CYAN}Flux was not updated.${NC}"
+            echo -e "${ARROW} ${CYAN}Flux force update....${NC}"
+            rm /home/$USER/$FLUX_DIR/.git/HEAD.lock >/dev/null 2>&1
+            #cd /home/$USER/$FLUX_DIR && npm run hardupdatezelflux
+            cd /home/$USER/$FLUX_DIR && git reset --hard HEAD && git clean -f -d && git pull
+
+            current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+            required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+
+            if [[ "$required_ver" == "$current_ver" ]]; then
+                echo -e "${ARROW} ${CYAN}Flux updated successfully ${GREEN}($required_ver)${NC}"
+            fi
+        fi
+
+    else
+    
+        echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
+    fi
 
 }
 
 function fluxdaemon_update()
 {
 
-local_version=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+    local_version=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
 
-if [[ "$type" == "force" ]]; then
-echo -e "${ARROW} ${CYAN}Force Flux daemon updating...${NC}"
-stop_fluxdaemon
-install_package "$COIN_NAME"
-dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
-echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
-start_fluxdaemon
-return
-fi
-
-
-remote_version_check "$COIN_NAME"
-#local_version=$($COIN_CLI getinfo | jq -r .version)
-#remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
-
-if [[ "$call_type" != "update_all" ]]; then
-
-  if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-   echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
-   return
-  fi
-
-  if [[ "$local_version" == "$remote_version" ]]; then
-   echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
-   return
-  fi
-
-fi
-
-dpkg_version_before_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
-stop_fluxdaemon
-
-sudo apt-get update >/dev/null 2>&1
-sudo apt-get install --only-upgrade $COIN_NAME -y >/dev/null 2>&1
-sudo chmod 755 "$COIN_PATH"/$COIN_NAME*
-sleep 2
-
-dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
-echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
-#echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
-
-if [[ "$dpkg_version_after_install" == "" ]]; then
-
-install_package "$COIN_NAME"
-dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
-
-  if [[ "$dpkg_version_after_install" != "" ]]; then
-    echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-  fi
-
-start_fluxdaemon
-
-else
-
-  if [[ "$local_version" != "$dpkg_version_after_install" ]]; then
-  
-    echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
-    start_fluxdaemon
-  fi
-
-  if [[ "local_version" == "$dpkg_version_after_install" ]]; then
-    install_package "$COIN_NAME"
-    dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
-    
-    if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
-      echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+    if [[ "$type" == "force" ]]; then
+        echo -e "${ARROW} ${CYAN}Force Flux daemon updating...${NC}"
+        stop_fluxdaemon
+        install_package "$COIN_NAME"
+        dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+        echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
+        echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
+        start_fluxdaemon
+        return
     fi
-    
-    start_fluxdaemon
-  fi
 
-fi
+
+    remote_version_check "$COIN_NAME"
+    #local_version=$($COIN_CLI getinfo | jq -r .version)
+    #remote_version=$(curl -s -m3  https://zelcore.io/zelflux/zelcashinfo.php | jq -r .version)
+
+    if [[ "$call_type" != "update_all" ]]; then
+
+        if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+	
+            echo -e "${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
+            return
+	    
+        fi
+
+        if [[ "$local_version" == "$remote_version" ]]; then
+	
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
+            return
+	    
+        fi
+	
+    fi
+
+    dpkg_version_before_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+    stop_fluxdaemon
+
+    sudo apt-get update >/dev/null 2>&1
+    sudo apt-get install --only-upgrade $COIN_NAME -y >/dev/null 2>&1
+    sudo chmod 755 "$COIN_PATH"/$COIN_NAME*
+    sleep 2
+
+    dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+    echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
+    #echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
+
+    if [[ "$dpkg_version_after_install" == "" ]]; then
+
+        install_package "$COIN_NAME"
+        dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+
+        if [[ "$dpkg_version_after_install" != "" ]]; then
+	
+            echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+        fi
+
+        start_fluxdaemon
+
+    else
+
+        if [[ "$local_version" != "$dpkg_version_after_install" ]]; then
+  
+            echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+            start_fluxdaemon
+	    
+        fi
+
+        if [[ "local_version" == "$dpkg_version_after_install" ]]; then
+	
+            install_package "$COIN_NAME"
+            dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
+    
+            if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
+	    
+                echo -e "${ARROW} ${CYAN}Flux daemon update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
+            fi
+    
+            start_fluxdaemon
+        fi
+
+    fi
 
 }
 
-function check_update() {
+function check_update() 
+{
 
-update_fluxbench="0"
-update_fluxdaemon="0"
-update_flux="0"
+    update_fluxbench="0"
+    update_fluxdaemon="0"
+    update_flux="0"
 
-local_version_check "$COIN_NAME"
-remote_version_check "$COIN_NAME"
+    local_version_check "$COIN_NAME"
+    remote_version_check "$COIN_NAME"
 
-if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
-else
+    if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+        echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux daemon installation skipped...${NC}"
+    else
 
-  if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of Flux daemon available ${SEA}$remote_version${NC}"
-  update_fluxdaemon="1"
-  else
-  echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
-  fi
+        if [[ "$local_version" != "$remote_version" ]]; then
+	
+            echo -e "${RED}${HOT}${CYAN}New version of Flux daemon available ${SEA}$remote_version${NC}"
+            update_fluxdaemon="1"
+	    
+        else
+	
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux daemon ${GREEN}($remote_version)${NC}"
+	    
+        fi
   
-fi
+    fi
 
-local_version_check "$BENCH_NAME"
-remote_version_check "$BENCH_NAME"
+    local_version_check "$BENCH_NAME"
+    remote_version_check "$BENCH_NAME"
 
-if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
-else
+    if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+        echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux benchmark installation skipped...${NC}"
+    else
 
-  if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of Flux benchmark available ${SEA}$remote_version${NC}"
-  update_fluxbench="1"
-  else
-  echo -e "${ARROW} ${CYAN}You have the current version of Flux benchmark ${GREEN}($remote_version)${NC}"
-  fi
+        if [[ "$local_version" != "$remote_version" ]]; then
+	
+            echo -e "${RED}${HOT}${CYAN}New version of Flux benchmark available ${SEA}$remote_version${NC}"
+            update_fluxbench="1"
+	    
+        else
+	
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux benchmark ${GREEN}($remote_version)${NC}"
+	    
+        fi
 
-fi
+    fi
 
-local_version=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-remote_version=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+    local_version=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
+    remote_version=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
-if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
-echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
-else
+    if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
+        echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
+    else
 
-  if [[ "$local_version" != "$remote_version" ]]; then
-  echo -e "${RED}${HOT}${CYAN}New version of Flux available ${SEA}$remote_version${NC}"
-  update_flux="1"
-  FLUX_UPDATE="1"
-  else
-  echo -e "${ARROW} ${CYAN}You have the current version of Flux ${GREEN}($remote_version)${NC}"
-  fi
+        if [[ "$local_version" != "$remote_version" ]]; then
+	
+            echo -e "${RED}${HOT}${CYAN}New version of Flux available ${SEA}$remote_version${NC}"
+            update_flux="1"
+            FLUX_UPDATE="1"
+	    
+        else
+	
+            echo -e "${ARROW} ${CYAN}You have the current version of Flux ${GREEN}($remote_version)${NC}"
+	    
+        fi
 
-fi
+    fi
 
-if [[ "$update_fluxbench" == "1" || "$update_fluxdaemon" == "1" || "$update_flux" == "1" ]]; then
-echo -e ""
-fi
+    if [[ "$update_fluxbench" == "1" || "$update_fluxdaemon" == "1" || "$update_flux" == "1" ]]; then
+        echo -e ""
+    fi
 
 }
 
@@ -512,10 +561,15 @@ function tar_file_pack()
 function check_tar()
 {
     echo -e "${ARROW} ${YELLOW}Checking  bootstrap archive file...${NC}"
+    
     if gzip -t "$1" &>/dev/null; then
+    
         echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+	
     else
+    
         echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+	
     fi
 
 }
@@ -524,77 +578,90 @@ function check_tar()
 function create_daemon_bootstrap()
 {
 
-sudo apt install zip >/dev/null 2>&1
+    sudo apt install zip >/dev/null 2>&1
 
-if "$COIN_CLI" getinfo > /dev/null 2>&1; then
+    if "$COIN_CLI" getinfo > /dev/null 2>&1; then
 
 
-local_network_hight=$("COIN_CLI" getinfo | jq -r .blocks)
-echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
-explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
+        local_network_hight=$("COIN_CLI" getinfo | jq -r .blocks)
+        echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
+        explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+        echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
- if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
- echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
- exit
- fi
+        if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
+    
+            echo -e "${ARROW} ${CYAN}Flux network veryfication failed...${NC}"
+            exit
+	
+        fi
  
-if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
- echo -e "${ARROW} ${CYAN}Node is full synced with Flux Network...${NC}"
-else
- echo -e "${ARROW} ${CYAN}Node is not full synced with Flux Network...${NC}"
- echo
-exit
-fi
-data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
-stop_fluxdaemon
-check_zip=$(zip -L | head -n1)
-if [[ "$check_zip" != "" ]]; then
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 5
-echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
-cd /home/$USER/$CONFIG_DIR  
-zip /home/$USER/$BOOTSTRAP_ZIPFILE -r blocks chainstate determ_zelnodes
-cd
+        if [[ "$explorer_network_hight" == "$local_network_hight" ]]; then
+            echo -e "${ARROW} ${CYAN}Node is full synced with Flux Network...${NC}"
+        else
+            echo -e "${ARROW} ${CYAN}Node is not full synced with Flux Network...${NC}"
+            echo
+            exit
+        fi
+    
+        data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
+        stop_fluxdaemon
+        check_zip=$(zip -L | head -n1)
+    
+        if [[ "$check_zip" != "" ]]; then
+            echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+            rm -rf /home/$USER/$BOOTSTRAP_ZIPFILE >/dev/null 2>&1 && sleep 5
+            echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating...${NC}"
+            cd /home/$USER/$CONFIG_DIR  
+            zip /home/$USER/$BOOTSTRAP_ZIPFILE -r blocks chainstate determ_zelnodes
+            cd
 
-if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE ]]; then
-echo -e "${ARROW} ${CYAN}Flux daemon bootstrap created successful ${GREEN}($local_network_hight)${NC}"
-rm -rf /home/$USER/daemon_bootstrap.json >/dev/null 2>&1
+            if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE ]]; then
+                echo -e "${ARROW} ${CYAN}Flux daemon bootstrap created successful ${GREEN}($local_network_hight)${NC}"
+                rm -rf /home/$USER/daemon_bootstrap.json >/dev/null 2>&1
 
-sudo touch /home/$USER/daemon_bootstrap.json
-sudo chown $USER:$USER /home/$USER/daemon_bootstrap.json
-    cat << EOF > /home/$USER/daemon_bootstrap.json
-{
-  "blocks_height": "${explorer_network_hight}",
-  "time": "${data}"
-}
-EOF
+                sudo touch /home/$USER/daemon_bootstrap.json
+                sudo chown $USER:$USER /home/$USER/daemon_bootstrap.json
+	        cat << EOF > /home/$USER/daemon_bootstrap.json
+		{
+		  "blocks_height": "${explorer_network_hight}",
+		  "time": "${data}"
+		}
+		EOF
 
+            else
+	    
+                echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating failed${NC}"
+	
+            fi
 
-else
-echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating failed${NC}"
-fi
+        fi
+    
+        start_fluxdaemon
 
-fi
-start_fluxdaemon
-
-else
-echo -e "${ARROW} ${CYAN}Flux network veryfication failed...Flux daemon not working...${NC}"
-echo
-fi
+    else
+    
+        echo -e "${ARROW} ${CYAN}Flux network veryfication failed...Flux daemon not working...${NC}"
+        echo
+	
+    fi
 
 }
 
 function create_mongod_bootstrap()
 {
     
-    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
+    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q)
+    
     if [[ "$WANIP" == "" ]]; then
-        WANIP=$(curl -s -m 3 ifconfig.me)     
+    
+        WANIP=$(curl -s -m 3 ifconfig.me) 
+	
         if [[ "$WANIP" == "" ]]; then
+	
             echo -e "${ARROW} ${CYAN}Public IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
             echo
 	    exit
+	    
     	fi
     fi
 
@@ -611,14 +678,20 @@ function create_mongod_bootstrap()
     check_height=$((explorer_network_hight-local_network_hight))
 
     if [[ "$check_height" -lt 0 ]]; then
+    
         check_height=$((check_height*(-1)))
+	
     fi
 
     if [[ "$check_height" -lt 15 ]]; then
+    
         echo -e "${ARROW} ${CYAN}Local and Global network are synced, diff: ${GREEN}$check_height${NC}"
+	
     else
+    
         echo -e "${ARROW} ${CYAN}Local and Global network are not synced, try again later (diff: ${RED}$check_height${CYAN})${NC}"
         return
+	
     fi
 
     data=$(date -u +'%Y-%m-%d %H:%M:%S [%z]')
@@ -644,9 +717,12 @@ function create_mongod_bootstrap()
 	"blocks_height": "${explorer_network_hight}",
 	"time": "${data}"
 	}
-EOF
+	EOF
+	
     else
+    
         echo -e "${ARROW} ${CYAN}Mongod bootstrap creating failed${NC}"
+	
     fi
 
 }
@@ -743,32 +819,33 @@ function install_mongod() {
 	  echo
    	  exit
     fi
-    sleep 2
     
-echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
-sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
-sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
-sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
-echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
-sudo apt-get update -y > /dev/null 2>&1
-sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
-sudo systemctl enable mongod > /dev/null 2>&1
-sudo systemctl start  mongod > /dev/null 2>&1
-if mongod --version > /dev/null 2>&1 
-then
- #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
- string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
- echo
-else
- #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
- string_limit_x_mark "MongoDB was not installed................................."
- echo
-fi
+    sleep 2 
+    echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
+    sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
+    sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
+    sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
+    echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
+    sudo apt-get update -y > /dev/null 2>&1
+    sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
+    sudo systemctl enable mongod > /dev/null 2>&1
+    sudo systemctl start  mongod > /dev/null 2>&1
+    
+    if mongod --version > /dev/null 2>&1 
+    then
+        #echo -e "${ARROW} ${CYAN}MongoDB version: ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed${NC}"
+        string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+        echo
+    else
+        #echo -e "${ARROW} ${CYAN}MongoDB was not installed${NC}" 
+        string_limit_x_mark "MongoDB was not installed................................."
+        echo
+    fi
 }
 
 function swapon_create()
 {
- MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+    MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
     gb=$(awk "BEGIN {print $MEM/1048576}")
     GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
     if [ "$GB" -lt 2 ]; then
@@ -782,7 +859,9 @@ function swapon_create()
         swap=2G
         #echo -e "${YELLOW}Swap set at $swap...${NC}"
     fi
+    
     if ! grep -q "swapfile" /etc/fstab; then
+    
         if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
             sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
             sudo chmod 600 /swapfile > /dev/null 2>&1
@@ -793,51 +872,59 @@ function swapon_create()
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
         fi
-fi
+	
+    fi
 }
 
 
 
 function unlock_flux_resouce()
 {
- docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
- resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
- mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
+     docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
+     resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
+     mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
-if [[ "$mongod_check" != "" && "$mongod_check" != "null" && "$1" == "clean_db" ]]; then
-echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
-echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
-fi
+    if [[ "$mongod_check" != "" && "$mongod_check" != "null" && "$1" == "clean_db" ]]; then
+    
+        echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
+        echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
+        echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
+	
+    fi
 
-if [[ $docker_check != 0 ]]; then
-echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
-docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
-while read line; do
-sudo docker stop $line && sleep 1
-done
-fi
+    if [[ $docker_check != 0 ]]; then
+        echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
+        echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
+        docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
+	
+        while read line; do
+            sudo docker stop $line && sleep 1
+        done
+    fi
 
-if [[ $resource_check != 0 ]]; then
-echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
-df | egrep 'flux' | awk '{ print $1}' |
-while read line; do
-sudo umount $line && sleep 1
-done
-fi
-echo
+    if [[ $resource_check != 0 ]]; then
+        echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
+        echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
+        df | egrep 'flux' | awk '{ print $1}' |
+
+        while read line; do
+        sudo umount $line && sleep 1
+        done	
+    fi
+    
+    echo
 }
 
 function max(){
+
     local m="$1"
     for n in "$@"
     do
         [ "$n" -gt "$m" ] && m="$n"
     done
     echo "$m"
+    
 }
 
 function create_kda_bootstrap {
