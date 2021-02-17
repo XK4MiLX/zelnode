@@ -1076,7 +1076,7 @@ function daemon_bootstrap() {
 
     if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
     
-        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+     
 	tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
 	sleep 2
         #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
@@ -1098,9 +1098,6 @@ function daemon_bootstrap() {
 		 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-       		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		 
-        	 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 		 tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
 		 sleep 2
 
@@ -1108,9 +1105,7 @@ function daemon_bootstrap() {
 	    "2)")   
   		 BOOTSTRAP_ZIP="$(whiptail --title "Flux daemon bootstrap source" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
-		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
-		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		 
+		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress		 
 		 tar_file_unpack "/home/$USER/BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR"
 		 sleep 2
 		 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
@@ -1147,7 +1142,6 @@ function kda_bootstrap() {
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
     
         echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-        echo -e "${ARROW} ${CYAN}Checking if archive file is corrupted...${NC}"
         check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
 	
     fi
@@ -1155,7 +1149,6 @@ function kda_bootstrap() {
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
     
-        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 	tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
 	sleep 2
         #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
@@ -1177,9 +1170,6 @@ function kda_bootstrap() {
 		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
-       		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		 
-        	 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode" 
 		 sleep 2
 
@@ -1187,9 +1177,7 @@ function kda_bootstrap() {
 	    "2)")   
   		 KDA_BOOTSTRAP_ZIP="$(whiptail --title "Kadena node bootstrap source" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
-		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
-		 echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
-		 
+		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress		 
 		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
 		 sleep 2
 		 #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
