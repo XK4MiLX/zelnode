@@ -626,8 +626,7 @@ function create_daemon_bootstrap()
 		  "blocks_height": "${explorer_network_hight}",
 		  "time": "${data}"
 		}
-		EOF
-
+EOF
             else
 	    
                 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap creating failed${NC}"
@@ -717,7 +716,7 @@ function create_mongod_bootstrap()
 	"blocks_height": "${explorer_network_hight}",
 	"time": "${data}"
 	}
-	EOF
+EOF
 	
     else
     
