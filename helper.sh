@@ -762,7 +762,21 @@ function clean_mongod() {
 
 function mongodb_bootstrap(){
 
-    WANIP=$(wget http://ipecho.net/plain -O - -q)
+    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q)
+    
+    if [[ "$WANIP" == "" ]]; then
+    
+        WANIP=$(curl -s -m 3 ifconfig.me) 
+	
+        if [[ "$WANIP" == "" ]]; then
+	
+            echo -e "${ARROW} ${CYAN}Public IP address could not be found, action stopped .........[${X_MARK}${CYAN}]${NC}"
+            echo
+	    exit
+	    
+    	fi
+    fi
+    
     BLOCKHIGHT=0
     DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
     echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
