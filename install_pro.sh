@@ -980,6 +980,7 @@ function basic_security() {
     sudo ufw logging on > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
     
+    sudo ufw allow out from any to any port 123  > /dev/null 2>&1
     sudo ufw allow out to any port 80 > /dev/null 2>&1
     sudo ufw allow out to any port 443 > /dev/null 2>&1
     sudo ufw allow out to any port 53 > /dev/null 2>&1
