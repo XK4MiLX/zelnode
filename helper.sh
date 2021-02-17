@@ -1133,7 +1133,6 @@ function daemon_bootstrap() {
 
 }
 
-
 function kda_bootstrap() {
 
     sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
