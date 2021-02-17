@@ -584,7 +584,7 @@ function create_daemon_bootstrap()
     if "$COIN_CLI" getinfo > /dev/null 2>&1; then
 
 
-        local_network_hight=$("COIN_CLI" getinfo | jq -r .blocks)
+        local_network_hight=$("$COIN_CLI" getinfo | jq -r .blocks)
         echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
         explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
         echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
