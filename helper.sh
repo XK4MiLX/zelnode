@@ -560,7 +560,7 @@ function tar_file_pack()
 #check_tar file_name
 function check_tar()
 {
-    echo -e "${ARROW} ${YELLOW}Checking  bootstrap archive file...${NC}"
+    echo -e "${ARROW} ${YELLOW}Checking  bootstrap file integration...${NC}"
     
     if gzip -t "$1" &>/dev/null; then
     
@@ -1069,7 +1069,6 @@ function daemon_bootstrap() {
     if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
     
         echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-        echo -e "${ARROW} ${CYAN}Checking if archive file is corrupted...${NC}"
         check_tar "/home/$USER/$BOOTSTRAP_ZIPFILE"   
 	
     fi
