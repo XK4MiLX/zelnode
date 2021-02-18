@@ -1629,7 +1629,6 @@ function display_banner() {
 function start_install() {
 #Suppressing password prompts for this user so zelnode can operate
 start_install=`date +%s`
-echo
 sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}February 2021, created by dk808 improved by XK4MiLX from Flux's team."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
