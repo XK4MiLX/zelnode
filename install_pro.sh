@@ -1482,7 +1482,7 @@ else
     	pm2 save > /dev/null 2>&1
 	
 	echo
-	NUM='190'
+	NUM='320'
    	MSG1='Flux Loading....'
    	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
         spinning_timer
