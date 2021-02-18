@@ -334,7 +334,7 @@ echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
 #MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
 #spinning_timer
 #echo
-DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.blocks_height')
+DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
 BLOCKHIGHT=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 
 if [[ "$BLOCKHIGHT" == "null" ]]; then
@@ -1301,7 +1301,7 @@ function install_flux() {
 
 if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
 echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
+echo -e "${ARROW} ${YELLOW}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
 echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
 fi
 
@@ -1316,7 +1316,7 @@ fi
 
 if [[ $resource_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
+echo -e "${ARROW} ${YELLOW}Unmounting locked Flux resource${NC}" && sleep 1
 df | egrep 'flux' | awk '{ print $1}' |
 while read line; do
 sudo umount $line && sleep 1
@@ -1324,7 +1324,7 @@ done
 fi
    
     if [ -d "./$FLUX_DIR" ]; then
-         echo -e "${ARROW} ${YELLOW}Removing any instances of Flux{NC}"
+         echo -e "${ARROW} ${YELLOW}Removing any instances of Flux${NC}"
          sudo rm -rf $FLUX_DIR
     fi
 
