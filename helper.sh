@@ -555,7 +555,8 @@ function tar_file_unpack()
 function tar_file_pack()
 {
     echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
-    tar -czf --use-compress-program=pigz - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
+    tar -c --use-compress-program=pigz -f $2 $1
+    #tar -czf --use-compress-program=pigz - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
 }
 
 
@@ -1226,6 +1227,13 @@ if ! zip -v > /dev/null 2>&1
 then
 sudo apt-get install -y zip > /dev/null 2>&1
 fi
+
+if ! pigz -V > /dev/null 2>&1
+then
+sudo apt-get install -y pigz > /dev/null 2>&1
+fi
+
+
 
 
 
