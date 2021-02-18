@@ -1301,6 +1301,8 @@ fi
 	
         "mongod_bootstrap")
             echo
+	    echo -e "${ARROW} ${CYAN}Stopping Flux...${NC}"
+            pm2 stop flux >/dev/null 2>&1 && sleep 2
             mongodb_bootstrap
             echo
         ;;
