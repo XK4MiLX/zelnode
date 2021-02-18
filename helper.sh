@@ -42,6 +42,10 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
 
+#dialog color
+export NEWT_COLORS='
+title=black,
+'
 # add to path
 PATH=$PATH:"$COIN_PATH"
 export PATH
