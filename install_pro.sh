@@ -1339,7 +1339,7 @@ fi
 
         while true
                 do
-                ZELID="$(whiptail --title "Flux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+                ZELID=$(whiptail --title "Flux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
                 if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
                 then
                 echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
@@ -1349,7 +1349,11 @@ fi
                 sleep 4
                 fi
         done
-
+	
+           if whiptail --yesno "Are you planning to run Kadena node? Please note that only Super/BAMF nodes are allowed to run it." 8 60 3>&1 1>&2 2>&3; then
+              KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 85 3>&1 1>&2 2>&3)
+           fi
+	
         fi
   
 
