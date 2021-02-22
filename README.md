@@ -1,4 +1,4 @@
-# MULTITOOLBOX FOR FLUXNODE
+# MULTITOOLBOX FOR FLUXNODE OPERATORS
 
 <b>1) HOW RUN SCRIPT</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
