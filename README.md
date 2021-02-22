@@ -3,9 +3,6 @@
 <b>1) HOW RUN SCRIPT</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
-if this way not working you can try:  
-```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh && chmod +x multitoolbox.sh && ./multitoolbox.sh```   
-
 <b>2) Menu:</b>    
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/menu_v5.jpg) 
 
