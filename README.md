@@ -7,7 +7,7 @@
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/menu_v5.jpg) 
 
 <b>3) HOW USE MULTITOOLBOX TO SETUP FLUXNODE:</b>  
- https://zel.network/how-to-setup-a-zelnode-start-to-finish <br>
+ https://medium.com/zelinsights/zelnode-setup-the-easy-peasy-lemon-squeezy-way-fd89706ea03c <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
  
  <b>4) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
