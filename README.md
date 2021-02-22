@@ -12,6 +12,10 @@ if this way not working you can try:
 <b>3) HOW USE MULTITOOLBOX TO SETUP ZELNODE:</b>  
  https://zel.network/how-to-setup-a-zelnode-start-to-finish <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
+ 
+ <b>3) Bootstrap deploy server (always fresh copy):</b>  
+https://fluxnodeservice.com
+ 
 <br><br><br>
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
 https://xk4milx.coinrequest.io
