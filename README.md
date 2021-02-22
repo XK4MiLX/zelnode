@@ -6,10 +6,10 @@
 if this way not working you can try:  
 ```wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh && chmod +x multitoolbox.sh && ./multitoolbox.sh```   
 
-<b>1) Menu:</b>    
+<b>2) Menu:</b>    
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/menu_v5.jpg) 
 
-<b>2) HOW USE MULTITOOLBOX TO SETUP ZELNODE:</b>  
+<b>3) HOW USE MULTITOOLBOX TO SETUP ZELNODE:</b>  
  https://zel.network/how-to-setup-a-zelnode-start-to-finish <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
 <br><br><br>
