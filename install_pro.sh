@@ -199,6 +199,18 @@ function round() {
   printf "%.${2}f" "${1}"
 }
 
+function check_benchmarks() {
+
+ var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
+ limit=$2
+ if [[ $(echo " $limit>$var_benchmark" | bc) == "1" ]]
+ then
+  var_round=$(round "$var_benchmark" 2)
+  echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
+ fi
+
+}
+
 function import_date() {
 
 if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
@@ -1546,6 +1558,8 @@ if [[ "bench_benchmarks" != "" ]]; then
 bench_status=$(jq -r '.status' <<< "$bench_benchmarks")
 if [[ "$bench_status" == "failed" ]]; then
 echo -e "${ARROW} ${CYAN}Flux benchmark failed...............[${X_MARK}${CYAN}]${NC}"
+check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
+check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
 else
 echo -e "${BOOK}${CYAN}STATUS: ${GREEN}$bench_status${NC}"
 bench_cores=$(jq -r '.cores' <<< "$bench_benchmarks")
