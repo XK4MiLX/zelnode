@@ -203,7 +203,7 @@ function check_benchmarks() {
 
  var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
  limit=$2
- if [[ $(echo " $limit>$var_benchmark" | bc) == "1" ]]
+ if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]
  then
   var_round=$(round "$var_benchmark" 2)
   echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
