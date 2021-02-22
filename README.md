@@ -3,7 +3,7 @@
 <b>1) HOW RUN SCRIPT</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
-<b>2) Menu:</b>    
+<b>2) MENU:</b>    
 ![screen1](https://raw.githubusercontent.com/XK4MiLX/zelnode/master/image/menu_v5.jpg) 
 
 <b>3) HOW USE MULTITOOLBOX TO SETUP FLUXNODE:</b>  
