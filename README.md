@@ -16,7 +16,7 @@ if this way not working you can try:
  <b>4) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
 https://fluxnodeservice.com
  
-<br><br><br>
+<br><br>
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
 https://xk4milx.coinrequest.io
 ```
