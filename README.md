@@ -13,7 +13,7 @@ if this way not working you can try:
  https://zel.network/how-to-setup-a-zelnode-start-to-finish <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
  
- <b>3) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
+ <b>4) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
 https://fluxnodeservice.com
  
 <br><br><br>
