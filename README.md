@@ -1,6 +1,6 @@
 # ZELNODE MULTITOOLBOX
 
-<b>1) How run script</b>  
+<b>1) HOW RUN SCRIPT</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/multitoolbox.sh)```  
 
 if this way not working you can try:  
@@ -13,7 +13,7 @@ if this way not working you can try:
  https://zel.network/how-to-setup-a-zelnode-start-to-finish <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
  
- <b>3) Bootstrap deploy server (always fresh copy):</b>  
+ <b>3) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
 https://fluxnodeservice.com
  
 <br><br><br>
