@@ -937,7 +937,8 @@ function unlock_flux_resouce()
         docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
 	
         while read line; do
-            sudo docker stop $line && sleep 1
+            sudo docker stop $line && sleep 2
+	    sudo docker rm $line && sleep 2
         done
     fi
 
