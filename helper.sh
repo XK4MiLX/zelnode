@@ -1024,9 +1024,9 @@ function create_kda_bootstrap {
             docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
             echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode  	    
+            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0  	    
             #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
-	    tar_file_pack "chainweb-db" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
+	    tar_file_pack "rocksDb  sqlite" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
             cd
 
             if [[ -f /home/$USER/$KDA_BOOTSTRAP_ZIPFILE ]]; then
@@ -1138,12 +1138,14 @@ function kda_bootstrap() {
 
     sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
     echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-    docker stop zelKadenaChainWebNode > /dev/null 2>&1
+    docker stop zelKadenaChainWebNode > /dev/null 2>&1 && sleep 2
 
-    if [[ -e /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
+    if [[ -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
         rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs
     fi
+    
+     mkdir -p /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs/0  > /dev/null 2>&1
 
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
@@ -1156,7 +1158,7 @@ function kda_bootstrap() {
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
     
-	tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
+	tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs/0"
 	sleep 2
         #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
 	
@@ -1177,7 +1179,7 @@ function kda_bootstrap() {
 		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
-		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode" 
+		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs/0" 
 		 sleep 2
 
 	    ;;
@@ -1189,9 +1191,9 @@ function kda_bootstrap() {
 		 
 		 if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
-                    unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+                    unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs/0 > /dev/null 2>&1
 		else	       
-		    tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode"
+		    tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-dbs/0"
 		   
 		fi		
 		  sleep 2
