@@ -1023,7 +1023,7 @@ function create_kda_bootstrap {
             echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
             docker stop zelKadenaChainWebNode > /dev/null 2>&1
 
-            echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
+            #echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
             cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0  	    
             #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
 	    tar_file_pack "rocksDb  sqlite" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
