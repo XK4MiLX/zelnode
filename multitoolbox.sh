@@ -688,6 +688,7 @@ function flux_daemon_bootstrap() {
         exit
     fi
 
+    echo -e "${NC}"
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
@@ -699,11 +700,12 @@ function flux_daemon_bootstrap() {
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
-    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then		   
+    if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
+    
+     echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
 	
-        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
-	
-            echo -e "${ARROW} ${YELLOW}Local bootstrap file detected...${NC}"
+        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then	
+            
             echo -e "${ARROW} ${YELLOW}Checking if zip file is corrupted...${NC}"
 	    
             if unzip -t $BOOTSTRAP_ZIPFILE | grep 'No errors' > /dev/null 2>&1
@@ -983,9 +985,6 @@ echo -e "${WORNING}${CYAN}Docker is not working correct or is not installed.${NC
 exit
 fi
 
-
-
-#bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install.sh)
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install_pro.sh)
 
 
