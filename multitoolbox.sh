@@ -279,10 +279,11 @@ fi
 
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
-echo -e "${ARROW} ${CYAN}Stopping containers...${NC}"
-docker ps | grep "kadena" |  grep -Eo "^[0-9a-z]{8,}\b" |
+echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
+docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
-sudo docker stop $line && sleep 1
+sudo docker stop $line > /dev/null 2>&1 && sleep 2 
+sudo docker rm $line > /dev/null 2>&1 && sleep 2 
 done
 fi
 
