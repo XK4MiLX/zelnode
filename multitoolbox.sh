@@ -676,7 +676,7 @@ echo
 
 function flux_daemon_bootstrap() {
 
-    echo -e "${GREEN}Module: Restore Flux blockchain form bootstrap${NC}"
+    echo -e "${GREEN}Module: Restore Flux blockchain from bootstrap${NC}"
     echo -e "${YELLOW}================================================================${NC}"
 
     if [[ "$USER" == "root" ]]; then
