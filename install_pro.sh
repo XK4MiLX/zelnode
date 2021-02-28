@@ -1369,7 +1369,7 @@ fi
                 do
 		
                     KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 85 3>&1 1>&2 2>&3)
-                    if [[ "$KDA_A" = *kadena* &&  "$KDA_A" = *chainid* ]]; then
+                    if [[ "$KDA_A" = *kadena* && "$KDA_A" = *chainid* ]]; then
                         echo -e "${ARROW} ${CYAN}Kadena address is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
                         break
                     else
