@@ -1373,8 +1373,8 @@ fi
                         echo -e "${ARROW} ${CYAN}Kadena address is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
                         break
                     else
-                        echo -e "${ARROW} ${CYAN}Kadena address is not valid try again...........[${X_MARK}${CYAN}]${NC}}"
-                        sleep 4
+                        echo -e "${ARROW} ${CYAN}Kadena address is not valid try again...........[${X_MARK}${CYAN}]${NC}"
+                        sleep 2
                     fi
             done
 	                 
