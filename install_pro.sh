@@ -1508,7 +1508,7 @@ else
     fi
     
        
-   	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
+   	pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
 	echo
