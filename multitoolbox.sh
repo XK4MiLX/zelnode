@@ -1255,7 +1255,7 @@ echo -e "${CYAN}9 - Flux Daemon Reconfiguration${NC}"
 #echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-read -p "Pick an option: " -n 1 -r
+read -rp "Pick an option and hit ENTER: "
 
   case "$REPLY" in
 
