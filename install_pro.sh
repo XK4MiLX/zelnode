@@ -1427,11 +1427,11 @@ fi
 
 function status_loop() {
 
-if [[ $(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+if [[ $(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
 
-EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
@@ -1454,7 +1454,7 @@ else
     while true
     do
         
-        EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+        EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
@@ -1487,7 +1487,7 @@ else
           MSG2=''
           spinning_timer
 	  
-	  EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+	  EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
        	  LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	  CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	  LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
