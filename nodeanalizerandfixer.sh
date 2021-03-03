@@ -390,6 +390,12 @@ version=$(jq -r '.version' <<< "$daemon_getinfo")
 blocks_hight=$(jq -r '.blocks' <<< "$daemon_getinfo")
 protocolversion=$(jq -r '.protocolversion' <<< "$daemon_getinfo")
 connections=$(jq -r '.connections' <<< "$daemon_getinfo")
+error=$(jq -r '.error' <<< "$daemon_getinfo")
+
+if [[ "$error" != "" && "$error" != null ]]; then
+echo
+echo -e "${X_MARK} ${CYAN} Flux daemon error detected: ${RED}$error${CYAN}) IP${NC}"
+fi
 
 echo -e "${PIN} ${CYAN}Version: ${SEA}$version${NC}"
 echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
