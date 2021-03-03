@@ -4,6 +4,8 @@ BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
 
 CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
@@ -674,6 +676,104 @@ fi
 echo
 }
 
+
+function kda_bootstrap() {
+
+    echo -e "${GREEN}Module: Restore Kadena node blockchain from bootstrap${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+
+    if [[ "$USER" == "root" ]]; then
+    
+        echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+        echo -e "${CYAN}Please switch to the user accont.${NC}"
+        echo -e "${YELLOW}================================================================${NC}"
+        echo -e "${NC}"
+        exit
+    fi
+    
+    echo -e "${NC}"
+    sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
+    echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
+    docker stop zelKadenaChainWebNode > /dev/null 2>&1 && sleep 2
+
+    if [[ -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db
+    fi
+    
+     mkdir -p /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0  > /dev/null 2>&1
+
+
+    if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+    
+        echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+        check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
+	
+    fi
+
+
+    if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
+    
+	tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0"
+	sleep 2
+        #unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode > /dev/null 2>&1
+	
+    else
+
+        echo -e "${ARROW} ${CYAN}Bootstrap file downloading...${NC}" && sleep 2
+
+        CHOICE=$(
+        whiptail --title "Bootstrap installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+            "1)" "Download from source build in script" \
+            "2)" "Download from own source" 3>&2 2>&1 1>&3
+        )
+
+
+            case $CHOICE in
+	    "1)")   
+	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
+       		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
+		 tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0" 
+		 sleep 2
+
+	    ;;
+	    "2)")   
+  		 KDA_BOOTSTRAP_ZIP="$(whiptail --title "Kadena node bootstrap source (*.tar.gz, *.zip file supported)" --inputbox "Enter your URL" 8 72 3>&1 1>&2 2>&3)"
+		 KDA_BOOTSTRAP_ZIPFILE="${KDA_BOOTSTRAP_ZIP##*/}"
+		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
+		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress	
+		 
+		 if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
+ 		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
+                    unzip -o $KDA_BOOTSTRAP_ZIPFILE -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0 > /dev/null 2>&1
+		else	       
+		    tar_file_unpack "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" "/home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0"
+		   
+		fi		
+		  sleep 2
+	    ;;
+            esac
+
+    fi
+
+    if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+        rm -rf $KDA_BOOTSTRAP_ZIPFILE
+    fi
+
+    docker start zelKadenaChainWebNode > /dev/null 2>&1
+    NUM='15'
+    MSG1='Starting Kadena Node...'
+    MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo -e "" 
+    echo -e "${ARROW} ${CYAN}Kadena Node initial process can take about ~15min. ${NC}"
+    echo -e "" 
+
+}
+
+
 function flux_daemon_bootstrap() {
 
     echo -e "${GREEN}Module: Restore Flux blockchain from bootstrap${NC}"
@@ -1243,15 +1343,16 @@ echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: XK4MiLX from Flux's team${NC}"
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
 echo -e "${YELLOW}================================================================${NC}"
-echo -e "${CYAN}1 - Install Docker${NC}"
-echo -e "${CYAN}2 - Install FluxNode${NC}"
-echo -e "${CYAN}3 - FluxNode analyzer and fixer${NC}"
-echo -e "${CYAN}4 - Install watchdog for FluxNode${NC}"
-echo -e "${CYAN}5 - Restore Flux mongodb datatable from bootstrap${NC}"
-echo -e "${CYAN}6 - Restore Flux blockchain from bootstrap${NC}"
-echo -e "${CYAN}7 - Create FluxNode installation config file${NC}"
-echo -e "${CYAN}8 - Re-install Flux${NC}"
-echo -e "${CYAN}9 - Flux Daemon Reconfiguration${NC}"
+echo -e "${CYAN}1  - Install Docker${NC}"
+echo -e "${CYAN}2  - Install FluxNode${NC}"
+echo -e "${CYAN}3  - FluxNode analyzer and fixer${NC}"
+echo -e "${CYAN}4  - Install watchdog for FluxNode${NC}"
+echo -e "${CYAN}5  - Restore Flux mongodb datatable from bootstrap${NC}"
+echo -e "${CYAN}6  - Restore Flux blockchain from bootstrap${NC}"
+echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
+echo -e "${CYAN}8  - Re-install Flux${NC}"
+echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
+echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 #echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
@@ -1304,6 +1405,13 @@ read -rp "Pick an option and hit ENTER: "
    clear
    sleep 1
    daemon_reconfiguration
+   
+ ;;
+ 
+  10)
+   clear
+   sleep 1
+   kda_bootstrap
    
  ;;
  
