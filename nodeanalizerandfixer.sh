@@ -156,6 +156,43 @@ fi
 
 }
 
+function get_last_benchmark()
+{
+
+
+
+    if [[ "$1" == "cores" ]]; then
+        cores=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep 'cores' | tail -n1 | egrep -Eo '[^ ]+$')
+        echo -e "${BOOK}${CYAN} CORES: ${GREEN}$cores${NC}"
+    fi
+
+    if [[ "$1" == "HDD" ||  "$1" == "DD_WRITE" || "$1" == "ram" || "$1" == "eps" ]]; then
+
+        info=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)' | awk '{printf "%.2f\n", $1}')
+
+         if [[ "$1" == "ram" ]]; then
+           echo -e "${PIN}${CYAN} RAM: ${GREEN}$info${NC}"
+         fi
+
+         if [[ "$1" == "eps" ]]; then
+           echo -e "${PIN}${CYAN} EPS: ${GREEN}$info${NC}"
+         fi
+
+         if [[ "$1" == "DD_WRITE" ]]; then
+           echo -e "${PIN}${CYAN} DD WRITE: ${GREEN}$info${NC}"
+         fi
+
+          if [[ "$1" == "HDD" ]]; then
+           echo -e "${PIN}${CYAN} HDD: ${GREEN}$info${NC}"
+         fi
+
+
+
+    fi
+
+
+}
+
 function integration(){
 
 PATH_TO_FOLDER=( /usr/local/bin/ ) 
@@ -198,7 +235,7 @@ sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${NC}"
 if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
-echo -e "${BOOK} ${YELLOW}Checking Flux benchmark debug.log${NC}"
+echo -e "${BOOK} ${YELLOW}Checking Flux benchmark $BENCH_DIR_LOG/debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
@@ -220,10 +257,26 @@ else
 echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 echo
 fi
+
+
+echo -e "${BOOK} ${YELLOW}Last benchmark from $BENCH_DIR_LOG/debug.log${NC}"
+get_last_benchmark "HDD"
+get_last_benchmark "DD_WRITE"
+get_last_benchmark "ram"
+get_last_benchmark "cores"
+echo
+
 #else
 #echo -e "${RED}Debug file not exists${NC}"
 #echo
 fi
+
+
+
+
+
+
+
 
 if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
 echo -e "${BOOK} ${YELLOW}Checking Flux daemon debug.log${NC}"
