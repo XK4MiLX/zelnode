@@ -55,6 +55,17 @@ type="$2"
 
 echo -e "${BOOK}${YELLOW}Helper action: ${GREEN}$1${NC}"
 
+
+function max(){
+
+    local m="$1"
+    for n in "$@"
+    do
+        [ "$n" -gt "$m" ] && m="$n"
+    done
+    echo "$m"    
+}
+
 function spinning_timer() 
 {
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
@@ -591,8 +602,14 @@ function create_daemon_bootstrap()
 
         local_network_hight=$("$COIN_CLI" getinfo | jq -r .blocks)
         echo -e "${ARROW} ${CYAN}Local Network Block Hight: ${GREEN}$local_network_hight${NC}"
-        explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-        echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
+	
+	 network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+         network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+         network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+
+         explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+	 
+         echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
         if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
     
@@ -687,7 +704,15 @@ function create_mongod_bootstrap()
 
     local_network_hight=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e "${ARROW} ${CYAN}Mongod Network Block Hight: ${GREEN}$local_network_hight${NC}"
-    explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+    
+    #explorer_network_hight=$(curl -s -m 3 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+    
+    network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+    network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+    network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+
+    explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+     
     echo -e "${ARROW} ${CYAN}Global Network Block Hight: ${GREEN}$explorer_network_hight${NC}"
 
     if [[ "$explorer_network_hight" == "" || "$local_network_hight" == "" ]]; then
@@ -955,16 +980,6 @@ function unlock_flux_resouce()
     echo
 }
 
-function max(){
-
-    local m="$1"
-    for n in "$@"
-    do
-        [ "$n" -gt "$m" ] && m="$n"
-    done
-    echo "$m"
-    
-}
 
 function create_kda_bootstrap {
 
