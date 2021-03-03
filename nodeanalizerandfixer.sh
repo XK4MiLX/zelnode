@@ -80,6 +80,17 @@ function show_time() {
     echo -e "${RED}$day"d "$hour"h "$min"m "$sec"s"${CYAN} ago.${NC}"
 }
 
+function max(){
+
+    local m="$1"
+    for n in "$@"
+    do
+        [ "$n" -gt "$m" ] && m="$n"
+    done
+    echo "$m"
+    
+}
+
 function spinning_timer() {
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
