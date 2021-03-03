@@ -458,10 +458,7 @@ stak_info=""
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
-	#stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
-        stak_info1=$(curl -s -m 5 https://explorer2.zel.network/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
-	stak_info2=$(curl -s -m 5 https://explorer.zel.network/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
-	stak_info=$(max "$stak_info1" "$stak_info2")
+	stak_info=$(zelcash-cli decoderawtransaction $(zelcash-cli getrawtransaction $txhash) | jq '.vout[].value' | egrep -n '10000|25000|100000'  | sed 's/:/ /' | awk '{print $1-1" "$2}')
 fi
 
 	if [[ "$stak_info" != "" ]]; then
