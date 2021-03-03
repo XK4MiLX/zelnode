@@ -75,6 +75,18 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
+
+function max(){
+
+    local m="$1"
+    for n in "$@"
+    do
+        [ "$n" -gt "$m" ] && m="$n"
+    done
+    echo "$m"
+    
+}
+
 function string_limit_x_mark() {
 if [[ -z "$2" ]]; then
 string="$1"
@@ -1427,11 +1439,18 @@ fi
 
 function status_loop() {
 
-if [[ $(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks') == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+
+explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+
+
+if [[ "$explorer_network_hight" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
 
-EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+EXPLORER_BLOCK_HIGHT=$("$explorer_network_hight")
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
@@ -1454,7 +1473,12 @@ else
     while true
     do
         
-        EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+	network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+        network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+        network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+
+        EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+	
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
@@ -1487,7 +1511,12 @@ else
           MSG2=''
           spinning_timer
 	  
-	  EXPLORER_BLOCK_HIGHT=$(wget -nv -qO - https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+	  network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+          network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
+          network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+
+          EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+	  
        	  LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	  CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 	  LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
