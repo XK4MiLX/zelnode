@@ -163,7 +163,7 @@ function get_last_benchmark()
 
     if [[ "$1" == "cores" ]]; then
         cores=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep 'cores' | tail -n1 | egrep -Eo '[^ ]+$')
-        echo -e "${BOOK}${CYAN} CORES: ${GREEN}$cores${NC}"
+        echo -e "${PIN}${CYAN} CORES: ${GREEN}$cores${NC}"
     fi
 
     if [[ "$1" == "HDD" ||  "$1" == "DD_WRITE" || "$1" == "ram" || "$1" == "eps" ]]; then
