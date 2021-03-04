@@ -1591,7 +1591,7 @@ function check() {
     echo && spinning_timer
     echo && echo
         
-echo -e "${BOOK}${YELLOW}Flux benchmarks:${NC}"
+echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
 echo -e "${YELLOW}======================${NC}"
 bench_benchmarks=$($BENCH_CLI getbenchmarks)
 
@@ -1602,24 +1602,24 @@ echo -e "${ARROW} ${CYAN}Flux benchmark failed...............[${X_MARK}${CYAN}]$
 check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
 else
-echo -e "${BOOK}${CYAN}STATUS: ${GREEN}$bench_status${NC}"
+echo -e "${BOOK}${CYAN} STATUS: ${GREEN}$bench_status${NC}"
 bench_cores=$(jq -r '.cores' <<< "$bench_benchmarks")
-echo -e "${BOOK}${CYAN}CORES: ${GREEN}$bench_cores${NC}"
+echo -e "${BOOK}${CYAN} CORES: ${GREEN}$bench_cores${NC}"
 bench_ram=$(jq -r '.ram' <<< "$bench_benchmarks")
 bench_ram=$(round "$bench_ram" 2)
-echo -e "${BOOK}${CYAN}RAM: ${GREEN}$bench_ram${NC}"
+echo -e "${BOOK}${CYAN} RAM: ${GREEN}$bench_ram${NC}"
 bench_ssd=$(jq -r '.ssd' <<< "$bench_benchmarks")
 bench_ssd=$(round "$bench_ssd" 2)
-echo -e "${BOOK}${CYAN}SSD: ${GREEN}$bench_ssd${NC}"
+echo -e "${BOOK}${CYAN} SSD: ${GREEN}$bench_ssd${NC}"
 bench_hdd=$(jq -r '.hdd' <<< "$bench_benchmarks")
 bench_hdd=$(round "$bench_hdd" 2)
-echo -e "${BOOK}${CYAN}HDD: ${GREEN}$bench_hdd${NC}"
+echo -e "${BOOK}${CYAN} HDD: ${GREEN}$bench_hdd${NC}"
 bench_ddwrite=$(jq -r '.ddwrite' <<< "$bench_benchmarks")
 bench_ddwrite=$(round "$bench_ddwrite" 2)
-echo -e "${BOOK}${CYAN}DDWRITE: ${GREEN}$bench_ddwrite${NC}"
+echo -e "${BOOK}${CYAN} DDWRITE: ${GREEN}$bench_ddwrite${NC}"
 bench_eps=$(jq -r '.eps' <<< "$bench_benchmarks")
 bench_eps=$(round "$bench_eps" 2)
-echo -e "${BOOK}${CYAN}EPS: ${GREEN}$bench_eps${NC}"
+echo -e "${BOOK}${CYAN} EPS: ${GREEN}$bench_eps${NC}"
 fi
 
 else
