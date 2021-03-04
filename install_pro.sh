@@ -80,8 +80,10 @@ function max(){
 
     local m="$1"
     for n in "$@"
-    do
-        [ "$n" -gt "$m" ] && m="$n"
+    do        
+        if [[ $m == ?(-)+([0-9]) && $n  == ?(-)+([0-9]) ]]; then
+            [ "$n" -gt "$m" ] && m="$n"
+        fi
     done
     echo "$m"
     
