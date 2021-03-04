@@ -1445,7 +1445,7 @@ explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network
 
 if [[ "$explorer_network_hight" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
-echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
+echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
 
 EXPLORER_BLOCK_HIGHT=$("$explorer_network_hight")
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
