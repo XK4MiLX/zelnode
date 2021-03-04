@@ -1535,7 +1535,7 @@ else
     
        
    	#pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
-	pm2 start ~/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time
+	pm2 start ~/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
     	pm2 save > /dev/null 2>&1
 	
 	echo
