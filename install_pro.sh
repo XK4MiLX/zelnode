@@ -769,9 +769,10 @@ function install_daemon() {
       
  if [[ "$architecture" = *arm* ]]; then
    
-     sudo rm /etc/apt/sources.list.d/zelcash.list
-     curl -SsL -m 10 https://apt.fluxnodeservice.com/flux_ppa/zelcash.gpg | sudo apt-key add -
-     sudo curl -SsL -m 10 -o /etc/apt/sources.list.d/zelcash.list https://apt.fluxnodeservice.com/flux_ppa/zelcash.list
+    # sudo rm /etc/apt/sources.list.d/zelcash.list
+     curl -SsL -m 10 https://apt.fluxnodeservice.com/flux_ppa/zelcash.gpg | sudo apt-key add - > /dev/null 2>&1
+     sudo curl -SsL -m 10 -o /etc/apt/sources.list.d/zelcash.list https://apt.fluxnodeservice.com/flux_ppa/zelcash.list > /dev/null 2>&1
+     flux_package && sleep 2
      
  else
 
