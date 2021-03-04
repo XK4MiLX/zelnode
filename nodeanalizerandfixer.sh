@@ -82,7 +82,7 @@ function show_time() {
 
 function max(){
 
-    local m="$1"
+    local m="0"
     for n in "$@"
     do        
         if [[ $m == ?(-)+([0-9]) && $n  == ?(-)+([0-9]) ]]; then
