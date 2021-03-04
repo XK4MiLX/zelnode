@@ -712,7 +712,7 @@ function kda_bootstrap() {
             check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
 	else
 	    echo -e "${ARROW} ${CYAN}Vailidation of archive file skipped..${NC}"
-        if
+        fi
 	
     fi
 
