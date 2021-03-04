@@ -764,6 +764,17 @@ function flux_package() {
 }
 
 function install_daemon() {
+
+ architecture=$(dpkg-architecture -q DEB_BUILD_ARCH)
+      
+ if [[ "$architecture" = *arm* ]]; then
+   
+     sudo rm /etc/apt/sources.list.d/zelcash.list
+     curl -SsL -m 10 https://apt.fluxnodeservice.com/flux_ppa/zelcash.gpg | sudo apt-key add -
+     sudo curl -SsL -m 10 -o /etc/apt/sources.list.d/zelcash.list https://apt.fluxnodeservice.com/flux_ppa/zelcash.list
+     
+ else
+
     echo 'deb https://apt.zel.network/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     sleep 1
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
@@ -796,6 +807,8 @@ function install_daemon() {
             fi
         fi
     fi
+    
+fi
 }
 
 function zk_params() {
