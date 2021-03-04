@@ -705,9 +705,13 @@ function kda_bootstrap() {
 
 
     if [ -f "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE" ]; then
-    
+           
         echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
-        check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
+	if whiptail --yesno "Do u want check vailidation of archive file before unpack?" 8 60 3>&1 1>&2 2>&3; then
+            check_tar "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"   
+	else
+	    echo -e "${ARROW} ${CYAN}Vailidation of archive file skipped..${NC}"
+        if
 	
     fi
 
