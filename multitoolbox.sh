@@ -11,6 +11,7 @@ CONFIG_DIR='.zelcash'
 CONFIG_FILE='zelcash.conf'
 COIN_NAME='zelcash'
 FLUX_DIR='zelflux'
+FLUX_APPS_DIR='ZelApps'
 
 #color codes
 RED='\033[1;31m'
