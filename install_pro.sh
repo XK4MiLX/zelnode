@@ -154,54 +154,54 @@ echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
 if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
-echo -e "${PIN}${CYAN}Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN}Import settings from Flux..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Import settings from Flux..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
 
 if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN}SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN}${CYAN}Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$use_old_chain" == "1" ]]; then
-echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 
 else
 
 if [[ "$bootstrap_url" == "" ]]; then
-echo -e "${PIN}${CYAN}Use Flux daemon bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Use Flux daemon bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN}Remove Flux daemon bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Leave Flux daemon bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
 
 if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$watchdog" == "1" ]]; then
-echo -e "${PIN}${CYAN}Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 
@@ -236,22 +236,22 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
 if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
 
 KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 if [[ "$KDA_A" != "" ]]; then
-echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
 fi
 
 fi
@@ -265,21 +265,21 @@ IMPORT_ZELCONF="1"
 echo
 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
 zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
 if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
 then
 IMPORT_ZELID="1"
 ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
 KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 if [[ "$KDA_A" != "" ]]; then
-echo -e "${PIN}${CYAN}KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
 fi
 
 
