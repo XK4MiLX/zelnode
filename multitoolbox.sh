@@ -1022,7 +1022,7 @@ then
     echo -e "${NC}"
     exit
 fi
-echo -e "${NC}"
+
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
 
 }
