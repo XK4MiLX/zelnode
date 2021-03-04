@@ -296,11 +296,6 @@ function tar_file_unpack()
     pv $1 | tar -zx -C $2
 }
 
-function tar_file_pack()
-{
-    echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
-    tar -czf - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
-}
 
 function check_tar()
 {
