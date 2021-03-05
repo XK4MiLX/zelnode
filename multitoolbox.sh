@@ -1163,6 +1163,9 @@ then
 fi
 
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+
+
+
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
 adduser --gecos "" "$usernew" > /dev/null 2>&1  
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
@@ -1186,7 +1189,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 else
 
 sudo apt-get -y install apt-transport-https ca-certificates > /dev/null 2>&1  
-sudo apt-get -y curl gnupg-agent software-properties-common > /dev/null 2>&1  
+sudo apt-get -y install curl gnupg-agent software-properties-common > /dev/null 2>&1  
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update -y  
