@@ -900,7 +900,7 @@ function flux_daemon_bootstrap() {
 
 function mongodb_bootstrap(){
 
-echo -e "${GREEN}Module: Restore Flux mongodb datatable from bootstrap (explorer only)${NC}"
+echo -e "${GREEN}Module: Restore Flux MongoDB datatable from bootstrap (explorer only)${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" ]]; then
@@ -930,7 +930,7 @@ BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.da
 FORCE_BOOTSTRAP=0
 
 if [[ "$DB_HIGHT" == "" ]]; then
-    echo -e "${ARROW} ${CYAN}Mongod bootstrap server offline...${NC}"
+    echo -e "${ARROW} ${CYAN}MongoDB bootstrap server offline...${NC}"
     string_limit_x_mark "Operation aborted....................."
     exit
 fi
@@ -1017,22 +1017,22 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --json
 	    
 	     if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
 
-                 string_limit_check_mark "Mongo bootstrap installed successful.................................."
+                 string_limit_check_mark "MongoDB bootstrap installed successful.................................."
                  echo -e ""
              else
 	     
 	         if [[ "$FORCE_BOOTSTRAP" == "1" ]]; then
-                    string_limit_check_mark "Mongo bootstrap installed successful.................................."
+                    string_limit_check_mark "MongoDB bootstrap installed successful.................................."
                     echo -e ""
 		 else
-		    string_limit_x_mark "Mongo bootstrap installation failed.................................."
+		    string_limit_x_mark "MongoDB bootstrap installation failed.................................."
                     echo -e ""
 		 fi
 		 
              fi
  else
  
-     string_limit_x_mark "Mongo bootstrap installation failed.................................."
+     string_limit_x_mark "MongoDB bootstrap installation failed.................................."
      echo -e ""
  
  fi
@@ -1390,7 +1390,7 @@ echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
 echo -e "${CYAN}3  - FluxNode analyzer and fixer${NC}"
 echo -e "${CYAN}4  - Install watchdog for FluxNode${NC}"
-echo -e "${CYAN}5  - Restore Flux mongodb datatable from bootstrap${NC}"
+echo -e "${CYAN}5  - Restore Flux MongoDB datatable from bootstrap${NC}"
 echo -e "${CYAN}6  - Restore Flux blockchain from bootstrap${NC}"
 echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
 echo -e "${CYAN}8  - Re-install Flux${NC}"
