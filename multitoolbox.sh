@@ -926,7 +926,7 @@ fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 DB_HIGHT=$(curl -s -m 5 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')	
 FORCE_BOOTSTRAP=0
 
 if [[ "$DB_HIGHT" == "" ]]; then
@@ -936,9 +936,9 @@ if [[ "$DB_HIGHT" == "" ]]; then
 fi
 
 
-if [[ "$BLOCKHIGHT" == "" ]]; then
+if [[ "$BLOCKHIGHT" == ""  ||  "$BLOCKHIGHT" == "null" ]]; then
 
-    if whiptail --yesno "Local explorer not responding ...Would you like force bootstrap installation?" 8 60; then   
+    if whiptail --yesno "Would you like force bootstrap installation?" 8 60; then   
         FORCE_BOOTSTRAP=1		
     else
         string_limit_x_mark "Local Explorer not responding........."
@@ -950,24 +950,22 @@ if [[ "$BLOCKHIGHT" == "" ]]; then
 
 fi
    
-if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then	
+ if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then	
 
     if [[ "$BLOCKHIGHT" == "null" ]]; then
 
-        message=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
+           message=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
         
-        if whiptail --yesno "Local Explorer noticed error...Would you like force bootstrap installation?" 8 60; then 
-             FORCE_BOOTSTRAP=1
-        else
-	     echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
-             string_limit_x_mark "Operation aborted....................."
-             echo -e ""
-	     exit
-        fi
-    
-    fi
-
-fi
+           if whiptail --yesno "Would you like force bootstrap installation?" 8 60; then 
+              FORCE_BOOTSTRAP=1
+           else
+	      echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
+              string_limit_x_mark "Operation aborted....................."
+              echo -e ""
+	      exit
+	   fi  
+      fi
+ fi
 
 
 if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
