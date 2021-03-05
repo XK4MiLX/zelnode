@@ -700,21 +700,27 @@ if [[ "$verifity_mongod" != "0" ]]; then
 
   mongod_lib_dir_ownership=$(ls -l /var/lib/mongodb | awk '{print $3}' | tail -n1)
   mongod_log_dir_ownership=$(ls -l /var/log/mongodb | awk '{print $3}' | tail -n1)
-  mongod_tmp_sock_ownership=$(ls -l /tmp/mongodb-27017.sock | awk '{print $3}')
+  
+  if [[ -f /tmp/mongodb-27017.sock ]]; then
+    mongod_tmp_sock_ownership=$(ls -l /tmp/mongodb-27017.sock | awk '{print $3}')
+  else
+   mongod_tmp_sock_ownership="mongodb"
+  fi
 
   if [[ "$mongod_lib_dir_ownership" != "mongodb" || mongod_log_dir_ownershi != "mongodb" || mongod_tmp_sock_ownership != "mongodb" ]]; then
   
       echo -e "${BOOK} ${YELLOW}Checking MongoDB:${NC}"
       echo -e "${X_MARK} ${CYAN} MongodDB directory/ownership detected!"
+      echo
 
 
-       if [[ ! -f /var/lib/mongodb ]]; then 
+       if [[ ! -d /var/lib/mongodb ]]; then 
            sudo mkdir /var/lib/mongodb > /dev/null 2>&1    
        fi
        
        sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
      
-       if [[ ! -f /var/log/mongodb ]]; then
+       if [[ ! -d /var/log/mongodb ]]; then
            sudo mkdir /var/log/mongodb > /dev/null 2>&1
        fi
        
