@@ -1022,8 +1022,15 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --json
                  string_limit_check_mark "Mongo bootstrap installed successful.................................."
                  echo -e ""
              else
-                 string_limit_x_mark "Mongo bootstrap installation failed.................................."
-                 echo -e ""
+	     
+	         if [[ "$FORCE_BOOTSTRAP" == "1" ]]; then
+                    string_limit_check_mark "Mongo bootstrap installed successful.................................."
+                    echo -e ""
+		 else
+		    string_limit_x_mark "Mongo bootstrap installation failed.................................."
+                    echo -e ""
+		 fi
+		 
              fi
  else
  
