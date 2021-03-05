@@ -786,9 +786,19 @@ function clean_mongod() {
     echo -e "${ARROW} ${CYAN}Stopping MongoDB...${NC}"
     sudo systemctl stop mongod >/dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Removing MongoDB datatable...${NC}"
-    sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
+    # sudo rm -r /var/lib/mongodb >/dev/null 2>&1 && sleep 2
     install_mongod
-    mongodb_bootstrap
+    
+    pm2 start flux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+
+    NUM='60'
+    MSG1='Flux starting...'
+    MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo
+    
+    #mongodb_bootstrap
     
 }
 
@@ -874,13 +884,13 @@ function install_mongod() {
         echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64  ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
     elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
         wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+        echo "deb [ arch=amd64,arm64  ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
 	
     else
-   	  echo -e "${WORNING}${CYAN}ERROR: OS version not supported: $(lsb_release -d)"
+   	  echo -e "${WORNING}${CYAN}ERROR: OS version not supported"
    	  echo -e "${WORNING}${CYAN}Installation stopped..."
 	  echo
    	  exit
