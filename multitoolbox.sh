@@ -929,14 +929,20 @@ DB_HIGHT=$(curl -s -m 5 https://fluxnodeservice.com/mongodb_bootstrap.json | jq 
 BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
 FORCE_BOOTSTRAP=0
 
+if [[ "$DB_HIGHT" == "" ]]; then
+    echo -e "${ARROW} ${CYAN}Mongod bootstrap server offline...${NC}"
+    string_limit_x_mark "Operation aborted....................."
+    exit
+fi
+
 
 if [[ "$BLOCKHIGHT" == "" ]]; then
 
     if whiptail --yesno "Local explorer not responding ...Would you like force bootstrap installation?" 8 60; then   
         FORCE_BOOTSTRAP=1		
     else
-        string_limit_x_mark "Local Explorer not responding........................................"
-        string_limit_x_mark "Operation aborted...................................................."
+        string_limit_x_mark "Local Explorer not responding........."
+        string_limit_x_mark "Operation aborted....................."
 	
         echo -e ""
         exit  
@@ -954,7 +960,7 @@ if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then
              FORCE_BOOTSTRAP=1
         else
 	     echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
-             string_limit_x_mark "Operation aborted........................................"
+             string_limit_x_mark "Operation aborted....................."
              echo -e ""
 	     exit
         fi
@@ -968,6 +974,7 @@ if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
 
           if [[ "$BLOCKHIGHT" -gt "$DB_HIGHT" ]]; then
              echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+	     string_limit_x_mark "Operation aborted....................."
              echo -e ""
 	     exit
           fi
@@ -1004,8 +1011,8 @@ MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
 
-BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-	
+#BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)	
  if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" != "" && "$BLOCKHIGHT_AFTER_BOOTSTRAP" == "null" ]]; then
  
              echo -e "${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}"
@@ -1020,8 +1027,8 @@ BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scanned
              fi
  else
  
-  echo -e "${ARROW} ${YELLOW}Bootstrap for Flux explorer installed ... Veryfication skipped ${NC}"
-  echo -e ""
+     string_limit_x_mark "Mongo bootstrap installation failed.................................."
+     echo -e ""
  
  fi
 	
