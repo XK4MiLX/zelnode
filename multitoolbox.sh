@@ -1164,8 +1164,8 @@ fi
 
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
-adduser --gecos "" "$usernew"
-usermod -aG sudo "$usernew"
+adduser --gecos "" "$usernew" > /dev/null 2>&1  
+usermod -aG sudo "$usernew" > /dev/null 2>&1  
 echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y
@@ -1185,12 +1185,12 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
 else
 
-sudo apt-get -y install apt-transport-https ca-certificates
-sudo apt-get -y curl gnupg-agent software-properties-common
+sudo apt-get -y install apt-transport-https ca-certificates > /dev/null 2>&1  
+sudo apt-get -y curl gnupg-agent software-properties-common > /dev/null 2>&1  
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update -y 
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
+sudo apt-get update -y  
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y  
 
 fi
 
