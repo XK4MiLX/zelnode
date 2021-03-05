@@ -935,7 +935,9 @@ if [[ "$BLOCKHIGHT" == "" ]]; then
     if whiptail --yesno "Local explorer not responding ...Would you like force bootstrap installation?" 8 60; then   
         FORCE_BOOTSTRAP=1		
     else
-        string_limit_x_mark "Operation aborted........................................"
+        string_limit_x_mark "Local Explorer not responding........................................"
+        string_limit_x_mark "Operation aborted...................................................."
+	
         echo -e ""
         exit  
     fi
@@ -947,13 +949,11 @@ if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then
     if [[ "$BLOCKHIGHT" == "null" ]]; then
 
         message=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
-        echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
-        sleep 2
-        echo
-
+        
         if whiptail --yesno "Local Explorer noticed error...Would you like force bootstrap installation?" 8 60; then 
              FORCE_BOOTSTRAP=1
         else
+	     echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
              string_limit_x_mark "Operation aborted........................................"
              echo -e ""
 	     exit
