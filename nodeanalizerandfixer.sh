@@ -181,7 +181,7 @@ function get_last_benchmark()
          fi
 
          if [[ "$1" == "DD_WRITE" ]]; then
-           echo -e "${PIN}${CYAN} DD WRITE: ${GREEN}$info${NC}"
+           echo -e "${PIN}${CYAN} DD_WRITE: ${GREEN}$info${NC}"
          fi
 
           if [[ "$1" == "HDD" ]]; then
@@ -217,8 +217,7 @@ done
 function check_benchmarks() {
  var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
  limit=$2
- if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]
- then
+ if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]; then
   var_round=$(round "$var_benchmark" 2)
   echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
  fi
@@ -233,6 +232,7 @@ then
     echo -e "${NC}"
     exit
 fi
+
 sleep 1
 sudo apt install bc > /dev/null 2>&1
 echo -e "${NC}"
@@ -272,11 +272,6 @@ echo
 #echo -e "${RED}Debug file not exists${NC}"
 #echo
 fi
-
-
-
-
-
 
 
 
@@ -387,7 +382,7 @@ fi
 
 if [[ "$WANIP" != "" ]]; then
 
-back_error_check=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
+back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
 
   if [[ "$back_error_check" == "" ]]; then
   
