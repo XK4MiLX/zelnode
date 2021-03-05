@@ -1169,7 +1169,6 @@ usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your user
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
 adduser --gecos "" "$usernew" > /dev/null 2>&1  
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
-echo -e "${NC}"
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
@@ -1180,7 +1179,7 @@ then
 sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1 
 sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get -y install apt-transport-https ca-certificates 
-sudo apt-get -y curl gnupg-agent software-properties-common > /dev/null 2>&1
+sudo apt-get -y install curl gnupg-agent software-properties-common > /dev/null 2>&1
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /dev/null 2>&1
 sudo apt-get update -y  > /dev/null 2>&1
