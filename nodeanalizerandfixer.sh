@@ -707,7 +707,7 @@ if [[ "$verifity_mongod" != "0" ]]; then
    mongod_tmp_sock_ownership="mongodb"
   fi
 
-  if [[ "$mongod_lib_dir_ownership" != "mongodb" || mongod_log_dir_ownershi != "mongodb" || mongod_tmp_sock_ownership != "mongodb" ]]; then
+  if [[ "$mongod_lib_dir_ownership" != "mongodb" || "$mongod_log_dir_ownership" != "mongodb" || "$mongod_tmp_sock_ownership" != "mongodb" ]]; then
   
       echo -e "${BOOK} ${YELLOW}Checking MongoDB:${NC}"
       echo -e "${X_MARK} ${CYAN} MongodDB directory/ownership detected!"
