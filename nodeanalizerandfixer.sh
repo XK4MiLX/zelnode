@@ -669,12 +669,15 @@ fi
 #fi
 #fi
 
+verifity_mongod=0
+
 if sudo systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
 else
 
 if [[ "$mongod_inactive" != "" ]]; then
 echo -e "${X_MARK} ${CYAN} MongoDB service not running ${RED}$mongod_inactive${NC}"
+verifity_mongod=1
 else
 echo -e "${X_MARK} ${CYAN} MongoDB service is not installed${NC}"
 fi
@@ -691,6 +694,43 @@ echo -e "${X_MARK} ${CYAN} Flux daemon service is not installed${NC}"
 fi
 fi
 echo -e ""
+
+if [[ "$verifity_mongod" != "0" ]]; then
+
+
+  mongod_lib_dir_ownership=$(ls -l /var/lib/mongodb | awk '{print $3}' | tail -n1)
+  mongod_log_dir_ownership=$(ls -l /var/log/mongodb | awk '{print $3}' | tail -n1)
+  mongod_tmp_sock_ownership=$(ls -l /tmp/mongodb-27017.sock | awk '{print $3}')
+
+  if [[ "$mongod_lib_dir_ownership" != "mongodb" || mongod_log_dir_ownershi != "mongodb" || mongod_tmp_sock_ownership != "mongodb" ]]; then
+  
+      echo -e "${BOOK} ${YELLOW}Checking MongoDB:${NC}"
+      echo -e "${X_MARK} ${CYAN} MongodDB directory/ownership detected!"
+
+
+       if [[ ! -f /var/lib/mongodb ]]; then 
+           sudo mkdir /var/lib/mongodb > /dev/null 2>&1    
+       fi
+       
+       sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+     
+       if [[ ! -f /var/log/mongodb ]]; then
+           sudo mkdir /var/log/mongodb > /dev/null 2>&1
+       fi
+       
+       sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1      
+       chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+  
+  else
+  
+      echo -e "${X_MARK} ${CYAN} MongodDB working correct but service is stopped!"
+      echo -e ""
+  
+  fi
+
+
+
+fi
 
 echo -e "${BOOK} ${YELLOW}Checking Flux:${NC}"
 
