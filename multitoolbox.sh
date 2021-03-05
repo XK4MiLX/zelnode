@@ -1123,30 +1123,18 @@ then
 
 sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1 
 sudo apt-get update -y  > /dev/null 2>&1
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common -y > /dev/null 2>&1
+sudo apt-get -y install apt-transport-https ca-certificates 
+sudo apt-get -y curl gnupg-agent software-properties-common > /dev/null 2>&1
 curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - > /dev/null 2>&1
-sudo add-apt-repository \
-   "deb [arch=amd64,arm64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable" > /dev/null 2>&1
+sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /dev/null 2>&1
 sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1  
 
 else
 
-#sudo apt-get update -y > /dev/null 2>&1
-sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common -y 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - 
+sudo apt-get -y install apt-transport-https ca-certificates
+sudo apt-get -y curl gnupg-agent software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
 sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update -y 
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y 
@@ -1162,7 +1150,7 @@ echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${YELLOW}Running through some checks...${NC}"
 echo -e "${YELLOW}=====================================================${NC}"
 
-if sudo docker run hello-world 
+if sudo docker run hello-world > /dev/null 2>&1  
 then
 	echo -e "${CHECK_MARK} ${CYAN}Docker is installed${NC}"
 else
