@@ -1461,7 +1461,7 @@ if [[ "$explorer_network_hight" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; the
 echo
 echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
 
-EXPLORER_BLOCK_HIGHT=$("$explorer_network_hight")
+EXPLORER_BLOCK_HIGHT=$(${explorer_network_hight})
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
