@@ -1167,7 +1167,7 @@ usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your user
 
 
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
-adduser --gecos "" "$usernew" > /dev/null 2>&1  
+adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y
