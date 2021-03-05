@@ -727,11 +727,6 @@ if [[ "$verifity_mongod" != "0" ]]; then
        sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1      
        chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
   
-  else
-  
-      echo -e "${X_MARK} ${CYAN} MongodDB working correct but service is stopped!"
-      echo -e ""
-  
   fi
 
 
