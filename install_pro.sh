@@ -78,13 +78,14 @@ echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 
 function max(){
 
-    local m="0"
+    m="0"
     for n in "$@"
     do        
         if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
             [ "$n" -gt "$m" ] && m="$n"
         fi
     done
+    
     echo "$m"
     
 }
