@@ -349,6 +349,7 @@ fi
 
 function mongodb_bootstrap(){
 
+    echo -e ""
     echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
     DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -1565,7 +1566,7 @@ NUM='400'
 MSG1='Finalizing Flux installation please be patient this will take about ~5min...'
 MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 echo && spinning_timer
-echo && echo
+echo 
 
 $BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
 
