@@ -349,53 +349,26 @@ fi
 
 function mongodb_bootstrap(){
 
-echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-#NUM='180'
-#MSG1='Zelflux loading...'
-#MSG2="${CYAN}......................[${CHECK_MARK}${CYAN}]${NC}"
-#spinning_timer
-#echo
-DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-
-if [[ "$BLOCKHIGHT" == "null" ]]; then
-
-message=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
-echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
-echo -e ""
-
-else
-
-  #echo -e "${PIN} ${CYAN}IP: ${PINK}$IP"
-  echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-  echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-
-  if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
+    echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
+    DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+    #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+    echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
     echo -e ""
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
     wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
     echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
     tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}Stoping Flux...${NC}"
-    pm2 stop flux > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
     mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
     sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
     sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-    pm2 start flux > /dev/null 2>&1
-    pm2 save > /dev/null 2>&1
 
-    NUM='180'
-    MSG1='Flux starting...'
-    MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
-    spinning_timer
-    echo -e ""
-    BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
+
+    BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
     echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
   
-    if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]
-    then
+    if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
       echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
       echo -e ""
     else
@@ -403,13 +376,6 @@ else
       echo -e ""
     fi
   
-  else
-     echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-     echo -e ""
-  fi
-
-fi
-
 }
 
 function wipe_clean() {
@@ -1479,7 +1445,7 @@ else
    
    f=0
    start_sync=`date +%s`
- #  c=0
+
 	
     while true
     do
@@ -1548,18 +1514,9 @@ else
     fi
     
        
-   	#pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
-	pm2 start ~/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
-	
-	echo
-	NUM='400'
-   	MSG1='Flux Loading....'
-   	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-        spinning_timer
-        echo && echo
-    
+   #pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
 
+    
   if [[ -z "$mongo_bootstrap" ]]; then
     
     if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
@@ -1567,6 +1524,7 @@ else
     else
         echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
     fi
+    
   else
    
     if [[ "$mongo_bootstrap" == "1" ]]; then
@@ -1599,11 +1557,23 @@ else
 }
 
 function check() {
-    NUM='120'
-    MSG1='Finalizing installation please be patient this will take about 2min...'
-    MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-    echo && spinning_timer
-    echo && echo
+
+pm2 start ~/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+pm2 save > /dev/null 2>&1
+
+NUM='400'
+MSG1='Finalizing Flux installation please be patient this will take about ~5min...'
+MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+echo && spinning_timer
+echo && echo
+
+$BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
+
+NUM='250'
+MSG1='Restarting benchmark...'
+MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+spinning_timer
+echo && echo
         
 echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
 echo -e "${YELLOW}======================${NC}"
