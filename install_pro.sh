@@ -354,7 +354,6 @@ function mongodb_bootstrap(){
     DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-    echo -e ""
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
     wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
     echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
@@ -1421,14 +1420,14 @@ network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getI
 network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
 network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
 
-explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 
 
 if [[ "$explorer_network_hight" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
 
-EXPLORER_BLOCK_HIGHT=$(${explorer_network_hight})
+
 LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
