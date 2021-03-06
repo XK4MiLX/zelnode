@@ -368,14 +368,15 @@ function mongodb_bootstrap(){
 
     BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
     echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
-  
-    if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
-      echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
-      echo -e ""
-    else
-      echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
-      echo -e ""
-    fi
+    echo -e ""
+    
+    #if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
+      #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
+      #echo -e ""
+   # else
+     # echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
+     # echo -e ""
+   # fi
   
 }
 
