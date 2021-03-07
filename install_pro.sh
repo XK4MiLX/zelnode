@@ -745,12 +745,12 @@ function install_daemon() {
  architecture=$(dpkg-architecture -q DEB_BUILD_ARCH)
       
  if [[ "$architecture" = *arm* ]]; then
-   
-    # sudo rm /etc/apt/sources.list.d/zelcash.list
-     curl -SsL -m 10 https://apt.fluxnodeservice.com/flux_ppa/zelcash.gpg | sudo apt-key add - > /dev/null 2>&1
-     sudo curl -SsL -m 10 -o /etc/apt/sources.list.d/zelcash.list https://apt.fluxnodeservice.com/flux_ppa/zelcash.list > /dev/null 2>&1
-     flux_package && sleep 2
-     
+ 
+ 
+      	  echo -e "${WORNING}${CYAN}ERROR: ARM architecture not supported yet!"
+   	  echo -e "${WORNING}${CYAN}Installation stopped..."
+	  echo
+   	  exit    
  else
 
     echo 'deb https://apt.zel.network/ all main' 2> /dev/null | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
