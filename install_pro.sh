@@ -1425,7 +1425,7 @@ network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=g
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 
 
-if [[ "$explorer_network_hight" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
+if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
 echo
 echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
 
