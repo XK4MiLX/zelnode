@@ -356,19 +356,28 @@ function mongodb_bootstrap(){
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
-    wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
-    echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-    tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-    mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-    echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-    sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-    sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
+    wget --tries=5 $BOOTSTRAP_URL_MONGOD -q --show-progress 
+    
+    if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
+    
+        echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
+        tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
+        echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
+        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
+        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+        sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
+        sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
 
 
-    BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
-    echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
-    echo -e ""
+        BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
+        echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+		
+     else
+     
+          echo -e "${ARROW} ${RED}MongoDB bootstrap server offline...try again later use option 5${NC}"   
+     fi
+     
+        echo -e ""
     
     #if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
       #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
