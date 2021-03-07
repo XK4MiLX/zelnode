@@ -513,7 +513,6 @@ function wipe_clean() {
     fi
 fi
 
-  
     sudo rm -rf /home/$USER/watchdog > /dev/null 2>&1
     sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1
