@@ -1678,7 +1678,6 @@ function display_banner() {
     exec bash
 }
 
-
 function start_install() {
 #Suppressing password prompts for this user so zelnode can operate
 start_install=`date +%s`
