@@ -793,7 +793,6 @@ if [[ "$required_ver" != "" ]]; then
  fi
 
 echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
-
 ZELIDLG=`echo -n $(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
 if [ "$ZELIDLG" -eq "36" ] || [ "$ZELIDLG" -eq "35" ]; then
 echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
