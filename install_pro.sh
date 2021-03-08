@@ -1568,7 +1568,7 @@ else
 
 function check() {
 
-pm2 start ~/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='400'
