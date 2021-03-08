@@ -794,7 +794,7 @@ echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/$FLUX_DIR/config/userconfig.js exi
 ZELIDLG=`echo -n $(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//') | wc -m`
 if [ "$ZELIDLG" -eq "36" ] || [ "$ZELIDLG" -eq "35" ]; then
 echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
-elif [[ "$ZELIDLG" == "" ]]; then
+elif [[ "$ZELIDLG" == "0" || "$ZELIDLG" == "2" ]]; then
 echo -e "${X_MARK} ${CYAN} Zel ID is missing...${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Zel ID is not valid${NC}"
