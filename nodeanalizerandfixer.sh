@@ -774,9 +774,9 @@ else
 echo -e "${X_MARK} ${CYAN} Flux front is not working${NC}"
 fi
 
-if [ -d ~/$FLUX_DIR ]
+if [ -d /home/$USER/$FLUX_DIR ]
 then
-FILE=~/$FLUX_DIR/config/userconfig.js
+FILE=/home/$USER/$FLUX_DIR/config/userconfig.js
 if [ -f "$FILE" ]
 then
 
