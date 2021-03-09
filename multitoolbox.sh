@@ -270,7 +270,7 @@ fi
  pm2 save > /dev/null 2>&1
  fi
  
-docker_check=$(docker ps |  grep -Eo "^[0-9a-z]{8,}\b"  | wc -l)
+docker_check=$(docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
 resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
 mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
@@ -283,7 +283,8 @@ fi
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
-docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
+#docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
+docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
 sudo docker stop $line > /dev/null 2>&1 && sleep 2 
 sudo docker rm $line > /dev/null 2>&1 && sleep 2 
