@@ -1136,6 +1136,16 @@ then
     exit
 fi
 
+if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
+
+    echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+    echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+    echo
+    exit
+
+fi
+
+
 if docker run hello-world > /dev/null 2>&1
 then
 echo -e "${NC}"
