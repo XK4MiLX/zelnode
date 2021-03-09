@@ -1163,9 +1163,16 @@ then
     exit
 fi
 
+if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
+
+    echo -e "${WORNING} ${CYAN}ERROR: OS version not supported"
+    echo -e "${WORNING} ${CYAN}Installation stopped..."
+    echo
+    exit
+
+fi
+
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-
-
 
 echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
 adduser --gecos "" "$usernew" 
@@ -1173,6 +1180,16 @@ usermod -aG sudo "$usernew" > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
+echo -e "${ARROW} ${CYAN}Architekture: ${GREEN}$(dpkg --print-architecture)${NC}"
+
+if [[ -f /usr/share/keyrings/docker-archive-keyring.gpg ]]; then
+    sudo rm /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1
+fi
+
+if [[ -f /etc/apt/sources.list.d/docker.list ]]; then
+    sudo rm /etc/apt/sources.list.d/docker.list > /dev/null 2>&1 
+fi
+
 
 if [[ $(lsb_release -d) = *Debian* ]]
 then
@@ -1181,8 +1198,10 @@ sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/nul
 sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get -y install apt-transport-https ca-certificates > /dev/null 2>&1 
 sudo apt-get -y install curl gnupg-agent software-properties-common > /dev/null 2>&1
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - > /dev/null 2>&1
-sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /dev/null 2>&1
+#curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - > /dev/null 2>&1
+#sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /dev/null 2>&1
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1
 sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1  
 
@@ -1191,8 +1210,11 @@ else
 sudo apt-get remove docker docker-engine docker.io containerd runc -y > /dev/null 2>&1 
 sudo apt-get -y install apt-transport-https ca-certificates > /dev/null 2>&1  
 sudo apt-get -y install curl gnupg-agent software-properties-common > /dev/null 2>&1  
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
-sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /dev/null 2>&1
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 2>&1
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - > /dev/null 2>&1
+#sudo add-apt-repository -y "deb [arch=amd64,arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" > /dev/null 2>&1
 sudo apt-get update -y  > /dev/null 2>&1
 sudo apt-get install docker-ce docker-ce-cli containerd.io -y > /dev/null 2>&1
 
