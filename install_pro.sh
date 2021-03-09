@@ -125,8 +125,8 @@ fi
 done
 
 if [[ "$CORRUPTED" == "1" ]]; then
-  echo -e "${WORNING}${CYAN}Flux daemon package corrupted..."
-  echo -e "${WORNING}${CYAN}Will exit out so try and run the script again..."
+  echo -e "${WORNING} ${CYAN}Flux daemon package corrupted...${NC}"
+  echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again...${NC}"
   echo
   exit
 fi	
@@ -150,6 +150,7 @@ prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
@@ -230,64 +231,57 @@ function import_date() {
 
 if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
 
-if [[ -z "$import_settings" ]]; then
+    if [[ -z "$import_settings" ]]; then
 
-if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
-IMPORT_ZELCONF="1"
-echo
-echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+        if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
+            IMPORT_ZELCONF="1"
+            echo
+            echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
+            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+            echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+            echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+            echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
-if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
-then
-IMPORT_ZELID="1"
-ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+           if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
+               IMPORT_ZELID="1"
+               ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+               echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
+               KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+              if [[ "$KDA_A" != "" ]]; then
+                  echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+             fi
 
-KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-if [[ "$KDA_A" != "" ]]; then
-echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-fi
-
-fi
-fi
-
+         fi
+    fi
 
 else 
 
-if [[ "$import_settings" == "1" ]]; then
-IMPORT_ZELCONF="1"
-echo
-echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+    if [[ "$import_settings" == "1" ]]; then
+    IMPORT_ZELCONF="1"
+    echo
+    echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
+    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+    echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+    echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+    echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
-if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]
-then
-IMPORT_ZELID="1"
-ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+         if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
+            IMPORT_ZELID="1"
+            ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+            echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1 
+            KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+               if [[ "$KDA_A" != "" ]]; then
+                    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+               fi
+          fi
+      fi
 
-KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-if [[ "$KDA_A" != "" ]]; then
-echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-fi
-
-
-fi
-fi
-
-fi
+   fi
 fi
 sleep 1
 echo
@@ -1346,8 +1340,7 @@ fi
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
     
-            if [[ "$IMPORT_ZELID" == "0" ]]
-        then
+            if [[ "$IMPORT_ZELID" == "0" ]]; then
 
         while true
                 do
