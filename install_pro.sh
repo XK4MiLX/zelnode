@@ -1568,7 +1568,8 @@ else
 
 function check() {
 
-pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+cd
+pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=40000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='400'
@@ -1632,12 +1633,13 @@ function display_banner() {
     if pm2 -v > /dev/null 2>&1; then
 	pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
 	if [[ "$pm2_flux_status" == "online" ]]; then
-	pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
-	pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-	echo -e "${BOOK} ${CYAN}Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
+	    pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+	    pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+	    echo -e "${BOOK} ${CYAN}Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
 	else
 		if [[ "$pm2_flux_status" != "" ]]; then
-		echo -e "${PIN} ${CYAN}PM2 Flux status: ${RED}$pm2_flux_status ${NC}" 
+		    pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+		    echo -e "${PIN} ${CYAN}PM2 Flux status: ${RED}$pm2_flux_status${NC}, restarts: ${RED}$pm2_flux_restarts${NC}" 
 		fi
 	fi
 	    echo
