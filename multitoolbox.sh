@@ -180,6 +180,7 @@ prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 
 echo -e "${ARROW} ${YELLOW}Install config summary:"
 
@@ -518,6 +519,7 @@ prvkey=""
 outpoint=""
 index=""
 zelid=""
+kda_address=""
 else
 
 prvkey=$(whiptail --inputbox "Enter your FluxNode Private Key from Zelcore" 8 65 3>&1 1>&2 2>&3)
@@ -527,6 +529,8 @@ sleep 1
 index=$(whiptail --inputbox "Enter your FluxNode Output Index from Zelcore" 8 65 3>&1 1>&2 2>&3)
 sleep 1
 zel_id=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
+sleep 1
+kda_address=$(whiptail --inputbox "Enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 72 3>&1 1>&2 2>&3)
 sleep 1
 
 fi
@@ -609,6 +613,7 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "outpoint": "${outpoint}",
   "index": "${index}",
   "zelid": "${zel_id}",
+  "kda_address": "${kda_address}",
   "ssh_port": "${ssh_port}",
   "firewall_disable": "${firewall_disable}",
   "bootstrap_url": "${bootstrap_url}",
