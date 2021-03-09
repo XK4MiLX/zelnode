@@ -751,32 +751,23 @@ function install_daemon() {
     gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
     flux_package && sleep 2
-    if ! gpg --list-keys Zel > /dev/null; then
-        echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-        gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-        gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-        flux_package && sleep 2
+    
         if ! gpg --list-keys Zel > /dev/null; then
-            echo -e "${YELLOW}Second keyserver also failed will try a different keyserver.${NC}"
-            gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+            echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
+            gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
             gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
             flux_package && sleep 2
-            if ! gpg --list-keys Zel > /dev/null; then
-                echo -e "${YELLOW}Third keyserver also failed will try a different keyserver.${NC}"
-                gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-                gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-                flux_package && sleep 2
-                if ! gpg --list-keys Zel > /dev/null; then
-                    echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-                    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-                    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-                    flux_package && sleep 2
-                fi
-            fi
         fi
-    fi
     
-fi
+        if ! gpg --list-keys Zel > /dev/null; then
+            echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
+            gpg --keyserver hkp://keys.gnupg.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
+            flux_package && sleep 2
+        fi
+
+    
+ fi
 }
 
 function zk_params() {
