@@ -751,7 +751,7 @@ function install_daemon() {
     if [ ! -f /etc/apt/sources.list.d/zelcash.list ]; then
         echo 'deb https://zelcash.github.io/aptrepo/ all main' 2> /dev/null | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
     fi
-    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
+    gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
     flux_package && sleep 2
     if ! gpg --list-keys Zel > /dev/null; then
