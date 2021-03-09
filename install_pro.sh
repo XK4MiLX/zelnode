@@ -746,8 +746,8 @@ function install_daemon() {
  if [[ "$architecture" = *arm* ]]; then
  
  
-      	  echo -e "${WORNING}${RED}ERROR: ARM architecture not supported yet!${NC}"
-   	  echo -e "${WORNING}${CYAN}Installation stopped...${NC}"
+      	  echo -e "${WORNING} ${RED}ERROR: ARM architecture not supported yet!${NC}"
+   	  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 	  echo
    	  exit    
  else
