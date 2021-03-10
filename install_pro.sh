@@ -750,9 +750,7 @@ function install_daemon() {
 
  else
 
-   # cleaning
-   Configuring repository and importing daemon public GPG Key
-   
+   # cleaning 
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
 
