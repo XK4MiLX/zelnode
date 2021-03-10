@@ -735,6 +735,9 @@ function flux_package() {
 
 function install_daemon() {
 
+
+ echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}"
+ 
  architecture=$(dpkg-architecture -q DEB_BUILD_ARCH)
       
  if [[ "$architecture" = *arm* ]]; then
@@ -748,6 +751,8 @@ function install_daemon() {
  else
 
    # cleaning
+   Configuring repository and importing daemon public GPG Key
+   
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
 
@@ -778,7 +783,7 @@ function install_daemon() {
    else
    
      echo
-     echo -e "${WORNING} ${RED}Downloading key from keyserver failed...${NC}"
+     echo -e "${WORNING} ${RED}Importing public GPG Key failed...${NC}"
      echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
      echo
      exit
