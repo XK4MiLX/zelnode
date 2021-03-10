@@ -739,36 +739,57 @@ function install_daemon() {
       
  if [[ "$architecture" = *arm* ]]; then
  
- 
-      	  echo -e "${WORNING} ${RED}ERROR: ARM architecture not supported yet!${NC}"
-   	  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-	  echo
-   	  exit    
+     echo
+     echo -e "${WORNING} ${RED}ARM architecture not supported yet!${NC}"
+     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+     echo
+     exit   
+
  else
 
-    sudo rm /etc/apt/sources.list.d/zelcash.list  > /dev/null 2>&1
-    echo 'deb https://zelcash.github.io/aptrepo/ all main' 2> /dev/null | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
-    gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
+   # cleaning
+   sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+   sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
+
+   # creating apt list file
+   echo 'deb [signed-by=/usr/share/keyrings/zelcash-archive-keyring.gpg] https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+
+   # downloading key && save it as keyring  
+   sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+
+   if ! gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+      echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
+      sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
+      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+   fi
+
+
+   if ! gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+      echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
+      sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
+      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+   fi
+
+
+   if gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+   
     flux_package && sleep 2
     
-        if ! gpg --list-keys Zel > /dev/null; then
-            echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-            gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-            flux_package && sleep 2
-        fi
-    
-        if ! gpg --list-keys Zel > /dev/null; then
-            echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-            gpg --keyserver hkp://keys.gnupg.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-            flux_package && sleep 2
-        fi
+   else
+   
+     echo
+     echo -e "${WORNING} ${RED}Downloading key from keyserver failed...${NC}"
+     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+     echo
+     exit
+     
+   fi
 
-    
  fi
+
 }
+
+
 
 function zk_params() {
     echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
