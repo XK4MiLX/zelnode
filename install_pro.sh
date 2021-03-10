@@ -726,7 +726,7 @@ EOF
 }
 
 function flux_package() {
-    sudo apt-get update > /dev/null 2>&1 && sleep 2
+    sudo apt-get update -y > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
     sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
@@ -1186,7 +1186,7 @@ EOF
 }
 
 function install_process() {
-    #echo 
+ 
     echo -e "${ARROW} ${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
@@ -1194,50 +1194,38 @@ function install_process() {
     sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
     echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
+    
     if ! sysbench --version > /dev/null 2>&1; then
         curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
         sudo apt -y install sysbench > /dev/null 2>&1
     fi
 
-    sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
-    if [[ $(lsb_release -r) = *16.* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *19.*  ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -r) = *20.*   ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-	
+
+    sudo rm /etc/apt/sources.list.d/mongodb*.list
+    sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
+
+    curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+
+    if [[ $(lsb_release -d) = *Debian* ]]; then 
+
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+
+    elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
+
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+
     else
-   	  echo -e "${WORNING} ${RED}ERROR: OS version not supported${NC}"
-   	  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-	  echo
-   	  exit
-    
+
+      echo -e "${WORNING} ${RED}OS type not supported!${NC}"
+      echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+      echo
+      exit    
+
     fi
+
+    install_mongod
+    install_nodejs
+    install_flux
     sleep 2
 }
 
