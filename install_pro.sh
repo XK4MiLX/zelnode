@@ -1001,7 +1001,7 @@ function bootstrap() {
 
 function create_service_scripts() {
 
-echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
+#echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
 sudo touch /home/$USER/start_daemon_service.sh
 sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
     cat <<'EOF' > /home/$USER/start_daemon_service.sh
@@ -1205,12 +1205,6 @@ function install_process() {
 
     echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
     
-    if ! sysbench --version > /dev/null 2>&1; then
-        curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
-        sudo apt -y install sysbench > /dev/null 2>&1
-    fi
-
-
     sudo rm /etc/apt/sources.list.d/mongodb*.list
     sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
 
@@ -1231,6 +1225,24 @@ function install_process() {
       echo
       exit    
 
+    fi
+    
+    
+    if ! sysbench --version > /dev/null 2>&1; then
+     
+        echo
+        echo -e "${ARROW} ${YELLOW}Sysbench installing...${NC}"
+        curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
+        sudo apt -y install sysbench > /dev/null 2>&1
+	
+	 if sysbench --version > /dev/null 2>&1; then
+	 
+	   string_limit_check_mark "Sysbench $(sysbench --version | awk '{print $2}') installed................................." "Sysbench ${GREEN}$(sysbench --version | awk '{print $2}')${CYAN} installed................................."
+	   echo
+	   
+	 fi
+	
+	
     fi
 
     install_mongod
