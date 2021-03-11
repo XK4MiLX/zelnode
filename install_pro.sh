@@ -803,7 +803,9 @@ function zk_params() {
 function bootstrap() {
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
-
+    
+    echo -e ""
+    echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
     if [[ -z "$bootstrap_url" ]]; then
 
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
@@ -946,7 +948,11 @@ function bootstrap() {
 		
             else
 	    
-	        DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		if [[ "$DB_HIGHT" == "" ]]; then
+		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		fi
+		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
                 wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
