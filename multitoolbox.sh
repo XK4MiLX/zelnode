@@ -1108,7 +1108,7 @@ echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e ""
 
-continer_name="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
+continer_name="$(whiptail --title "FLUXNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
 echo -e "${YELLOW}================================================================${NC}"
 if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
 then
@@ -1185,7 +1185,7 @@ fi
 
 if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
-    echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+    echo -e "${WORNING} ${RED}OS type not supported!${NC}"
     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
     echo
     exit
