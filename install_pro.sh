@@ -346,7 +346,12 @@ function mongodb_bootstrap(){
 
     echo -e ""
     echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-    DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+      
+     DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     if [[ "$DB_HIGHT" == "" ]]; then
+         DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     fi
+    
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
