@@ -834,7 +834,7 @@ fi
 if [[ "$ZELCONF" == "1" ]]
 then
 echo 
-echo -e "${BOOK} ${YELLOW}Checking ~/$COIN_DIR/$CONFIG_FILE${NC}"
+echo -e "${BOOK} ${YELLOW}Checking ~/$CONFIG_DIR/$CONFIG_FILE${NC}"
 if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//') ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} FluxNode privkey matches${NC}"
