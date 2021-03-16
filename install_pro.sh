@@ -1332,9 +1332,11 @@ function install_flux() {
  mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
 if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
+
 echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
 echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
+
 fi
 
 if [[ $docker_check != 0 ]]; then
@@ -1506,12 +1508,13 @@ else
 	#fi
 	#
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
-	f=$((f+1))
-	LOCAL_BLOCK_HIGHT="N/A"
-	LEFT="N/A"
-	CONNECTIONS="N/A"
-	sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
-	sudo systemctl start $COIN_NAME > /dev/null 2>&1
+	
+	  f=$((f+1))
+	  LOCAL_BLOCK_HIGHT="N/A"
+	  LEFT="N/A"
+	  CONNECTIONS="N/A"
+	  sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+	  sudo systemctl start $COIN_NAME > /dev/null 2>&1
 	
           NUM='60'
           MSG1="Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
