@@ -56,7 +56,8 @@ title=black,
     if [[ "$WANIP" == "" ]]; then
       WANIP=$(curl -s -m 3 ifconfig.me)  
     fi
-    
+
+
 #function
 function show_time() {
     num=$1
