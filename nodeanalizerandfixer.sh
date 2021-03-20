@@ -172,7 +172,7 @@ function get_last_benchmark()
       if [[ "$info_check"  == "" ]]; then
         echo -e "1"
         skipp_debug=1
-        return 1
+        return 
       fi
    
    fi
