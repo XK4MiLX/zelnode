@@ -51,7 +51,12 @@ BENCH_CLI='zelbench-cli'
 export NEWT_COLORS='
 title=black,
 '
-WANIP=$(wget http://ipecho.net/plain -O - -q)
+
+ WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
+    if [[ "$WANIP" == "" ]]; then
+      WANIP=$(curl -s -m 3 ifconfig.me)  
+    fi
+    
 #function
 function show_time() {
     num=$1
