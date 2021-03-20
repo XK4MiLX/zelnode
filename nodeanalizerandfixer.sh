@@ -171,7 +171,6 @@ function get_last_benchmark()
    
       info_check=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
       if [[ "$info_check"  == "" ]]; then
-        echo -e "1"
         skipp_debug=1
         return 
       fi
@@ -279,8 +278,6 @@ fi
 skipp_debug=0
 
 get_last_benchmark "HDD" "check"
-
-echo -e ".... $skipp_debug"
 
 if [[ "$skipp_debug" == "0" ]]; then
 
