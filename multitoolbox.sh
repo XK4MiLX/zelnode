@@ -980,7 +980,7 @@ if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
              echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
 	     string_limit_x_mark "Operation aborted....................."
              echo -e ""
-	     exit
+	     #exit
           fi
 fi
 
