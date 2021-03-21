@@ -752,7 +752,7 @@ if [[ "$verifity_mongod" != "0" ]]; then
 fi
 
 echo -e "${BOOK} ${YELLOW}Checking Flux:${NC}"
-echo -e "${CHECK_MARK} ${CYAN} Flux install directory: ${GREEN}$(locate ZelBack | head -n1 | grep -oP ".*$(locate ZelBack | cut -d "/" -f$(locate ZelBack | awk -F"/" '{print NF-1}' | head -n1) | head -n1)") ${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux install path: ${GREEN}$(locate ZelBack | head -n1 | grep -oP ".*$(locate ZelBack | cut -d "/" -f$(locate ZelBack | awk -F"/" '{print NF-1}' | head -n1) | head -n1)") ${NC}"
 if pm2 -v > /dev/null 2>&1; then
 pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
 if [[ "$pm2_flux_status" == "online" ]]; then
