@@ -57,6 +57,7 @@ title=black,
       WANIP=$(curl -s -m 3 ifconfig.me)  
     fi
 
+
 #function
 function show_time() {
     num=$1
@@ -166,6 +167,15 @@ fi
 function get_last_benchmark()
 {
 
+   if [[ "$2" == "check" ]]; then
+   
+      info_check=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
+      if [[ "$info_check"  == "" ]]; then
+        skipp_debug=1
+        return 
+      fi
+   
+   fi
 
 
     if [[ "$1" == "cores" ]]; then
@@ -265,14 +275,19 @@ echo -e "${GREEN}\xF0\x9F\x94\x8A ${CYAN}Found: ${GREEN}0 errors${NC}"
 echo
 fi
 
+skipp_debug=0
 
-echo -e "${BOOK} ${YELLOW}Last benchmark from $BENCH_DIR_LOG/debug.log${NC}"
-get_last_benchmark "HDD"
-get_last_benchmark "DD_WRITE"
-get_last_benchmark "ram"
-get_last_benchmark "cores"
-echo
+get_last_benchmark "HDD" "check"
 
+if [[ "$skipp_debug" == "0" ]]; then
+
+    echo -e "${BOOK} ${YELLOW}Last benchmark from $BENCH_DIR_LOG/debug.log${NC}"
+    get_last_benchmark "HDD"
+    get_last_benchmark "DD_WRITE"
+    get_last_benchmark "ram"
+    get_last_benchmark "cores"
+    echo
+fi
 #else
 #echo -e "${RED}Debug file not exists${NC}"
 #echo
