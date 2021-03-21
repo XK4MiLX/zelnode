@@ -977,8 +977,6 @@ if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
 
         if [[ "$BLOCKHIGHT" -gt "$DB_HIGHT" ]]; then
 	  
-	    echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-	  
 	    if whiptail --yesno "Datatable is out of date....Would you like force bootstrap installation?" 8 60; then   
                 FORCE_BOOTSTRAP=1		
             else
