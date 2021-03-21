@@ -213,7 +213,7 @@ function get_last_benchmark()
 function integration(){
 
 PATH_TO_FOLDER=( /usr/local/bin/ ) 
-FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' )
 ELEMENTS=${#FILE_ARRAY[@]}
 NOT_FOUND="0"
 
