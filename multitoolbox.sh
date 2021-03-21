@@ -944,12 +944,11 @@ fi
 
 if [[ "$BLOCKHIGHT" == ""  ||  "$BLOCKHIGHT" == "null" ]]; then
 
-    if whiptail --yesno "Would you like force bootstrap installation?" 8 60; then   
+    if whiptail --yesno "Local Explorer not respondin...Would you like force bootstrap installation?" 8 60; then   
         FORCE_BOOTSTRAP=1		
     else
         string_limit_x_mark "Local Explorer not responding........."
-        string_limit_x_mark "Operation aborted....................."
-	
+        string_limit_x_mark "Operation aborted....................."	
         echo -e ""
         exit  
     fi
@@ -962,7 +961,7 @@ fi
 
            message=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
         
-           if whiptail --yesno "Would you like force bootstrap installation?" 8 60; then 
+           if whiptail --yesno "Flux explorer error noticed...Would you like force bootstrap installation?" 8 60; then 
               FORCE_BOOTSTRAP=1
            else
 	      echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
@@ -976,12 +975,20 @@ fi
 
 if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
 
-          if [[ "$BLOCKHIGHT" -gt "$DB_HIGHT" ]]; then
-             echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-	     string_limit_x_mark "Operation aborted....................."
-             echo -e ""
-	     #exit
-          fi
+        if [[ "$BLOCKHIGHT" -gt "$DB_HIGHT" ]]; then
+	  
+	    echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+	  
+	    if whiptail --yesno "Datatable is out of date....Would you like force bootstrap installation?" 8 60; then   
+                FORCE_BOOTSTRAP=1		
+            else
+                echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
+	        string_limit_x_mark "Operation aborted....................."
+                echo -e ""
+	        exit
+            fi
+	  
+        fi	         
 fi
 
 
