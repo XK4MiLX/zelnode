@@ -1200,7 +1200,7 @@ usermod -aG sudo "$usernew" > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
-echo -e "${ARROW} ${CYAN}Architekture: ${GREEN}$(dpkg --print-architecture)${NC}"
+echo -e "${ARROW} ${CYAN}Architecture: ${GREEN}$(dpkg --print-architecture)${NC}"
 
 if [[ -f /usr/share/keyrings/docker-archive-keyring.gpg ]]; then
     sudo rm /usr/share/keyrings/docker-archive-keyring.gpg > /dev/null 2>&1
@@ -1265,7 +1265,7 @@ fi
 
 echo -e "${YELLOW}=====================================================${NC}"
 echo -e "${NC}"
-read -p "Would you like switch to user accont Y/N?" -n 1 -r
+read -p "Would you like switch to user account Y/N?" -n 1 -r
 echo -e "${NC}"
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
