@@ -1611,7 +1611,7 @@ fi
 function display_banner() {
     echo -e "${BLUE}"
     figlet -t -k "FLUXNODE"
-    figlet -t -k "INSTALLATION COMPLITED"
+    figlet -t -k "INSTALLATION   COMPLETED"
     echo -e "${YELLOW}================================================================================================================================"
     #echo -e "FLUXNODE INSTALATION COMPLITED${NC}"
     #echo -e "${CYAN}COURTESY OF DK808/XK4MiLX${NC}"
