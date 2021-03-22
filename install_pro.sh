@@ -353,7 +353,7 @@ function mongodb_bootstrap(){
      fi
     
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-    echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
+    echo -e "${ARROW} ${CYAN}Bootstrap block height: ${GREEN}$DB_HIGHT${NC}"
     echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
     wget --tries=5 $BOOTSTRAP_URL_MONGOD -q --show-progress 
     
@@ -1465,7 +1465,7 @@ CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
 LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
 
 NUM='2'
-MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
+MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo
@@ -1517,7 +1517,7 @@ else
 	  sudo systemctl start $COIN_NAME > /dev/null 2>&1
 	
           NUM='60'
-          MSG1="Syncing progress => Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+          MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
 	  
@@ -1534,7 +1534,7 @@ else
 	fi
 	
 	NUM="$time_break"
-        MSG1="Syncing progress >> Local block hight: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block hight: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+        MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
         MSG2=''
         spinning_timer
 	
