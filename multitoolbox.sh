@@ -868,7 +868,11 @@ function flux_daemon_bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	       DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')		   
+               if [[ "$DB_HIGHT" == "" ]]; then
+                   DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+               fi
+		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
@@ -936,7 +940,12 @@ if ! pm2 -v > /dev/null 2>&1; then
 fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
-DB_HIGHT=$(curl -s -m 5 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+
+ DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')		   
+ if [[ "$DB_HIGHT" == "" ]]; then
+     DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+ fi
+
 BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')	
 FORCE_BOOTSTRAP=0
 
