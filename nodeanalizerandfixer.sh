@@ -500,6 +500,18 @@ else
 node_status_color="${RED}$node_status"
 fi
 
+echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
+
+if [[ "$node_status" == "DOS" ]]; then
+blocks_till=$($COIN_CLI  getdoslist | jq .[] | grep $collateral -A4 -B1 | jq .eligible_in)
+dos_till=$((blocks_hight+blocks_till))
+echo -e "${PIN} ${RED}DOS ${NC}Till: ${ORANGE}$dos_till ${NC}EXPIRE_COUNT: ${ORANGE}$blocks_till${NC} Time left: ${RED}~$((2*blocks_till)) min. ${NC}"
+fi
+
+
+echo -e "${PIN} ${CYAN}Collateral1: ${SEA}$collateral${NC}"
+echo -e ""
+
 if [ "$node_status" != "CONFIRMED" ]
 then
 
@@ -512,9 +524,7 @@ fi
 
 fi
 
-echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
-echo -e "${PIN} ${CYAN}Collateral1: ${SEA}$collateral${NC}"
-echo -e ""
+
 
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
