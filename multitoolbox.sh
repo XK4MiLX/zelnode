@@ -284,6 +284,8 @@ fi
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
+sudo aa-remove-unknown && sudo service docker restart > /dev/null 2>&1 && sleep 2 
+sleep 5
 #docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
 docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
