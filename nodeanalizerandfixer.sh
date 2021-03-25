@@ -52,7 +52,6 @@ else
     CONFIG_FILE='flux.conf'
 fi
 
-echo -e "$CONFIG_DIR"
 
 if [[ -d /home/$USER/.zelbenchmark ]]; then
 BENCH_DIR_LOG='.zelbenchmark'
@@ -296,7 +295,7 @@ get_last_benchmark "HDD" "check"
 
 if [[ "$skipp_debug" == "0" ]]; then
 
-    echo -e "${BOOK} ${YELLOW}Last benchmark from $BENCH_DIR_LOG/debug.log${NC}"
+    echo -e "${BOOK} ${YELLOW}Last benchmark from ~/$BENCH_DIR_LOG/debug.log${NC}"
     get_last_benchmark "HDD"
     get_last_benchmark "DD_WRITE"
     get_last_benchmark "ram"
