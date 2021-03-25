@@ -37,8 +37,7 @@ FLUX_DIR='zelflux'
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
 COIN_CLI='zelcash-cli'
-CONFIG_DIR='.zelcash'
-CONFIG_FILE='zelcash.conf'
+
 
 BENCH_DIR_LOG='.zelbenchmark'
 BENCH_DAEMON='zelbenchd'
@@ -53,6 +52,7 @@ else
     CONFIG_FILE='flux.conf'
 fi
 
+echo -e "$CONFIG_DIR"
 
 if [[ -d /home/$USER/.zelbenchmark ]]; then
 BENCH_DIR_LOG='.zelbenchmark'
@@ -311,7 +311,7 @@ fi
 
 
 if [ -f /home/$USER/$CONFIG_DIR/debug.log ]; then
-echo -e "${BOOK} ${YELLOW}Checking Flux daemon debug.log${NC}"
+echo -e "${BOOK} ${YELLOW}Checking Flux daemon ~/$CONFIG_DIR/debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) != "0" ]]; then
