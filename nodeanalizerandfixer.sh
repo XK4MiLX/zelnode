@@ -45,6 +45,21 @@ BENCH_DAEMON='zelbenchd'
 BENCH_NAME='zelbench'
 BENCH_CLI='zelbench-cli'
 
+if [[ -d /home/$USER/.zelcash ]]; then
+    CONFIG_DIR='.zelcash'
+    CONFIG_FILE='zelcash.conf'
+else
+    CONFIG_DIR='.flux'
+    CONFIG_FILE='flux.conf'
+fi
+
+
+if [[ -d /home/$USER/.zelbenchmark ]]; then
+BENCH_DIR_LOG='.zelbenchmark'
+else
+BENCH_DIR_LOG='.fluxbenchmark'
+fi
+
 
 
 #dialog color
@@ -332,6 +347,11 @@ bench_getatus=$($BENCH_CLI getstatus)
 bench_status=$(jq -r '.status' <<< "$bench_getatus")
 bench_benchmark=$(jq -r '.benchmarking' <<< "$bench_getatus")
 bench_back=$(jq -r '.zelback' <<< "$bench_getatus")
+if [[ "$bench_back" == "null" ]]; then
+bench_back=$(jq -r '.flux' <<< "$bench_getatus")
+fi
+
+
 bench_getinfo=$($BENCH_CLI getinfo)
 bench_version=$(jq -r '.version' <<< "$bench_getinfo")
 
