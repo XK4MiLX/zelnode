@@ -198,7 +198,7 @@ function get_last_benchmark()
         echo -e "${PIN}${CYAN} CORES: ${GREEN}$cores${NC}"
     fi
 
-    if [[ "$1" == "HDD" ||  "$1" == "DD_WRITE" || "$1" == "ram" || "$1" == "eps" ]]; then
+    if [[ "$1" == "HDD" ||  "$1" == "DD_WRITE" || "$1" == "ram" || "$1" == "eps" ]] && [[ "$2" != "check" ]]; then
 
          info=$(grep 'Found' /home/$USER/$BENCH_DIR_LOG/debug.log | egrep 'Found|Historical' | grep $1 | tail -n1 | egrep -o '[0-9]+(\.[0-9]+)|([0-9]+)' | tail -n1 | awk '{printf "%.2f\n", $1}')
 
