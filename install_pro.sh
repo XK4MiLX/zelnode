@@ -747,8 +747,9 @@ function install_daemon() {
   sudo rm /etc/apt/sources.list.d/zelcash.list  > /dev/null 2>&1
   #sudo rm /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
   sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-  wget -O- https://apt.fluxnodeservice.com/flux_ppa/flux.gpg | sudo tee /usr/share/keyrings/flux-archive-keyring.gpg
-  echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxnodeservice.com/flux_ppa ./' | sudo tee /etc/apt/sources.list.d/zelcash.list
+  #wget -O- https://apt.fluxnodeservice.com/flux_ppa/flux.gpg | sudo tee /usr/share/keyrings/flux-archive-keyring.gpg
+  curl -fsSL https://apt.fluxnodeservice.com/flux_ppa/flux.gpg | sudo gpg --dearmor -o /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+  echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxnodeservice.com/flux_ppa ./' | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
   flux_package && sleep 2
  
       	 # echo -e "${WORNING} ${RED}ERROR: ARM architecture not supported yet!${NC}"
