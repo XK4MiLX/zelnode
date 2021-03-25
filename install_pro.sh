@@ -734,7 +734,7 @@ function flux_package() {
     sudo apt-get update > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
     sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
-    sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
+    sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
     integration_check
 }
 
