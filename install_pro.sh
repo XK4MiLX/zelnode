@@ -7,16 +7,16 @@ BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
-COIN_NAME='zelcash'
-CONFIG_DIR='.zelcash'
-CONFIG_FILE='zelcash.conf'
+COIN_NAME='flux'
+CONFIG_DIR='.flux'
+CONFIG_FILE='flux.conf'
 
-BENCH_NAME='zelbench'
-BENCH_CLI='zelbench-cli'
-BENCH_DIR_LOG='.zelbenchmark'
+BENCH_NAME='fluxbench'
+BENCH_CLI='fluxbench-cli'
+BENCH_DIR_LOG='.fluxbenchmark'
 
-COIN_DAEMON='zelcashd'
-COIN_CLI='zelcash-cli'
+COIN_DAEMON='fluxd'
+COIN_CLI='flux-cli'
 COIN_PATH='/usr/local/bin'
 
 USERNAME="$(whoami)"
@@ -107,7 +107,7 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 
 
 function integration_check() {
-FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'fluxcash-cli' 'fluxcashd' 'flux-fetch-params.sh' 'flux-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
 
 for (( i=0;i<$ELEMENTS;i++)); do
@@ -234,6 +234,15 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
     if [[ -z "$import_settings" ]]; then
 
         if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
+	
+	    OLD_CONFIG=0
+	
+	    if [[ -d /home/$USER/.zelcash ]]; then
+	     CONFIG_DIR='.zelcash'
+	     CONFIG_FILE='zelcash.conf' 
+	     OLD_CONFIG=1
+	    fi
+	    
             IMPORT_ZELCONF="1"
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
@@ -243,6 +252,11 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
             zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+	    
+	    if [[ OLD_CONFIG == "1" ]]; then 
+	       CONFIG_DIR='.flux'
+	       CONFIG_FILE='flux.conf' 
+	    fi
 
            if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
                IMPORT_ZELID="1"
@@ -260,6 +274,15 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
 else 
 
     if [[ "$import_settings" == "1" ]]; then
+    
+            OLD_CONFIG=0
+	
+	    if [[ -d /home/$USER/.zelcash ]]; then
+	     CONFIG_DIR='.zelcash'
+	     CONFIG_FILE='zelcash.conf' 
+	     OLD_CONFIG=1
+	    fi 
+    
     IMPORT_ZELCONF="1"
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
@@ -269,6 +292,12 @@ else
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
     zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+    
+     if [[ OLD_CONFIG == "1" ]]; then 
+	  CONFIG_DIR='.flux'
+	  CONFIG_FILE='flux.conf' 
+     fi
+    
 
          if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
             IMPORT_ZELID="1"
@@ -412,7 +441,7 @@ function wipe_clean() {
     sudo killall -s SIGKILL $BENCH_NAME > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
-    sudo rm -rf /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
+    sudo rm -rf /usr/bin/flux* > /dev/null 2>&1 && sleep 1
     
     echo -e "${ARROW} ${CYAN}Removing daemon && benchmark...${NC}"
     sudo apt-get remove $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 1
@@ -459,6 +488,15 @@ function wipe_clean() {
     sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
+    
+    if [[ -d /home/$USER/.zelcash ]]; then
+    
+      echo -e "${ARROW} ${CYAN}Moving ~/.zelcash to ~/.flux${NC}"  
+      echo -e "${ARROW} ${CYAN}Renaming zelcash.conf to flux.conf${NC}"  
+      sudo mv /home/$USER/.zelcash /home/$USER/.flux
+      sudo mv /home/$USER/.zelcash/zelcash.conf /home/$USER/.flux/flux.conf    
+        
+    fi
    
     
  if [[ -d /home/$USER/$CONFIG_DIR ]]; then
@@ -479,7 +517,7 @@ function wipe_clean() {
 	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
 	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
 	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     fi
@@ -496,7 +534,7 @@ function wipe_clean() {
       sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
       sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
       sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
       sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
       sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     
@@ -721,9 +759,8 @@ txindex=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=explorer.zel.network
-addnode=explorer2.zel.network
-addnode=explorer.zel.zelcore.io
+addnode=explorer.flux.zelcore.io
+addnode=explorer.runonflux.io
 addnode=explorer.zelcash.online
 maxconnections=256
 EOF
@@ -734,7 +771,7 @@ function flux_package() {
     sudo apt-get update -y > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
     sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
-    sudo chmod 755 $COIN_PATH/${COIN_NAME}* > /dev/null 2>&1 && sleep 2
+    sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
     integration_check
 }
 
@@ -801,7 +838,7 @@ function install_daemon() {
 
 function zk_params() {
     echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
-    bash zelcash-fetch-params.sh > /dev/null 2>&1 && sleep 2
+    bash flux-fetch-params.sh > /dev/null 2>&1 && sleep 2
     sudo chown -R $USER:$USER /home/$USER  > /dev/null 2>&1
 }
 
@@ -1023,24 +1060,24 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 sleep 2
 echo -e "${BOOK} ${CYAN}Pre-start process starting...${NC}"
 echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
-bench_status_pind=$(pgrep zelbenchd)
-daemon_status_pind=$(pgrep zelcashd)
+bench_status_pind=$(pgrep fluxbenchd)
+daemon_status_pind=$(pgrep fluxd)
 if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
 echo -e "${BOOK} ${CYAN}The service can be safely started${NC}"
 else
 if [[ "$bench_status_pind" != "" ]]; then
 echo -e "${WORNING} Running benchmark process detected${NC}"
 echo -e "${WORNING} Killing benchmark...${NC}"
-sudo killall zelbenchd > /dev/null 2>&1  && sleep 2
+sudo killall fluxbenchd > /dev/null 2>&1  && sleep 2
 fi
 if [[ "$daemon_status_pind" != "" ]]; then
 echo -e "${WORNING} Running daemon process detected${NC}"
 echo -e "${WORNING} Killing daemon...${NC}"
-sudo killall zelcashd > /dev/null 2>&1  && sleep 2
+sudo killall fluxd > /dev/null 2>&1  && sleep 2
 fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
-bash -c "zelcashd"
+bash -c "fluxd"
 exit
 EOF
 
@@ -1049,7 +1086,7 @@ sudo touch /home/$USER/stop_daemon_service.sh
 sudo chown $USER:$USER /home/$USER/stop_daemon_service.sh
     cat <<'EOF' > /home/$USER/stop_daemon_service.sh
 #!/bin/bash
-bash -c "zelcash-cli stop"
+bash -c "flux-cli stop"
 exit
 EOF
 
@@ -1070,7 +1107,6 @@ After=network.target
 Type=forking
 User=$USER
 Group=$USER
-WorkingDirectory=/home/$USER/$CONFIG_DIR/
 ExecStart=/home/$USER/start_daemon_service.sh
 ExecStop=-/home/$USER/stop_daemon_service.sh
 Restart=always
@@ -1453,7 +1489,7 @@ function status_loop() {
 
 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
 network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 
@@ -1487,7 +1523,7 @@ else
         
         network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
         network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
-        network_height_03=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
         EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 	
@@ -1526,7 +1562,7 @@ else
 	  
 	  network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
           network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
-          network_height_03=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
+          network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
           EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 	  
@@ -1595,7 +1631,7 @@ else
 function check() {
 
 cd
-pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=40000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='400'
