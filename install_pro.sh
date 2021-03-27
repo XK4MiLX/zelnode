@@ -770,7 +770,7 @@ EOF
 function flux_package() {
     sudo apt-get update -y > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
-    sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
+    sudo apt install $COIN_NAME $BENCH_NAME zelbench zelcash -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
     integration_check
 }
@@ -778,45 +778,38 @@ function flux_package() {
 function install_daemon() {
 
 
- echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}"
+   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}"
  
- architecture=$(dpkg-architecture -q DEB_BUILD_ARCH)
-      
- if [[ "$architecture" = *arm* ]]; then
- 
-     echo
-     echo -e "${WORNING} ${RED}ARM architecture not supported yet!${NC}"
-     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-     echo
-     exit   
-
- else
-
    # cleaning 
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
-   sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
-
-   # creating apt list file
-   echo 'deb [signed-by=/usr/share/keyrings/zelcash-archive-keyring.gpg] https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+   sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+   sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+   
+ 
+   if [[ $(lsb_release -cs) != "groovy" && $(lsb_release -cs) != "hirsute" ]]; then 
+       echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
+   else
+        echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ 'focal' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+   fi
 
    # downloading key && save it as keyring  
-   sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+   sudo gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
 
-   if ! gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
       echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
       sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
-      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
    fi
 
 
    if ! gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
       echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
       sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
-      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+      sudo gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
    fi
 
 
-   if gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+   if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
    
     flux_package && sleep 2
     
@@ -829,8 +822,6 @@ function install_daemon() {
      exit
      
    fi
-
- fi
 
 }
 
