@@ -106,7 +106,7 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 
 
 function integration_check() {
-FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'fluxcash-cli' 'fluxcashd' 'flux-fetch-params.sh' 'flux-tx' )
+FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
 
 for (( i=0;i<$ELEMENTS;i++)); do
