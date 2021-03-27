@@ -1757,7 +1757,7 @@ echo -e "${CYAN}February 2021, created by dk808 improved by XK4MiLX from Flux's 
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "FluxNode setup starting, press [CTRL+C] to cancel.${NC}"
 sleep 2
-exit
+
 if jq --version > /dev/null 2>&1; then
 echo -e ""
 else
