@@ -779,6 +779,7 @@ function install_daemon() {
 
    echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}"
  
+   sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
    # cleaning 
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
