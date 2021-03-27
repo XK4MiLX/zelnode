@@ -1168,7 +1168,7 @@ fi
 
 if docker run hello-world > /dev/null 2>&1
 then
-echo -e "${NC}"
+echo -e ""
 else
 echo -e "${WORNING}${CYAN}Docker is not working correct or is not installed.${NC}"
 exit
