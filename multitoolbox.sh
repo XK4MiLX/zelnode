@@ -18,7 +18,6 @@ else
     COIN_NAME='flux'
 fi
 
-
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 
