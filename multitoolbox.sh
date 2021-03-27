@@ -11,15 +11,15 @@ KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
 if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
    CONFIG_FILE='zelcash.conf'
-    COIN_NAME='zelcash'
+    
 else
     CONFIG_DIR='.flux'
     CONFIG_FILE='flux.conf'
-    COIN_NAME='flux'
 fi
 
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
+COIN_NAME='zelcash'
 
 #color codes
 RED='\033[1;31m'
