@@ -252,7 +252,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 	    
-	    if [[ OLD_CONFIG == "1" ]]; then 
+	    if [[ "$OLD_CONFIG" == "1" ]]; then 
 	       CONFIG_DIR='.flux'
 	       CONFIG_FILE='flux.conf' 
 	    fi
@@ -292,7 +292,7 @@ else
     zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
     
-     if [[ OLD_CONFIG == "1" ]]; then 
+     if [[ "$OLD_CONFIG" == "1" ]]; then 
 	  CONFIG_DIR='.flux'
 	  CONFIG_FILE='flux.conf' 
      fi
