@@ -802,9 +802,9 @@ function install_daemon() {
    fi
 
 
-   if ! gpg -k --keyring /usr/share/keyrings/zelcash-archive-keyring.gpg Zel > /dev/null 2>&1; then
+   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
       echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-      sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
+      sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
       sudo gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
    fi
 
