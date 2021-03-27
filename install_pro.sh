@@ -777,9 +777,12 @@ function flux_package() {
 function install_daemon() {
 
 
-   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}"
- 
+   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
    sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
+   
+   gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+   gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1
+   
    # cleaning 
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
@@ -1049,7 +1052,7 @@ echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
 bench_status_pind=$(pgrep fluxbenchd)
 daemon_status_pind=$(pgrep fluxd)
 if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
-echo -e "${BOOK} ${CYAN}The service can be safely started${NC}"
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
 else
 if [[ "$bench_status_pind" != "" ]]; then
 echo -e "${WORNING} Running benchmark process detected${NC}"
@@ -1063,6 +1066,25 @@ sudo killall fluxd > /dev/null 2>&1  && sleep 2
 fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
+
+bench_status_pind=$(pgrep zelbenchd)
+daemon_status_pind=$(pgrep zelcashd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall zelbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall zelcashd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+
 bash -c "fluxd"
 exit
 EOF
@@ -1083,11 +1105,11 @@ sudo chmod +x /home/$USER/start_daemon_service.sh
 
 function create_service() {
     echo -e "${ARROW} ${YELLOW}Creating Flux daemon service...${NC}" && sleep 1
-    sudo touch /etc/systemd/system/$COIN_NAME.service
-    sudo chown $USER:$USER /etc/systemd/system/$COIN_NAME.service
-    cat << EOF > /etc/systemd/system/$COIN_NAME.service
+    sudo touch /etc/systemd/system/zelcash.service
+    sudo chown $USER:$USER /etc/systemd/system/zelcash.service
+    cat << EOF > /etc/systemd/system/zelcash.service
 [Unit]
-Description=$COIN_NAME service
+Description=zelcash service
 After=network.target
 [Service]
 Type=forking
@@ -1105,7 +1127,7 @@ StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
 EOF
-    sudo chown root:root /etc/systemd/system/$COIN_NAME.service
+    sudo chown root:root /etc/systemd/system/zelcash.service
     sudo systemctl daemon-reload
 }
 
@@ -1170,8 +1192,8 @@ function pm2_install(){
 
 function start_daemon() {
 
-    sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl start $COIN_NAME > /dev/null 2>&1
+    sudo systemctl enable zelcash.service > /dev/null 2>&1
+    sudo systemctl start zelcash > /dev/null 2>&1
     
     NUM='120'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
