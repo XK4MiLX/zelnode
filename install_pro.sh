@@ -7,16 +7,16 @@ BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
-COIN_NAME='zelcash'
-CONFIG_DIR='.zelcash'
-CONFIG_FILE='zelcash.conf'
+COIN_NAME='flux'
+CONFIG_DIR='.flux'
+CONFIG_FILE='flux.conf'
 
-BENCH_NAME='zelbench'
-BENCH_CLI='zelbench-cli'
-BENCH_DIR_LOG='.zelbenchmark'
+BENCH_NAME='fluxbench'
+BENCH_CLI='fluxbench-cli'
+BENCH_DIR_LOG='.fluxbenchmark'
 
-COIN_DAEMON='zelcashd'
-COIN_CLI='zelcash-cli'
+COIN_DAEMON='fluxd'
+COIN_CLI='flux-cli'
 COIN_PATH='/usr/local/bin'
 
 USERNAME="$(whoami)"
@@ -75,7 +75,6 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
-
 function max(){
 
     m="0"
@@ -107,7 +106,7 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 
 
 function integration_check() {
-FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
 
 for (( i=0;i<$ELEMENTS;i++)); do
@@ -234,6 +233,15 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
     if [[ -z "$import_settings" ]]; then
 
         if whiptail --yesno "Would you like to import data from Flux config files Y/N?" 8 60; then
+	
+	    OLD_CONFIG=0
+	
+	    if [[ -d /home/$USER/.zelcash ]]; then
+	     CONFIG_DIR='.zelcash'
+	     CONFIG_FILE='zelcash.conf' 
+	     OLD_CONFIG=1
+	    fi
+	    
             IMPORT_ZELCONF="1"
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
@@ -243,6 +251,11 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
             zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+	    
+	    if [[ OLD_CONFIG == "1" ]]; then 
+	       CONFIG_DIR='.flux'
+	       CONFIG_FILE='flux.conf' 
+	    fi
 
            if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
                IMPORT_ZELID="1"
@@ -260,6 +273,15 @@ if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
 else 
 
     if [[ "$import_settings" == "1" ]]; then
+    
+            OLD_CONFIG=0
+	
+	    if [[ -d /home/$USER/.zelcash ]]; then
+	     CONFIG_DIR='.zelcash'
+	     CONFIG_FILE='zelcash.conf' 
+	     OLD_CONFIG=1
+	    fi 
+    
     IMPORT_ZELCONF="1"
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
@@ -269,6 +291,12 @@ else
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
     zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+    
+     if [[ OLD_CONFIG == "1" ]]; then 
+	  CONFIG_DIR='.flux'
+	  CONFIG_FILE='flux.conf' 
+     fi
+    
 
          if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
             IMPORT_ZELID="1"
@@ -346,11 +374,11 @@ function mongodb_bootstrap(){
 
     echo -e ""
     echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-    DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-    if [[ "$DB_HIGHT" == "" ]]; then
-       sleep 2 
-       DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-    fi
+      
+     DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     if [[ "$DB_HIGHT" == "" ]]; then
+         DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     fi
     
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
     echo -e "${ARROW} ${CYAN}Bootstrap block height: ${GREEN}$DB_HIGHT${NC}"
@@ -412,7 +440,7 @@ function wipe_clean() {
     sudo killall -s SIGKILL $BENCH_NAME > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16127/tcp > /dev/null 2>&1 && sleep 1
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
-    sudo rm -rf /usr/bin/${COIN_NAME}* > /dev/null 2>&1 && sleep 1
+    sudo rm -rf /usr/bin/flux* > /dev/null 2>&1 && sleep 1
     
     echo -e "${ARROW} ${CYAN}Removing daemon && benchmark...${NC}"
     sudo apt-get remove $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 1
@@ -459,6 +487,15 @@ function wipe_clean() {
     sudo rm -rf .zelbenchmark  > /dev/null 2>&1 && sleep 1
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
+    
+    if [[ -d /home/$USER/.zelcash ]]; then
+    
+      echo -e "${ARROW} ${CYAN}Moving ~/.zelcash to ~/.flux${NC}"  
+      echo -e "${ARROW} ${CYAN}Renaming zelcash.conf to flux.conf${NC}"  
+      sudo mv /home/$USER/.zelcash /home/$USER/.flux
+      sudo mv /home/$USER/.zelcash/zelcash.conf /home/$USER/.flux/flux.conf    
+        
+    fi
    
     
  if [[ -d /home/$USER/$CONFIG_DIR ]]; then
@@ -479,7 +516,7 @@ function wipe_clean() {
 	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
 	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
 	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
 	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     fi
@@ -496,7 +533,7 @@ function wipe_clean() {
       sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
       sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
       sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelcash.conf && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
       sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
       sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     
@@ -721,9 +758,8 @@ txindex=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=explorer.zel.network
-addnode=explorer2.zel.network
-addnode=explorer.zel.zelcore.io
+addnode=explorer.flux.zelcore.io
+addnode=explorer.runonflux.io
 addnode=explorer.zelcash.online
 maxconnections=256
 EOF
@@ -731,67 +767,76 @@ EOF
 }
 
 function flux_package() {
-    sudo apt-get update > /dev/null 2>&1 && sleep 2
+    sudo apt-get update -y > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
-    sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
+    sudo apt install $COIN_NAME $BENCH_NAME zelbench zelcash -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
     integration_check
 }
 
 function install_daemon() {
 
- architecture=$(dpkg-architecture -q DEB_BUILD_ARCH)
-      
- if [[ "$architecture" = *arm* ]]; then
- 
-  sudo rm /etc/apt/sources.list.d/zelcash.list  > /dev/null 2>&1
-  #sudo rm /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-  sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-  #wget -O- https://apt.fluxnodeservice.com/flux_ppa/flux.gpg | sudo tee /usr/share/keyrings/flux-archive-keyring.gpg
-  curl -fsSL https://apt.fluxnodeservice.com/flux_ppa/flux.gpg | sudo gpg --dearmor -o /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-  echo 'deb [arch=arm64 signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxnodeservice.com/flux_ppa ./' | sudo tee /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
-  flux_package && sleep 2
- 
-      	 # echo -e "${WORNING} ${RED}ERROR: ARM architecture not supported yet!${NC}"
-   	#  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-	#  echo
-   	#  exit    
- else
 
-    sudo rm /etc/apt/sources.list.d/zelcash.list  > /dev/null 2>&1
-    echo 'deb https://zelcash.github.io/aptrepo/ all main' 2> /dev/null | sudo tee --append /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
-    gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
+   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
+   sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
+   
+   gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+   gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1
+   
+   # cleaning 
+   sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+   sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+   sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+       
+   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
+ 
+   # downloading key && save it as keyring  
+   gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+
+   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+      echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
+      sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
+      gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+   fi
+
+
+   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+      echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
+      sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+      gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+   fi
+
+
+   if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+   
     flux_package && sleep 2
     
-        if ! gpg --list-keys Zel > /dev/null; then
-            echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-            gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-            flux_package && sleep 2
-        fi
-    
-        if ! gpg --list-keys Zel > /dev/null; then
-            echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-            gpg --keyserver hkp://keys.gnupg.net:80 --recv 4B69CA27A986265D > /dev/null 2>&1 && sleep 2
-            gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1 && sleep 2
-            flux_package && sleep 2
-        fi
+   else
+   
+     echo
+     echo -e "${WORNING} ${RED}Importing public GPG Key failed...${NC}"
+     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+     echo
+     exit
+     
+   fi
 
-    
- fi
 }
+
+
 
 function zk_params() {
     echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
-    bash zelcash-fetch-params.sh > /dev/null 2>&1 && sleep 2
+    bash flux-fetch-params.sh > /dev/null 2>&1 && sleep 2
     sudo chown -R $USER:$USER /home/$USER  > /dev/null 2>&1
 }
 
 function bootstrap() {
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
-
+    
+    echo -e ""
+    echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
     if [[ -z "$bootstrap_url" ]]; then
 
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
@@ -852,10 +897,14 @@ function bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		if [[ "$DB_HIGHT" == "" ]]; then
+		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		fi
+		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
-       		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+       		wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 	        tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
 		sleep 2
         	#unzip -o $BOOTSTRAP_ZIPFILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
@@ -866,7 +915,7 @@ function bootstrap() {
   		BOOTSTRAP_ZIP="$(whiptail --title "Flux daemon bootstrap setup" --inputbox "Enter your URL (zip, tar.gz)" 8 72 3>&1 1>&2 2>&3)"
 		echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"		
 		BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
-		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+		wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
@@ -930,10 +979,14 @@ function bootstrap() {
 		
             else
 	    
-	        DB_HIGHT=$(curl -s -m 6 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		if [[ "$DB_HIGHT" == "" ]]; then
+		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		fi
+		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
-                wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+                wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		tar_file_unpack "/home/$USER/$BOOTSTRAP_ZIPFILE" "/home/$USER/$CONFIG_DIR" 
 		sleep 2
 
@@ -948,7 +1001,7 @@ function bootstrap() {
                 BOOTSTRAP_ZIP="$bootstrap_url"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"           
 		BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
-		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
+		wget --tries 5 -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
  		    echo -e "${ARROW} ${YELLOW}Unpacking wallet bootstrap please be patient...${NC}"
@@ -979,7 +1032,7 @@ function bootstrap() {
 
 function create_service_scripts() {
 
-echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
+#echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
 sudo touch /home/$USER/start_daemon_service.sh
 sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
     cat <<'EOF' > /home/$USER/start_daemon_service.sh
@@ -996,10 +1049,28 @@ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 sleep 2
 echo -e "${BOOK} ${CYAN}Pre-start process starting...${NC}"
 echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
+bench_status_pind=$(pgrep fluxbenchd)
+daemon_status_pind=$(pgrep fluxd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall fluxbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall fluxd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+
 bench_status_pind=$(pgrep zelbenchd)
 daemon_status_pind=$(pgrep zelcashd)
 if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
-echo -e "${BOOK} ${CYAN}The service can be safely started${NC}"
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
 else
 if [[ "$bench_status_pind" != "" ]]; then
 echo -e "${WORNING} Running benchmark process detected${NC}"
@@ -1013,7 +1084,8 @@ sudo killall zelcashd > /dev/null 2>&1  && sleep 2
 fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
-bash -c "zelcashd"
+
+bash -c "fluxd"
 exit
 EOF
 
@@ -1022,7 +1094,7 @@ sudo touch /home/$USER/stop_daemon_service.sh
 sudo chown $USER:$USER /home/$USER/stop_daemon_service.sh
     cat <<'EOF' > /home/$USER/stop_daemon_service.sh
 #!/bin/bash
-bash -c "zelcash-cli stop"
+bash -c "flux-cli stop"
 exit
 EOF
 
@@ -1033,17 +1105,16 @@ sudo chmod +x /home/$USER/start_daemon_service.sh
 
 function create_service() {
     echo -e "${ARROW} ${YELLOW}Creating Flux daemon service...${NC}" && sleep 1
-    sudo touch /etc/systemd/system/$COIN_NAME.service
-    sudo chown $USER:$USER /etc/systemd/system/$COIN_NAME.service
-    cat << EOF > /etc/systemd/system/$COIN_NAME.service
+    sudo touch /etc/systemd/system/zelcash.service
+    sudo chown $USER:$USER /etc/systemd/system/zelcash.service
+    cat << EOF > /etc/systemd/system/zelcash.service
 [Unit]
-Description=$COIN_NAME service
+Description=zelcash service
 After=network.target
 [Service]
 Type=forking
 User=$USER
 Group=$USER
-WorkingDirectory=/home/$USER/$CONFIG_DIR/
 ExecStart=/home/$USER/start_daemon_service.sh
 ExecStop=-/home/$USER/stop_daemon_service.sh
 Restart=always
@@ -1056,7 +1127,7 @@ StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
 EOF
-    sudo chown root:root /etc/systemd/system/$COIN_NAME.service
+    sudo chown root:root /etc/systemd/system/zelcash.service
     sudo systemctl daemon-reload
 }
 
@@ -1121,8 +1192,8 @@ function pm2_install(){
 
 function start_daemon() {
 
-    sudo systemctl enable $COIN_NAME.service > /dev/null 2>&1
-    sudo systemctl start $COIN_NAME > /dev/null 2>&1
+    sudo systemctl enable zelcash.service > /dev/null 2>&1
+    sudo systemctl start zelcash > /dev/null 2>&1
     
     NUM='120'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
@@ -1174,7 +1245,7 @@ EOF
 }
 
 function install_process() {
-    #echo 
+ 
     echo -e "${ARROW} ${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
@@ -1182,50 +1253,49 @@ function install_process() {
     sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
     echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
+    
+    sudo rm /etc/apt/sources.list.d/mongodb*.list
+    sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
+
+    curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+
+    if [[ $(lsb_release -d) = *Debian* ]]; then 
+
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+
+    elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
+
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+
+    else
+
+      echo -e "${WORNING} ${RED}OS type not supported!${NC}"
+      echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+      echo
+      exit    
+
+    fi
+    
+    
     if ! sysbench --version > /dev/null 2>&1; then
+     
+        echo
+        echo -e "${ARROW} ${YELLOW}Sysbench installing...${NC}"
         curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
         sudo apt -y install sysbench > /dev/null 2>&1
+	
+	 if sysbench --version > /dev/null 2>&1; then
+	 
+	   string_limit_check_mark "Sysbench $(sysbench --version | awk '{print $2}') installed................................." "Sysbench ${GREEN}$(sysbench --version | awk '{print $2}')${CYAN} installed................................."
+	   
+	 fi
+	
+	
     fi
 
-    sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
-    if [[ $(lsb_release -r) = *16.* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -r) = *18.* || $(lsb_release -r) = *19.*  ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -r) = *20.*   ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-    elif [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *10* ]]; then
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc 2> /dev/null | sudo apt-key add - > /dev/null 2>&1
-        echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-        install_mongod
-        install_nodejs
-        install_flux
-	
-    else
-   	  echo -e "${WORNING} ${RED}ERROR: OS version not supported${NC}"
-   	  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-	  echo
-   	  exit
-    
-    fi
+    install_mongod
+    install_nodejs
+    install_flux
     sleep 2
 }
 
@@ -1305,17 +1375,18 @@ function install_flux() {
  mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
 if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
+
 echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
 echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
+
 fi
 
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
 
-sudo aa-remove-unknown && sudo service docker restart > /dev/null 2>&1 && sleep 2 
-sleep 5
+sudo service docker restart > /dev/null 2>&1 && sleep 5
 
 docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
@@ -1366,10 +1437,10 @@ fi
 		
                     KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 85 3>&1 1>&2 2>&3)
                     if [[ "$KDA_A" = *kadena* && "$KDA_A" = *chainid* ]]; then
-                        echo -e "${ARROW} ${CYAN}Kadena address is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
                         break
                     else
-                        echo -e "${ARROW} ${CYAN}Kadena address is not valid try again...........[${X_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
                         sleep 2
                     fi
             done
@@ -1423,9 +1494,9 @@ fi
 
 function status_loop() {
 
-network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 
@@ -1443,7 +1514,7 @@ NUM='2'
 MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo
+echo && echo
 
 else
 	
@@ -1457,9 +1528,9 @@ else
     while true
     do
         
-	network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-        network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
-        network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+        network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+        network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
         EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 	
@@ -1483,21 +1554,22 @@ else
 	#fi
 	#
 	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
-	f=$((f+1))
-	LOCAL_BLOCK_HIGHT="N/A"
-	LEFT="N/A"
-	CONNECTIONS="N/A"
-	sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
-	sudo systemctl start $COIN_NAME > /dev/null 2>&1
+	
+	  f=$((f+1))
+	  LOCAL_BLOCK_HIGHT="N/A"
+	  LEFT="N/A"
+	  CONNECTIONS="N/A"
+	  sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+	  sudo systemctl start zelcash > /dev/null 2>&1
 	
           NUM='60'
           MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
           MSG2=''
           spinning_timer
 	  
-	  network_height_01=$(curl -sk -m 5 https://explorer.zel.network/api/status?q=getInfo | jq '.info.blocks')
-          network_height_02=$(curl -sk -m 5 https://explorer2.zel.network/api/status?q=getInfo | jq '.info.blocks')
-          network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+	  network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+          network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+          network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
           EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 	  
@@ -1566,7 +1638,7 @@ else
 function check() {
 
 cd
-pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=40000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
 
 NUM='400'
