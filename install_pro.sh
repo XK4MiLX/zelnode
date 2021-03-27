@@ -488,12 +488,12 @@ function wipe_clean() {
     sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1
     sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1
     
-    if [[ -d /home/$USER/.zelcash ]]; then
+    if [[ -d /home/$USER/.zelcash  ]]; then
     
       echo -e "${ARROW} ${CYAN}Moving ~/.zelcash to ~/.flux${NC}"  
       echo -e "${ARROW} ${CYAN}Renaming zelcash.conf to flux.conf${NC}"  
-      sudo mv /home/$USER/.zelcash /home/$USER/.flux
-      sudo mv /home/$USER/.zelcash/zelcash.conf /home/$USER/.flux/flux.conf    
+      sudo mv /home/$USER/.zelcash /home/$USER/.flux > /dev/null 2>&1 && sleep 1
+      sudo mv /home/$USER/.flux/zelcash.conf /home/$USER/.flux/flux.conf > /dev/null 2>&1 && sleep 1   
         
     fi
    
