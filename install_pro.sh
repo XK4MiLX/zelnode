@@ -1560,8 +1560,8 @@ else
 	  LOCAL_BLOCK_HIGHT="N/A"
 	  LEFT="N/A"
 	  CONNECTIONS="N/A"
-	  sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
-	  sudo systemctl start $COIN_NAME > /dev/null 2>&1
+	  sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+	  sudo systemctl start zelcash > /dev/null 2>&1
 	
           NUM='60'
           MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
