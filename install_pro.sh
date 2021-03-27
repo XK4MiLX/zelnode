@@ -1268,7 +1268,7 @@ function install_process() {
 
     else
 
-      echo -e "${WORNING} ${RED}OS type not supported!${NC}"
+      echo -e "${WORNING} ${RED}OS type not supported..${NC}"
       echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
       echo
       exit    
