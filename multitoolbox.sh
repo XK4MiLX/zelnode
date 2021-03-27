@@ -1183,7 +1183,7 @@ exit
 fi
 
 #bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install_pro.sh)
-bash -i <(https://raw.githubusercontent.com/XK4MiLX/zelnode/development_2021/install_pro.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/development_2021/install_pro.sh)
 
 
 
