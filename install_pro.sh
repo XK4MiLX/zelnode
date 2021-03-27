@@ -1287,7 +1287,6 @@ function install_process() {
 	 if sysbench --version > /dev/null 2>&1; then
 	 
 	   string_limit_check_mark "Sysbench $(sysbench --version | awk '{print $2}') installed................................." "Sysbench ${GREEN}$(sysbench --version | awk '{print $2}')${CYAN} installed................................."
-	   echo
 	   
 	 fi
 	
@@ -1515,7 +1514,7 @@ NUM='2'
 MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
 MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
-echo
+echo && echo
 
 else
 	
