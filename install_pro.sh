@@ -228,7 +228,7 @@ function check_benchmarks() {
 
 function import_date() {
 
-if [[ -f ~/$CONFIG_DIR/$CONFIG_FILE ]]; then
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
     if [[ -z "$import_settings" ]]; then
 
