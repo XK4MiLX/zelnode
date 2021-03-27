@@ -1749,14 +1749,15 @@ function display_banner() {
 }
 
 function start_install() {
-#Suppressing password prompts for this user so zelnode can operate
+
 start_install=`date +%s`
-sudo echo -e "$(whoami) ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
+
+sudo echo -e "$USER ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
 echo -e "${CYAN}February 2021, created by dk808 improved by XK4MiLX from Flux's team."
 echo -e "Special thanks to Goose-Tech, Skyslayer, & Packetflow."
 echo -e "FluxNode setup starting, press [CTRL+C] to cancel.${NC}"
 sleep 2
-
+exit
 if jq --version > /dev/null 2>&1; then
 echo -e ""
 else
