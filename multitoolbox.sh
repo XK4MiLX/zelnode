@@ -1185,8 +1185,6 @@ fi
 bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/development_2021/install_pro.sh)
 
 
-
-
 }
 
 function install_docker(){
