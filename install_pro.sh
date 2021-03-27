@@ -75,7 +75,6 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
-
 function max(){
 
     m="0"
