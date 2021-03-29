@@ -236,7 +236,12 @@ function get_last_benchmark()
 function integration(){
 
 PATH_TO_FOLDER=( /usr/local/bin/ ) 
-FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+if [[ -f /usr/local/bin/fluxd ]]; then
+    FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
+else
+    FILE_ARRAY=( 'zelbench-cli' 'zelbenchd' 'zelcash-cli' 'zelcashd' 'zelcash-fetch-params.sh' 'zelcash-tx' )
+fi
+
 ELEMENTS=${#FILE_ARRAY[@]}
 NOT_FOUND="0"
 
