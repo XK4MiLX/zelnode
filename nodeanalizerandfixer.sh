@@ -145,7 +145,7 @@ else
 echo -e "${X_MARK} ${CYAN} Mongod not listen${NC}"
 fi
 
-if [[ sudo lsof -i  -n | grep LISTEN | grep 16125 | grep fluxd> /dev/null 2>&1 ]] || [[ sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1 ]]; then
+if [[ sudo lsof -i  -n | grep LISTEN | grep 16125 | grep fluxd > /dev/null 2>&1 ]] || [[ sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1 ]]; then
 echo -e "${CHECK_MARK} ${CYAN} Flux daemon listen on port 16125${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Flux daemon not listen${NC}"
