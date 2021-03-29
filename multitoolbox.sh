@@ -113,7 +113,7 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 function tar_file_unpack()
 {
     echo -e "${ARROW} ${YELLOW}Unpacking bootstrap archive file...${NC}"
-    pv $1 | tar -zx -C $2
+    pv $1 | sudo tar -zx -C $2
 }
 
 function tar_file_pack()
@@ -711,11 +711,11 @@ function kda_bootstrap() {
     echo -e "${NC}"
     sudo chown -R $USER:$USER /home/$USER/$FLUX_DIR
     echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-    docker stop zelKadenaChainWebNode > /dev/null 2>&1 && sleep 2
+    docker stop zelKadenaChainWebNode > /dev/null 2>&1 && sleep 5
 
     if [[ -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db  ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db
+        sudo rm -rf /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db
     fi
     
      mkdir -p /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0  > /dev/null 2>&1
