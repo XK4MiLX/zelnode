@@ -353,6 +353,12 @@ fi
 #echo
 fi
 
+if [[ "$(flux-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    COIN_CLI='flux-cli'
+else
+    COIN_CLI='zelcash-cli'
+fi
+
 if $COIN_CLI getinfo > /dev/null 2>&1; then
 
 echo -e "${BOOK} ${YELLOW}Flux benchmark status:${NC}"
