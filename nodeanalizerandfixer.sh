@@ -226,8 +226,6 @@ function get_last_benchmark()
            echo -e "${PIN}${CYAN} HDD: ${GREEN}$info${NC}"
          fi
 
-
-
     fi
 
 
