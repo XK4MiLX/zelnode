@@ -1435,7 +1435,7 @@ echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
 df | egrep 'flux' | awk '{ print $1}' |
 while read line; do
-sudo umount $line && sleep 1
+sudo umount -l $line && sleep 1
 done
 fi
    
