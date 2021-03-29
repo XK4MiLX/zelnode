@@ -36,13 +36,27 @@ ARROW="${CYAN}\xE2\x96\xB6${NC}"
 FLUX_DIR='zelflux'
 COIN_NAME='zelcash'
 COIN_DAEMON='zelcashd'
-COIN_CLI='zelcash-cli'
+#COIN_CLI='zelcash-cli'
 
 
 BENCH_DIR_LOG='.zelbenchmark'
 BENCH_DAEMON='zelbenchd'
 BENCH_NAME='zelbench'
-BENCH_CLI='zelbench-cli'
+#BENCH_CLI='zelbench-cli'
+
+if [[ "$(flux-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    COIN_CLI='flux-cli'
+else
+    COIN_CLI='zelcash-cli'
+fi
+
+if [[ "$(fluxbenchd-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    BENCH_CLI='fluxbench-cli'
+else
+    BENCH_CLI='zelbench-cli'
+fi
+
+
 
 if [[ -d /home/$USER/.zelcash ]]; then
     CONFIG_DIR='.zelcash'
@@ -351,17 +365,7 @@ fi
 #echo
 fi
 
-if [[ "$(flux-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
-    COIN_CLI='flux-cli'
-else
-    COIN_CLI='zelcash-cli'
-fi
 
-if [[ "$(fluxbenchd-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
-    BENCH_CLI='fluxbench-cli'
-else
-    BENCH_CLI='zelbench-cli'
-fi
 
 if $COIN_CLI getinfo > /dev/null 2>&1; then
 
