@@ -568,7 +568,6 @@ fi
 fi
 
 
-
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
 txhash=$(sed -n "2p" <<< "$txhash")
