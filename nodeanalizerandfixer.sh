@@ -506,7 +506,9 @@ network_height_03=$(curl -sk -m 5 https://explorer.zel.zelcore.io/api/status?q=g
 
 explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
 
-if [[ "$explorer_network_hight" == "$blocks_hight" ]]; then
+block_diff=$((explorer_network_hight-blocks_hight))
+
+if [[ "$block_diff" < 10 ]]; then
 echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
 else
 echo -e "${PIN} ${CYAN}Status: ${RED}not synced${NC}"
@@ -565,8 +567,13 @@ if [[ "$txhash" != "" ]]; then
 stak_info=""
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
+        #collateral_index=$(awk '{print $1}' <<< "$stak_info")
 	stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	
+	if [[ "$stak_info" != "" ]]; then
+	    stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	fi
+	
 fi
 
 	if [[ "$stak_info" != "" ]]; then
