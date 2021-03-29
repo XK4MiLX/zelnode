@@ -50,7 +50,7 @@ else
     COIN_CLI='zelcash-cli'
 fi
 
-if [[ "$(fluxbenchd-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+if [[ "$(fluxbench-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
     BENCH_CLI='fluxbench-cli'
 else
     BENCH_CLI='zelbench-cli'
