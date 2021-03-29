@@ -776,11 +776,29 @@ function flux_package() {
 function install_daemon() {
 
 
-   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
-   sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
+echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
+sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
+   
+if [[ "$(lsb_release -cs)" == "xenial" ]]; then
+   
+     gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
+     
+     if ! gpg --list-keys Zel > /dev/null; then    
+         gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+         gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1   
+     fi
+        
+     flux_package && sleep 2    
+else
    
    gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
    gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1
+   
+   if ! gpg --list-keys Zel > /dev/null; then    
+        gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+        gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1   
+   fi
    
    # cleaning 
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
@@ -819,6 +837,8 @@ function install_daemon() {
      exit
      
    fi
+   
+fi
 
 }
 
