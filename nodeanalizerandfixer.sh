@@ -533,7 +533,7 @@ echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 if [[ "$node_status" == "DOS" ]]; then
 blocks_till=$($COIN_CLI  getdoslist | jq .[] | grep "$collateral" -A4 -B1 | jq .eligible_in)
 dos_till=$((blocks_hight+blocks_till))
-echo -e "${PIN} ${RED}DOS ${NC}Till: ${ORANGE}$dos_till ${NC}EXPIRE_COUNT: ${ORANGE}$blocks_till${NC} Time left: ${RED}~$((2*blocks_till)) min. ${NC}"
+echo -e "${PIN} ${RED}DOS ${CYAN}Till: ${ORANGE}$dos_till ${CYAN}EXPIRE_COUNT: ${ORANGE}$blocks_till${CYAN} Time left: ${RED}~$((2*blocks_till)) min. ${NC}"
 fi
 
 
@@ -566,7 +566,7 @@ stak_info=""
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 		#collateral_index=$(awk '{print $1}' <<< "$stak_info")
-	stak_info=$(curl -s -m 5 https://explorer2.zel.network/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 fi
 
 	if [[ "$stak_info" != "" ]]; then
@@ -613,7 +613,7 @@ fi
 		esac
 		
 		#echo -e "$zelbench_benchmark_value" -> 10000 BASIC
-	       # echo -e "$type" -> 25000 SUPER
+	        # echo -e "$type" -> 25000 SUPER
 
    		 if [[ -z bench_benchmark_value ]]; then
   		  echo -e ""
@@ -627,7 +627,7 @@ fi
 	 			 "100000") bench_benchmark_value_name="BAMF" ;;
 				esac
 			
-			  echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${GREEN}$bench_benchmark_value_name${NC}"
+			  #echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${GREEN}$bench_benchmark_value_name${NC}"
 			else
 			
 				case $type in
@@ -640,11 +640,11 @@ fi
 					echo -en ""
 				else
 				
-				      if [[ "$bench_benchmark" == "failed" ]]; then
+				    #  if [[ "$bench_benchmark" == "failed" ]]; then
 				         echo -en ""	
-				      else    
-				         echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${RED}$bench_benchmark_value_name${NC}"	
-				      fi
+				     # else    
+				    #     echo -e "${X_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${RED}$bench_benchmark_value_name${NC}"	
+				  #    fi
 				   		      	
 				 fi
 			fi
