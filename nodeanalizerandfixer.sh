@@ -399,7 +399,7 @@ fi
 echo -e "${PIN} ${CYAN}Flux benchmark version: ${SEA}$bench_version${NC}"
 echo -e "${PIN} ${CYAN}Flux benchmark status: $bench_status_color${NC}"
 echo -e "${PIN} ${CYAN}Benchmark: $bench_benchmark_color${NC}"
-echo -e "${PIN} ${CYAN}FluxBack: $bench_back_color${NC}"
+echo -e "${PIN} ${CYAN}Flux: $bench_back_color${NC}"
 echo -e "${NC}"
 
 if [[ "$bench_benchmark" == "running" ]]; then
