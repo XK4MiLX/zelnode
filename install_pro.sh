@@ -1199,7 +1199,7 @@ function start_daemon() {
     MSG2=''
     spinning_timer
     
-    if [[ "$($COIN_DAEMON  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
     # if $COIN_DAEMON > /dev/null 2>&1; then
         
         NUM='2'
@@ -1219,6 +1219,7 @@ function start_daemon() {
 	pm2_install
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
+        echo
         echo -e "${WORNING} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
 	echo -e "${WORNING} ${RED}Veryfity date in ~/.flux/flux.conf .${NC}"
 	echo
