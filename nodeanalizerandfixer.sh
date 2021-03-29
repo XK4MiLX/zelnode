@@ -422,7 +422,6 @@ echo -e "${X_MARK} ${CYAN} Flux benchmark working correct but minimum system req
 check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
 check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
 fi
-
 #if [[ "$zelbench_benchmark" == "toaster" || "$zelbench_benchmark" == "failed" ]]; then
 ##lc_numeric_var=$(locale | grep LC_NUMERIC | sed -e 's/.*LC_NUMERIC=//')
 ##lc_numeric_need='"en_US.UTF-8"'
@@ -434,7 +433,6 @@ fi
 ##LC_CHECK="1"
 ##fi
 #fi
-
 if [[ "$bench_back" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} FluxBack does not work properly${NC}"
 
