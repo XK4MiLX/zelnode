@@ -706,8 +706,8 @@ docker_inactive=$(sudo systemctl status docker 2> /dev/null | egrep 'inactive|fa
 mongod_running=$(sudo systemctl status mongod 2> /dev/null | grep 'running' | grep -o 'since.*')
 mongod_inactive=$(sudo systemctl status mongod 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
-daemon_running=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | grep 'running' | grep -o 'since.*')
-daemon_inactive=$(sudo systemctl status "$COIN_NAME" 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
+daemon_running=$(sudo systemctl status zelcash 2> /dev/null | grep 'running' | grep -o 'since.*')
+daemon_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|failed' | grep -o 'since.*')
 
 if sudo systemctl list-units | grep snap.docker.dockerd.service | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${ARROW}  ${CYAN}Docker(SNAP) service running ${SEA}$snap_docker_running${NC}"
@@ -765,7 +765,7 @@ fi
 
 fi
 
-if sudo systemctl list-units | grep $COIN_NAME | egrep -wi 'running' > /dev/null 2>&1; then
+if sudo systemctl list-units | grep zelcash | egrep -wi 'running' > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Flux daemon service running ${SEA}$daemon_running${NC}"
 else
 if [[ "$daemon_inactive" != "" ]]; then
