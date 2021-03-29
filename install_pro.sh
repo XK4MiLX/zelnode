@@ -1194,16 +1194,20 @@ function start_daemon() {
     sudo systemctl enable zelcash.service > /dev/null 2>&1
     sudo systemctl start zelcash > /dev/null 2>&1
     
-    NUM='120'
+    NUM='125'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 2 min...'
     MSG2=''
-    if $COIN_DAEMON > /dev/null 2>&1; then
-        spinning_timer
+    spinning_timer
+    
+    if [[ "$($COIN_DAEMON  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    # if $COIN_DAEMON > /dev/null 2>&1; then
+        
         NUM='2'
         MSG1='Getting info...'
         MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
         spinning_timer
         echo && echo
+	
 	
 	daemon_version=$($COIN_CLI getinfo | jq -r '.version')
 	string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
@@ -1216,6 +1220,7 @@ function start_daemon() {
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo -e "${WORNING} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+	echo -e "${WORNING} ${RED}Veryfity date in ~/.flux/flux.conf .${NC}"
 	echo
         exit
     fi
