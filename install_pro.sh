@@ -1128,7 +1128,7 @@ function create_service() {
     sudo chown $USER:$USER /etc/systemd/system/zelcash.service
     cat << EOF > /etc/systemd/system/zelcash.service
 [Unit]
-Description=zelcash service
+Description=Flux daemon service
 After=network.target
 [Service]
 Type=forking
