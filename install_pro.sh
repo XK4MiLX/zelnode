@@ -1450,13 +1450,12 @@ fi
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
     
-            if [[ "$IMPORT_ZELID" == "0" ]]; then
+if [[ "$IMPORT_ZELID" == "0" ]]; then
 
         while true
-                do
+        do
                 ZELID=$(whiptail --title "Flux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
-                if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]
-                then
+                if [ $(printf "%s" "$ZELID" | wc -c) -eq "34" ] || [ $(printf "%s" "$ZELID" | wc -c) -eq "33" ]; then
                 echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
                 break
                 else
@@ -1465,24 +1464,38 @@ fi
                 fi
         done
 	
-           if whiptail --yesno "Are you planning to run Kadena node? Please note that only Super/BAMF nodes are allowed to run it." 8 60 3>&1 1>&2 2>&3; then
+        if whiptail --yesno "Are you planning to run Kadena node? Please note that only Super/BAMF nodes are allowed to run it." 8 60 3>&1 1>&2 2>&3; then
 	   
 	    while true
                 do
 		
-                    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 85 3>&1 1>&2 2>&3)
-                    if [[ "$KDA_A" = *kadena* && "$KDA_A" = *chainid* ]]; then
-                        echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
-                        break
-                    else
-                        echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
-                        sleep 2
-                    fi
-            done
+                    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+                    if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* ]]; then
+		    	
+			     echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+			 
+			  while true
+		          do
+			     KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
+		             if [[ "$KDA_C" -ge "0"  && "$KDA_C" -le "19" ]]; then		    
+                              echo -e "${ARROW} ${CYAN}Kadena chainid is valid.................[${CHECK_MARK}${CYAN}]${NC}"			      
+                              break
+                             else
+                              echo -e "${ARROW} ${CYAN}Kadena chainid is not valid.............[${X_MARK}${CYAN}]${NC}"			    
+                              sleep 2
+                             fi		     
+		          done
+			  
+			  break
+		    else	     
+		              echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
+			   sleep 2		     
+		    fi
+              done
 	                 
-           fi
-	
         fi
+	
+ fi
   
 
 if [[ "$KDA_A" != "" ]]; then
@@ -1492,7 +1505,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${ZELID}',
-	kadena: '${KDA_A}',
+	kadena: 'kadena:${KDA_A}?chainid=${KDA_C}',
         testnet: false
       }
     }
