@@ -1076,12 +1076,12 @@ else
 if [[ "$bench_status_pind" != "" ]]; then
 echo -e "${WORNING} Running benchmark process detected${NC}"
 echo -e "${WORNING} Killing benchmark...${NC}"
-sudo killall fluxbenchd > /dev/null 2>&1  && sleep 2
+sudo killall -9 fluxbenchd > /dev/null 2>&1  && sleep 2
 fi
 if [[ "$daemon_status_pind" != "" ]]; then
 echo -e "${WORNING} Running daemon process detected${NC}"
 echo -e "${WORNING} Killing daemon...${NC}"
-sudo killall fluxd > /dev/null 2>&1  && sleep 2
+sudo killall -9 fluxd > /dev/null 2>&1  && sleep 2
 fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
@@ -1094,12 +1094,12 @@ else
 if [[ "$bench_status_pind" != "" ]]; then
 echo -e "${WORNING} Running benchmark process detected${NC}"
 echo -e "${WORNING} Killing benchmark...${NC}"
-sudo killall zelbenchd > /dev/null 2>&1  && sleep 2
+sudo killall -9 zelbenchd > /dev/null 2>&1  && sleep 2
 fi
 if [[ "$daemon_status_pind" != "" ]]; then
 echo -e "${WORNING} Running daemon process detected${NC}"
 echo -e "${WORNING} Killing daemon...${NC}"
-sudo killall zelcashd > /dev/null 2>&1  && sleep 2
+sudo killall -9 zelcashd > /dev/null 2>&1  && sleep 2
 fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
