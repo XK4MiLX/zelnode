@@ -775,12 +775,15 @@ function flux_package() {
 
 function install_daemon() {
 
-
-echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
-sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
+   sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
+   sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+   
+   echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
+   sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
    
 if [[ "$(lsb_release -cs)" == "xenial" ]]; then
    
+     echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
      gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
      gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
      
@@ -801,8 +804,6 @@ else
    fi
    
    # cleaning 
-   sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
-   sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
    sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
        
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
@@ -1279,7 +1280,7 @@ function install_process() {
 
     echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
     
-    sudo rm /etc/apt/sources.list.d/mongodb*.list
+    sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
     sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
     
     curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
