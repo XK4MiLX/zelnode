@@ -247,15 +247,24 @@ fi
 }
 
 function ip_confirm() {
-    WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].') 
+
+    WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+    
     if [[ "$WANIP" == "" ]]; then
-     WANIP=$(curl --silent -m 15 https://ipv4bot.whatismyipaddress.com | tr -dc '[:alnum:].')     
-         if [[ "$WANIP" == "" ]]; then
-      	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
-	 echo
-	 exit
-    	 fi
+      WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+    fi  
+      
+    if [[ "$WANIP" == "" ]]; then
+      WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
     fi
+      
+        
+    if [[ "$WANIP" == "" ]]; then
+      	echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+	echo
+	exit
+    fi
+    
    string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................." 
 }
 
