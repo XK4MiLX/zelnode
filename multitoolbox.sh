@@ -247,9 +247,9 @@ fi
 }
 
 function ip_confirm() {
-    WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
+    WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].') 
     if [[ "$WANIP" == "" ]]; then
-     WANIP=$(curl -s -m 3  ifconfig.me)     
+     WANIP=$(curl --silent -m 15 https://ipv4bot.whatismyipaddress.com | tr -dc '[:alnum:].')     
          if [[ "$WANIP" == "" ]]; then
       	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
 	 echo
@@ -1428,6 +1428,11 @@ fi
 if ! zip -v > /dev/null 2>&1
 then
 sudo apt-get install -y zip > /dev/null 2>&1
+fi
+
+if ! whiptail -v > /dev/null 2>&1
+then
+sudo apt-get install -y whiptail > /dev/null 2>&1
 fi
 
 
