@@ -624,19 +624,24 @@ function ssh_port() {
 function ip_confirm() {
     echo -e "${ARROW} ${YELLOW}Detecting IP address...${NC}"
     
+    WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
     
-    
-    
-    
-    WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].') 
     if [[ "$WANIP" == "" ]]; then
-      WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')     
-         if [[ "$WANIP" == "" ]]; then
-      	 echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
-	 echo
-	 exit
-    	 fi
+      WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+    fi  
+      
+    if [[ "$WANIP" == "" ]]; then
+      WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
     fi
+      
+        
+    if [[ "$WANIP" == "" ]]; then
+      	echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+	echo
+	exit
+    fi
+	 
+	 
    string_limit_check_mark "Detected IP: $WANIP ................................." "Detected IP: ${GREEN}$WANIP${CYAN} ................................."
     
 }
