@@ -1184,14 +1184,14 @@ function install_docker(){
 echo -e "${GREEN}Module: Install Docker${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-#if [[ "$USER" != "root" || "$USER" != "ubuntu" ]]
-#then
-    #echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-   # echo -e "${CYAN}Please switch to the root accont.${NC}"
-   # echo -e "${YELLOW}================================================================${NC}"
-   # echo -e "${NC}"
-    #exit
-#fi
+if [[ "$USER" != "root" ]]
+then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the root accont use command 'su -'.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
 
 if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
