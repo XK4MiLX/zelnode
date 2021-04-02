@@ -841,11 +841,6 @@ fi
 
 else
 echo -e "${X_MARK} ${CYAN} Pm2 is not installed${NC}"
-if tmux ls | grep created &> /dev/null; then
-echo -e "${CHECK_MARK} ${CYAN} Tmux session exists${NC}"
-else
-echo -e "${X_MARK} ${CYAN} Tmux session does not exists${NC}"
-fi
 fi
 
 if [[ $(curl -s -m 5 --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
