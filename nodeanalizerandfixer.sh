@@ -44,13 +44,15 @@ BENCH_DAEMON='zelbenchd'
 BENCH_NAME='zelbench'
 #BENCH_CLI='zelbench-cli'
 
-if [[ "$(flux-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+
+
+if [[ -f /usr/local/bin/flux-cli ]]; then
     COIN_CLI='flux-cli'
 else
     COIN_CLI='zelcash-cli'
 fi
 
-if [[ "$(fluxbench-cli getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+if [[ -f /usr/local/bin/fluxbench-cli ]]; then
     BENCH_CLI='fluxbench-cli'
 else
     BENCH_CLI='zelbench-cli'
@@ -369,7 +371,7 @@ fi
 
 
 
-if $COIN_CLI getinfo > /dev/null 2>&1; then
+if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
 
 echo -e "${BOOK} ${YELLOW}Flux benchmark status:${NC}"
 bench_getatus=$($BENCH_CLI getstatus)
@@ -380,7 +382,7 @@ if [[ "$bench_back" == "null" ]]; then
 bench_back=$(jq -r '.flux' <<< "$bench_getatus")
 fi
 
-
+if [[ "$($BENCH_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
 bench_getinfo=$($BENCH_CLI getinfo)
 bench_version=$(jq -r '.version' <<< "$bench_getinfo")
 
@@ -500,6 +502,7 @@ fi
 
 fi
 
+fi
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Flux deamon information:${NC}"
 daemon_getinfo=$($COIN_CLI getinfo)
