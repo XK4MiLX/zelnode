@@ -502,6 +502,9 @@ fi
 
 fi
 
+fi
+
+if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
 
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Flux deamon information:${NC}"
