@@ -501,12 +501,10 @@ echo -e "${ARROW} ${CYAN} Local device(${GREEN}$device_name${CYAN}) IP veryficat
 fi
 
 fi
-
+echo -e "${NC}"
 fi
 
 if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
-
-echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Flux deamon information:${NC}"
 daemon_getinfo=$($COIN_CLI getinfo)
 version=$(jq -r '.version' <<< "$daemon_getinfo")
