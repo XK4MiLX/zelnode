@@ -553,7 +553,7 @@ KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85
 sleep 1
 KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
 
-    if [[ KDA_A == "" ]]; then 
+    if [[ "$KDA_A" == "" ]]; then 
         kda_address=""
     else
         kda_address="kadena:$KDA_A?chainid=$KDA_C"
