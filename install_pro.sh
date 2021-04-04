@@ -1489,7 +1489,8 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
 		          do
 			     KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
 		             if [[ "$KDA_C" -ge "0"  && "$KDA_C" -le "19" ]]; then		    
-                              echo -e "${ARROW} ${CYAN}Kadena chainid is valid.................[${CHECK_MARK}${CYAN}]${NC}"			      
+                              echo -e "${ARROW} ${CYAN}Kadena chainid is valid.................[${CHECK_MARK}${CYAN}]${NC}"	
+			      KDA_A="kadena:$KDA_A?chainid=$KDA_C"
                               break
                              else
                               echo -e "${ARROW} ${CYAN}Kadena chainid is not valid.............[${X_MARK}${CYAN}]${NC}"			    
@@ -1516,7 +1517,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${ZELID}',
-	kadena: 'kadena:${KDA_A}?chainid=${KDA_C}',
+	kadena: '${KDA_A}',
         testnet: false
       }
     }
