@@ -549,8 +549,15 @@ index=$(whiptail --inputbox "Enter your FluxNode Output Index from Zelcore" 8 65
 sleep 1
 zel_id=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
 sleep 1
-kda_address=$(whiptail --inputbox "Enter your Kadena address from Zelcore. Copy and paste the first address under the QR code. Do not edit out anything just paste what you copied." 8 72 3>&1 1>&2 2>&3)
+KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
 sleep 1
+KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
+
+    if [[ KDA_A == "" ]]; then 
+        kda_address=""
+    else
+        kda_address="kadena:$KDA_A?chainid=$KDA_C"
+    fi
 
 fi
 
