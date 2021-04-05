@@ -1395,7 +1395,7 @@ echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
  # git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)` > /dev/null 2>&1
 #) && \. "$NVM_DIR/nvm.sh"
 #cd
-curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash > /dev/null 2>&1
+curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash > /dev/null 2>&1
 . ~/.profile
 . ~/.bashrc
 sleep 1
