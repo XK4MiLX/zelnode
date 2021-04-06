@@ -177,7 +177,8 @@ function install_package()
      fi
     
       sudo apt-get update >/dev/null 2>&1
-      sudo apt-get install "$1" "$2" -y >/dev/null 2>&1
+      echo "$1 $2"
+      sudo apt-get install "$1" "$2" -y 
       sudo chmod 755 "$COIN_PATH/"* && sleep 2
      
 }
