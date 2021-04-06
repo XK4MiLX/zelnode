@@ -161,7 +161,7 @@ function remote_version_check(){
 function install_package()
 {
 
-    echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
+    echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1 $2${NC}"
     sudo apt-get purge "$1" "$2" -y >/dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/flux.list >/dev/null 2>&1 && sleep 1
@@ -177,8 +177,7 @@ function install_package()
      fi
     
       sudo apt-get update >/dev/null 2>&1
-      echo "$1 $2"
-      sudo apt-get install "$1" "$2" -y 
+      sudo apt-get install "$1" "$2" -y > /dev/null 2>&1 
       sudo chmod 755 "$COIN_PATH/"* && sleep 2
      
 }
@@ -276,7 +275,7 @@ function fluxbench_update()
     $BENCH_CLI stop >/dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
     sudo apt-get update >/dev/null 2>&1
-    sudo apt-get install --only-upgrade $BENCH_NAME -y >/dev/null 2>&1
+    sudo apt-get install --only-upgrade $BENCH_NAME fluxbench -y >/dev/null 2>&1
     sudo chmod 755 "$COIN_PATH"/$BENCH_NAME*
     sleep 2
 
@@ -417,7 +416,7 @@ function fluxdaemon_update()
     stop_fluxdaemon
 
     sudo apt-get update >/dev/null 2>&1
-    sudo apt-get install --only-upgrade $COIN_NAME -y >/dev/null 2>&1
+    sudo apt-get install --only-upgrade $COIN_NAME flux -y >/dev/null 2>&1
     sudo chmod 755 "$COIN_PATH"/$COIN_NAME*
     sleep 2
 
