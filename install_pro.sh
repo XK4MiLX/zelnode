@@ -1115,8 +1115,13 @@ fi
 sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
 
+if [[ -f /usr/local/bin/fluxd ]]; then
 bash -c "fluxd"
 exit
+else
+bash -c "zelcashd"
+exit
+fi
 EOF
 
 
