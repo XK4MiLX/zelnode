@@ -208,7 +208,6 @@ stop_fluxdaemon() {
 
 }
 
-
 function reindex()
 {
     echo -e "${ARROW} ${CYAN}Reindexing...${NC}"
