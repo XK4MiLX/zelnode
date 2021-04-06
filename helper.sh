@@ -162,45 +162,24 @@ function install_package()
 {
 
     echo -e "${ARROW} ${CYAN}Install package for: ${GREEN}$1${NC}"
-
-    sudo apt-get purge "$1" -y >/dev/null 2>&1 && sleep 1
+    sudo apt-get purge "$1" "$2" -y >/dev/null 2>&1 && sleep 1
     sudo rm /etc/apt/sources.list.d/zelcash.list >/dev/null 2>&1 && sleep 1
+    sudo rm /etc/apt/sources.list.d/flux.list >/dev/null 2>&1 && sleep 1
     echo -e "${ARROW} ${CYAN}Adding apt source...${NC}"
-    echo 'deb https://apt.zel.network/ all main' | sudo tee /etc/apt/sources.list.d/zelcash.list
-    gpg --keyserver keyserver.ubuntu.com --recv 4B69CA27A986265D >/dev/null 2>&1
-    gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-    sudo apt-get update >/dev/null 2>&1
-    sudo apt-get install "$1" -y >/dev/null 2>&1
-    sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-    if ! gpg --list-keys Zel >/dev/null; then
-        gpg --keyserver na.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
-        gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-        sudo apt-get update >/dev/null 2>&1 
-        sudo apt-get install "$1" -y >/dev/null 2>&1
-        sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-        if ! gpg --list-keys Zel >/dev/null; then
-            gpg --keyserver eu.pool.sks-keyservers.net --recv 4B69CA27A986265D >/dev/null 2>&1
-            gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-            sudo apt-get update >/dev/null 2>&1
-            sudo apt-get install "$1" -y >/dev/null 2>&1
-            sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-            if ! gpg --list-keys Zel >/dev/null; then
-                gpg --keyserver pgpkeys.urown.net --recv 4B69CA27A986265D >/dev/null 2>&1
-                gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-                sudo apt-get update >/dev/null 2>&1
-                sudo apt-get install "$1" -y >/dev/null 2>&1
-                sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-                if ! gpg --list-keys Zel >/dev/null; then
-                    gpg --keyserver keys.gnupg.net --recv 4B69CA27A986265D >/dev/null 2>&1  
-                    gpg --export 4B69CA27A986265D | sudo apt-key add - >/dev/null 2>&1
-                    sudo apt-get update >/dev/null 2>&1
-                    sudo apt-get install "$1" -y >/dev/null 2>&1
-                    sudo chmod 755 "$COIN_PATH/$1"* && sleep 2
-                fi
-            fi
-        fi
-    fi
     
+     echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
+     gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
+     
+     if ! gpg --list-keys Zel > /dev/null; then    
+         gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+         gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1   
+     fi
+    
+      sudo apt-get update >/dev/null 2>&1
+      sudo apt-get install "$1" "$2" -y >/dev/null 2>&1
+      sudo chmod 755 "$COIN_PATH/"* && sleep 2
+     
 }
 
 start_fluxdaemon() 
@@ -265,7 +244,7 @@ function fluxbench_update()
     if [[ "$type" == "force" ]]; then
         echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
         stop_fluxdaemon
-        install_package $BENCH_NAME
+        install_package "$BENCH_NAME" "fluxbench"
         dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
         echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
         echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
@@ -306,7 +285,7 @@ function fluxbench_update()
 
     if [[ "$dpkg_version_after_install" == "" ]]; then
 
-        install_package "$BENCH_NAME"
+        install_package "$BENCH_NAME" "fluxbench"
         dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
         if [[ "$dpkg_version_after_install" != "" ]]; then
@@ -328,7 +307,7 @@ function fluxbench_update()
 
             if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
 	    
-                install_package $BENCH_NAME
+                install_package "$BENCH_NAME" "fluxbench"
                 dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
                 if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
@@ -402,7 +381,7 @@ function fluxdaemon_update()
     if [[ "$type" == "force" ]]; then
         echo -e "${ARROW} ${CYAN}Force Flux daemon updating...${NC}"
         stop_fluxdaemon
-        install_package "$COIN_NAME"
+        install_package "$COIN_NAME" "flux"
         dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
         echo -e "${ARROW} ${CYAN}Flux daemon version before update: ${GREEN}$local_version${NC}"
         echo -e "${ARROW} ${CYAN}Flux daemon version after update: ${GREEN}$dpkg_version_after_install${NC}"
@@ -447,7 +426,7 @@ function fluxdaemon_update()
 
     if [[ "$dpkg_version_after_install" == "" ]]; then
 
-        install_package "$COIN_NAME"
+        install_package "$COIN_NAME" "flux"
         dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
 
         if [[ "$dpkg_version_after_install" != "" ]]; then
@@ -468,7 +447,7 @@ function fluxdaemon_update()
 
         if [[ "local_version" == "$dpkg_version_after_install" ]]; then
 	
-            install_package "$COIN_NAME"
+            install_package "$COIN_NAME" "flux"
             dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
     
             if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
