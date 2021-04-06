@@ -202,8 +202,8 @@ stop_fluxdaemon() {
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon...${NC}"
     sudo systemctl stop $COIN_NAME >/dev/null 2>&1 && sleep 5
     "$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
-    sudo killall "$COIN_DAEMON" >/dev/null 2>&1
-    sudo killall -s SIGKILL $BENCH_NAME >/dev/null 2>&1 && sleep 1
+    sudo killall "$COIN_DAEMON" fluxd >/dev/null 2>&1
+    sudo killall -s SIGKILL $BENCH_NAME fluxbench >/dev/null 2>&1 && sleep 1
     sleep 4
 
 }
@@ -275,7 +275,7 @@ function fluxbench_update()
     sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
     sudo apt-get update >/dev/null 2>&1
     sudo apt-get install --only-upgrade $BENCH_NAME fluxbench -y >/dev/null 2>&1
-    sudo chmod 755 "$COIN_PATH"/$BENCH_NAME*
+    sudo chmod 755 "$COIN_PATH/"*
     sleep 2
 
     dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
@@ -416,7 +416,7 @@ function fluxdaemon_update()
 
     sudo apt-get update >/dev/null 2>&1
     sudo apt-get install --only-upgrade $COIN_NAME flux -y >/dev/null 2>&1
-    sudo chmod 755 "$COIN_PATH"/$COIN_NAME*
+    sudo chmod 755 "$COIN_PATH/"*
     sleep 2
 
     dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
