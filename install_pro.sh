@@ -1257,9 +1257,20 @@ function start_daemon() {
     else
         echo
         echo -e "${WORNING} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+	
+	if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
+	  error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed -E 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
+	     if [[ "$error_line" != "" ]]; then	  
+	       echo -e "${WORNING} ${CYAN}Last error from ~/$CONFIG_DIR/debug.log: ${NC}"
+	       echo -e "${WORNING} ${CYAN}$error_line${NC}"
+	       echo
+	       exit
+	     fi  	       
+        fi
+	
 	echo -e "${WORNING} ${RED}Veryfity date in ~/.flux/flux.conf .${NC}"
 	echo
-        exit
+        exit	
     fi
 }
 
