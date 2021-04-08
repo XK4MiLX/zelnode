@@ -1491,7 +1491,7 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
                 fi
         done
 	
-        if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward u still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
+        if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
 	   
 	    while true
                 do
