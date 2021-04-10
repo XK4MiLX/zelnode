@@ -300,7 +300,7 @@ echo -e "${BOOK} ${YELLOW}Checking Flux benchmark $BENCH_DIR_LOG/debug.log${NC}"
 if [[ $(egrep -ac -wi --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log) != "0" ]]; then
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log)${CYAN} error events${NC}"
 #egrep -wi --color 'warning|error|critical|failed' ~/.zelbenchmark/debug.log
-error_line=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | sed -E 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+error_line=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -a --color 'Failed' /home/$USER/$BENCH_DIR_LOG/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
@@ -345,7 +345,7 @@ if [[ $(egrep -ac -wi --color 'error|failed' /home/$USER//$CONFIG_DIR/debug.log)
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(egrep -ac -wi --color 'error|failed' /home/$USER/$CONFIG_DIR/debug.log)${CYAN} error events, ${RED}$(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) ${CYAN}related to benchmark${NC}"
 if [[ $(egrep -ac -wi --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log) != "0" ]]; then
 echo -e "${BOOK} ${CYAN}FluxBench errors info:${NC}"
-error_line=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed -E 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
+error_line=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')
 event_date=$(egrep -a --color 'benchmarking' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | grep -o '[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}')
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
 event_time_uxtime=$(date -ud "$event_date" +"%s")
