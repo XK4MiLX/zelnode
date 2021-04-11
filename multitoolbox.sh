@@ -769,7 +769,10 @@ function kda_bootstrap() {
 
             case $CHOICE in
 	    "1)")   
-	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=$(curl -s -m 15 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		 if [[ "$DB_HIGHT" == "" ]]; then
+		     DB_HIGHT=$(curl -s -m 15 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		 fi
 		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
