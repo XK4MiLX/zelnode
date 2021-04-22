@@ -780,7 +780,6 @@ function clean_mongod() {
     
 }
 
-
 function mongodb_bootstrap(){
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q)
