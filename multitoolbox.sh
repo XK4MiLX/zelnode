@@ -346,8 +346,6 @@ if [ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]; then
 
 fi
 
-
-
 if [ -d /home/$USER/$FLUX_DIR ]; then
 
     echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
