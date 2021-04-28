@@ -257,9 +257,13 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	    fi
 
            if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
-               IMPORT_ZELID="1"
+               
                ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-               echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+               
+	       if [[ "$ZELID" != "" ]]; then
+	         echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+	         IMPORT_ZELID="1"
+	       fi
 
                KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
               if [[ "$KDA_A" != "" ]]; then
@@ -298,9 +302,14 @@ else
     
 
          if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
-            IMPORT_ZELID="1"
-            ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-            echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1 
+	 
+          ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+	 
+	       if [[ "$ZELID" != "" ]]; then
+	         echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+	         IMPORT_ZELID="1"
+	       fi
+	       
             KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
                if [[ "$KDA_A" != "" ]]; then
                     echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
