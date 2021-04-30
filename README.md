@@ -15,7 +15,7 @@ https://fluxnodeservice.com
  
 <br>
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
-<p>https://xk4milx.coinrequest.io</p>
+<p>https://x4milx.coinrequest.io</p>
 
 ```
 CruxID: k4mil@zel.crux  
