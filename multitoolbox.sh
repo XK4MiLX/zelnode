@@ -1130,41 +1130,6 @@ bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool
 
 }
 
- function insertAfter
-{
-   local file="$1" line="$2" newText="$3"
-   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
-}
-
-function fix_lxc_config(){
-
-echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
-
-continer_name="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
-echo -e "${YELLOW}================================================================${NC}"
-if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [OK]${NC}"
-fi
-
-insertAfter "/etc/pve/lxc/$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
-sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"   
-
-if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
-else
-echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf fix [Failed]${NC}"
-fi  
-
-}
 
 function install_node(){
 
@@ -1481,7 +1446,6 @@ echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
 echo -e "${CYAN}8  - Re-install Flux${NC}"
 echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
-#echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
