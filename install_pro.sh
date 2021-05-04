@@ -353,9 +353,9 @@ if pm2 -v > /dev/null 2>&1
 then
 WATCHDOG_INSTALL="1"
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
+cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
