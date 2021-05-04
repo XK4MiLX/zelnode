@@ -405,7 +405,7 @@ function mongodb_bootstrap(){
 
 
         BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
-        echo -e ${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
+        echo -e ${ARROW} ${CYAN}Node block height after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
 		
      else
      
