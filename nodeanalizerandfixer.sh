@@ -414,7 +414,7 @@ if [[ "$bench_benchmark" == "running" ]]; then
 echo -e "${ARROW} ${CYAN} Benchmarking hasn't completed, please wait until benchmarking has completed.${NC}"
 fi
 
-if [[ "$bench_benchmark" == "BASIC" || "$bench_benchmark" == "SUPER" || "$bench_benchmark" == "BAMF" ]]; then
+if [[ "$bench_benchmark" == "CUMULUS" || "$bench_benchmark" == "NIMBUS" || "$bench_benchmark" == "STRATUS" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} Flux benchmark working correct, all requirements met.${NC}"
 fi
 
@@ -630,15 +630,15 @@ fi
 		if [[ $type == ?(-)+([0-9]) ]]; then
 
 		case $type in
- 		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BASIC${NC}" ;;
- 		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}SUPER${NC}";;
-	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}BAMF${NC}";;
+ 		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}CUMULUS${NC}" ;;
+ 		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}NIMBUS${NC}";;
+	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}STRATUS${NC}";;
 		esac
 		
 		case $bench_benchmark in
- 		 "BASIC")  bench_benchmark_value=10000 ;;
- 		 "SUPER")  bench_benchmark_value=25000 ;;
-	 	 "BAMF") bench_benchmark_value=100000 ;;
+ 		 "CUMULUS")  bench_benchmark_value=10000 ;;
+ 		 "NIMBUS")  bench_benchmark_value=25000 ;;
+	 	 "STRATUS") bench_benchmark_value=100000 ;;
 		esac
 		
 		#echo -e "$zelbench_benchmark_value" -> 10000 BASIC
@@ -651,18 +651,18 @@ fi
 		 	if [[ "$bench_benchmark_value" -ge "$type" ]]; then
 			
 				case $type in
- 				 "10000")  bench_benchmark_value_name="BASIC" ;;
- 				 "25000")  bench_benchmark_value_name="SUPER" ;;
-	 			 "100000") bench_benchmark_value_name="BAMF" ;;
+ 				 "10000")  bench_benchmark_value_name="CUMULUS" ;;
+ 				 "25000")  bench_benchmark_value_name="NIMBUS" ;;
+	 			 "100000") bench_benchmark_value_name="STRATUS" ;;
 				esac
 			
 			  #echo -e "${CHECK_MARK} ${CYAN} Benchmark passed for ${GREEN}$bench_benchmark${CYAN} required ${GREEN}$bench_benchmark_value_name${NC}"
 			else
 			
 				case $type in
- 				 "10000")  bench_benchmark_value_name="BASIC" ;;
- 				 "25000")  bench_benchmark_value_name="SUPER" ;;
-	 			 "100000") bench_benchmark_value_name="BAMF" ;;
+ 				 "10000")  bench_benchmark_value_name="CUMULUS" ;;
+ 				 "25000")  bench_benchmark_value_name="NIMBUS" ;;
+	 			 "100000") bench_benchmark_value_name="STRATUS" ;;
 				esac
 				
 				if [[ "$bench_benchmark" == "running" ]]; then
