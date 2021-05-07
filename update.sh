@@ -83,6 +83,7 @@ else
 
 fi
 
+fi
     
 if sudo systemctl list-units --full --no-legend --no-pager --plain --all --type service "$SERVICE_NAME.service" | grep -Foq "$SERVICE_NAME.service"; then
   sudo systemctl start "$SERVICE_NAME"
