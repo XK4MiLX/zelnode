@@ -3,15 +3,16 @@
 #information
 FLUX_APPS_DIR='ZelApps'
 FLUX_DIR='zelflux'
-COIN_NAME='zelcash'
-COIN_DAEMON='zelcashd'
-COIN_CLI='zelcash-cli'
+SERVICE_NAME='zelcash'
+COIN_NAME='flux'
+COIN_DAEMON='fluxd'
+COIN_CLI='flux-cli'
 COIN_PATH='/usr/local/bin'
 CONFIG_DIR='.flux'
 CONFIG_FILE='zelcash.conf'
-BENCH_NAME='zelbench'
-BENCH_DAEMON='zelbenchd'
-BENCH_CLI='zelbench-cli'
+BENCH_NAME='fluxbench'
+BENCH_DAEMON='fluxbenchd'
+BENCH_CLI='fluxbench-cli'
 #end of required details
 
 #color codes
@@ -150,12 +151,11 @@ function remote_version_check(){
     #variable null
     remote_version=""
     package_name=""
+    remote_version=$(curl -s -m 8 https://apt.runonflux.io/pool/main/f/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
     
-    remote_version=$(curl -s -m 3 https://apt.zel.network/pool/main/z/"$1"/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
-    
-    if [[ "$remote_version" != "" ]]; then
-        package_name=$(echo "$1_"$remote_version"_all.deb")
-    fi
+   # if [[ "$remote_version" != "" ]]; then
+    #    package_name=$(echo "$1_"$remote_version"_all.deb")
+   # fi
 }
 
 function install_package()
@@ -177,7 +177,7 @@ function install_package()
      fi
     
       sudo apt-get update >/dev/null 2>&1
-      sudo apt-get install "$1" "$2" -y > /dev/null 2>&1 
+      sudo apt-get install "$1" -y > /dev/null 2>&1 
       sudo chmod 755 "$COIN_PATH/"* && sleep 2
      
 }
@@ -185,11 +185,11 @@ function install_package()
 start_fluxdaemon() 
 {
 
-    serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
+    serive_check=$(sudo systemctl list-units --full -all | grep -o "$SERVICE_NAME.service" | head -n1)
 
     if [[ "$serive_check" != "" ]]; then
         echo -e "${ARROW} ${CYAN}Starting Flux daemon service...${NC}"
-        sudo systemctl start $COIN_NAME >/dev/null 2>&1
+        sudo systemctl start $SERVICE_NAME >/dev/null 2>&1
     else
         echo -e "${ARROW} ${CYAN}Starting Flux daemon process...${NC}"
         "$COIN_DAEMON" >/dev/null 2>&1
@@ -200,7 +200,7 @@ start_fluxdaemon()
 stop_fluxdaemon() {
 
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon...${NC}"
-    sudo systemctl stop $COIN_NAME >/dev/null 2>&1 && sleep 5
+    sudo systemctl stop $SERVICE_NAME >/dev/null 2>&1 && sleep 5
     "$COIN_CLI" stop >/dev/null 2>&1 && sleep 5
     sudo killall "$COIN_DAEMON" fluxd >/dev/null 2>&1
     sudo killall -s SIGKILL $BENCH_NAME fluxbench >/dev/null 2>&1 && sleep 1
@@ -225,9 +225,9 @@ function restart_fluxdaemon()
 {
 
     echo -e "${ARROW} ${CYAN}Restarting Flux daemon...${NC}"
-    serive_check=$(sudo systemctl list-units --full -all | grep -o "$COIN_NAME.service" | head -n1)
+    serive_check=$(sudo systemctl list-units --full -all | grep -o "$SERVICE_NAME.service" | head -n1)
     if [[ "$serive_check" != "" ]]; then
-        sudo systemctl restart $COIN_NAME >/dev/null 2>&1 && sleep 3
+        sudo systemctl restart $SERVICE_NAME >/dev/null 2>&1 && sleep 3
        else
         stop_fluxdaemon
         start_fluxdaemon
@@ -243,7 +243,7 @@ function fluxbench_update()
     if [[ "$type" == "force" ]]; then
         echo -e "${ARROW} ${CYAN}Force Flux benchmark updating...${NC}"
         stop_fluxdaemon
-        install_package "$BENCH_NAME" "fluxbench"
+        install_package "$BENCH_NAME"
         dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
         echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
         echo -e "${ARROW} ${CYAN}Flux benchmark version after update: ${GREEN}$dpkg_version_after_install${NC}"
@@ -269,22 +269,20 @@ function fluxbench_update()
     fi
 
     echo -e "${ARROW} ${CYAN}Updating Flux benchmark...${NC}"
-    #stop_zelcash
     echo -e "${ARROW} ${CYAN}Flux benchmark stopping...${NC}"
     $BENCH_CLI stop >/dev/null 2>&1 && sleep 2
     sudo killall -s SIGKILL $BENCH_DAEMON >/dev/null 2>&1 && sleep 1
     sudo apt-get update >/dev/null 2>&1
-    sudo apt-get install --only-upgrade $BENCH_NAME fluxbench -y >/dev/null 2>&1
+    sudo apt-get install $BENCH_NAME -y >/dev/null 2>&1
     sudo chmod 755 "$COIN_PATH/"*
     sleep 2
 
     dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     echo -e "${ARROW} ${CYAN}Flux benchmark version before update: ${GREEN}$local_version${NC}"
-    #echo -e "${ARROW} ${CYAN}Zelbench version after update: ${GREEN}$dpkg_version_after_install${NC}"
 
     if [[ "$dpkg_version_after_install" == "" ]]; then
 
-        install_package "$BENCH_NAME" "fluxbench"
+        install_package "$BENCH_NAME"
         dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
         if [[ "$dpkg_version_after_install" != "" ]]; then
@@ -293,7 +291,6 @@ function fluxbench_update()
 
         start_fluxdaemon
         echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-        #zelbenchd -daemon >/dev/null 2>&1
     else
 
         if [[ "$remote_version" == "$dpkg_version_after_install" ]]; then
@@ -301,15 +298,14 @@ function fluxbench_update()
             echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
             start_fluxdaemon
             echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-            #zelbenchd -daemon >/dev/null 2>&1
         else
 
             if [[ "$local_version" == "$dpkg_version_after_install" ]]; then
 	    
-                install_package "$BENCH_NAME" "fluxbench"
+                install_package $BENCH_NAME
                 dpkg_version_after_install=$(dpkg -l $BENCH_NAME | grep -w "$BENCH_NAME" | awk '{print $3}')
     
-                if [[ "dpkg_version_after_install" == "$remote_version" ]]; then
+                if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
 		
                     echo -e "${ARROW} ${CYAN}Flux benchmark update successful ${CYAN}(${GREEN}$dpkg_version_after_install${CYAN})${NC}"
 		    
@@ -317,7 +313,6 @@ function fluxbench_update()
 		
                 start_fluxdaemon
 		echo -e "${ARROW} ${CYAN}Flux benchmark starting...${NC}"
-		#zelbenchd -daemon >/dev/null 2>&1
             fi
         fi
     fi
@@ -328,7 +323,7 @@ function flux_update()
 {
 
 	current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-	required_ver=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+	required_ver=$(curl -s -m 5 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
     if [[ "$required_ver" != "" && "$call_type" != "update_all" ]]; then
 	
@@ -415,7 +410,7 @@ function fluxdaemon_update()
     stop_fluxdaemon
 
     sudo apt-get update >/dev/null 2>&1
-    sudo apt-get install --only-upgrade $COIN_NAME flux -y >/dev/null 2>&1
+    sudo apt-get install flux -y >/dev/null 2>&1
     sudo chmod 755 "$COIN_PATH/"*
     sleep 2
 
@@ -446,7 +441,7 @@ function fluxdaemon_update()
 
         if [[ "local_version" == "$dpkg_version_after_install" ]]; then
 	
-            install_package "$COIN_NAME" "flux"
+            install_package "$COIN_NAME"
             dpkg_version_after_install=$(dpkg -l $COIN_NAME | grep -w "$COIN_NAME" | awk '{print $3}')
     
             if [[ "$dpkg_version_after_install" == "$remote_version" ]]; then
@@ -509,7 +504,7 @@ function check_update()
     fi
 
     local_version=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-    remote_version=$(curl -s -m 3 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+    remote_version=$(curl -s -m 5 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
 
     if [[ "$local_version" == "" || "$remote_version" == "" ]]; then
         echo -e "${RED}${ARROW} ${CYAN}Problem with version veryfication...Flux installation skipped...${NC}"
@@ -991,9 +986,9 @@ function create_kda_bootstrap {
         exit
     fi
     
-    network_height_node_01=$(curl -sk -m 3 https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
-    network_height_node_02=$(curl -sk -m 3 https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
-    network_height_node_03=$(curl -sk -m 3 https://fr1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_01=$(curl -sk -m 5 https://us-e1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_02=$(curl -sk -m 5 https://us-e2.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
+    network_height_node_03=$(curl -sk -m 5 https://fr1.chainweb.com/chainweb/0.0/mainnet01/cut | jq '.height')
 
     network_height=$(max "$network_height_node_01" "$network_height_node_02" "$network_height_node_03")
     echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
@@ -1069,7 +1064,7 @@ function daemon_bootstrap() {
 
 
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
-    sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
+    sudo systemctl stop $SERVICE_NAME > /dev/null 2>&1 && sleep 2
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 
     if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
@@ -1130,7 +1125,7 @@ function daemon_bootstrap() {
         rm -rf $BOOTSTRAP_ZIPFILE
     fi
 
-    sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+    sudo systemctl start $SERVICE_NAME  > /dev/null 2>&1 && sleep 2
     NUM='35'
     MSG1='Starting Flux daemon service...'
     MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
