@@ -697,61 +697,62 @@ echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 
 if whiptail --yesno "Would you like enable FluxOS auto update?" 8 65; then
 flux_update='1'
-sleep 3
+sleep 1
 else
 flux_update='0'
-sleep 3
+sleep 1
 fi
 
 if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 65; then
 daemon_update='1'
-sleep 3
+sleep 1
 else
 daemon_update='0'
-sleep 3
+sleep 1
 fi
 
 if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 65; then
 bench_update='1'
-sleep 3
+sleep 1
 else
 bench_update='0'
-sleep 3
+sleep 1
 fi
 
 if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 65; then
 fix_action='1'
-sleep 3
+sleep 1
 else
 fix_action='0'
-sleep 3
+sleep 1
 fi
 
 if whiptail --yesno "Would you like enable discord alert?" 8 65; then
 
 discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
-sleep 2
+sleep 1
 
   if whiptail --yesno "Would you like enable nick ping on discord?" 8 65; then
     ping=$(whiptail --inputbox "Enter your discord user id" 8 65 3>&1 1>&2 2>&3)
-    sleep 3
+    sleep 1
   else
     ping='0'
-    sleep 3
+    sleep 1
   fi
   
 else
 discord='0'
 ping='0'
-sleep 3
+sleep 1
 fi
 
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	
     if [[ "$stak_info" != "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
     fi	
 fi
 
