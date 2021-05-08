@@ -695,7 +695,7 @@ cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 
 
-if whiptail --yesno "Would you like enable FluxOS auto update?" 8 65; then
+if whiptail --yesno "Would you like enable FluxOS auto update?" 8 60; then
 flux_update='1'
 sleep 1
 else
@@ -703,7 +703,7 @@ flux_update='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 65; then
+if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 60; then
 daemon_update='1'
 sleep 1
 else
@@ -711,7 +711,7 @@ daemon_update='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 65; then
+if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 60; then
 bench_update='1'
 sleep 1
 else
@@ -719,7 +719,7 @@ bench_update='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 65; then
+if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 75; then
 fix_action='1'
 sleep 1
 else
@@ -727,13 +727,13 @@ fix_action='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable discord alert?" 8 65; then
+if whiptail --yesno "Would you like enable discord alert?" 8 60; then
 
 discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
 sleep 1
 
-  if whiptail --yesno "Would you like enable nick ping on discord?" 8 65; then
-    ping=$(whiptail --inputbox "Enter your discord user id" 8 65 3>&1 1>&2 2>&3)
+  if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
+    ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
     sleep 1
   else
     ping='0'
@@ -755,12 +755,6 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
       stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
     fi	
 fi
-
-echo
-echo -e "$index_from_file"
-echo -e "$tx_from_file"
-echo -e "$stak_info"
-echo
 
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
