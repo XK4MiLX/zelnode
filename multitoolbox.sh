@@ -755,7 +755,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
     fi	
 fi
 
-if [[ $stak_info === ?(-)+([0-9]) ]]; then
+if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
   case $stak_info in
    "10000") eps_limit=90 ;;
