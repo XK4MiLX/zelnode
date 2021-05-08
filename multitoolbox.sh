@@ -756,6 +756,12 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
     fi	
 fi
 
+echo
+echo -e "$index_from_file"
+echo -e "$tx_from_file"
+echo -e "$stak_info"
+echo
+
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
   case $stak_info in
