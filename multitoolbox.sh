@@ -692,6 +692,96 @@ mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
+
+
+if whiptail --yesno "Would you like enable FluxOS auto update?" 8 65; then
+flux_update='1'
+sleep 3
+else
+flux_update='0'
+sleep 3
+fi
+
+if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 65; then
+daemon_update='1'
+sleep 3
+else
+daemon_update='0'
+sleep 3
+fi
+
+if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 65; then
+bench_update='1'
+sleep 3
+else
+bench_update='0'
+sleep 3
+fi
+
+if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 65; then
+fix_action='1'
+sleep 3
+else
+fix_action='0'
+sleep 3
+fi
+
+if whiptail --yesno "Would you like enable discord alert?" 8 65; then
+
+discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+sleep 2
+
+  if whiptail --yesno "Would you like enable nick ping on discord?" 8 65; then
+    ping=$(whiptail --inputbox "Enter your discord user id" 8 65 3>&1 1>&2 2>&3)
+    sleep 3
+  else
+    ping='0'
+    sleep 3
+  fi
+  
+else
+discord='0'
+ping='0'
+sleep 3
+fi
+
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	
+    if [[ "$stak_info" != "" ]]; then
+      stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+    fi	
+fi
+
+if [[ $stak_info === ?(-)+([0-9]) ]]; then
+
+  case $stak_info in
+   "10000") eps_limit=90 ;;
+   "25000")  eps_limit=180 ;;
+   "100000") eps_limit=300 ;;
+  esac
+ 
+else
+eps_limit=0;
+fi
+
+
+sudo touch /home/$USER/watchdog/config.js
+sudo chown $USER:$USER /home/$USER/watchdog/config.js
+    cat << EOF >  /home/$USER/watchdog/config.js
+module.exports = {
+    tier_eps_min: '${eps_limit}',
+    zelflux_update: '${flux_update}',
+    zelcash_update: '${daemon_update}',
+    zelbench_update: '${bench_update}',
+    action: '${fix_action}',
+    ping: '${ping}',
+    web_hook_url: '${discord}'
+}
+EOF
+
 echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
 pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
