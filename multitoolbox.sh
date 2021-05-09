@@ -685,13 +685,104 @@ pm2 save  > /dev/null 2>&1
 sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
-cd && git clone https://github.com/XK4MiLX/watchdog.git > /dev/null 2>&1
+cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/XK4MiLX/zelnode/master/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
+
+
+if whiptail --yesno "Would you like enable FluxOS auto update?" 8 60; then
+flux_update='1'
+sleep 1
+else
+flux_update='0'
+sleep 1
+fi
+
+if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 60; then
+daemon_update='1'
+sleep 1
+else
+daemon_update='0'
+sleep 1
+fi
+
+if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 60; then
+bench_update='1'
+sleep 1
+else
+bench_update='0'
+sleep 1
+fi
+
+if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 75; then
+fix_action='1'
+sleep 1
+else
+fix_action='0'
+sleep 1
+fi
+
+if whiptail --yesno "Would you like enable discord alert?" 8 60; then
+
+discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+sleep 1
+
+  if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
+    ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
+    sleep 1
+  else
+    ping='0'
+    sleep 1
+  fi
+  
+else
+discord='0'
+ping='0'
+sleep 1
+fi
+
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+	
+    if [[ "$stak_info" != "" ]]; then
+      stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+    fi	
+fi
+
+if [[ $stak_info == ?(-)+([0-9]) ]]; then
+
+  case $stak_info in
+   "10000") eps_limit=90 ;;
+   "25000")  eps_limit=180 ;;
+   "100000") eps_limit=300 ;;
+  esac
+ 
+else
+eps_limit=0;
+fi
+
+
+sudo touch /home/$USER/watchdog/config.js
+sudo chown $USER:$USER /home/$USER/watchdog/config.js
+    cat << EOF >  /home/$USER/watchdog/config.js
+module.exports = {
+    tier_eps_min: '${eps_limit}',
+    zelflux_update: '${flux_update}',
+    zelcash_update: '${daemon_update}',
+    zelbench_update: '${bench_update}',
+    action: '${fix_action}',
+    ping: '${ping}',
+    web_hook_url: '${discord}'
+}
+EOF
+
 echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
 pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
@@ -1125,45 +1216,11 @@ then
     exit
 fi
 
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/nodeanalizerandfixer.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/nodeanalizerandfixer.sh)
+
 
 }
 
- function insertAfter
-{
-   local file="$1" line="$2" newText="$3"
-   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
-}
-
-function fix_lxc_config(){
-
-echo -e "${GREEN}Module: Fix your lxc.conf file on host${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-echo -e ""
-
-continer_name="$(whiptail --title "ZELNODE MULTITOOLBOX $dversion" --inputbox "Enter your LXC continer name" 8 72 3>&1 1>&2 2>&3)"
-echo -e "${YELLOW}================================================================${NC}"
-if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [OK]${NC}"
-fi
-
-insertAfter "/etc/pve/lxc/$continer_name.conf" "cores" "features: mount=fuse,nesting=1"
-sudo bash -c "echo 'lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop: mac_override sys_time sys_module sys_rawio' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.apparmor.profile: unconfined' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cgroup.devices.allow: a' >>/etc/pve/lxc/$continer_name.conf"
-sudo bash -c "echo 'lxc.cap.drop:' >>/etc/pve/lxc/$continer_name.conf"   
-
-if [[ $(grep -w "features: mount=fuse,nesting=1" /etc/pve/lxc/$continer_name.conf) && $(grep -w "lxc.mount.entry: /dev/fuse dev/fuse none bind,create=file 0 0" /etc/pve/lxc/$continer_name.conf) ]] 
-then
-echo -e "${CHECK_MARK} ${CYAN}LXC configurate file $continer_name.conf [FiXED]${NC}"
-else
-echo -e "${X_MARK} ${CYAN}LXC configurate file $continer_name.conf fix [Failed]${NC}"
-fi  
-
-}
 
 function install_node(){
 
@@ -1196,7 +1253,8 @@ echo -e "${WORNING}${CYAN}Docker is not working correct or is not installed.${NC
 exit
 fi
 
-bash -i <(curl -s https://raw.githubusercontent.com/XK4MiLX/zelnode/master/install_pro.sh)
+
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro.sh)
 
 
 }
@@ -1479,7 +1537,6 @@ echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
 echo -e "${CYAN}8  - Re-install Flux${NC}"
 echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
-#echo -e "${CYAN}8 - Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
