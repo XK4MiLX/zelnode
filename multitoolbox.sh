@@ -733,7 +733,19 @@ discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 
 sleep 1
 
   if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
-    ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
+    
+     while true
+     do
+         ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
+        if [[ $ping == ?(-)+([0-9]) ]]; then
+           string_limit_check_mark "UserID is valid..........................................."
+           break
+         else
+           string_limit_x_mark "UserID is not valid try again............................."
+           sleep 1
+        fi
+    done
+ 
     sleep 1
   else
     ping='0'
