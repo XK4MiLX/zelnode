@@ -1342,7 +1342,7 @@ function start_daemon() {
     sudo systemctl enable zelcash.service > /dev/null 2>&1
     sudo systemctl start zelcash > /dev/null 2>&1
     
-    NUM='180'
+    NUM='210'
     MSG1='Starting daemon & syncing with chain please be patient this will take about 3 min...'
     MSG2=''
     spinning_timer
