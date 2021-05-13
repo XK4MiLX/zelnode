@@ -19,7 +19,7 @@ export PATH
     
         sudo killall apt > /dev/null 2>&1
         sudo killall apt-get > /dev/null 2>&1
-	      sudo dpkg --configure -a > /dev/null 2>&1
+        sudo dpkg --configure -a > /dev/null 2>&1
 	
     fi
     
