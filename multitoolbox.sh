@@ -1602,6 +1602,8 @@ echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
 sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
 sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1  
 sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1 
+sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1 
 sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
     
 echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
