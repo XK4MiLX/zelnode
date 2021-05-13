@@ -1241,7 +1241,11 @@ sudo touch /home/$USER/stop_daemon_service.sh
 sudo chown $USER:$USER /home/$USER/stop_daemon_service.sh
     cat <<'EOF' > /home/$USER/stop_daemon_service.sh
 #!/bin/bash
+if [[ -f /usr/local/bin/flux-cli ]]; then
 bash -c "flux-cli stop"
+else
+bash -c "zelcash-cli stop"
+fi
 exit
 EOF
 
