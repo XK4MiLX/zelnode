@@ -1500,7 +1500,135 @@ echo -e "" && echo -e ""
 
 }
 
+function create_service_scripts() {
 
+echo -e "${ARROW} ${CYAN}Creating Flux daemon service scripts...${NC}" && sleep 1
+sudo touch /home/$USER/start_daemon_service.sh
+sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
+    cat <<'EOF' > /home/$USER/start_daemon_service.sh
+#!/bin/bash
+#color codes
+RED='\033[1;31m'
+CYAN='\033[1;36m'
+NC='\033[0m'
+#emoji codes
+BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+sleep 2
+echo -e "${BOOK} ${CYAN}Pre-start process starting...${NC}"
+echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
+bench_status_pind=$(pgrep fluxbenchd)
+daemon_status_pind=$(pgrep fluxd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall -9 fluxbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall -9 fluxd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+bench_status_pind=$(pgrep zelbenchd)
+daemon_status_pind=$(pgrep zelcashd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall -9 zelbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall -9 zelcashd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+if [[ -f /usr/local/bin/fluxd ]]; then
+bash -c "fluxd"
+exit
+else
+bash -c "zelcashd"
+exit
+fi
+EOF
+
+
+sudo touch /home/$USER/stop_daemon_service.sh
+sudo chown $USER:$USER /home/$USER/stop_daemon_service.sh
+    cat <<'EOF' > /home/$USER/stop_daemon_service.sh
+#!/bin/bash
+if [[ -f /usr/local/bin/flux-cli ]]; then
+bash -c "flux-cli stop"
+else
+bash -c "zelcash-cli stop"
+fi
+exit
+EOF
+
+echo -e "${ARROW} ${CYAN}Setting scripts permissions...${NC}" && sleep 1
+sudo chmod +x /home/$USER/stop_daemon_service.sh
+sudo chmod +x /home/$USER/start_daemon_service.sh
+echo -e "${ARROW} ${CYAN}Reloading service config...${NC}" && sleep 1
+sudo systemctl daemon-reload > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Starting Flux daemon....${NC}" && sleep 1
+sudo systemctl start zelcash > /dev/null 2>&1
+echo -e ""
+}
+
+function create_service() {
+
+ echo -e "${GREEN}Module: Flux Daemon service creator${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+ if [[ "$USER" == "root" ]]
+ then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+
+echo -e ""
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
+sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1 
+sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
+    
+echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
+sudo touch /etc/systemd/system/zelcash.service
+sudo chown $USER:$USER /etc/systemd/system/zelcash.service
+cat << EOF > /etc/systemd/system/zelcash.service
+[Unit]
+Description=Flux daemon service
+After=network.target
+[Service]
+Type=forking
+User=$USER
+Group=$USER
+ExecStart=/home/$USER/start_daemon_service.sh
+ExecStop=-/home/$USER/stop_daemon_service.sh
+Restart=always
+RestartSec=10
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=15s
+StartLimitInterval=120s
+StartLimitBurst=5
+[Install]
+WantedBy=multi-user.target
+EOF
+    sudo chown root:root /etc/systemd/system/zelcash.service
+}
 
 
 if ! figlet -v > /dev/null 2>&1
@@ -1551,6 +1679,7 @@ echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
 echo -e "${CYAN}8  - Re-install Flux${NC}"
 echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
+echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -1610,6 +1739,13 @@ read -rp "Pick an option and hit ENTER: "
    sleep 1
    kda_bootstrap
    
+ ;;
+ 
+ 11)
+  clear
+  sleep 1
+  create_service
+  create_service_scripts
  ;;
  
 # 8)
