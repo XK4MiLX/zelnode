@@ -32,7 +32,7 @@ WATCHDOG_INSTALL="0"
 ZELFRONTPORT=16126
 LOCPORT=16127
 ZELNODEPORT=16128
-MDBPORT=27017
+#MDBPORT=27017
 RPCPORT=16124
 PORT=16125
 
@@ -1418,7 +1418,7 @@ function install_process() {
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
     sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
     sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
-    sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
+    #sudo ufw allow $MDBPORT/tcp > /dev/null 2>&1
 
     echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
     
