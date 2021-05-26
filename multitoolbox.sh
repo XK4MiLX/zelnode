@@ -760,6 +760,44 @@ ping='0'
 sleep 1
 fi
 
+if whiptail --yesno "Would you like enable telegram alert?" 8 60; then
+
+  telegram_alert=1;
+  
+  while true
+     do
+        telegram_bot_token=$(whiptail --inputbox "Enter telegram bot token from BotFather" 8 65 3>&1 1>&2 2>&3)
+        if [[ $(grep ':' <<< "$telegram_bot_token") != "" ]]; then
+           string_limit_check_mark "Bot token is valid..........................................."
+           break
+         else
+           string_limit_x_mark "Bot token is not valid try again............................."
+           sleep 1
+        fi
+    done
+    
+  sleep 1
+  
+    while true
+     do      
+        telegram_chat_id=$(whiptail --inputbox "Enter your chat id from GetIDs Bot" 8 60 3>&1 1>&2 2>&3)
+        if [[ $telegram_chat_id == ?(-)+([0-9]) ]]; then
+           string_limit_check_mark "Chat ID is valid..........................................."
+           break
+         else
+           string_limit_x_mark "Chat ID is not valid try again............................."
+           sleep 1
+        fi
+    done
+  
+  sleep 1
+
+else
+    telegram_alert=0;
+    telegram_bot_token=0;
+    telegram_chat_id=0;
+fi
+
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
@@ -793,7 +831,10 @@ module.exports = {
     zelbench_update: '${bench_update}',
     action: '${fix_action}',
     ping: '${ping}',
-    web_hook_url: '${discord}'
+    web_hook_url: '${discord}',
+    telegram_alert: '${telegram_alert}',
+    telegram_bot_token: '${telegram_bot_token}',
+    telegram_chat_id: '${telegram_chat_id}',
 }
 EOF
 
