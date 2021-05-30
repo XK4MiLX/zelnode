@@ -1381,12 +1381,12 @@ if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 fi
 
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-
-echo -e "${ARROW} ${YELLOW}Creating new user...${NC}"
+usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
 adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
-apt update -y && apt upgrade -y
+apt update -y && apt upgrade -y 
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
 echo -e "${ARROW} ${CYAN}Architecture: ${GREEN}$(dpkg --print-architecture)${NC}"
            
