@@ -734,7 +734,11 @@ if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
 
-CHOICES=$(whiptail  --infobox "Use space for select option / use tab for switch" --title "Choose options: " --separate-output --checklist 10 45 5 \
+whiptail --title "Info: " --infobox "To select item use space / to switch to OK use tab..." 10 50
+
+sleep 1
+
+CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist 10 45 5 \
   "1" "Discord notification" ON \
   "2" "Telegram notification" OFF 3>&1 1>&2 2>&3 )
 
