@@ -401,7 +401,7 @@ if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
 
-whiptail --msgbox "Info: to select item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
+whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
 
 sleep 1
 
