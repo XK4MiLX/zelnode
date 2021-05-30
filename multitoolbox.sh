@@ -738,7 +738,7 @@ CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist "Cho
   "1" "Discord notification" ON \
   "2" "Telegram notification" OFF 3>&1 1>&2 2>&3 )
 
-if [ -z "$CHOICE" ]; then
+if [ -z "$CHOICES" ]; then
 
   echo "No option was selected (user hit Cancel or unselected all options)"
   sleep 1
