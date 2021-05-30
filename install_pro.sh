@@ -1632,7 +1632,7 @@ fi
 
 function install_flux() {
    
- docker_check=$(docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
+ docker_check=$(docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
  resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
  mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
@@ -1650,7 +1650,7 @@ echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
 
 sudo service docker restart > /dev/null 2>&1 && sleep 5
 
-docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" |
+docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
 sudo docker stop $line > /dev/null 2>&1 && sleep 2
 sudo docker rm $line > /dev/null 2>&1 && sleep 2
