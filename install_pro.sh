@@ -394,43 +394,65 @@ fix_action='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable discord alert?" 8 60; then
+telegram_alert=0;
+discord=0;
 
-discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+if whiptail --yesno "Would you like enable alert notification?" 8 60; then
+
 sleep 1
 
-  if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
+whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
 
-   while true
-     do
-         ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
-        if [[ $ping == ?(-)+([0-9]) ]]; then
-           string_limit_check_mark "UserID is valid..........................................."
-           break
-         else
-           string_limit_x_mark "UserID is not valid try again............................."
-           sleep 1
-        fi
-    done
+sleep 1
 
-    sleep 1
-    
-  else
-    ping='0'
-    sleep 1
-  fi
-  
+CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist "Choose options: " 10 45 5 \
+  "1" "Discord notification      " ON \
+  "2" "Telegram notification     " OFF 3>&1 1>&2 2>&3 )
+
+if [ -z "$CHOICES" ]; then
+
+  echo -e "${ARROW} ${CYAN}No option was selected...Alert notification disabled! ${NC}"
+  sleep 1
+  discord=0;
+  ping=0;
+  telegram_alert=0;
+  telegram_bot_token=0;
+  telegram_chat_id=0;
+
 else
-discord='0'
-ping='0'
-sleep 1
-fi
+  for CHOICE in $CHOICES; do
+    case "$CHOICE" in
+    "1")
 
+      discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+      sleep 1
 
-if whiptail --yesno "Would you like enable telegram alert?" 8 60; then
+      if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
 
-  telegram_alert=1;
-  
+       while true
+       do
+           ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
+          if [[ $ping == ?(-)+([0-9]) ]]; then
+             string_limit_check_mark "UserID is valid..........................................."
+             break
+           else
+             string_limit_x_mark "UserID is not valid try again............................."
+             sleep 1
+          fi
+        done
+
+        sleep 1
+
+      else
+        ping=0;
+        sleep 1
+     fi
+
+      ;;
+    "2")
+
+ telegram_alert=1;
+
   while true
      do
         telegram_bot_token=$(whiptail --inputbox "Enter telegram bot token from BotFather" 8 65 3>&1 1>&2 2>&3)
@@ -442,11 +464,11 @@ if whiptail --yesno "Would you like enable telegram alert?" 8 60; then
            sleep 1
         fi
     done
-    
+
   sleep 1
-  
+
     while true
-     do      
+     do
         telegram_chat_id=$(whiptail --inputbox "Enter your chat id from GetIDs Bot" 8 60 3>&1 1>&2 2>&3)
         if [[ $telegram_chat_id == ?(-)+([0-9]) ]]; then
            string_limit_check_mark "Chat ID is valid..........................................."
@@ -456,15 +478,34 @@ if whiptail --yesno "Would you like enable telegram alert?" 8 60; then
            sleep 1
         fi
     done
-  
+
   sleep 1
 
+      ;;
+    esac
+  done
+fi
+
 else
+
+    discord=0;
+    ping=0;
     telegram_alert=0;
     telegram_bot_token=0;
     telegram_chat_id=0;
+    sleep 1
 fi
 
+
+if [[ "$discord" == 0 ]]; then
+    ping=0;
+fi
+
+
+if [[ "$telegram_alert" == 0 ]]; then
+    telegram_bot_token=0;
+    telegram_chat_id=0;
+fi
 
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
@@ -1591,7 +1632,7 @@ fi
 
 function install_flux() {
    
- docker_check=$(docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
+ docker_check=$(docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
  resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
  mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
@@ -1609,7 +1650,7 @@ echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
 
 sudo service docker restart > /dev/null 2>&1 && sleep 5
 
-docker container ls -a | grep 'zelcash' | grep -Eo "^[0-9a-z]{8,}\b" |
+docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
 sudo docker stop $line > /dev/null 2>&1 && sleep 2
 sudo docker rm $line > /dev/null 2>&1 && sleep 2
