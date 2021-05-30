@@ -734,24 +734,24 @@ if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
 
-whiptail --title "Info: " --infobox "To select item use space / to switch to OK use tab..." 10 50
+whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
 
 sleep 1
 
-CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist 10 45 5 \
-  "1" "Discord notification" ON \
-  "2" "Telegram notification" OFF 3>&1 1>&2 2>&3 )
+CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist "Choose options: " 10 45 5 \
+  "1" "Discord notification      " ON \
+  "2" "Telegram notification     " OFF 3>&1 1>&2 2>&3 )
 
 if [ -z "$CHOICES" ]; then
 
   echo -e "${ARROW} ${CYAN}No option was selected...Alert notification disabled! ${NC}"
   sleep 1
-  discord='0'
-  ping='0'
+  discord=0;
+  ping=0;
   telegram_alert=0;
   telegram_bot_token=0;
   telegram_chat_id=0;
-    
+
 else
   for CHOICE in $CHOICES; do
     case "$CHOICE" in
@@ -775,17 +775,17 @@ else
         done
 
         sleep 1
-    
+
       else
         ping=0;
         sleep 1
      fi
-  
+
       ;;
     "2")
-    
+
  telegram_alert=1;
-  
+
   while true
      do
         telegram_bot_token=$(whiptail --inputbox "Enter telegram bot token from BotFather" 8 65 3>&1 1>&2 2>&3)
@@ -797,11 +797,11 @@ else
            sleep 1
         fi
     done
-    
+
   sleep 1
-  
+
     while true
-     do      
+     do
         telegram_chat_id=$(whiptail --inputbox "Enter your chat id from GetIDs Bot" 8 60 3>&1 1>&2 2>&3)
         if [[ $telegram_chat_id == ?(-)+([0-9]) ]]; then
            string_limit_check_mark "Chat ID is valid..........................................."
@@ -811,9 +811,9 @@ else
            sleep 1
         fi
     done
-  
+
   sleep 1
-  
+
       ;;
     esac
   done
@@ -821,8 +821,8 @@ fi
 
 else
 
-    discord='0'
-    ping='0'
+    discord=0;
+    ping=0;
     telegram_alert=0;
     telegram_bot_token=0;
     telegram_chat_id=0;
@@ -830,12 +830,12 @@ else
 fi
 
 
-if [[ discord == 0 ]]; then
+if [[ $discord == 0 ]]; then
     ping=0;
 fi
 
 
-if [[ telegram_alert == 0 ]]; then
+if [[ $telegram_alert == 0 ]]; then
     telegram_bot_token=0;
     telegram_chat_id=0;
 fi
