@@ -734,9 +734,9 @@ if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
 
-CHOICES=$(whiptail --separate-output --checklist "Choose options" 10 35 5 \
+CHOICES=$(whiptail --separate-output --checklist "Choose options: " 10 35 5 \
   "1" "Discord notification" ON \
-  "2" "Telegram notification" OFF 3>&1 1>&2 2>&3)
+  "2" "Telegram notification" OFF 3>&1 1>&2 2>&3 )
 
 if [ -z "$CHOICE" ]; then
 
