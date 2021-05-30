@@ -758,7 +758,6 @@ else
 
       if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
 
-
        while true
        do
            ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
@@ -771,20 +770,16 @@ else
           fi
         done
 
-    sleep 1
+        sleep 1
     
-  else
-    ping='0'
-    sleep 1
-  fi
+      else
+        ping=0;
+        sleep 1
+     fi
   
-else
-discord='0'
-ping='0'
-sleep 1
-fi
       ;;
     "2")
+    
  telegram_alert=1;
   
   while true
@@ -814,13 +809,7 @@ fi
     done
   
   sleep 1
-
-else
-    telegram_alert=0;
-    telegram_bot_token=0;
-    telegram_chat_id=0;
-fi
-
+  
       ;;
     esac
   done
@@ -838,11 +827,11 @@ fi
 
 
 if [[ discord == 0 ]]; then
-    ping='0'
+    ping=0;
 fi
 
 
-if [[ telegram == 0 ]]; then
+if [[ telegram_alert == 0 ]]; then
     telegram_bot_token=0;
     telegram_chat_id=0;
 fi
