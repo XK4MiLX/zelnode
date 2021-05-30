@@ -727,28 +727,52 @@ fix_action='0'
 sleep 1
 fi
 
-if whiptail --yesno "Would you like enable discord alert?" 8 60; then
+telegram_alert=0;
+discord=0;
 
-discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+if whiptail --yesno "Would you like enable alert notification?" 8 60; then
+
 sleep 1
 
-  if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
+CHOICES=$(whiptail --separate-output --checklist "Choose options" 10 35 5 \
+  "1" "Discord notification" ON \
+  "2" "Telegram notification" OFF 3>&1 1>&2 2>&3)
+
+if [ -z "$CHOICE" ]; then
+
+  echo "No option was selected (user hit Cancel or unselected all options)"
+  sleep 1
+  discord='0'
+  ping='0'
+  telegram_alert=0;
+  telegram_bot_token=0;
+  telegram_chat_id=0;
+    
+else
+  for CHOICE in $CHOICES; do
+    case "$CHOICE" in
+    "1")
+
+      discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
+      sleep 1
+
+      if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
 
 
-   while true
-     do
-         ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
-        if [[ $ping == ?(-)+([0-9]) ]]; then
-           string_limit_check_mark "UserID is valid..........................................."
-           break
-         else
-           string_limit_x_mark "UserID is not valid try again............................."
-           sleep 1
-        fi
-    done
+       while true
+       do
+           ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
+          if [[ $ping == ?(-)+([0-9]) ]]; then
+             string_limit_check_mark "UserID is valid..........................................."
+             break
+           else
+             string_limit_x_mark "UserID is not valid try again............................."
+             sleep 1
+          fi
+        done
 
     sleep 1
-
+    
   else
     ping='0'
     sleep 1
@@ -759,10 +783,9 @@ discord='0'
 ping='0'
 sleep 1
 fi
-
-if whiptail --yesno "Would you like enable telegram alert?" 8 60; then
-
-  telegram_alert=1;
+      ;;
+    "2")
+ telegram_alert=1;
   
   while true
      do
@@ -797,6 +820,33 @@ else
     telegram_bot_token=0;
     telegram_chat_id=0;
 fi
+
+      ;;
+    esac
+  done
+fi
+
+else
+
+    discord='0'
+    ping='0'
+    telegram_alert=0;
+    telegram_bot_token=0;
+    telegram_chat_id=0;
+    sleep 1
+fi
+
+
+if [[ discord == 0 ]]; then
+    ping='0'
+fi
+
+
+if [[ telegram == 0 ]]; then
+    telegram_bot_token=0;
+    telegram_chat_id=0;
+fi
+
 
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
