@@ -734,13 +734,13 @@ if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
 
-CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist "Choose options: " 10 35 5 \
+CHOICES=$(whiptail  --infobox "Use space for select option / use tab for switch" --title "Choose options: " --separate-output --checklist 10 45 5 \
   "1" "Discord notification" ON \
   "2" "Telegram notification" OFF 3>&1 1>&2 2>&3 )
 
 if [ -z "$CHOICES" ]; then
 
-  echo "No option was selected (user hit Cancel or unselected all options)"
+  echo -e "${ARROW} ${CYAN}No option was selected...Alert notification disabled! ${NC}"
   sleep 1
   discord='0'
   ping='0'
