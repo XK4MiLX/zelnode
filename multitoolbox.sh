@@ -355,7 +355,7 @@ if [ -d /home/$USER/$FLUX_DIR ]; then
 fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
-git clone https://github.com/zelcash/zelflux.git > /dev/null 2>&1 && sleep 2
+git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/$FLUX_DIR ]
 then
