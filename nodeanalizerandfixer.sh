@@ -861,7 +861,7 @@ if [ -f "$FILE" ]
 then
 
  current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
- required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+ required_ver=$(curl -sS --max-time 10 https://raw.githubusercontent.com/RunOnFlux/flux/master/package.json | jq -r '.version')
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
@@ -984,7 +984,7 @@ echo -e ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
 cd /home/$USER/$FLUX_DIR && git pull > /dev/null 2>&1 && cd
 current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-required_ver=$(curl -sS https://raw.githubusercontent.com/zelcash/zelflux/master/package.json | jq -r '.version')
+required_ver=$(curl -sS https://raw.githubusercontent.com/RunOnFlux/flux/master/package.json | jq -r '.version')
 if [[ "$required_ver" == "$current_ver" ]]; then
 echo -e "${CHECK_MARK} ${CYAN}Flux updated successfully.${NC}"
 echo -e ""
