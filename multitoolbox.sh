@@ -882,7 +882,7 @@ module.exports = {
 EOF
 
 echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
-pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 10 > /dev/null 2>&1 
+pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
 if [[ -f /home/$USER/watchdog/watchdog.js ]]
 then
