@@ -1456,7 +1456,7 @@ function start_daemon() {
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo
-        echo -e "${WORNING} ${RED}Something is not right the daemon did not start. Will exit out so try and run the script again.${NC}"
+        echo -e "${WORNING} ${RED}Something is not right the daemon did not start or still loading...${NC}"
 	
 	if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
 	  error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
@@ -1468,9 +1468,21 @@ function start_daemon() {
 	     fi  	       
         fi
 	
-	echo -e "${WORNING} ${RED}Veryfity date in ~/.flux/flux.conf .${NC}"
-	echo
-        exit	
+	
+	if whiptail --yesno "Something is not right the daemon did not start or still loading....\nWould you like continue the installation (make shour that flux daemon working) Y/N?" 8 90; then
+       
+          echo -e "${ARROW} ${CYAN}Problem with daemon noticed but user want continue installation...  ${NC}"
+	  echo -n ""
+
+	else
+	
+	  echo -e "${WORNING} ${RED}Installation stopped by user...${NC}"
+	  echo -n ""
+	  exit
+
+	fi
+
+		
     fi
 }
 
