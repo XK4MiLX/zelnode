@@ -276,7 +276,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -476,7 +476,7 @@ function create_config() {
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -661,7 +661,7 @@ function install_watchdog() {
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -905,7 +905,7 @@ function kda_bootstrap() {
     if [[ "$USER" == "root" ]]; then
     
         echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-        echo -e "${CYAN}Please switch to the user accont.${NC}"
+        echo -e "${CYAN}Please switch to the user account.${NC}"
         echo -e "${YELLOW}================================================================${NC}"
         echo -e "${NC}"
         exit
@@ -1010,7 +1010,7 @@ function flux_daemon_bootstrap() {
     if [[ "$USER" == "root" ]]; then
     
         echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-        echo -e "${CYAN}Please switch to the user accont.${NC}"
+        echo -e "${CYAN}Please switch to the user account.${NC}"
         echo -e "${YELLOW}================================================================${NC}"
         echo -e "${NC}"
         exit
@@ -1128,7 +1128,7 @@ echo -e "${YELLOW}==============================================================
 
 if [[ "$USER" == "root" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1282,7 +1282,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1308,7 +1308,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1328,7 +1328,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1365,7 +1365,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" != "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the root accont use command 'su -'.${NC}"
+    echo -e "${CYAN}Please switch to the root account use command 'su -'.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1471,7 +1471,7 @@ echo -e "${YELLOW}==============================================================
 if [[ "$USER" == "root" ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1577,7 +1577,7 @@ fi
 
 sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
 NUM='35'
-MSG1='Restarting daemon serivce...'
+MSG1='Restarting daemon service...'
 MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo -e "" && echo -e ""
@@ -1675,7 +1675,7 @@ function create_service() {
  if [[ "$USER" == "root" ]]
  then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user accont.${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
