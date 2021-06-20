@@ -1680,6 +1680,79 @@ function create_service() {
     echo -e "${NC}"
     exit
  fi 
+ 
+ function selfhosting() {
+ 
+ echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+ if [[ "$USER" == "root" ]]
+ then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+ 
+echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
+sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
+sudo touch /home/$USER/ip_check.sh
+sudo chown $USER:$USER /home/$USER/ip_check.sh
+    cat <<'EOF' > /home/$USER/ip_check.sh
+#!/bin/bash
+
+function get_ip(){
+
+ WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+    
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+  fi  
+      
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
+  fi
+
+}
+
+
+if [[ $1 == "restart" ]]; then
+
+  get_ip
+  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+
+  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+   sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+  fi
+
+fi
+
+if [[ $1 == "ip_check" ]]; then
+
+  get_ip
+  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+  confirmed_ip=$(curl -SsL -m 10 http://localhost:16127/flux/info | jq -r .data.node.status.ip)
+
+  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
+
+    if [[ "$WANIP" != "$confirmed_ip" ]]; then
+      sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+    fi
+
+  fi
+
+fi
+EOF
+
+sudo chmod +x /home/$USER/ip_check.sh
+echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
+(crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
+(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
+echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
+echo -e "" 
+ 
+ }
 
 echo -e ""
 echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
@@ -1766,6 +1839,7 @@ echo -e "${CYAN}8  - Re-install Flux${NC}"
 echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
+echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -1833,6 +1907,13 @@ read -rp "Pick an option and hit ENTER: "
   create_service
   create_service_scripts
  ;;
+ 
+  12)
+  clear
+  sleep 1
+  selfhosting
+ ;;
+ 
  
 # 8)
     #clear
