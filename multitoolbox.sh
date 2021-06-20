@@ -49,6 +49,20 @@ export NEWT_COLORS='
 title=black,
 '
 
+function get_ip(){
+
+ WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+    
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+  fi  
+      
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
+  fi
+
+}
+
 function spinning_timer() {
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
@@ -1729,6 +1743,19 @@ EOF
     echo -e "${NC}"
     exit
  fi 
+ 
+ echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
+ get_ip
+ device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+ 
+  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+    sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
+  else
+    echo -e "${WORNING} ${CYAN}Problem detected operation stopped! ${NC}" && sleep 1
+    echo -e ""
+    exit
+  fi
+ 
  
 echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
 sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
