@@ -1681,6 +1681,41 @@ function create_service() {
     exit
  fi 
  
+echo -e ""
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
+sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1 
+sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1 
+sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
+    
+echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
+sudo touch /etc/systemd/system/zelcash.service
+sudo chown $USER:$USER /etc/systemd/system/zelcash.service
+cat << EOF > /etc/systemd/system/zelcash.service
+[Unit]
+Description=Flux daemon service
+After=network.target
+[Service]
+Type=forking
+User=$USER
+Group=$USER
+ExecStart=/home/$USER/start_daemon_service.sh
+ExecStop=-/home/$USER/stop_daemon_service.sh
+Restart=always
+RestartSec=10
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=15s
+StartLimitInterval=120s
+StartLimitBurst=5
+[Install]
+WantedBy=multi-user.target
+EOF
+    sudo chown root:root /etc/systemd/system/zelcash.service
+}
+
  function selfhosting() {
  
  echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
@@ -1753,41 +1788,6 @@ echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
 echo -e "" 
  
  }
-
-echo -e ""
-echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
-sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
-sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1  
-sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1 
-sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1  
-sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1 
-sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
-    
-echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
-sudo touch /etc/systemd/system/zelcash.service
-sudo chown $USER:$USER /etc/systemd/system/zelcash.service
-cat << EOF > /etc/systemd/system/zelcash.service
-[Unit]
-Description=Flux daemon service
-After=network.target
-[Service]
-Type=forking
-User=$USER
-Group=$USER
-ExecStart=/home/$USER/start_daemon_service.sh
-ExecStop=-/home/$USER/stop_daemon_service.sh
-Restart=always
-RestartSec=10
-PrivateTmp=true
-TimeoutStopSec=60s
-TimeoutStartSec=15s
-StartLimitInterval=120s
-StartLimitBurst=5
-[Install]
-WantedBy=multi-user.target
-EOF
-    sudo chown root:root /etc/systemd/system/zelcash.service
-}
 
 
 if ! figlet -v > /dev/null 2>&1
