@@ -1781,10 +1781,13 @@ function get_ip(){
 
 if [[ $1 == "restart" ]]; then
 
+  
   get_ip
   device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 
   if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+   date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+   echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
    sudo ip addr add $WANIP dev $device_name:0 && sleep 2
   fi
 
@@ -1799,6 +1802,8 @@ if [[ $1 == "ip_check" ]]; then
   if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
 
     if [[ "$WANIP" != "$confirmed_ip" ]]; then
+      date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+      echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
       sudo ip addr add $WANIP dev $device_name:0 && sleep 2
     fi
 
