@@ -1531,7 +1531,7 @@ echo
 exit
 fi
 
-echo -e "${ARROW} ${CYAN}Stopping Flux daemon serivce...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping Flux daemon service...${NC}"
 sudo systemctl stop $COIN_NAME  > /dev/null 2>&1 && sleep 2
 sudo fuser -k 16125/tcp > /dev/null 2>&1
 
