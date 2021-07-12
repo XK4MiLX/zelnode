@@ -1815,9 +1815,16 @@ EOF
 
 sudo chmod +x /home/$USER/ip_check.sh
 echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
-(crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
-(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
-echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
+
+crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l)
+
+if [[ "$crontab_check" == "0" ]]; then
+  (crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
+  (crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
+  echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
+else
+  echo -e "${ARROW} ${CYAN}Info: Script already installed! ${NC}" 
+fi
 echo -e "" 
  
  }
