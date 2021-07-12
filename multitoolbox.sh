@@ -1823,7 +1823,8 @@ if [[ "$crontab_check" == "0" ]]; then
   (crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
   echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
 else
-  echo -e "${ARROW} ${CYAN}Info: Script already installed! ${NC}" 
+  echo -e "${ARROW} ${CYAN}Cron jobs already added! ${NC}" 
+  echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
 fi
 echo -e "" 
  
