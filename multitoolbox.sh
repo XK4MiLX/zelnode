@@ -1781,7 +1781,8 @@ function get_ip(){
 
 if [[ $1 == "restart" ]]; then
 
-  
+  # give 3min to connext with internet
+  sleep 180
   get_ip
   device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 
