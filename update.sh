@@ -37,7 +37,7 @@ sudo killall "$COIN_DAEMON" >/dev/null 2>&1
 
 sudo killall -s SIGKILL zelbenchd >/dev/null 2>&1 && sleep 1
 sudo killall -s SIGKILL fluxbenchd >/dev/null 2>&1 && sleep 1
-sudo apt-get purge --auto-remove "$COIN_NAME" zelcash -y >/dev/null 2>&1 && sleep 1
+sudo apt-get purge --auto-remove "$COIN_NAME" zelcash fluxbench zelbench -y >/dev/null 2>&1 && sleep 1
 sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
 sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
 
@@ -65,7 +65,7 @@ else
    
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
     sudo apt-get update -y
-    sudo apt-get install "$COIN_NAME" -y
+    sudo apt-get install "$COIN_NAME" fluxbench -y
     sudo chmod 755 "$COIN_PATH/"* && sleep 2
 
   else
@@ -90,7 +90,7 @@ else
      fi
 
     sudo apt-get update -y
-    sudo apt-get install "$COIN_NAME" -y
+    sudo apt-get install "$COIN_NAME" fluxbench -y
     sudo chmod 755 "$COIN_PATH/"* && sleep 2
 
 fi
