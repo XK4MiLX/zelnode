@@ -418,6 +418,7 @@ if [ -z "$CHOICES" ]; then
   telegram_alert=0;
   telegram_bot_token=0;
   telegram_chat_id=0;
+  node_label=0;
 
 else
   for CHOICE in $CHOICES; do
@@ -486,6 +487,18 @@ else
   done
 fi
 
+ while true
+     do
+       node_label=$(whiptail --inputbox "Enter name of your node (alias)" 8 65 3>&1 1>&2 2>&3)
+        if [[ "$node_label" != "" && "$node_label" != "0"  ]]; then
+           string_limit_check_mark "Node name is valid..........................................."
+           break
+         else
+           string_limit_x_mark "Node name is not valid try again............................."
+           sleep 1
+        fi
+    done
+
 else
 
     discord=0;
@@ -493,6 +506,7 @@ else
     telegram_alert=0;
     telegram_bot_token=0;
     telegram_chat_id=0;
+    node_label=0;
     sleep 1
 fi
 
@@ -534,6 +548,7 @@ sudo touch /home/$USER/watchdog/config.js
 sudo chown $USER:$USER /home/$USER/watchdog/config.js
     cat << EOF >  /home/$USER/watchdog/config.js
 module.exports = {
+    label: '${node_label}',
     tier_eps_min: '${eps_limit}',
     zelflux_update: '${flux_update}',
     zelcash_update: '${daemon_update}',
