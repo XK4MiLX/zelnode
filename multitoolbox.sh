@@ -765,6 +765,7 @@ if [ -z "$CHOICES" ]; then
   telegram_alert=0;
   telegram_bot_token=0;
   telegram_chat_id=0;
+  node_label=0;
 
 else
   for CHOICE in $CHOICES; do
@@ -835,7 +836,7 @@ fi
 
  while true
      do
-       node_label=$(whiptail --inputbox "Enter name of your node (label)" 8 65 3>&1 1>&2 2>&3)
+       node_label=$(whiptail --inputbox "Enter name of your node (alias)" 8 65 3>&1 1>&2 2>&3)
         if [[ "$node_label" != "" && "$node_label" != "0"  ]]; then
            string_limit_check_mark "Node name is valid..........................................."
            break
@@ -868,7 +869,6 @@ fi
 if [[ $telegram_alert == 0 ]]; then
     telegram_bot_token=0;
     telegram_chat_id=0;
-    node_label=0;
 fi
 
 
