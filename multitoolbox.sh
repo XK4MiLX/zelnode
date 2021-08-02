@@ -250,9 +250,9 @@ if [[ "$swapon" == "1" ]]; then
 echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$mongo_bootstrap" == "1" ]]; then
+#echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 if [[ "$watchdog" == "1" ]]; then
 echo -e "${PIN}${CYAN}Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -1157,6 +1157,9 @@ function mongodb_bootstrap(){
 
 echo -e "${GREEN}Module: Restore Flux MongoDB datatable from bootstrap (explorer only)${NC}"
 echo -e "${YELLOW}================================================================${NC}"
+echo -e "${ARROW} ${CYAN}Module disabled...${NC}"
+echo -e ""
+exit
 
 if [[ "$USER" == "root" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
