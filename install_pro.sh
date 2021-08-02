@@ -141,7 +141,7 @@ firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable'
 bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
 swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
-mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
+#mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
 watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
@@ -196,9 +196,9 @@ if [[ "$swapon" == "1" ]]; then
 echo -e "${PIN}${CYAN} Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-if [[ "$mongo_bootstrap" == "1" ]]; then
-echo -e "${PIN}${CYAN} Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$mongo_bootstrap" == "1" ]]; then
+#echo -e "${PIN}${CYAN} Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 if [[ "$watchdog" == "1" ]]; then
 echo -e "${PIN}${CYAN} Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -1899,23 +1899,23 @@ else
    #pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
 
     
-  if [[ -z "$mongo_bootstrap" ]]; then
+ # if [[ -z "$mongo_bootstrap" ]]; then
     
-    if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
-         mongodb_bootstrap
-    else
-        echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
-    fi
-    
-  else
+   # if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
+   #      mongodb_bootstrap
+   # else
+  #      echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
+   # fi
+ #   
+ # else
    
-    if [[ "$mongo_bootstrap" == "1" ]]; then
-      mongodb_bootstrap
-    else
-      echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
-    fi
+  #  if [[ "$mongo_bootstrap" == "1" ]]; then
+ #     mongodb_bootstrap
+  #  else
+  #    echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
+   # fi
    
-  fi
+ # fi
     
     
   if [[ -z "$watchdog" ]]; then
