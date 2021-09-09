@@ -899,10 +899,10 @@ tdiff=$((now_date-event_time_uxtime))
 show_time "$tdiff"
 fi
 
-if [ ! -f ~/$FLUX_DIR/ZelFront/dist/index.html ]
-then
-echo -e "${WORNING} ${CYAN}Flux problem detected, missing ~/$FLUX_DIR/ZelFront/dist/index.html"
-fi
+#if [ ! -f ~/$FLUX_DIR/ZelFront/dist/index.html ]
+#then
+#echo -e "${WORNING} ${CYAN}Flux problem detected, missing ~/$FLUX_DIR/ZelFront/dist/index.html"
+#fi
 
 else
 FLUXCONF="1"
