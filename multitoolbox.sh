@@ -721,7 +721,7 @@ flux_update='1'
 daemon_update='1'
 ##sleep 1
 #else
-daemon_update='0'
+#daemon_update='0'
 ##sleep 1
 #fi
 
