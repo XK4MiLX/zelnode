@@ -1610,6 +1610,7 @@ echo -e "${ARROW} ${CYAN}Replace FluxNode IP skipped.........................[${
 fi
 fi
 
+pm2 restart flux > /dev/null 2>&1
 sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
 NUM='35'
 MSG1='Restarting daemon service...'
