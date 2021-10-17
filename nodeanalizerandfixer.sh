@@ -1005,28 +1005,45 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 echo -e ""
 
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "\c"
-        else
-        sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
-                if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e " ${CYAN}FluxNode privkey replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
-                fi
+  echo -e "\c"
+else
+	
+  if [[ "$zelnodeprivkey" == "" ]]; then
+     echo -e " ${CYAN}FluxNode privkey skipped...............${NC}"
+  else
+      sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
+      if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+           echo -e " ${CYAN}FluxNode privkey replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+      fi
+   fi
 fi
+
+
 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
 echo -e "\c"
         else
+	
+     if [[ "$zelnodeoutpoint" == "" ]]; then
+       echo -e " ${CYAN}FluxNode zelnodeoutpoint skipped...............${NC}"
+     else
         sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e " ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
+     fi
 fi
 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
 echo -e "\c"
         else
-        sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
+	
+	 if [[ "$zelnodeindex" == "" ]]; then
+          echo -e " ${CYAN}FluxNode zelnodeindex skipped...............${NC}"
+         else
+          sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
                         echo -e " ${CYAN}FluxNode index replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
+	 fi
 fi
 echo -e ""
 sudo systemctl start "$COIN_NAME"
