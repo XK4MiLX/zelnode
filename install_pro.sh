@@ -74,6 +74,79 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
+ function selfhosting() {
+ echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
+ echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
+ get_ip
+ device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+ 
+  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+    sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
+  else
+    echo -e "${WORNING} ${CYAN}Problem detected operation stopped! ${NC}" && sleep 1
+    echo -e ""
+    exit
+  fi
+ 
+echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
+sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
+sudo touch /home/$USER/ip_check.sh
+sudo chown $USER:$USER /home/$USER/ip_check.sh
+    cat <<'EOF' > /home/$USER/ip_check.sh
+#!/bin/bash
+function get_ip(){
+ WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+    
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+  fi  
+      
+  if [[ "$WANIP" == "" ]]; then
+   WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
+  fi
+}
+if [[ $1 == "restart" ]]; then
+  # give 3min to connect with internet
+  sleep 180
+  get_ip
+  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+   date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+   echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+   sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+  fi
+fi
+if [[ $1 == "ip_check" ]]; then
+  get_ip
+  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+  confirmed_ip=$(curl -SsL -m 10 http://localhost:16127/flux/info | jq -r .data.node.status.ip)
+  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
+    if [[ "$WANIP" != "$confirmed_ip" ]]; then
+      date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+      echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+      sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+    fi
+  fi
+fi
+EOF
+
+sudo chmod +x /home/$USER/ip_check.sh
+echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
+
+crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l)
+
+if [[ "$crontab_check" == "0" ]]; then
+  (crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
+  (crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
+  echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
+else
+  echo -e "${ARROW} ${CYAN}Cron jobs already added! ${NC}" 
+  echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
+fi
+echo -e "" 
+ }
+
+
 function max(){
 
     m="0"
@@ -2141,6 +2214,9 @@ fi
     fi
     create_service_scripts
     create_service
+    if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
+      selfhosting
+    fi
     install_process
     start_daemon
     log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
