@@ -1484,7 +1484,7 @@ function start_daemon() {
         fi
 	
 	
-	if whiptail --yesno "Something is not right the daemon did not start or still loading....\nWould you like continue the installation (make shour that flux daemon working) Y/N?" 8 90; then
+	if whiptail --yesno "Something is not right the daemon did not start or still loading....\nWould you like continue the installation (make sure that flux daemon working) Y/N?" 8 90; then
        
           echo -e "${ARROW} ${CYAN}Problem with daemon noticed but user want continue installation...  ${NC}"
 	  echo -n ""
