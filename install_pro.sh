@@ -2220,9 +2220,17 @@ fi
     fi
     create_service_scripts
     create_service
-    if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
-      selfhosting
+    
+    if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
+      echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+    else
+       if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
+         selfhosting
+       else
+         echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+       fi 
     fi
+    
     install_process
     start_daemon
     log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
