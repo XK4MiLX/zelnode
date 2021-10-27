@@ -2016,7 +2016,7 @@ function check() {
 cd
 pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
-sleep 120000
+sleep 120
 cd /home/$USER/zelflux
 pm2 stop flux
 npm install --legacy-peer-deps
