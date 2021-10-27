@@ -284,7 +284,7 @@ function ip_confirm() {
 
 function install_flux() {
 
-echo -e "${GREEN}Module: Re-install Flux${NC}"
+echo -e "${GREEN}Module: Re-install FluxOS${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" ]]
@@ -1898,7 +1898,7 @@ echo -e "${CYAN}4  - Install watchdog for FluxNode${NC}"
 echo -e "${CYAN}5  - Restore Flux MongoDB datatable from bootstrap${NC}"
 echo -e "${CYAN}6  - Restore Flux blockchain from bootstrap${NC}"
 echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
-echo -e "${CYAN}8  - Re-install Flux${NC}"
+echo -e "${CYAN}8  - Re-install FluxOS${NC}"
 echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
