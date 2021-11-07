@@ -1767,8 +1767,12 @@ function replace_zelid() {
     exit
  fi 
 
-new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-    if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ]; then
+while true
+  do
+  
+    new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+
+    if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
       string_limit_check_mark "Zel ID is valid..........................................."
       break
     else
@@ -1776,10 +1780,12 @@ new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from 
       sleep 2
    fi
    
+  done
+   
   if [[ "zelid:'$new_zelid'," == $(grep -w zelid /home/$USER/zelflux/config/userconfig.js) ]]; then
      echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped..................[${CHECK_MARK}${CYAN}]${NC}"
    else
-        sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js )/zelid='$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
+        sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid='$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
 
         if [[ $(grep -w $new_zelid home/$USER/zelflux/config/userconfig.js) != "" ]]; then
                         echo -e "${ARROW} ${CYAN}ZEL ID replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
