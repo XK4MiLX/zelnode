@@ -1782,7 +1782,7 @@ while true
    
   done
    
-  if [[ "zelid:'$new_zelid'," == $(grep -w zelid /home/$USER/zelflux/config/userconfig.js) ]]; then
+  if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
      echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped..................[${CHECK_MARK}${CYAN}]${NC}"
    else
         sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid='$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
@@ -2025,6 +2025,7 @@ read -rp "Pick an option and hit ENTER: "
   clear
   sleep 1
   replace_zelid
+  echo -e ""
  ;;
  
  
