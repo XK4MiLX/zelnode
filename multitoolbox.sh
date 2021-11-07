@@ -1787,7 +1787,7 @@ while true
    else
         sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid='$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
 
-        if [[ $(grep -w $new_zelid home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+        if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
                         echo -e "${ARROW} ${CYAN}ZEL ID replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
         fi
 
