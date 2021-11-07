@@ -1786,6 +1786,42 @@ sudo chown $USER:$USER /home/$USER/ip_check.sh
     cat <<'EOF' > /home/$USER/ip_check.sh
 #!/bin/bash
 
+function replace_zelid(){
+
+ echo -e "${GREEN}Module: Replace Zel ID${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+ if [[ "$USER" == "root" ]]
+ then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+
+new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+    if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ]; then
+      string_limit_check_mark "Zel ID is valid..........................................."
+      break
+    else
+      string_limit_x_mark "Zel ID is not valid try again..........................................."
+      sleep 2
+   fi
+   
+  if [[ "zelid:'$new_zelid'," == $(grep -w zelid /home/$USER/zelflux/config/userconfig.js) ]]; then
+     echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped..................[${CHECK_MARK}${CYAN}]${NC}"
+   else
+        sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js )/zelid='$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
+
+        if [[ $(grep -w $new_zelid home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+                        echo -e "${ARROW} ${CYAN}ZEL ID replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+        fi
+
+   fi
+
+}
+
 function get_ip(){
 
  WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
@@ -1903,6 +1939,7 @@ echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
+echo -e "${CYAN}13 - Replace Zel ID ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -1976,6 +2013,13 @@ read -rp "Pick an option and hit ENTER: "
   sleep 1
   selfhosting
  ;;
+ 
+   13)
+  clear
+  sleep 1
+  replace_zelid
+ ;;
+ 
  
  
 # 8)
