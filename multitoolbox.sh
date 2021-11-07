@@ -1752,41 +1752,8 @@ EOF
     sudo chown root:root /etc/systemd/system/zelcash.service
 }
 
- function selfhosting() {
- 
- echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
- echo -e "${YELLOW}================================================================${NC}"
- 
- if [[ "$USER" == "root" ]]
- then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
- fi 
- 
- echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
- get_ip
- device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
- 
-  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-    sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
-  else
-    echo -e "${WORNING} ${CYAN}Problem detected operation stopped! ${NC}" && sleep 1
-    echo -e ""
-    exit
-  fi
- 
- 
-echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
-sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
-sudo touch /home/$USER/ip_check.sh
-sudo chown $USER:$USER /home/$USER/ip_check.sh
-    cat <<'EOF' > /home/$USER/ip_check.sh
-#!/bin/bash
 
-function replace_zelid(){
+function replace_zelid() {
 
  echo -e "${GREEN}Module: Replace Zel ID${NC}"
  echo -e "${YELLOW}================================================================${NC}"
@@ -1821,6 +1788,40 @@ new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from 
    fi
 
 }
+
+ function selfhosting() {
+ 
+ echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+ if [[ "$USER" == "root" ]]
+ then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+ 
+ echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
+ get_ip
+ device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+ 
+  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+    sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
+  else
+    echo -e "${WORNING} ${CYAN}Problem detected operation stopped! ${NC}" && sleep 1
+    echo -e ""
+    exit
+  fi
+ 
+ 
+echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
+sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
+sudo touch /home/$USER/ip_check.sh
+sudo chown $USER:$USER /home/$USER/ip_check.sh
+    cat <<'EOF' > /home/$USER/ip_check.sh
+#!/bin/bash
 
 function get_ip(){
 
