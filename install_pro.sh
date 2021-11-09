@@ -697,7 +697,7 @@ function mongodb_bootstrap(){
      # echo -e ""
    # fi
   
-}
+#}
 
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of FluxNode${NC}"
@@ -1786,7 +1786,7 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
                 echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
                 break
                 else
-                echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...........[${X_MARK}${CYAN}]${NC}}"
+                echo -e "${ARROW} ${CYAN}Zel ID is not valid try again...........[${X_MARK}${CYAN}]${NC}"
                 sleep 4
                 fi
         done
