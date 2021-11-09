@@ -697,7 +697,7 @@ function mongodb_bootstrap(){
      # echo -e ""
    # fi
   
-#}
+}
 
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of FluxNode${NC}"
