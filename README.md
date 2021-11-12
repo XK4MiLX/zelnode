@@ -18,8 +18,7 @@ https://fluxnodeservice.com
 <p>https://x4milx.coinrequest.io</p>
 
 ```
-CruxID: k4mil@zel.crux  
-ZEL: t1f66kBo9xzpgPJV6wvzT7MY6unpm42kvST  
+FLUX: t1f66kBo9xzpgPJV6wvzT7MY6unpm42kvST  
 BTC: 1NDVjrP1zg35nfSD1WBKyYSBf8dgJ8AKay  
 ETH: 0xf515e0e2ba9347c208418c88a7d75bee3288a010  
 LTC: LgST14gr5LH93U8NBeAdFZVwsLzxTBRTq8  
