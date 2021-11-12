@@ -77,7 +77,6 @@ echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
  function selfhosting() {
  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
  echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
- get_ip
  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
  
   if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
