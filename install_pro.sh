@@ -2018,7 +2018,7 @@ pm2 save > /dev/null 2>&1
 sleep 120
 cd /home/$USER/zelflux
 pm2 stop flux
-npm install --legacy-peer-deps
+npm install --legacy-peer-deps > /dev/null 2>&1
 pm2 start flux 
 cd
 
