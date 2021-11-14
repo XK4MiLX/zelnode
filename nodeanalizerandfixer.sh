@@ -451,35 +451,28 @@ fi
 
 if [[ "$WANIP" != "" ]]; then
 
-back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .data[]? | wc -l)
+back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .status )
 
-  if [[ "$back_error_check" == "" ]]; then
+  if [[ "$back_error_check" != "success" &&  "$back_error_check" != "" ]]; then
   
-   sudo ufw allow from any to any port 16127 > /dev/null 2>&1
-   sudo ufw allow out to any port 16127 > /dev/null 2>&1
-   sudo ufw reload > /dev/null 2>&1
+        back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
+	
+	if [[ "$back_error" != "" ]; then
+	
+          echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
+	  
+        else
+	
+           back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message)
+	   
+   	   if [[ "$back_error" != "" ]; then  
+	   
+              echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
    
-  else
-
-    if [[ "$back_error_check" == "7" ]]; then
-        back_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
-        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
-        sudo ufw allow from any to any port 16127 > /dev/null 2>&1
-        sudo ufw allow out to any port 16127 > /dev/null 2>&1
-        sudo ufw reload > /dev/null 2>&1
-     
+           fi           
+        fi
     fi
-    
-    if [[ "$back_error_check" == "3" ]]; then
-        back_error=$(curl -s -m 3 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message)
-        echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
-        sudo ufw allow from any to any port 16127 > /dev/null 2>&1
-        sudo ufw allow out to any port 16127 > /dev/null 2>&1
-        sudo ufw reload > /dev/null 2>&1
-     
-    fi
-  fi
-fi
+ fi
 
 device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 local_device_ip=$(ip a list $device_name | grep -o $WANIP )
