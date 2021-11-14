@@ -457,7 +457,7 @@ back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .s
   
         back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message)
 	
-	if [[ "$back_error" != "" ]; then
+	if [[ "$back_error" != "" ]]; then
 	
           echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
 	  
@@ -465,7 +465,7 @@ back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .s
 	
            back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message)
 	   
-   	   if [[ "$back_error" != "" ]; then  
+   	   if [[ "$back_error" != "" ]]; then  
 	   
               echo -e "${X_MARK} ${CYAN} FluxBack error: ${RED}$back_error${NC}"
    
