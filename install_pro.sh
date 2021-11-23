@@ -1715,7 +1715,7 @@ curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.s
 . ~/.bashrc
 sleep 1
 #nvm install v12.16.1
-nvm install --lts > /dev/null 2>&1
+nvm install v14.18.1 > /dev/null 2>&1
 if node -v > /dev/null 2>&1
 then
 #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
