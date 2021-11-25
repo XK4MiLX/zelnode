@@ -2015,12 +2015,12 @@ function check() {
 cd
 pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 pm2 save > /dev/null 2>&1
-sleep 120
-cd /home/$USER/zelflux
-pm2 stop flux
-npm install --legacy-peer-deps > /dev/null 2>&1
-pm2 start flux 
-cd
+#sleep 120
+#cd /home/$USER/zelflux
+#pm2 stop flux
+#npm install --legacy-peer-deps > /dev/null 2>&1
+#pm2 start flux 
+#cd
 
 NUM='400'
 MSG1='Finalizing Flux installation please be patient this will take about ~5min...'
