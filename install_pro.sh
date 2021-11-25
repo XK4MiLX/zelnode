@@ -1053,6 +1053,9 @@ bind=0.0.0.0
 addnode=explorer.flux.zelcore.io
 addnode=explorer.runonflux.io
 addnode=explorer.zelcash.online
+addnode=blockbook.runonflux.io
+addnode=185.225.232.141:16125
+addnode=95.216.124.220:16125
 maxconnections=256
 EOF
     sleep 2
