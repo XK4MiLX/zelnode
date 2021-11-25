@@ -1056,6 +1056,9 @@ addnode=explorer.zelcash.online
 addnode=blockbook.runonflux.io
 addnode=185.225.232.141:16125
 addnode=95.216.124.220:16125
+addnode=209.145.55.52:16125
+addnode=78.113.97.147:16125
+addnode=209.145.49.181:16125
 maxconnections=256
 EOF
     sleep 2
