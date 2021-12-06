@@ -994,9 +994,15 @@ function create_swap() {
 function install_packages() {
     echo
     echo -e "${ARROW} ${YELLOW}Installing Packages...${NC}"
+    
     if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
         sudo apt-get install dirmngr apt-transport-https -y > /dev/null 2>&1
     fi
+    
+    if ! dirmngr --v > /dev/null 2>&1; then
+      sudo apt install dirmngr -y > /dev/null 2>&1
+    fi
+    
     sudo apt-get install software-properties-common -y > /dev/null 2>&1
     sudo apt-get update -y > /dev/null 2>&1
     sudo apt-get upgrade -y > /dev/null 2>&1
