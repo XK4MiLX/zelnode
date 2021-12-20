@@ -575,6 +575,7 @@ flux_communication=$(curl -SsL http://"$WANIP":16127/flux/checkcommunication | j
 if [[ "$flux_communication" != "null" || "$flux_communication" != "" ]]; then
 echo -e "${BOOK} ${YELLOW}Checking FluxOS communication: ${NC}"
 echo -e "${ARROW} ${CYAN}$flux_communication${NC}"
+echo -e ""
 fi
 
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
