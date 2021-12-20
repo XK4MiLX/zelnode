@@ -571,6 +571,12 @@ fi
 fi
 
 
+flux_communication=$(curl -SsL http://"$WANIP":16127/flux/checkcommunication | jq -r .data.message)
+if [[ "$flux_communication" != "null" || "$flux_communication" != "" ]]; then
+echo -e "${BOOK} ${YELLOW}Checking FluxOS communication: ${NC}"
+echo -e "${ARROW} ${CYAN}$flux_communication${NC}"
+fi
+
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
 txhash=$(sed -n "2p" <<< "$txhash")
