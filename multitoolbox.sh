@@ -1406,6 +1406,8 @@ then
     exit
 fi
 
+
+
 if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
     echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
@@ -1422,6 +1424,11 @@ adduser --gecos "" "$usernew"
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
 echo -e "${ARROW} ${YELLOW}Update and upgrade system...${NC}"
 apt update -y && apt upgrade -y 
+if ! ufw version > /dev/null 2>&1
+then
+echo -e "${ARROW} ${YELLOW}Installing ufw firewall..${NC}"
+sudo apt-get install -y ufw > /dev/null 2>&1
+fi
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
 echo -e "${ARROW} ${CYAN}Architecture: ${GREEN}$(dpkg --print-architecture)${NC}"
            
