@@ -1830,7 +1830,7 @@ containrrr/watchtower \
 if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
 echo -e "${ARROW} ${CYAN}Watchtower installed successful, id: ${GREEN}$apps_id${NC}"
 else
-echo -e "${ARROW} ${CYAN}Watchtower installion failed!${NC}"
+echo -e "${ARROW} ${CYAN}Watchtower installion failed!.. ${NC}"
 fi
  
  }
