@@ -1817,14 +1817,17 @@ while true
  fi 
  
 echo -e ""
-echo -e "${ARROW} ${CYAN}Installing containrrr/watchtower...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
+docker pull v2tec/watchtower:latest > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
 random=$(shuf -i 300-700 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
-docker run -d \
+apps_id=$(docker run -d \
 --name watchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
---label-enable --cleanup --interval $random
+--label-enable --cleanup --interval $random)
+echo -e "${ARROW} ${CYAN}Watchtower installed ID: ${GREEN}$apps_id${NC}"
  
  
  }
