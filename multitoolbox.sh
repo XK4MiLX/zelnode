@@ -2077,8 +2077,7 @@ read -rp "Pick an option and hit ENTER: "
   echo -e ""
  ;;
  
- 
- 
+
 # 8)
     #clear
    # sleep 1
