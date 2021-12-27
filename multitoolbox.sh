@@ -1982,7 +1982,7 @@ echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}13 - Replace Zel ID ${NC}"
-echo -e "${CYAN}13 - Install containrrr/watchtower for docker container autoupdate${NC}"
+echo -e "${CYAN}14 - Install containrrr/watchtower for docker container autoupdate${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
