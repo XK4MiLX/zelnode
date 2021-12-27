@@ -1827,8 +1827,11 @@ apps_id=$(docker run -d \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
 --label-enable --cleanup --interval $random)
-echo -e "${ARROW} ${CYAN}Watchtower installed ID: ${GREEN}$apps_id${NC}"
- 
+if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
+echo -e "${ARROW} ${CYAN}Watchtower installed successful, id: ${GREEN}$apps_id${NC}"
+else
+echo -e "${ARROW} ${CYAN}Watchtower installed failed!${NC}"
+fi
  
  }
  
