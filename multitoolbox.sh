@@ -1804,7 +1804,7 @@ while true
 
  function install_watchtower(){
  
- echo -e "${GREEN}Module: Install containrrr/watchtower${NC}"
+ echo -e "${GREEN}Module: Install containrrr/watchtower for docker image autoupdate${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
  if [[ "$USER" == "root" ]]
