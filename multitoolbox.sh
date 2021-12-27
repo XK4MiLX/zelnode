@@ -1802,6 +1802,34 @@ while true
 
 }
 
+ function install_watchtower(){
+ 
+ echo -e "${GREEN}Module: Install containrrr/watchtower${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+ if [[ "$USER" == "root" ]]
+ then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+ 
+echo -e ""
+echo -e "${ARROW} ${CYAN}Installing containrrr/watchtower...${NC}"
+random=$(shuf -i 300-700 -n 1)
+echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
+docker run -d \
+--name watchtower \
+-v /var/run/docker.sock:/var/run/docker.sock \
+containrrr/watchtower \
+--label-enable --cleanup --interval $random
+ 
+ 
+ }
+ 
+
  function selfhosting() {
  
  echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
@@ -1954,6 +1982,7 @@ echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}13 - Replace Zel ID ${NC}"
+echo -e "${CYAN}13 - Install containrrr/watchtower for docker container autoupdate${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2032,6 +2061,13 @@ read -rp "Pick an option and hit ENTER: "
   clear
   sleep 1
   replace_zelid
+  echo -e ""
+ ;;
+ 
+    14)
+  clear
+  sleep 1
+  install_watchtower
   echo -e ""
  ;;
  
