@@ -1830,7 +1830,7 @@ fi
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
 docker pull v2tec/watchtower:latest > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
-random=$(shuf -i 300-700 -n 1)
+random=$(shuf -i 7200-14400 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
 apps_id=$(docker run -d \
 --name watchtower \
