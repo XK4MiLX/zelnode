@@ -517,10 +517,10 @@ echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
+#network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
 network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
-explorer_network_hight=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+explorer_network_hight=$(max "$network_height_01" "$network_height_03")
 
 block_diff=$((explorer_network_hight-blocks_hight))
 
@@ -593,7 +593,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	
 	if [[ "$stak_info" != "" ]]; then
-	    stak_info=$(curl -s -m 5 https://explorer.flux.zelcore.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	    stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	fi
 	
 fi
