@@ -1816,6 +1816,17 @@ while true
  fi 
  
 echo -e ""
+echo -e "${ARROW} ${CYAN}Checking if watchtower is installed....${NC}"
+apps_check=$(docker ps | grep "watchtower")
+
+if [[ "$apps_check" != "" ]]; then
+echo -e "${ARROW} ${CYAN}Stopping watchtower...${NC}"
+docker stop watchtower > /dev/null 2>&1
+sleep 2
+echo -e "${ARROW} ${CYAN}Removing watchtower...${NC}"
+docker rm watchtower > /dev/null 2>&1
+fi
+
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
 docker pull v2tec/watchtower:latest > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
@@ -1825,7 +1836,7 @@ apps_id=$(docker run -d \
 --name watchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
---label-enable --cleanup --interval $random) 2> /dev/null
+--label-enable --cleanup --interval $random 2> /dev/null) 
 if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
 echo -e "${ARROW} ${CYAN}Watchtower installed successful, id: ${GREEN}$apps_id${NC}"
 else
