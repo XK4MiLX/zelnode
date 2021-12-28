@@ -7,7 +7,6 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
 
-
 if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
    CONFIG_FILE='zelcash.conf'
