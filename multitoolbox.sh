@@ -1816,15 +1816,15 @@ while true
  fi 
  
 echo -e ""
-echo -e "${ARROW} ${CYAN}Checking if watchtower is installed....${NC}"
-apps_check=$(docker ps | grep "watchtower")
+echo -e "${ARROW} ${CYAN}Checking if fluxwatchtower is installed....${NC}"
+apps_check=$(docker ps | grep "fluxwatchtowerr")
 
 if [[ "$apps_check" != "" ]]; then
 echo -e "${ARROW} ${CYAN}Stopping watchtower...${NC}"
-docker stop watchtower > /dev/null 2>&1
+docker stop fluxwatchtower > /dev/null 2>&1
 sleep 2
 echo -e "${ARROW} ${CYAN}Removing watchtower...${NC}"
-docker rm watchtower > /dev/null 2>&1
+docker rm fluxwatchtower > /dev/null 2>&1
 fi
 
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
@@ -1833,7 +1833,7 @@ echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
 random=$(shuf -i 7500-35000 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
 apps_id=$(docker run -d \
---name watchtower \
+--name fluxwatchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
 --label-enable --cleanup --interval $random 2> /dev/null) 
