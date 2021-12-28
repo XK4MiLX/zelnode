@@ -1830,13 +1830,13 @@ fi
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
 docker pull v2tec/watchtower:latest > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
-random=$(shuf -i 7200-14400 -n 1)
+random=$(shuf -i 7500-35000 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
 apps_id=$(docker run -d \
 --name watchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
---label-enable --cleanup --interval $random 2> /dev/null) 
+--label-enable --cleanup --c $random 2> /dev/null) 
 if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
 echo -e "${ARROW} ${CYAN}Watchtower installed successful, id: ${GREEN}$apps_id${NC}"
 else
