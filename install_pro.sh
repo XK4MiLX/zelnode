@@ -1882,10 +1882,9 @@ fi
 function status_loop() {
 
 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
 network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
-EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 
 
 if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks') ]]; then
@@ -1916,10 +1915,9 @@ else
     do
         
         network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-        network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
         network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
-        EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+        EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
@@ -1955,10 +1953,9 @@ else
           spinning_timer
 	  
 	  network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-          network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
           network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
-          EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02" "$network_height_03")
+          EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	  
        	  LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
 	  CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
