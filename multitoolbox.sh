@@ -1817,18 +1817,18 @@ while true
  
 echo -e ""
 echo -e "${ARROW} ${CYAN}Checking if fluxwatchtower is installed....${NC}"
-apps_check=$(docker ps | grep "fluxwatchtowerr")
+apps_check=$(docker ps | grep "fluxwatchtower")
 
 if [[ "$apps_check" != "" ]]; then
-echo -e "${ARROW} ${CYAN}Stopping watchtower...${NC}"
+echo -e "${ARROW} ${CYAN}Stopping fluxwatchtower...${NC}"
 docker stop fluxwatchtower > /dev/null 2>&1
 sleep 2
-echo -e "${ARROW} ${CYAN}Removing watchtower...${NC}"
+echo -e "${ARROW} ${CYAN}Removing fluxwatchtower...${NC}"
 docker rm fluxwatchtower > /dev/null 2>&1
 fi
 
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
-docker pull v2tec/watchtower:latest > /dev/null 2>&1
+docker pull containrrr/watchtower:latest > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
 random=$(shuf -i 7500-35000 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
