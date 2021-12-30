@@ -1073,7 +1073,7 @@ EOF
 function flux_package() {
     sudo apt-get update -y > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
-    sudo apt install $COIN_NAME $BENCH_NAME -y && sleep 2
+    sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
     sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
     integration_check
 }
@@ -1084,7 +1084,7 @@ function install_daemon() {
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
    
    echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
-   sudo chown -R $USER:$USER /usr/share/keyrings 
+   sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
    
 if [[ "$(lsb_release -cs)" == "xenial" ]]; then
    
@@ -1100,8 +1100,8 @@ if [[ "$(lsb_release -cs)" == "xenial" ]]; then
      flux_package && sleep 2    
 else
    
-   gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D 
-   gpg --export 4B69CA27A986265D | sudo apt-key add -
+   gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+   gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1
    
    if ! gpg --list-keys Zel > /dev/null; then    
         gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
@@ -1114,7 +1114,7 @@ else
    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/flux.list  
  
    # downloading key && save it as keyring  
-   gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D 
+   gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
 
    if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
       echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
