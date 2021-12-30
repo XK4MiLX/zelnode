@@ -1003,7 +1003,7 @@ function install_packages() {
       sudo apt install dirmngr -y > /dev/null 2>&1
     fi
     
-    sudo apt-get install software-properties-common -y > /dev/null 2>&1
+    sudo apt-get install software-properties-common ca-certificates -y > /dev/null 2>&1
     sudo apt-get update -y > /dev/null 2>&1
     sudo apt-get upgrade -y > /dev/null 2>&1
     sudo apt-get install nano htop pwgen ufw figlet tmux jq zip gzip pv unzip git -y > /dev/null 2>&1
