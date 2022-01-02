@@ -1339,7 +1339,7 @@ function analyzer_and_fixer(){
 echo -e "${GREEN}Module: FluxNode analyzer and fixer${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-if [[ "$USER" == "root" ]]
+if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]
 then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
