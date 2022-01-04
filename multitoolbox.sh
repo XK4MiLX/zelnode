@@ -1047,6 +1047,7 @@ function flux_daemon_bootstrap() {
         exit
     fi
 
+    cd
     echo -e "${NC}"
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
