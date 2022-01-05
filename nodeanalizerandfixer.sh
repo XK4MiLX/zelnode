@@ -444,6 +444,15 @@ fi
 if [[ "$bench_back" == "disconnected" ]]; then
 echo -e "${X_MARK} ${CYAN} FluxBack does not work properly${NC}"
 
+usercheck=$(getent group docker)
+if [[ "$usercheck" =~ "," ]]; then
+echo -e ""
+echo -e "${WORNING} ${CYAN} Detected multiple users in docker group...${NC}"
+echo -e "${WORNING} ${CYAN} More then one instance of flux daemon will cause it to malfunction...${NC}"
+echo -e "${WORNING} ${CYAN} If u installed FluxOS on more then one user you need delete one instance of it...${NC}"
+echo -e ""
+fi
+
 WANIP=$(wget http://ipecho.net/plain -O - -q) 
 if [[ "$WANIP" == "" ]]; then
   WANIP=$(curl ifconfig.me)     
