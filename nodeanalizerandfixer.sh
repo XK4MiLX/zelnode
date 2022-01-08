@@ -543,7 +543,7 @@ if [[ "$explorer_network_hight" != "0" ]]; then
 
 else
 
-  echo -e "${PIN} ${CYAN}Status: ${RED}sync check skipped...${NC}"
+  echo -e "${PIN} ${CYAN}Info: ${RED}sync check skipped...${NC}"
   
 fi
 
