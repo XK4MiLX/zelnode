@@ -525,15 +525,15 @@ echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
-network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo getinfo 2> /dev/null  | jq '.info.blocks')
+network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo getinfo   | jq '.info.blocks' 2> /dev/null)
 #network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo getinfo 2> /dev/null | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo getinfo  | jq '.info.blocks' 2> /dev/null)
 
 explorer_network_hight=$(max "$network_height_01" "$network_height_03")
 
 block_diff=$((explorer_network_hight-blocks_hight))
 
-if [[ "$explorer_network_hight" != "" ]]; then
+if [[ "$explorer_network_hight" != "0" ]]; then
 
   if [[ "$block_diff" < 10 ]]; then
   echo -e "${PIN} ${CYAN}Status: ${GREEN}synced${NC}"
@@ -595,7 +595,7 @@ echo -e "${ARROW} ${CYAN}$flux_communication${NC}"
 echo -e ""
 fi
 
-if [[ "$explorer_network_hight" != "" ]]; then
+if [[ "$explorer_network_hight" != "0" ]]; then
 
 echo -e "${BOOK} ${YELLOW}Checking collateral:${NC}"
 txhash=$(grep -o "\w*" <<< "$collateral")
