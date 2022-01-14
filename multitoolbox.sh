@@ -1804,7 +1804,7 @@ while true
 
  function install_watchtower(){
  
- echo -e "${GREEN}Module: Install containrrr/watchtower for docker image autoupdate${NC}"
+ echo -e "${GREEN}Module: Install fluxwatchtower for docker images autoupdate${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
  if [[ "$USER" == "root" ]]
@@ -2018,7 +2018,7 @@ echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
 echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}13 - Replace Zel ID ${NC}"
-echo -e "${CYAN}14 - Install containrrr/watchtower for docker image autoupdate${NC}"
+echo -e "${CYAN}14 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}15 - Recover corrupted MongoDB database${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
