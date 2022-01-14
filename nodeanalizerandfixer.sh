@@ -611,7 +611,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
         #collateral_index=$(awk '{print $1}' <<< "$stak_info")
 	stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	
-	if [[ "$stak_info" != "" ]]; then
+	if [[ "$stak_info" == "" ]]; then
 	    stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	fi
 	
