@@ -1834,6 +1834,7 @@ echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
 random=$(shuf -i 7500-35000 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
 apps_id=$(docker run -d \
+--restart unless-stopped \
 --name fluxwatchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
@@ -1846,6 +1847,24 @@ fi
  
  }
  
+ 
+ function mongod_db_fix() {
+  echo -e "${GREEN}Module: Recover corrupted MongoDB database${NC}"
+  echo -e "${YELLOW}================================================================${NC}"
+ 
+  if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]
+  then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+  fi 
+ 
+  echo -e ""
+  sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
+ 
+ }
 
  function selfhosting() {
  
@@ -2000,6 +2019,7 @@ echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}13 - Replace Zel ID ${NC}"
 echo -e "${CYAN}14 - Install containrrr/watchtower for docker image autoupdate${NC}"
+echo -e "${CYAN}15 - Recover corrupted MongoDB database${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2085,6 +2105,13 @@ read -rp "Pick an option and hit ENTER: "
   clear
   sleep 1
   install_watchtower
+  echo -e ""
+ ;;
+ 
+     15)
+  clear
+  sleep 1
+  mongod_db_fix
   echo -e ""
  ;;
  
