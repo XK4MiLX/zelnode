@@ -1929,8 +1929,8 @@ else
     while true
     do
         
-        network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
+        network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
         EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	
@@ -1967,8 +1967,8 @@ else
           MSG2=''
           spinning_timer
 	  
-	  network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-          network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
+	 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+         network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
           EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	  
