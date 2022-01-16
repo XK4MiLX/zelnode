@@ -4,7 +4,7 @@
 ```bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```  
 
 <b>2) MENU:</b>    
-![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/new_menu_v3.jpg) 
+![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/v6.png) 
 
 <b>3) HOW USE MULTITOOLBOX TO SETUP FLUXNODE:</b>  
  https://medium.com/zelinsights/zelnode-setup-the-easy-peasy-lemon-squeezy-way-fd89706ea03c <br>
