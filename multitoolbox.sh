@@ -485,7 +485,7 @@ fi
 }
 
 function create_config() {
-if [[ "$USER" == "root" || "$USER" == "ubuntu" ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -669,7 +669,7 @@ echo
 
 function install_watchdog() {
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu" ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -930,8 +930,7 @@ function kda_bootstrap() {
     echo -e "${GREEN}Module: Restore Kadena node blockchain from bootstrap${NC}"
     echo -e "${YELLOW}================================================================${NC}"
 
-    if [[ "$USER" == "root" || "$USER" == "ubuntu" ]]; then
-    
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then 
         echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
         echo -e "${CYAN}Please switch to the user account.${NC}"
         echo -e "${YELLOW}================================================================${NC}"
@@ -1035,8 +1034,7 @@ function flux_daemon_bootstrap() {
     echo -e "${GREEN}Module: Restore Flux blockchain from bootstrap${NC}"
     echo -e "${YELLOW}================================================================${NC}"
 
-    if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
-    
+    if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then    
         echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
         echo -e "${CYAN}Please switch to the user account.${NC}"
         echo -e "${YELLOW}================================================================${NC}"
@@ -1158,7 +1156,7 @@ echo -e "${ARROW} ${CYAN}Module disabled...${NC}"
 echo -e ""
 exit
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1337,7 +1335,7 @@ function analyzer_and_fixer(){
 echo -e "${GREEN}Module: FluxNode analyzer and fixer${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1356,7 +1354,7 @@ function install_node(){
 echo -e "${GREEN}Module: Install FluxNode${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1504,7 +1502,7 @@ function daemon_reconfiguration()
 echo -e "${GREEN}Module: Flux Daemon Reconfiguration${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1708,7 +1706,7 @@ function create_service() {
  echo -e "${GREEN}Module: Flux Daemon service creator${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1757,7 +1755,7 @@ function replace_zelid() {
  echo -e "${GREEN}Module: Replace Zel ID${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1798,7 +1796,7 @@ while true
  echo -e "${GREEN}Module: Install fluxwatchtower for docker images autoupdate${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
@@ -1842,7 +1840,7 @@ fi
   echo -e "${GREEN}Module: Recover corrupted MongoDB database${NC}"
   echo -e "${YELLOW}================================================================${NC}"
  
-  if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]
+ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
   then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
@@ -1861,7 +1859,7 @@ fi
  echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
-if [[ "$USER" == "root" || "$USER" == "ubuntu"  ]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
