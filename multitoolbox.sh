@@ -1793,7 +1793,7 @@ while true
 
  function install_watchtower(){
  
- echo -e "${GREEN}Module: Install fluxwatchtower for docker images autoupdate${NC}"
+ echo -e "${GREEN}Module: Install flux_watchtower for docker images autoupdate${NC}"
  echo -e "${YELLOW}================================================================${NC}"
  
 if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
@@ -1805,15 +1805,15 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
  fi 
  
 echo -e ""
-echo -e "${ARROW} ${CYAN}Checking if fluxwatchtower is installed....${NC}"
-apps_check=$(docker ps | grep "fluxwatchtower")
+echo -e "${ARROW} ${CYAN}Checking if flux_watchtower is installed....${NC}"
+apps_check=$(docker ps | grep "flux_watchtower")
 
 if [[ "$apps_check" != "" ]]; then
-echo -e "${ARROW} ${CYAN}Stopping fluxwatchtower...${NC}"
-docker stop fluxwatchtower > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Stopping flux_watchtower...${NC}"
+docker stop flux_watchtower > /dev/null 2>&1
 sleep 2
-echo -e "${ARROW} ${CYAN}Removing fluxwatchtower...${NC}"
-docker rm fluxwatchtower > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Removing flux_watchtower...${NC}"
+docker rm flux_watchtower > /dev/null 2>&1
 fi
 
 echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
@@ -1823,14 +1823,14 @@ random=$(shuf -i 7500-35000 -n 1)
 echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
 apps_id=$(docker run -d \
 --restart unless-stopped \
---name fluxwatchtower \
+--name flux_watchtower \
 -v /var/run/docker.sock:/var/run/docker.sock \
 containrrr/watchtower \
 --cleanup --interval $random 2> /dev/null) 
 if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
-echo -e "${ARROW} ${CYAN}FluxWatchtower installed successful, id: ${GREEN}$apps_id${NC}"
+echo -e "${ARROW} ${CYAN}flux_watchtower installed successful, id: ${GREEN}$apps_id${NC}"
 else
-echo -e "${ARROW} ${CYAN}FluxWatchtower installion failed...${NC}"
+echo -e "${ARROW} ${CYAN}flux_watchtower installion failed...${NC}"
 fi
  
  }
