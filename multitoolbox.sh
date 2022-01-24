@@ -1044,6 +1044,7 @@ function flux_daemon_bootstrap() {
 
     cd
     echo -e "${NC}"
+    pm2 stop watchdog > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
@@ -1146,6 +1147,7 @@ function flux_daemon_bootstrap() {
     MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
     spinning_timer
     echo -e "" && echo -e ""
+    pm2 start watchdog --watch > /dev/null 2>&1 && sleep 2
 }
 
 function mongodb_bootstrap(){
