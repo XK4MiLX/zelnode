@@ -1049,9 +1049,9 @@ function flux_daemon_bootstrap() {
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
     sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 
-    if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+    if [[ -e /home/$USER/$CONFIG_DIR/blocks ]] && [[ -e /home/$USER/$CONFIG_DIR/chainstate ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
+        rm -rf /home/$USER/$CONFIG_DIR/blocks /home/$USER/$CONFIG_DIR/chainstate /home/$USER/$CONFIG_DIR/determ_zelnodes
     fi
 
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
@@ -1122,6 +1122,11 @@ function flux_daemon_bootstrap() {
   		BOOTSTRAP_ZIP="$(whiptail --title "Flux daemon bootstrap setup" --inputbox "Enter your URL (zip, tar.gz)" 8 72 3>&1 1>&2 2>&3)"
 		echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"		
 		BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
+		
+		if [[ "$BOOTSTRAP_ZIPFILE" != *".zip"* ]]; then
+                  BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
+                fi
+		
 		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
 		
 	        if [[ "$BOOTSTRAP_ZIPFILE" == *".zip"* ]]; then
