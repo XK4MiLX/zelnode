@@ -2008,7 +2008,7 @@ else
     
   #if [[ -z "$watchdog" ]]; then
     #if   whiptail --yesno "Would you like to install watchdog for FluxNode?" 8 60; then
-   install_watchdog
+   #install_watchdog
    # else
        # echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
    # fi
