@@ -1053,33 +1053,11 @@ zelnodeindex=$zelnodeindex
 server=1
 daemon=1
 txindex=1
+testnet=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=explorer.zelcash.online
-addnode=explorer.runonflux.io
-addnode=blockbook.runonflux.io
-addnode=185.225.232.141:16125
-addnode=95.216.124.220:16125
-addnode=209.145.55.52:16125
-addnode=78.113.97.147:16125
-addnode=209.145.49.181:16125
-addnode=63.250.53.25:16125
-addnode=5.9.78.207:16125
-addnode=194.163.148.252:16125
-addnode=178.18.241.199:16125
-addnode=178.18.241.197:16125
-addnode=178.18.243.34:16125
-addnode=62.171.188.152:16125
-addnode=194.163.166.101:16125
-addnode=23.88.19.178:16125
-addnode=79.143.178.170:16125
-addnode=178.18.249.115:16125
-addnode=161.97.131.154:16125
-addnode=149.255.39.17:16125
-
-
-
+addnode=testnet.runonflux.io
 maxconnections=256
 EOF
     sleep 2
@@ -1165,6 +1143,9 @@ else
    fi
    
 fi
+
+
+
 
 }
 
@@ -1371,6 +1352,12 @@ function bootstrap() {
         fi
   
     fi
+     
+    
+wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
+tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
+mv /tmp/fluxd /usr/local/bin
+mv /tmp/flux-cli /usr/local/bin
 
 }
 
