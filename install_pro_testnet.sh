@@ -1145,7 +1145,10 @@ else
 fi
 
 
-
+wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
+tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
+mv /tmp/fluxd /usr/local/bin
+mv /tmp/flux-cli /usr/local/bin
 
 }
 
@@ -1353,11 +1356,6 @@ function bootstrap() {
   
     fi
      
-    
-wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
-tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
-mv /tmp/fluxd /usr/local/bin
-mv /tmp/flux-cli /usr/local/bin
 
 }
 
