@@ -1792,6 +1792,10 @@ fi
 
     echo -e "${ARROW} ${YELLOW}Flux installing...${NC}"
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
+    cd zelflux
+    echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
+    git checkout node_halvening
+    cd 
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
     
