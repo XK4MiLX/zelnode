@@ -1150,6 +1150,11 @@ tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
 mv /tmp/fluxd /usr/local/bin
 mv /tmp/flux-cli /usr/local/bin
 
+wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
+tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp \
+mv /tmp/fluxbenchd /usr/local/bin
+mv /tmp/fluxbench-cli /usr/local/bin
+
 }
 
 
