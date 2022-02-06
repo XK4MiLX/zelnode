@@ -7,7 +7,7 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
 COIN_NAME='flux'
-CONFIG_DIR='.flux'
+CONFIG_DIR='.fluxtestnet'
 CONFIG_FILE='flux.conf'
 
 BENCH_NAME='fluxbench'
@@ -316,11 +316,11 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             IMPORT_ZELCONF="1"
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
             echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 	    
 	    if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -360,11 +360,11 @@ else
     IMPORT_ZELCONF="1"
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
     echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
     
      if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -786,21 +786,21 @@ function wipe_clean() {
     
     if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
     echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-    sudo rm -rf ~/$CONFIG_DIR/testnet/determ_zelnodes ~/$CONFIG_DIR/testnet/sporks ~/$CONFIG_DIR/testnet/database ~/$CONFIG_DIR/testnet/blocks ~/$CONFIG_DIR/testnet/chainstate && sleep 2
+    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
     sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
     
     else
         BOOTSTRAP_SKIP="1"
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/fee_estimates.dat 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/peers.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnode.conf 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodecache.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodepayments.dat
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/db.log
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/flux.conf && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/database && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/sporks && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
+	sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
+	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
+	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
+	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     fi
     
     else
@@ -808,21 +808,21 @@ function wipe_clean() {
     if [[ "$use_old_chain" == "1" ]]; then
     
       BOOTSTRAP_SKIP="1"
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/fee_estimates.dat 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/peers.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnode.conf 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodecache.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodepayments.dat
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/db.log
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/debug.log && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/flux.conf && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/database && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/sporks && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
+      sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
+      sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
     
     else
     
       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-      sudo rm -rf ~/$CONFIG_DIR/testnet/determ_zelnodes ~/$CONFIG_DIR/testnet/sporks ~/$CONFIG_DIR/testnet/database ~/$CONFIG_DIR/testnet/blocks ~/$CONFIG_DIR/testnet/chainstate && sleep 2
+      sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
       sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
       
     
@@ -1018,9 +1018,9 @@ function install_packages() {
 function create_conf() {
 
     echo -e "${ARROW} ${YELLOW}Creating Flux daemon config file...${NC}"
-    if [ -f ~/$CONFIG_DIR/testnet/$CONFIG_FILE ]; then
+    if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
         echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
-        mv ~/$CONFIG_DIR/testnet/$CONFIG_FILE ~/$CONFIG_DIR/testnet/$COIN_NAME.old;
+        mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
     fi
     
     RPCUSER=$(pwgen -1 8 -n)
@@ -1037,9 +1037,9 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir -p ~/$CONFIG_DIR/testnet > /dev/null 2>&1
-    touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR/testnet/$CONFIG_FILE
+    mkdir -p ~/$CONFIG_DIR > /dev/null 2>&1
+    touch ~/$CONFIG_DIR/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -1424,7 +1424,7 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
 
 if [[ -f /usr/local/bin/fluxd ]]; then
-bash -c "fluxd -datadir=/home/$USER/.flux/testnet"
+bash -c "fluxd -datadir=/home/$USER/.fluxtestnet"
 exit
 else
 bash -c "zelcashd"
