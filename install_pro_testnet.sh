@@ -1018,9 +1018,9 @@ function install_packages() {
 function create_conf() {
 
     echo -e "${ARROW} ${YELLOW}Creating Flux daemon config file...${NC}"
-    if [ -f ~/$CONFIG_DIR/$CONFIG_FILE ]; then
+    if [ -f ~/$CONFIG_DIR/testnet/$CONFIG_FILE ]; then
         echo -e "${ARROW} ${CYAN}Existing conf file found backing up to $COIN_NAME.old ...${NC}"
-        mv ~/$CONFIG_DIR/$CONFIG_FILE ~/$CONFIG_DIR/$COIN_NAME.old;
+        mv ~/$CONFIG_DIR/testnet/$CONFIG_FILE ~/$CONFIG_DIR/testnet/$COIN_NAME.old;
     fi
     
     RPCUSER=$(pwgen -1 8 -n)
@@ -1039,7 +1039,7 @@ function create_conf() {
     fi
     mkdir ~/$CONFIG_DIR/testnet > /dev/null 2>&1
     touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR/testnet/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
