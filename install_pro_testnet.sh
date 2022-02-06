@@ -1145,15 +1145,17 @@ else
 fi
 
 
-wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
-tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
+sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
+sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
 sudo mv /tmp/fluxd /usr/local/bin
 sudo mv /tmp/flux-cli /usr/local/bin
 
-wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
-tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp \
+sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
+sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp \
 sudo mv /tmp/fluxbenchd /usr/local/bin
 sudo mv /tmp/fluxbench-cli /usr/local/bin
+
+sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
 
 }
 
