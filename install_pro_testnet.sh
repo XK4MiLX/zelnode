@@ -316,11 +316,11 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             IMPORT_ZELCONF="1"
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
             echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 	    
 	    if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -360,11 +360,11 @@ else
     IMPORT_ZELCONF="1"
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
     echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
     
      if [[ "$OLD_CONFIG" == "1" ]]; then 
