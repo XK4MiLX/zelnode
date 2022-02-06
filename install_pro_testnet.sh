@@ -1146,12 +1146,12 @@ fi
 
 
 sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
-sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
+sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp 
 sudo mv /tmp/fluxd /usr/local/bin
 sudo mv /tmp/flux-cli /usr/local/bin
 
 sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
-sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp \
+sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp 
 sudo mv /tmp/fluxbenchd /usr/local/bin
 sudo mv /tmp/fluxbench-cli /usr/local/bin
 
@@ -2239,9 +2239,9 @@ fi
     create_conf
     install_daemon
     zk_params
-    if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
+    #if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
    # bootstrap
-    fi
+   # fi
     create_service_scripts
     create_service
     
