@@ -1037,7 +1037,7 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir ~/$CONFIG_DIR/testnet > /dev/null 2>&1
+    mkdir -p ~/$CONFIG_DIR/testnet > /dev/null 2>&1
     touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
     cat << EOF > ~/$CONFIG_DIR/testnet/$CONFIG_FILE
 rpcuser=$RPCUSER
