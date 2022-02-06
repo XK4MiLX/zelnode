@@ -7,7 +7,7 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
 COIN_NAME='flux'
-CONFIG_DIR='.fluxtestnet'
+CONFIG_DIR='.flux'
 CONFIG_FILE='flux.conf'
 
 BENCH_NAME='fluxbench'
@@ -299,7 +299,7 @@ function check_benchmarks() {
 
 function import_date() {
 
-if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
+if [[ -f /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
 
     if [[ -z "$import_settings" ]]; then
 
@@ -316,11 +316,11 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             IMPORT_ZELCONF="1"
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
             echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 	    
 	    if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -360,11 +360,11 @@ else
     IMPORT_ZELCONF="1"
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
+    zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
     echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+    zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+    zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
     echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
     
      if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -593,9 +593,9 @@ if [[ "$telegram_alert" == 0 ]]; then
     telegram_chat_id=0;
 fi
 
-if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
-  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+if [[ -f /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
   stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
 	
     if [[ "$stak_info" == "" ]]; then
@@ -1037,9 +1037,9 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir -p ~/$CONFIG_DIR > /dev/null 2>&1
-    touch ~/$CONFIG_DIR/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
+    mkdir -p ~/$CONFIG_DIR/testnet > /dev/null 2>&1
+    touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR//testnet/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -1424,7 +1424,7 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
 
 if [[ -f /usr/local/bin/fluxd ]]; then
-bash -c "fluxd -datadir=/home/$USER/.fluxtestnet"
+bash -c "fluxd"
 exit
 else
 bash -c "zelcashd"
