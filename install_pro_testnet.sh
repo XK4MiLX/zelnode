@@ -786,21 +786,21 @@ function wipe_clean() {
     
     if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
     echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+    sudo rm -rf ~/$CONFIG_DIR/testnet/determ_zelnodes ~/$CONFIG_DIR/testnet/sporks ~/$CONFIG_DIR/testnet/database ~/$CONFIG_DIR/testnet/blocks ~/$CONFIG_DIR/testnet/chainstate && sleep 2
     sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
     
     else
         BOOTSTRAP_SKIP="1"
-	sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/fee_estimates.dat 
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/peers.dat && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnode.conf 
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodecache.dat && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodepayments.dat
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/db.log
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/debug.log && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/flux.conf && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/database && sleep 1
+	sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/sporks && sleep 1
     fi
     
     else
@@ -808,21 +808,21 @@ function wipe_clean() {
     if [[ "$use_old_chain" == "1" ]]; then
     
       BOOTSTRAP_SKIP="1"
-      sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-      sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-      sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-      sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/fee_estimates.dat 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/peers.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnode.conf 
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodecache.dat && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/zelnodepayments.dat
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/db.log
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/debug.log && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/flux.conf && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/database && sleep 1
+      sudo rm -rf /home/$USER/$CONFIG_DIR/testnet/sporks && sleep 1
     
     else
     
       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-      sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+      sudo rm -rf ~/$CONFIG_DIR/testnet/determ_zelnodes ~/$CONFIG_DIR/testnet/sporks ~/$CONFIG_DIR/testnet/database ~/$CONFIG_DIR/testnet/blocks ~/$CONFIG_DIR/testnet/chainstate && sleep 2
       sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
       
     
@@ -1037,8 +1037,8 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir ~/$CONFIG_DIR > /dev/null 2>&1
-    touch ~/$CONFIG_DIR/$CONFIG_FILE
+    mkdir ~/$CONFIG_DIR/testnet > /dev/null 2>&1
+    touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
     cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
@@ -1145,15 +1145,15 @@ else
 fi
 
 
-sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
-sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp 
-sudo mv /tmp/fluxd /usr/local/bin
-sudo mv /tmp/flux-cli /usr/local/bin
+sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
+sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
+sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
 
-sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
-sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp 
-sudo mv /tmp/fluxbenchd /usr/local/bin
-sudo mv /tmp/fluxbench-cli /usr/local/bin
+sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
+sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
+sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
 
 sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
 
@@ -1423,7 +1423,7 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 fi
 
 if [[ -f /usr/local/bin/fluxd ]]; then
-bash -c "fluxd"
+bash -c "fluxd -datadir=/home/$USER/.flux/testnet"
 exit
 else
 bash -c "zelcashd"
@@ -1799,7 +1799,7 @@ fi
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
     cd zelflux
     echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
-    git checkout node_halvening
+    git checkout node_halvening > /dev/null 2>&1
     cd 
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
