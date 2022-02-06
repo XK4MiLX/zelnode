@@ -596,10 +596,10 @@ fi
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+  stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
     fi	
 fi
 
@@ -1147,13 +1147,13 @@ fi
 
 wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp
 tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp \
-mv /tmp/fluxd /usr/local/bin
-mv /tmp/flux-cli /usr/local/bin
+sudo mv /tmp/fluxd /usr/local/bin
+sudo mv /tmp/flux-cli /usr/local/bin
 
 wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp
 tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp \
-mv /tmp/fluxbenchd /usr/local/bin
-mv /tmp/fluxbench-cli /usr/local/bin
+sudo mv /tmp/fluxbenchd /usr/local/bin
+sudo mv /tmp/fluxbench-cli /usr/local/bin
 
 }
 
@@ -1895,8 +1895,8 @@ fi
 
 function status_loop() {
 
-network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
+network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
 
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 
@@ -1928,8 +1928,8 @@ else
     while true
     do
         
-        network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
-        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+        network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+        network_height_03=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
         EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	
@@ -1966,8 +1966,8 @@ else
           MSG2=''
           spinning_timer
 	  
-	 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
-         network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+	 network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+         network_height_03=$(curl -sk -m 5 https://tetestnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
           EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	  
