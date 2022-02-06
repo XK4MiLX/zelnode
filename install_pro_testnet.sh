@@ -1061,6 +1061,7 @@ addnode=testnet.runonflux.io
 maxconnections=256
 EOF
     sleep 2
+    cp /home/$USER/.flux/testnet/flux.conf /home/$USER/.flux
 }
 
 function flux_package() {
