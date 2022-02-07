@@ -1493,6 +1493,8 @@ function basic_security() {
     sudo ufw allow out to any port 53 > /dev/null 2>&1
     sudo ufw allow out to any port 16124 > /dev/null 2>&1
     sudo ufw allow out to any port 16125 > /dev/null 2>&1
+    sudo ufw allow out to any port 26124 > /dev/null 2>&1
+    sudo ufw allow out to any port 26125 > /dev/null 2>&1
     sudo ufw allow out to any port 16127 > /dev/null 2>&1
     sudo ufw allow from any to any port 16127 > /dev/null 2>&1
     
