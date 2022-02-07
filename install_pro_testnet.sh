@@ -1563,7 +1563,7 @@ function start_daemon() {
 	daemon_version=$($COIN_CLI getinfo | jq -r '.version')
 	string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
 	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
-	bench_version=$($BENCH_CLI getinfo | jq -r '.version')
+	bench_version=$($BENCH_CLI -testnet getinfo | jq -r '.version')
 	string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
