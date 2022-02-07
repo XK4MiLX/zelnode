@@ -1865,7 +1865,7 @@ module.exports = {
         ipaddress: '${WANIP}',
         zelid: '${ZELID}',
 	kadena: '${KDA_A}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
@@ -1876,7 +1876,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${ZELID}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
