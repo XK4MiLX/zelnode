@@ -2067,7 +2067,7 @@ echo && echo
         
 echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
 echo -e "${YELLOW}======================${NC}"
-bench_benchmarks=$($BENCH_CLI getbenchmarks)
+bench_benchmarks=$($BENCH_CLI -testnet getbenchmarks)
 
 if [[ "bench_benchmarks" != "" ]]; then
 bench_status=$(jq -r '.status' <<< "$bench_benchmarks")
