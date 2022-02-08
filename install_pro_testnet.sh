@@ -1756,7 +1756,7 @@ echo -e "${ARROW} ${YELLOW}Nodejs installing...${NC}"
 #) && \. "$NVM_DIR/nvm.sh"
 #cd
 #curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash > /dev/null 2>&1
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash > /dev/null 2>&1
+curl -SsL -m 10 https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash > /dev/null 2>&1
 . ~/.profile
 . ~/.bashrc
 sleep 1
