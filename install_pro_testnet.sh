@@ -1162,7 +1162,7 @@ if [[ $(dpkg --print-architecture) = *amd* ]]; then
 
 else
 
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz -P /tmp > /dev/null 2>&1
   sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
   sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
