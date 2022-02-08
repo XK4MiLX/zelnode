@@ -1148,15 +1148,32 @@ fi
 sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
 sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
 
-sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
-sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
-sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
-sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+if [[ $(dpkg --print-architecture) = *amd* ]]; then
 
-sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
-sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
-sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
-sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+
+else
+
+  https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz
+  sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-arm-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+
+
+fi
 
 sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
 }
