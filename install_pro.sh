@@ -1011,7 +1011,7 @@ function install_packages() {
     sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
     sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
     sudo apt-get install autoconf ncurses-dev python python-zmq -y > /dev/null 2>&1
-    sudo apt-get install wget curl bsdmainutils automake fail2ban -y > /dev/null 2>&1
+    sudo apt-get install wget curl bc bsdmainutils automake fail2ban -y > /dev/null 2>&1
     sudo apt-get remove sysbench -y > /dev/null 2>&1
     echo -e "${ARROW} ${YELLOW}Packages complete...${NC}"
 }
