@@ -1039,9 +1039,9 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir -p ~/$CONFIG_DIR/testnet > /dev/null 2>&1
-    touch ~/$CONFIG_DIR/testnet/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR//testnet/$CONFIG_FILE
+    mkdir -p ~/$CONFIG_DIR > /dev/null 2>&1
+    touch ~/$CONFIG_DIR/$CONFIG_FILE
+    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
 rpcpassword=$PASSWORD
 rpcallowip=127.0.0.1
@@ -1063,7 +1063,7 @@ addnode=testnet.runonflux.io
 maxconnections=256
 EOF
     sleep 2
-    cp /home/$USER/.flux/testnet/flux.conf /home/$USER/.flux
+ 
 }
 
 function flux_package() {
