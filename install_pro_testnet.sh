@@ -339,10 +339,10 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	         IMPORT_ZELID="1"
 	       fi
 
-               KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-              if [[ "$KDA_A" != "" ]]; then
-                  echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-             fi
+             #  KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+             # if [[ "$KDA_A" != "" ]]; then
+                #  echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+            # fi
 
          fi
     fi
@@ -384,10 +384,10 @@ else
 	         IMPORT_ZELID="1"
 	       fi
 	       
-            KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-               if [[ "$KDA_A" != "" ]]; then
-                    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-               fi
+           # KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+              # if [[ "$KDA_A" != "" ]]; then
+                #    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+              # fi
           fi
       fi
 
@@ -839,26 +839,25 @@ fi
     echo -e ""
   
   echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
- if [[ $(sudo ufw status | grep "Status: active") ]]
-  then
-    if [[ -z "$firewall_disable" ]]; then    
-      if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
+ if [[ $(sudo ufw status | grep "Status: active") ]]; then
+   # if [[ -z "$firewall_disable" ]]; then    
+     # if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
 	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-      else	 
-	 echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
-      fi
+    #  else	 
+	# echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+    #  fi
     else
     
-      if [[ "$firewall_disable" == "1" ]]; then
-  	 sudo ufw disable > /dev/null 2>&1
-	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-      else
-        echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
-      fi
-    fi
+     # if [[ "$firewall_disable" == "1" ]]; then
+  	 #sudo ufw disable > /dev/null 2>&1
+	# echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
+     # else
+      #  echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+     # fi
+   # fi
     
-    else
+   # else
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
  fi
  
@@ -1841,55 +1840,11 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
                 sleep 4
                 fi
         done
-	
-        if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
-	   
-	    while true
-                do
 		
-                    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
-                    if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* ]]; then
-		    	
-			     echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
-			 
-			  while true
-		          do
-			     KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
-		             if [[ "$KDA_C" -ge "0"  && "$KDA_C" -le "19" ]]; then		    
-                              echo -e "${ARROW} ${CYAN}Kadena chainid is valid.................[${CHECK_MARK}${CYAN}]${NC}"	
-			      KDA_A="kadena:$KDA_A?chainid=$KDA_C"
-                              break
-                             else
-                              echo -e "${ARROW} ${CYAN}Kadena chainid is not valid.............[${X_MARK}${CYAN}]${NC}"			    
-                              sleep 2
-                             fi		     
-		          done
-			  
-			  break
-		    else	     
-		              echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
-			   sleep 2		     
-		    fi
-              done
-	                 
-        fi
-	
  fi
   
 
-if [[ "$KDA_A" != "" ]]; then
-  touch ~/$FLUX_DIR/config/userconfig.js
-    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
-module.exports = {
-      initial: {
-        ipaddress: '${WANIP}',
-        zelid: '${ZELID}',
-	kadena: '${KDA_A}',
-        testnet: true
-      }
-    }
-EOF
-else
+
     touch ~/$FLUX_DIR/config/userconfig.js
     cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
@@ -1900,7 +1855,7 @@ module.exports = {
       }
     }
 EOF
-fi
+
 
 if [ -d ~/$FLUX_DIR ]
 then
