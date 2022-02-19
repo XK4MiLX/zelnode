@@ -1822,7 +1822,7 @@ fi
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
     cd zelflux
     echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
-    git checkout development > /dev/null 2>&1
+    git checkout testnet > /dev/null 2>&1
     cd 
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
