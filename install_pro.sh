@@ -870,7 +870,7 @@ fi
     echo -e ""
   
   echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
-if [[ $(sudo ufw status | grep "Status: active") ]]
+if [[ $(sudo ufw status | grep "Status: active") ]]; then
  # then
  #  if [[ -z "$firewall_disable" ]]; then    
     #  if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
