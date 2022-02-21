@@ -946,7 +946,7 @@ function create_swap() {
         swap=2G
     fi
     if ! grep -q "swapfile" /etc/fstab; then
-        if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+       # if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
             sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
             sudo chmod 600 /swapfile > /dev/null 2>&1
             sudo mkswap /swapfile > /dev/null 2>&1
@@ -955,7 +955,7 @@ function create_swap() {
             echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
-        fi
+      #  fi
     fi
     
     else
