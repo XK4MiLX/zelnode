@@ -1,11 +1,11 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIP='http://202.61.207.10:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=a705701758411b28ea20325ef9654e31e3d8f5f03a24b4e4e662e601a1250859'
+KDA_BOOTSTRAP_ZIP='http://38.242.202.86:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=8ba005f55511d806f9d4ec5f56bf5c14ae02a50bfb80f5bdb08a1ded22f7b159'
 
 if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
@@ -871,10 +871,10 @@ fi
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
 fi
 
@@ -884,11 +884,15 @@ if [[ $stak_info == ?(-)+([0-9]) ]]; then
    "10000") eps_limit=90 ;;
    "25000")  eps_limit=180 ;;
    "100000") eps_limit=300 ;;
+   "1000") eps_limit=90 ;;
+   "12500")  eps_limit=180 ;;
+   "40000") eps_limit=300 ;;
   esac
  
 else
 eps_limit=0;
 fi
+
 
 
 sudo touch /home/$USER/watchdog/config.js
