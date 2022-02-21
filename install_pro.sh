@@ -9,6 +9,7 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
 CONFIG_FILE='flux.conf'
+kadena_possible="0"
 
 BENCH_NAME='fluxbench'
 BENCH_CLI='fluxbench-cli'
@@ -204,6 +205,34 @@ fi
 echo -e ""
 }
 
+function tier(){
+
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+	
+    if [[ "$stak_info" == "" ]]; then
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+    fi	
+
+
+  if [[ $stak_info == ?(-)+([0-9]) ]]; then
+
+   case $stak_info in
+    "25000")  kadena_possible=1 ;;
+    "100000") kadena_possible=1 ;;
+    "12500")  kadena_possible=1 ;;
+    "40000") kadena_possible=1 ;;
+   esac
+ 
+  else
+    kadena_possible=0
+  fi
+
+fi
+
+}
 
 function config_file() {
 
@@ -597,10 +626,10 @@ fi
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
 fi
 
@@ -610,6 +639,9 @@ if [[ $stak_info == ?(-)+([0-9]) ]]; then
    "10000") eps_limit=90 ;;
    "25000")  eps_limit=180 ;;
    "100000") eps_limit=300 ;;
+   "1000") eps_limit=90 ;;
+   "12500")  eps_limit=180 ;;
+   "40000") eps_limit=300 ;;
   esac
  
 else
@@ -838,26 +870,26 @@ fi
     echo -e ""
   
   echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
- if [[ $(sudo ufw status | grep "Status: active") ]]
-  then
-    if [[ -z "$firewall_disable" ]]; then    
-      if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
+if [[ $(sudo ufw status | grep "Status: active") ]]; then
+ # then
+ #  if [[ -z "$firewall_disable" ]]; then    
+    #  if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
 	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-      else	 
-	 echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
-      fi
-    else
+     # else	 
+	# echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+    #  fi
+   # else
     
-      if [[ "$firewall_disable" == "1" ]]; then
-  	 sudo ufw disable > /dev/null 2>&1
-	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-      else
-        echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
-      fi
-    fi
+     # if [[ "$firewall_disable" == "1" ]]; then
+  	### sudo ufw disable > /dev/null 2>&1
+	# echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
+    #  else
+        #echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+    #  fi
+   # fi
     
-    else
+ else
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
  fi
  
@@ -946,7 +978,7 @@ function create_swap() {
         swap=2G
     fi
     if ! grep -q "swapfile" /etc/fstab; then
-        if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+      #  if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
             sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
             sudo chmod 600 /swapfile > /dev/null 2>&1
             sudo mkswap /swapfile > /dev/null 2>&1
@@ -955,7 +987,7 @@ function create_swap() {
             echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
-        fi
+       # fi
     fi
     
     else
@@ -1054,6 +1086,11 @@ zelnodeindex=$zelnodeindex
 server=1
 daemon=1
 txindex=1
+addressindex=1
+timestampindex=1
+spentindex=1
+insightexplorer=1
+experimentalfeatures=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
@@ -1824,8 +1861,11 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
                 fi
         done
 	
-        if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
-	   
+      #  if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
+	
+	    tier
+	    if [[ "$kadena_possible" == "1" ]]; then
+	
 	    while true
                 do
 		
@@ -2161,6 +2201,7 @@ function display_banner() {
     exec bash
 }
 
+
 function start_install() {
 
 start_install=`date +%s`
@@ -2251,15 +2292,15 @@ fi
     create_service_scripts
     create_service
     
-    if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
-      echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
-    else
-       if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
+   # if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
+   #   echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+  #  else
+      # if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
          selfhosting
-       else
-         echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
-       fi 
-    fi
+      ## else
+         #echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+      ### fi 
+  ##  fi
     
     install_process
     start_daemon
