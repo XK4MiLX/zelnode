@@ -1,6 +1,6 @@
 #!/bin/bash
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
