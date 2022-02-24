@@ -367,8 +367,11 @@ if [ -d /home/$USER/$FLUX_DIR ]; then
 fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
-#git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
-git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
+git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
+cd zelflux
+echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
+git checkout testnet > /dev/null 2>&1
+#git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/$FLUX_DIR ]
 then
