@@ -367,7 +367,8 @@ if [ -d /home/$USER/$FLUX_DIR ]; then
 fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
-git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
+#git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
+git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/$FLUX_DIR ]
 then
@@ -412,7 +413,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
@@ -428,7 +429,7 @@ module.exports = {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
 	kadena: '${KDA_A}',
-        testnet: false
+        testnet: true,
       }
     }
 EOF
@@ -441,7 +442,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
@@ -2038,6 +2039,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
 echo -e "${CYAN}3  - Update flux daemon and benchmark binary${NC}"
+echo -e "${CYAN}4  - Install/Re-install FluxOS${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2058,5 +2060,10 @@ read -rp "Pick an option and hit ENTER: "
     clear
     sleep 1
     update_binary
+ ;;
+   4) 
+    clear
+    sleep 1
+    install_flux
  ;;
     esac
