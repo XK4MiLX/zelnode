@@ -2109,10 +2109,10 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE BENCHMARK.${NC}" 
-    echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} getinfo${NC}"
-    echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} getbenchmarks${NC}"
-    echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} restartnodebenchmarks${NC}"
-    echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} stop${NC}"
+    echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} -testnet getinfo${NC}"
+    echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} -testnet getbenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} -testnet restartnodebenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} -testnet stop${NC}"
     echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
