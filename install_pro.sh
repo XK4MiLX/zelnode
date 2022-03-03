@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
+#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -28,6 +28,7 @@ IMPORT_ZELID="0"
 CORRUPTED="0"
 BOOTSTRAP_SKIP="0"
 WATCHDOG_INSTALL="0"
+SKIP_OLD_CHAIN="0"
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -74,6 +75,32 @@ string=${string_color::40+string_diff}
 fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
+
+function config_veryfity(){
+
+ if [[ -f /home/$USER/.flux/flux.conf ]]; then
+ 
+    echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
+    insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+
+    if [[ "$insightexplorer" == "1" ]]; then
+  
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${CHECK_MARK}${CYAN}]${NC}"
+
+    else
+    
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${X_MARK}${CYAN}]${NC}"
+      echo -e "${ARROW} ${CYAN}Removing wallet.dat...${NC}"
+      echo -e "${ARROW} ${CYAN}Use old chain will be skipped...${NC}"
+      sudo rm -rf /home/$USER/$CONFIG_DIR/wallet.dat && sleep 1
+      SKIP_OLD_CHAIN="1"
+
+    fi
+  
+  fi
+
+}
+
 
  function selfhosting() {
  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
@@ -347,7 +374,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             echo
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
             zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-            echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+            echo -e "${PIN}${CYAN} Public Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
             zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
             echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
             zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
@@ -391,7 +418,7 @@ else
     echo
     echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
     zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-    echo -e "${PIN}${CYAN} Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+    echo -e "${PIN}${CYAN} Public Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
     zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
     echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
     zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
@@ -814,27 +841,41 @@ function wipe_clean() {
    
     
  if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+ 
+    config_veryfity
     
     if [[ -z "$use_old_chain" ]]; then
     
-    if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
-    echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
-    sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+      if [[ "SKIP_OLD_CHAIN" == "0" ]]; then       
     
-    else
-        BOOTSTRAP_SKIP="1"
-	sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
-    fi
+        if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
+        echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
+        sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+        sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+    
+        else
+      
+            BOOTSTRAP_SKIP="1"
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+        fi 
+	
+     else
+     
+       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
+       sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+       sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+     
+     fi
+    
     
     else
     
@@ -1061,7 +1102,7 @@ function create_conf() {
 
     if [[ "$IMPORT_ZELCONF" == "0" ]]
     then
-    zelnodeprivkey=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Privkey generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)
+    zelnodeprivkey=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Public Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)
     zelnodeoutpoint=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode collateral txid" 8 72 3>&1 1>&2 2>&3)
     zelnodeindex=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode collateral output index usually a 0/1" 8 60 3>&1 1>&2 2>&3)
     fi
@@ -1119,6 +1160,8 @@ maxconnections=256
 EOF
     sleep 2
 }
+
+
 
 function flux_package() {
     sudo apt-get update -y > /dev/null 2>&1 && sleep 2
@@ -1214,6 +1257,9 @@ function zk_params() {
 
 function bootstrap() {
 
+       
+    indexb=$(shuf -i 1-4 -n 1)   
+    BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
     echo -e ""
@@ -1278,9 +1324,9 @@ function bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://cdn-4.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-4.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
 		fi
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
@@ -2264,7 +2310,7 @@ IMPORT_ZELCONF="1"
 IMPORT_ZELID="1"
 echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
 zelnodeprivkey="$prvkey"
-echo -e "${PIN}${CYAN}Private Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Public Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint="$outpoint"
 echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex="$index"
