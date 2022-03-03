@@ -76,6 +76,12 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
 
+function bootstrap_rand_ip(){
+rand=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+r=$(shuf -i 0-3 -n 1)
+bootstrap_ip=${rand[$r]}
+}
+
 function config_veryfity(){
 
  if [[ -f /home/$USER/.flux/flux.conf ]]; then
@@ -1239,10 +1245,11 @@ function zk_params() {
 }
 
 function bootstrap() {
-
        
-    indexb=$(shuf -i 1-4 -n 1)   
-    BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+    bootstrap_rand_ip
+   # indexb=$(shuf -i 1-4 -n 1)   
+   # BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+    BOOTSTRAP_ZIP="https://$bootstrap_ip/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
     echo -e ""
