@@ -1555,9 +1555,9 @@ EOF
 
 function basic_security() {
     echo -e "${ARROW} ${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
-    sudo ufw allow 16124/tcp > /dev/null 2>&1
+    #sudo ufw allow 16124/tcp > /dev/null 2>&1
     sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
-    sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
+    #sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
     
@@ -1565,10 +1565,14 @@ function basic_security() {
     sudo ufw allow out to any port 80 > /dev/null 2>&1
     sudo ufw allow out to any port 443 > /dev/null 2>&1
     sudo ufw allow out to any port 53 > /dev/null 2>&1
-    sudo ufw allow out to any port 16124 > /dev/null 2>&1
-    sudo ufw allow out to any port 16125 > /dev/null 2>&1
-    sudo ufw allow out to any port 16127 > /dev/null 2>&1
-    sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16124 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16125 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16127 > /dev/null 2>&1
+    #sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+    
+    #FluxOS communication
+    sudo ufw allow 16100:16199/tcp > /dev/null 2>&1
+    ##
     
     sudo ufw default deny outgoing > /dev/null 2>&1
     sudo ufw limit OpenSSH > /dev/null 2>&1
