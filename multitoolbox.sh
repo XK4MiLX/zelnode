@@ -1,7 +1,9 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
+#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
+indexb=$(shuf -i 1-4 -n 1)   
+BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
@@ -38,7 +40,7 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-dversion="v6.0"
+dversion="v7.0"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -47,6 +49,32 @@ zelflux_setting_import="0"
 export NEWT_COLORS='
 title=black,
 '
+
+function config_veryfity(){
+
+ if [[ -f /home/$USER/.flux/flux.conf ]]; then
+ 
+    echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
+    insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+
+    if [[ "$insightexplorer" == "1" ]]; then
+  
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${CHECK_MARK}${CYAN}]${NC}"
+      echo ""
+
+    else
+    
+      echo -e "${WORNING} ${CYAN}Insightexplorer enabled.............[${X_MARK}${CYAN}]${NC}"
+      echo -e "${WORNING} ${CYAN}Use option 2 for node re-install${NC}"
+      echo -e ""
+      exit
+
+    fi
+  
+  fi
+
+}
+
 
 function get_ip(){
 
@@ -1113,7 +1141,10 @@ function flux_daemon_bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=$(curl -s -m 10 https://cdn-4.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+		if [[ "$DB_HIGHT" == "" ]]; then
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-4.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+		fi
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
@@ -1522,6 +1553,8 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     exit
 fi
 
+config_veryfity
+
 echo
 echo -e "${ARROW} ${YELLOW}Fill in all the fields that you want to replace${NC}"
 sleep 4
@@ -1860,8 +1893,18 @@ fi
     exit
   fi 
  
-  echo -e ""
+  echo -e ""  
+  echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" && sleep 1
+  sudo systemctl stop mongod
+  echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}" && sleep 1
   sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
+  echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" && sleep 1
+  sudo chown -R mongodb:mongodb /var/lib/mongodb
+  sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+  echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
+  sudo systemctl start mongod
+  echo -e ""
+  
  
  }
 
@@ -2008,17 +2051,15 @@ echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
 echo -e "${CYAN}3  - FluxNode analyzer and fixer${NC}"
 echo -e "${CYAN}4  - Install watchdog for FluxNode${NC}"
-echo -e "${CYAN}5  - Restore Flux MongoDB datatable from bootstrap${NC}"
-echo -e "${CYAN}6  - Restore Flux blockchain from bootstrap${NC}"
-echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
-echo -e "${CYAN}8  - Re-install FluxOS${NC}"
-echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
-echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
-echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
-echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
-echo -e "${CYAN}13 - Replace Zel ID ${NC}"
-echo -e "${CYAN}14 - Install fluxwatchtower for docker images autoupdate${NC}"
-echo -e "${CYAN}15 - Recover corrupted MongoDB database${NC}"
+echo -e "${CYAN}5  - Restore Flux blockchain from bootstrap${NC}"
+echo -e "${CYAN}6  - Create FluxNode installation config file${NC}"
+echo -e "${CYAN}7  - Re-install FluxOS${NC}"
+echo -e "${CYAN}8  - Flux Daemon Reconfiguration${NC}"
+echo -e "${CYAN}9 - Create Flux daemon service ( for old nodes )${NC}"
+echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
+echo -e "${CYAN}11 - Replace Zel ID ${NC}"
+echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
+echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2046,68 +2087,68 @@ read -rp "Pick an option and hit ENTER: "
     install_watchdog   
  ;;
  
- 5)  
-    clear
-    sleep 1
-    mongodb_bootstrap     
- ;;
-  6)  
+# 5)  
+  #  clear
+   #sleep 1
+    #mongodb_bootstrap     
+# ;;
+  5)  
     clear
     sleep 1
     flux_daemon_bootstrap     
  ;; 
-  7)
+  6)
     clear
     sleep 1
     create_config
  ;;
-   8)
+   7)
     clear
     sleep 1
     install_flux
  ;;
- 9)
+ 8)
    clear
    sleep 1
    daemon_reconfiguration
    
  ;;
  
-  10)
-   clear
-   sleep 1
-   kda_bootstrap
+#  10)
+ #  clear
+ #  sleep 1
+ #  kda_bootstrap
    
- ;;
+# ;;
  
- 11)
+ 9)
   clear
   sleep 1
   create_service
   create_service_scripts
  ;;
  
-  12)
+  10)
   clear
   sleep 1
   selfhosting
  ;;
  
-   13)
+   11)
   clear
   sleep 1
   replace_zelid
   echo -e ""
  ;;
  
-    14)
+    12)
   clear
   sleep 1
   install_watchtower
   echo -e ""
  ;;
  
-     15)
+     13)
   clear
   sleep 1
   mongod_db_fix
