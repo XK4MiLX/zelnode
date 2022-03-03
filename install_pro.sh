@@ -1635,6 +1635,7 @@ function start_daemon() {
        
        chain_check=$(flux-cli getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
        if [[ "$chain_check" == "1" ]]; then
+             echo -e ""
              echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting incresed for next 5min${NC}"
        fi
         
