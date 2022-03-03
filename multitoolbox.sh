@@ -1077,6 +1077,9 @@ function flux_daemon_bootstrap() {
 
     cd
     echo -e "${NC}"
+    
+    config_veryfity
+    
     pm2 stop watchdog > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
