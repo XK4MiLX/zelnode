@@ -846,7 +846,7 @@ function wipe_clean() {
     
     if [[ -z "$use_old_chain" ]]; then
     
-      if [[ "SKIP_OLD_CHAIN" == "0" ]]; then       
+      if [[ "$SKIP_OLD_CHAIN" == "0" ]]; then       
     
         if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
         echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
