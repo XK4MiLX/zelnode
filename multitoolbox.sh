@@ -1,8 +1,14 @@
 #!/bin/bash
 
 #BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
-indexb=$(shuf -i 1-4 -n 1)   
-BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+#indexb=$(shuf -i 1-4 -n 1)   
+#BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+
+rand=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+r=$(shuf -i 0-3 -n 1)
+bootstrap_ip=${rand[$r]}
+BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
