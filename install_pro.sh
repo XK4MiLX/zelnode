@@ -1617,10 +1617,42 @@ function start_daemon() {
     sudo systemctl enable zelcash.service > /dev/null 2>&1
     sudo systemctl start zelcash > /dev/null 2>&1
     
-    NUM='250'
-    MSG1='Starting daemon & syncing with chain please be patient this will take about 3 min...'
-    MSG2=''
-    spinning_timer
+    #NUM='300'
+    #MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
+    #MSG2=''
+    #spinning_timer
+    
+
+    
+    x=1  
+    while [ $x -le 6 ]
+     do
+     
+       NUM='300'
+       MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
+       MSG2=''
+       spinning_timer 
+       
+       chain_check=$(flux-cli getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
+       if [[ "$chain_check" == "1" ]]; then
+             echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting incresed for next 5min${NC}"
+       fi
+        
+       if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+          break
+       fi
+       
+       if [[ "$x" -gt 6 ]]; then
+         echo -e "${ARROW} ${CYAN}Maximum timeout exceeded...${NC}"
+	 break
+       fi
+       
+        x=$(( $x + 1 ))
+       
+     done
+    
+    
+    
     
     if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
     # if $COIN_DAEMON > /dev/null 2>&1; then
