@@ -1902,8 +1902,8 @@ fi
   echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}" && sleep 1
   sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
   echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" && sleep 1
-  sudo chown -R mongodb:mongodb /var/lib/mongodb
-  sudo chown mongodb:mongodb /tmp/mongodb-27017.sock
+  sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+  sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
   echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
   sudo systemctl start mongod
   echo -e ""
