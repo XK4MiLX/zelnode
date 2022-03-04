@@ -1644,7 +1644,7 @@ function start_daemon() {
        MSG2=''
        spinning_timer 
        
-       chain_check=$(flux-cli getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
+       chain_check=$($COIN_CLI getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
        if [[ "$chain_check" == "1" ]]; then
              echo -e ""
              echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting increased for next 5min${NC}"
