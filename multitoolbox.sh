@@ -1195,7 +1195,7 @@ function flux_daemon_bootstrap() {
     MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
     spinning_timer
     echo -e "" && echo -e ""
-    pm2 restart flux
+    pm2 restart flux > /dev/null 2>&1 && sleep 2
     pm2 start watchdog --watch > /dev/null 2>&1 && sleep 2
 }
 
