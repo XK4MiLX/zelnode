@@ -1444,7 +1444,7 @@ echo -e "${YELLOW}==============================================================
 
 if [[ "$USER" != "root" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the root account use command 'su -'.${NC}"
+    echo -e "${CYAN}Please switch to the root account use command 'sudo su -'.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
