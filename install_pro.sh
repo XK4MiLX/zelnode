@@ -2176,7 +2176,6 @@ else
    
  # fi
     
-    
   #if [[ -z "$watchdog" ]]; then
     #if   whiptail --yesno "Would you like to install watchdog for FluxNode?" 8 60; then
    install_watchdog
