@@ -998,12 +998,12 @@ function ssh_port() {
     if [[ -z "$ssh_port" ]]; then
     
     SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
-    if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
-        SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
+   #  if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
+   #   SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
+   #  echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+   #  else
         echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-    else
-        echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-    fi
+   #  fi
     
     else   		
 	pettern='^[0-9]+$'
