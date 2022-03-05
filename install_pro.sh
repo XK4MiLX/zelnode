@@ -29,6 +29,7 @@ CORRUPTED="0"
 BOOTSTRAP_SKIP="0"
 WATCHDOG_INSTALL="0"
 SKIP_OLD_CHAIN="0"
+Server_offline=0
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -74,6 +75,39 @@ string_diff=$((string_leght_color-string_leght))
 string=${string_color::40+string_diff}
 fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
+}
+
+function bootstrap_server(){
+#rand_by_ip=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+rand_by_domain=("1" "2" "3" "4")
+richable=()
+
+i=0
+len=${#rand_by_domain[@]}
+#echo -e "Bootstrap on list: $len"
+while [ $i -lt $len ];
+do
+
+    #echo ${rand_by_domain[$i]}
+    bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
+    #echo -e "Height: $bootstrap_check"
+    if [[ "$bootstrap_check" != "" ]]; then
+    #echo -e "Adding:  ${rand_by_domain[$i]}"
+      richable+=( ${rand_by_domain[$i]}  )
+    fi
+    i=$(($i+1))
+
+
+done
+
+len=${#richable[@]}
+if [[ "$len" == "0" ]]; then
+echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
+Server_offline=1
+return 1
+fi
+Server_offline=0
+
 }
 
 function bootstrap_rand_ip(){
@@ -1245,9 +1279,14 @@ function zk_params() {
 }
 
 function bootstrap() {
+
+    bootstrap_server
+    if [[ "$Server_offline" == "1" ]]; then
+     return 1
+    fi
        
    # bootstrap_rand_ip
-    indexb=$(shuf -i 1-4 -n 1)   
+    indexb=$(shuf -i 0-${#richable[@]} -n 1)
     BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     #BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
@@ -1314,10 +1353,14 @@ function bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		fi
+		
+		ckec
+		
+		
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
