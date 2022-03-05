@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
+#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
+BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
@@ -28,6 +28,8 @@ IMPORT_ZELID="0"
 CORRUPTED="0"
 BOOTSTRAP_SKIP="0"
 WATCHDOG_INSTALL="0"
+SKIP_OLD_CHAIN="0"
+Server_offline=0
 
 #Zelflux ports
 ZELFRONTPORT=16126
@@ -74,6 +76,71 @@ string=${string_color::40+string_diff}
 fi
 echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
+
+function bootstrap_server(){
+#rand_by_ip=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+rand_by_domain=("1" "2" "3" "4")
+richable=()
+
+i=0
+len=${#rand_by_domain[@]}
+#echo -e "Bootstrap on list: $len"
+while [ $i -lt $len ];
+do
+
+    #echo ${rand_by_domain[$i]}
+    bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
+    #echo -e "Height: $bootstrap_check"
+    if [[ "$bootstrap_check" != "" ]]; then
+    #echo -e "Adding:  ${rand_by_domain[$i]}"
+      richable+=( ${rand_by_domain[$i]}  )
+    fi
+    i=$(($i+1))
+
+
+done
+
+len=${#richable[@]}
+if [[ "$len" == "0" ]]; then
+echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
+Server_offline=1
+return 1
+fi
+Server_offline=0
+
+}
+
+function bootstrap_rand_ip(){
+rand=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+r=$(shuf -i 0-3 -n 1)
+bootstrap_ip=${rand[$r]}
+}
+
+function config_veryfity(){
+
+ if [[ -f /home/$USER/.flux/flux.conf ]]; then
+ 
+    echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
+    insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+
+    if [[ "$insightexplorer" == "1" ]]; then
+  
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${CHECK_MARK}${CYAN}]${NC}"
+
+    else
+    
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${X_MARK}${CYAN}]${NC}"
+      echo -e "${ARROW} ${CYAN}Removing wallet.dat...${NC}"
+      echo -e "${ARROW} ${CYAN}Use old chain will be skipped...${NC}"
+      sudo rm -rf /home/$USER/$CONFIG_DIR/wallet.dat && sleep 1
+      SKIP_OLD_CHAIN="1"
+
+    fi
+  
+  fi
+
+}
+
 
  function selfhosting() {
  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
@@ -814,27 +881,41 @@ function wipe_clean() {
    
     
  if [[ -d /home/$USER/$CONFIG_DIR ]]; then
+ 
+    config_veryfity
     
     if [[ -z "$use_old_chain" ]]; then
     
-    if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
-    echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
-    sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
-    sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+      if [[ "$SKIP_OLD_CHAIN" == "0" ]]; then       
     
-    else
-        BOOTSTRAP_SKIP="1"
-	sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
-	sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
-	sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
-	sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
-    fi
+        if  ! whiptail --yesno "Would you like to use old chain from Flux daemon config directory?" 8 60; then
+        echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
+        sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+        sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+    
+        else
+      
+            BOOTSTRAP_SKIP="1"
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/fee_estimates.dat 
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/peers.dat && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnode.conf 
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodecache.dat && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/zelnodepayments.dat
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/db.log
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/debug.log && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/flux.conf && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/database && sleep 1
+	    sudo rm -rf /home/$USER/$CONFIG_DIR/sporks && sleep 1
+        fi 
+	
+     else
+     
+       echo -e "${ARROW} ${CYAN}Removing Flux daemon config directory...${NC}"
+       sudo rm -rf ~/$CONFIG_DIR/determ_zelnodes ~/$CONFIG_DIR/sporks ~/$CONFIG_DIR/database ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate && sleep 2
+       sudo rm -rf /home/$USER/$CONFIG_DIR  > /dev/null 2>&1 && sleep 2
+     
+     fi
+    
     
     else
     
@@ -917,12 +998,12 @@ function ssh_port() {
     if [[ -z "$ssh_port" ]]; then
     
     SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
-    if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
-        SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
+   #  if ! whiptail --yesno "Detected you are using $SSHPORT for SSH is this correct?" 8 56; then
+   #   SSHPORT=$(whiptail --inputbox "Please enter port you are using for SSH" 8 43 3>&1 1>&2 2>&3)
+   #  echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
+   #  else
         echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-    else
-        echo -e "${ARROW} ${YELLOW}Using SSH port:${SEA} $SSHPORT${NC}" && sleep 1
-    fi
+   #  fi
     
     else   		
 	pettern='^[0-9]+$'
@@ -1038,7 +1119,7 @@ function install_packages() {
     
     sudo apt-get install software-properties-common ca-certificates -y > /dev/null 2>&1
     sudo apt-get update -y > /dev/null 2>&1
-    sudo apt-get upgrade -y > /dev/null 2>&1
+    sudo apt-get --with-new-pkgs upgrade -y > /dev/null 2>&1
     sudo apt-get install nano htop pwgen ufw figlet tmux jq zip gzip pv unzip git -y > /dev/null 2>&1
     sudo apt-get install build-essential libtool pkg-config -y > /dev/null 2>&1
     sudo apt-get install libc6-dev m4 g++-multilib -y > /dev/null 2>&1
@@ -1061,7 +1142,7 @@ function create_conf() {
 
     if [[ "$IMPORT_ZELCONF" == "0" ]]
     then
-    zelnodeprivkey=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Privkey generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)
+    zelnodeprivkey=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode Private Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)
     zelnodeoutpoint=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode collateral txid" 8 72 3>&1 1>&2 2>&3)
     zelnodeindex=$(whiptail --title "Flux daemon configuration" --inputbox "Enter your FluxNode collateral output index usually a 0/1" 8 60 3>&1 1>&2 2>&3)
     fi
@@ -1086,34 +1167,24 @@ zelnodeindex=$zelnodeindex
 server=1
 daemon=1
 txindex=1
+addressindex=1
+timestampindex=1
+spentindex=1
+insightexplorer=1
+experimentalfeatures=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=explorer.zelcash.online
+addnode=explorer.flux.zelcore.io
 addnode=explorer.runonflux.io
+addnode=explorer.zelcash.online
 addnode=blockbook.runonflux.io
-addnode=185.225.232.141:16125
-addnode=95.216.124.220:16125
-addnode=209.145.55.52:16125
-addnode=78.113.97.147:16125
-addnode=209.145.49.181:16125
-addnode=63.250.53.25:16125
-addnode=5.9.78.207:16125
-addnode=194.163.148.252:16125
-addnode=178.18.241.199:16125
-addnode=178.18.241.197:16125
-addnode=178.18.243.34:16125
-addnode=62.171.188.152:16125
-addnode=194.163.166.101:16125
-addnode=23.88.19.178:16125
-addnode=79.143.178.170:16125
-addnode=178.18.249.115:16125
-addnode=161.97.131.154:16125
-addnode=149.255.39.17:16125
 maxconnections=256
 EOF
     sleep 2
 }
+
+
 
 function flux_package() {
     sudo apt-get update -y > /dev/null 2>&1 && sleep 2
@@ -1209,6 +1280,15 @@ function zk_params() {
 
 function bootstrap() {
 
+    bootstrap_server
+    if [[ "$Server_offline" == "1" ]]; then
+     return 1
+    fi
+       
+   # bootstrap_rand_ip
+    indexb=$(shuf -i 0-${#richable[@]} -n 1)
+    BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+    #BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
     echo -e ""
@@ -1273,10 +1353,13 @@ function bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		fi
+		
+		
+		
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
@@ -1392,9 +1475,9 @@ function bootstrap() {
     fi
 
     if [[ -z "$bootstrap_zip_del" ]]; then
-        if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+      #  if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
             rm -rf $BOOTSTRAP_ZIPFILE
-        fi
+      #  fi
     else
 
         if [[ "$bootstrap_zip_del" == "1" ]]; then
@@ -1521,9 +1604,9 @@ EOF
 
 function basic_security() {
     echo -e "${ARROW} ${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
-    sudo ufw allow 16124/tcp > /dev/null 2>&1
+    #sudo ufw allow 16124/tcp > /dev/null 2>&1
     sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
-    sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
+    #sudo ufw allow "$PORT"/tcp > /dev/null 2>&1
     sudo ufw logging on > /dev/null 2>&1
     sudo ufw default deny incoming > /dev/null 2>&1
     
@@ -1531,10 +1614,14 @@ function basic_security() {
     sudo ufw allow out to any port 80 > /dev/null 2>&1
     sudo ufw allow out to any port 443 > /dev/null 2>&1
     sudo ufw allow out to any port 53 > /dev/null 2>&1
-    sudo ufw allow out to any port 16124 > /dev/null 2>&1
-    sudo ufw allow out to any port 16125 > /dev/null 2>&1
-    sudo ufw allow out to any port 16127 > /dev/null 2>&1
-    sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16124 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16125 > /dev/null 2>&1
+    #sudo ufw allow out to any port 16127 > /dev/null 2>&1
+    #sudo ufw allow from any to any port 16127 > /dev/null 2>&1
+    
+    #FluxOS communication
+    sudo ufw allow 16100:16199/tcp > /dev/null 2>&1
+    ##
     
     sudo ufw default deny outgoing > /dev/null 2>&1
     sudo ufw limit OpenSSH > /dev/null 2>&1
@@ -1583,10 +1670,43 @@ function start_daemon() {
     sudo systemctl enable zelcash.service > /dev/null 2>&1
     sudo systemctl start zelcash > /dev/null 2>&1
     
-    NUM='250'
-    MSG1='Starting daemon & syncing with chain please be patient this will take about 3 min...'
-    MSG2=''
-    spinning_timer
+    #NUM='300'
+    #MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
+    #MSG2=''
+    #spinning_timer
+    
+
+    
+    x=1  
+    while [ $x -le 6 ]
+     do
+     
+       NUM='300'
+       MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
+       MSG2=''
+       spinning_timer 
+       
+       chain_check=$($COIN_CLI getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
+       if [[ "$chain_check" == "1" ]]; then
+             echo -e ""
+             echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting increased for next 5min${NC}"
+       fi
+        
+       if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+          break
+       fi
+       
+       if [[ "$x" -gt 6 ]]; then
+         echo -e "${ARROW} ${CYAN}Maximum timeout exceeded...${NC}"
+	 break
+       fi
+       
+        x=$(( $x + 1 ))
+       
+     done
+    
+    
+    
     
     if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
     # if $COIN_DAEMON > /dev/null 2>&1; then
@@ -1865,7 +1985,7 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
 	    while true
                 do
 		
-                    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+                    KDA_A=$(whiptail --inputbox "Node tier eligible to receive KDA rewards, what's your KDA address? Nothing else will be required on FluxOS regarding KDA." 8 85 3>&1 1>&2 2>&3)
                     if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* ]]; then
 		    	
 			     echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
@@ -2055,7 +2175,6 @@ else
    # fi
    
  # fi
-    
     
   #if [[ -z "$watchdog" ]]; then
     #if   whiptail --yesno "Would you like to install watchdog for FluxNode?" 8 60; then

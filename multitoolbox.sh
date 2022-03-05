@@ -1,11 +1,17 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
+#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
+indexb=$(shuf -i 1-4 -n 1)   
+BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+#rand=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+#r=$(shuf -i 0-3 -n 1)
+#bootstrap_ip=${rand[$r]}
+#BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIP='http://202.61.207.10:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=a705701758411b28ea20325ef9654e31e3d8f5f03a24b4e4e662e601a1250859'
+KDA_BOOTSTRAP_ZIP='http://38.242.202.86:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=8ba005f55511d806f9d4ec5f56bf5c14ae02a50bfb80f5bdb08a1ded22f7b159'
 
 if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
@@ -38,7 +44,7 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-dversion="v6.0"
+dversion="v7.0"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -47,6 +53,32 @@ zelflux_setting_import="0"
 export NEWT_COLORS='
 title=black,
 '
+
+function config_veryfity(){
+
+ if [[ -f /home/$USER/.flux/flux.conf ]]; then
+ 
+    echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
+    insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
+
+    if [[ "$insightexplorer" == "1" ]]; then
+  
+      echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${CHECK_MARK}${CYAN}]${NC}"
+      echo ""
+
+    else
+    
+      echo -e "${WORNING} ${CYAN}Insightexplorer enabled.............[${X_MARK}${CYAN}]${NC}"
+      echo -e "${WORNING} ${CYAN}Use option 2 for node re-install${NC}"
+      echo -e ""
+      exit
+
+    fi
+  
+  fi
+
+}
+
 
 function get_ip(){
 
@@ -367,6 +399,7 @@ if [ -d /home/$USER/$FLUX_DIR ]; then
 fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
+#git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/$FLUX_DIR ]
@@ -871,10 +904,10 @@ fi
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
 fi
 
@@ -884,11 +917,15 @@ if [[ $stak_info == ?(-)+([0-9]) ]]; then
    "10000") eps_limit=90 ;;
    "25000")  eps_limit=180 ;;
    "100000") eps_limit=300 ;;
+   "1000") eps_limit=90 ;;
+   "12500")  eps_limit=180 ;;
+   "40000") eps_limit=300 ;;
   esac
  
 else
 eps_limit=0;
 fi
+
 
 
 sudo touch /home/$USER/watchdog/config.js
@@ -1044,6 +1081,9 @@ function flux_daemon_bootstrap() {
 
     cd
     echo -e "${NC}"
+    
+    config_veryfity
+    
     pm2 stop watchdog > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
     sudo systemctl stop $COIN_NAME > /dev/null 2>&1 && sleep 2
@@ -1108,7 +1148,10 @@ function flux_daemon_bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+		if [[ "$DB_HIGHT" == "" ]]; then
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height')
+		fi
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
@@ -1152,6 +1195,7 @@ function flux_daemon_bootstrap() {
     MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
     spinning_timer
     echo -e "" && echo -e ""
+    pm2 restart flux > /dev/null 2>&1 && sleep 2
     pm2 start watchdog --watch > /dev/null 2>&1 && sleep 2
 }
 
@@ -1399,7 +1443,7 @@ echo -e "${YELLOW}==============================================================
 
 if [[ "$USER" != "root" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the root account use command 'su -'.${NC}"
+    echo -e "${CYAN}Please switch to the root account use command 'sudo su -'.${NC}"
     echo -e "${YELLOW}================================================================${NC}"
     echo -e "${NC}"
     exit
@@ -1517,6 +1561,8 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     exit
 fi
 
+config_veryfity
+
 echo
 echo -e "${ARROW} ${YELLOW}Fill in all the fields that you want to replace${NC}"
 sleep 4
@@ -1532,7 +1578,7 @@ sleep 1
 
 if [[ "$zelnodeprivkey" == "" ]]; then
 skip_change=$((skip_change-1))
-echo -e "${ARROW} ${CYAN}Replace FluxNode privkey skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode public key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeoutpoint" == "" ]]; then
@@ -1565,11 +1611,11 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 if [[ "$zelnodeprivkey" != "" ]]; then
 
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}Replace FluxNode privkey skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode private key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode privkey replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
+                        echo -e "${ARROW} ${CYAN}FluxNode private key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
                 fi
 fi
 
@@ -1855,8 +1901,18 @@ fi
     exit
   fi 
  
-  echo -e ""
+  echo -e ""  
+  echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" && sleep 1
+  sudo systemctl stop mongod
+  echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}" && sleep 1
   sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
+  echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" && sleep 1
+  sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+  sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+  echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
+  sudo systemctl start mongod
+  echo -e ""
+  
  
  }
 
@@ -2003,17 +2059,15 @@ echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
 echo -e "${CYAN}3  - FluxNode analyzer and fixer${NC}"
 echo -e "${CYAN}4  - Install watchdog for FluxNode${NC}"
-echo -e "${CYAN}5  - Restore Flux MongoDB datatable from bootstrap${NC}"
-echo -e "${CYAN}6  - Restore Flux blockchain from bootstrap${NC}"
-echo -e "${CYAN}7  - Create FluxNode installation config file${NC}"
-echo -e "${CYAN}8  - Re-install FluxOS${NC}"
-echo -e "${CYAN}9  - Flux Daemon Reconfiguration${NC}"
-echo -e "${CYAN}10 - Restore Kadena node blockchain from bootstrap${NC}"
-echo -e "${CYAN}11 - Create Flux daemon service ( for old nodes )${NC}"
-echo -e "${CYAN}12 - Create Self-hosting cron ip service ${NC}"
-echo -e "${CYAN}13 - Replace Zel ID ${NC}"
-echo -e "${CYAN}14 - Install fluxwatchtower for docker images autoupdate${NC}"
-echo -e "${CYAN}15 - Recover corrupted MongoDB database${NC}"
+echo -e "${CYAN}5  - Restore Flux blockchain from bootstrap${NC}"
+echo -e "${CYAN}6  - Create FluxNode installation config file${NC}"
+echo -e "${CYAN}7  - Re-install FluxOS${NC}"
+echo -e "${CYAN}8  - Flux Daemon Reconfiguration${NC}"
+echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
+echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
+echo -e "${CYAN}11 - Replace Zel ID ${NC}"
+echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
+echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2041,68 +2095,68 @@ read -rp "Pick an option and hit ENTER: "
     install_watchdog   
  ;;
  
- 5)  
-    clear
-    sleep 1
-    mongodb_bootstrap     
- ;;
-  6)  
+# 5)  
+  #  clear
+   #sleep 1
+    #mongodb_bootstrap     
+# ;;
+  5)  
     clear
     sleep 1
     flux_daemon_bootstrap     
  ;; 
-  7)
+  6)
     clear
     sleep 1
     create_config
  ;;
-   8)
+   7)
     clear
     sleep 1
     install_flux
  ;;
- 9)
+ 8)
    clear
    sleep 1
    daemon_reconfiguration
    
  ;;
  
-  10)
-   clear
-   sleep 1
-   kda_bootstrap
+#  10)
+ #  clear
+ #  sleep 1
+ #  kda_bootstrap
    
- ;;
+# ;;
  
- 11)
+ 9)
   clear
   sleep 1
   create_service
   create_service_scripts
  ;;
  
-  12)
+  10)
   clear
   sleep 1
   selfhosting
  ;;
  
-   13)
+   11)
   clear
   sleep 1
   replace_zelid
   echo -e ""
  ;;
  
-    14)
+    12)
   clear
   sleep 1
   install_watchtower
   echo -e ""
  ;;
  
-     15)
+     13)
   clear
   sleep 1
   mongod_db_fix

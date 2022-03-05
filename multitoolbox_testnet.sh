@@ -368,6 +368,10 @@ fi
 
 echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
 git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
+cd zelflux
+echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
+git checkout testnet > /dev/null 2>&1
+#git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
 
 if [ -d /home/$USER/$FLUX_DIR ]
 then
@@ -412,7 +416,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
@@ -428,7 +432,7 @@ module.exports = {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
 	kadena: '${KDA_A}',
-        testnet: false
+        testnet: true,
       }
     }
 EOF
@@ -441,7 +445,7 @@ module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${zel_id}',
-        testnet: false
+        testnet: true
       }
     }
 EOF
@@ -1843,6 +1847,64 @@ fi
  
  }
  
+ function update_binary(){
+ 
+ echo -e "${GREEN}Module: Update flux daemon and benchmark binary${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+  if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+  fi 
+ 
+
+  echo -e "${ARROW} ${CYAN}Stopping flux daemon..${NC}"
+  sudo systemctl stop zelcash > /dev/null 2>&1
+ 
+
+if [[ $(dpkg --print-architecture) = *amd* ]]; then
+
+  echo -e "${ARROW} ${CYAN}Downloading file...${NC}" 
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+  sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
+  sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
+
+else
+
+  echo -e "${ARROW} ${CYAN}Downloading file...${NC}" 
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-arm-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+  sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
+  sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
+
+
+fi
+
+  sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
+  echo -e "${ARROW} ${CYAN}Starting flux daemon..${NC}"
+  echo ""
+  sudo systemctl start zelcash > /dev/null 2>&1
+
+ }
+ 
  
  function mongod_db_fix() {
   echo -e "${GREEN}Module: Recover corrupted MongoDB database${NC}"
@@ -2002,6 +2064,8 @@ echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
+echo -e "${CYAN}3  - Update flux daemon and benchmark binary${NC}"
+echo -e "${CYAN}4  - Install/Re-install FluxOS${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2017,5 +2081,15 @@ read -rp "Pick an option and hit ENTER: "
     clear
     sleep 1
     install_node
+ ;;
+  3) 
+    clear
+    sleep 1
+    update_binary
+ ;;
+   4) 
+    clear
+    sleep 1
+    install_flux
  ;;
     esac

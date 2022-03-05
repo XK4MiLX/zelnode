@@ -1,6 +1,6 @@
 #!/bin/bash
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
@@ -9,6 +9,7 @@ BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
 CONFIG_FILE='flux.conf'
+kadena_possible="0"
 
 BENCH_NAME='fluxbench'
 BENCH_CLI='fluxbench-cli'
@@ -135,7 +136,6 @@ echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
 #crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l)
 sudo [ -f /var/spool/cron/crontabs/$USER ] && crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l) || crontab_check=0
 
-
 if [[ "$crontab_check" == "0" ]]; then
   (crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
   (crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
@@ -205,6 +205,34 @@ fi
 echo -e ""
 }
 
+function tier(){
+
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+	
+    if [[ "$stak_info" == "" ]]; then
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+    fi	
+
+
+  if [[ $stak_info == ?(-)+([0-9]) ]]; then
+
+   case $stak_info in
+    "25000")  kadena_possible=1 ;;
+    "100000") kadena_possible=1 ;;
+    "12500")  kadena_possible=1 ;;
+    "40000") kadena_possible=1 ;;
+   esac
+ 
+  else
+    kadena_possible=0
+  fi
+
+fi
+
+}
 
 function config_file() {
 
@@ -339,10 +367,10 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	         IMPORT_ZELID="1"
 	       fi
 
-             #  KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-             # if [[ "$KDA_A" != "" ]]; then
-                #  echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-            # fi
+               KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+              if [[ "$KDA_A" != "" ]]; then
+                  echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+             fi
 
          fi
     fi
@@ -384,10 +412,10 @@ else
 	         IMPORT_ZELID="1"
 	       fi
 	       
-           # KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
-              # if [[ "$KDA_A" != "" ]]; then
-                #    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-              # fi
+            KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+               if [[ "$KDA_A" != "" ]]; then
+                    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+               fi
           fi
       fi
 
@@ -595,13 +623,13 @@ if [[ "$telegram_alert" == 0 ]]; then
     telegram_chat_id=0;
 fi
 
-if [[ -f /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE ]]; then
-  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/testnet/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+  index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
+  tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
+  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://testnet.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000')
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
 fi
 
@@ -611,6 +639,9 @@ if [[ $stak_info == ?(-)+([0-9]) ]]; then
    "10000") eps_limit=90 ;;
    "25000")  eps_limit=180 ;;
    "100000") eps_limit=300 ;;
+   "1000") eps_limit=90 ;;
+   "12500")  eps_limit=180 ;;
+   "40000") eps_limit=300 ;;
   esac
  
 else
@@ -839,25 +870,26 @@ fi
     echo -e ""
   
   echo -e "${ARROW} ${YELLOW}Checking firewall status...${NC}" && sleep 1
- if [[ $(sudo ufw status | grep "Status: active") ]]; then
-   # if [[ -z "$firewall_disable" ]]; then    
-     # if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
+if [[ $(sudo ufw status | grep "Status: active") ]]; then
+ # then
+ #  if [[ -z "$firewall_disable" ]]; then    
+    #  if   whiptail --yesno "Firewall is active and enabled. Do you want disable it during install process?<Yes>(Recommended)" 8 60; then
          sudo ufw disable > /dev/null 2>&1
 	 echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-    #  else	 
+     # else	 
 	# echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
     #  fi
-    else
+   # else
     
      # if [[ "$firewall_disable" == "1" ]]; then
-  	 #sudo ufw disable > /dev/null 2>&1
+  	### sudo ufw disable > /dev/null 2>&1
 	# echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
-     # else
-      #  echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
-     # fi
+    #  else
+        #echo -e "${ARROW} ${CYAN}Firewall status: ${GREEN}Enabled${NC}"
+    #  fi
    # fi
     
-   # else
+ else
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
  fi
  
@@ -946,7 +978,7 @@ function create_swap() {
         swap=2G
     fi
     if ! grep -q "swapfile" /etc/fstab; then
-       # if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+      #  if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
             sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
             sudo chmod 600 /swapfile > /dev/null 2>&1
             sudo mkswap /swapfile > /dev/null 2>&1
@@ -955,7 +987,7 @@ function create_swap() {
             echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
         else
             echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
-      #  fi
+       # fi
     fi
     
     else
@@ -1038,7 +1070,7 @@ function create_conf() {
     if [ "x$PASSWORD" = "x" ]; then
         PASSWORD=${WANIP}-$(date +%s)
     fi
-    mkdir -p ~/$CONFIG_DIR > /dev/null 2>&1
+    mkdir ~/$CONFIG_DIR > /dev/null 2>&1
     touch ~/$CONFIG_DIR/$CONFIG_FILE
     cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
 rpcuser=$RPCUSER
@@ -1059,15 +1091,33 @@ timestampindex=1
 spentindex=1
 insightexplorer=1
 experimentalfeatures=1
-testnet=1
 listen=1
 externalip=$WANIP
 bind=0.0.0.0
-addnode=testnet.runonflux.io
+addnode=explorer.zelcash.online
+addnode=explorer.runonflux.io
+addnode=blockbook.runonflux.io
+addnode=185.225.232.141:16125
+addnode=95.216.124.220:16125
+addnode=209.145.55.52:16125
+addnode=78.113.97.147:16125
+addnode=209.145.49.181:16125
+addnode=63.250.53.25:16125
+addnode=5.9.78.207:16125
+addnode=194.163.148.252:16125
+addnode=178.18.241.199:16125
+addnode=178.18.241.197:16125
+addnode=178.18.243.34:16125
+addnode=62.171.188.152:16125
+addnode=194.163.166.101:16125
+addnode=23.88.19.178:16125
+addnode=79.143.178.170:16125
+addnode=178.18.249.115:16125
+addnode=161.97.131.154:16125
+addnode=149.255.39.17:16125
 maxconnections=256
 EOF
     sleep 2
- 
 }
 
 function flux_package() {
@@ -1151,37 +1201,7 @@ else
    
 fi
 
-sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
-sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
 
-if [[ $(dpkg --print-architecture) = *amd* ]]; then
-
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
-  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
-  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
-
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-Linux-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
-  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
-  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
-
-else
-
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
-  sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
-  sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
-
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.0.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-arm-v3.0.0.tar.gz -C /tmp > /dev/null 2>&1
-  sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
-  sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
-
-
-fi
-
-sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
 }
 
 
@@ -1388,6 +1408,8 @@ function bootstrap() {
   
     fi
      
+    
+
 
 }
 
@@ -1516,8 +1538,6 @@ function basic_security() {
     sudo ufw allow out to any port 53 > /dev/null 2>&1
     sudo ufw allow out to any port 16124 > /dev/null 2>&1
     sudo ufw allow out to any port 16125 > /dev/null 2>&1
-    sudo ufw allow out to any port 26124 > /dev/null 2>&1
-    sudo ufw allow out to any port 26125 > /dev/null 2>&1
     sudo ufw allow out to any port 16127 > /dev/null 2>&1
     sudo ufw allow from any to any port 16127 > /dev/null 2>&1
     
@@ -1586,7 +1606,7 @@ function start_daemon() {
 	daemon_version=$($COIN_CLI getinfo | jq -r '.version')
 	string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
 	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
-	bench_version=$($BENCH_CLI -testnet getinfo | jq -r '.version')
+	bench_version=$($BENCH_CLI getinfo | jq -r '.version')
 	string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
@@ -1824,11 +1844,8 @@ fi
 
 
     echo -e "${ARROW} ${YELLOW}Flux installing...${NC}"
-    git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
-    cd zelflux
-    echo -e "${ARROW} ${YELLOW}Changing to test branch...${NC}"
-    git checkout testnet > /dev/null 2>&1
-    cd 
+   # git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
+    git clone --single-branch --branch development https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
     
     
@@ -1845,22 +1862,69 @@ if [[ "$IMPORT_ZELID" == "0" ]]; then
                 sleep 4
                 fi
         done
+	
+      #  if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
+	
+	    tier
+	    if [[ "$kadena_possible" == "1" ]]; then
+	
+	    while true
+                do
 		
+                    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+                    if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* ]]; then
+		    	
+			     echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"
+			 
+			  while true
+		          do
+			     KDA_C=$(whiptail --inputbox "Please enter your kadena chainid (0-19)" 8 85 3>&1 1>&2 2>&3)
+		             if [[ "$KDA_C" -ge "0"  && "$KDA_C" -le "19" ]]; then		    
+                              echo -e "${ARROW} ${CYAN}Kadena chainid is valid.................[${CHECK_MARK}${CYAN}]${NC}"	
+			      KDA_A="kadena:$KDA_A?chainid=$KDA_C"
+                              break
+                             else
+                              echo -e "${ARROW} ${CYAN}Kadena chainid is not valid.............[${X_MARK}${CYAN}]${NC}"			    
+                              sleep 2
+                             fi		     
+		          done
+			  
+			  break
+		    else	     
+		              echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
+			   sleep 2		     
+		    fi
+              done
+	                 
+        fi
+	
  fi
   
 
-
+if [[ "$KDA_A" != "" ]]; then
+  touch ~/$FLUX_DIR/config/userconfig.js
+    cat << EOF > ~/$FLUX_DIR/config/userconfig.js
+module.exports = {
+      initial: {
+        ipaddress: '${WANIP}',
+        zelid: '${ZELID}',
+	kadena: '${KDA_A}',
+        testnet: false
+      }
+    }
+EOF
+else
     touch ~/$FLUX_DIR/config/userconfig.js
     cat << EOF > ~/$FLUX_DIR/config/userconfig.js
 module.exports = {
       initial: {
         ipaddress: '${WANIP}',
         zelid: '${ZELID}',
-        testnet: true
+        testnet: false
       }
     }
 EOF
-
+fi
 
 if [ -d ~/$FLUX_DIR ]
 then
@@ -1881,8 +1945,8 @@ fi
 
 function status_loop() {
 
-network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks')
+network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks')
 
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 
@@ -1914,8 +1978,8 @@ else
     while true
     do
         
-        network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
-        network_height_03=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+        network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+        network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
         EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	
@@ -1952,8 +2016,8 @@ else
           MSG2=''
           spinning_timer
 	  
-	 network_height_01=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
-         network_height_03=$(curl -sk -m 5 https://testnet.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+	 network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
+         network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo | jq '.info.blocks' 2> /dev/null)
 
           EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 	  
@@ -2001,7 +2065,7 @@ else
     
   #if [[ -z "$watchdog" ]]; then
     #if   whiptail --yesno "Would you like to install watchdog for FluxNode?" 8 60; then
-   #install_watchdog
+   install_watchdog
    # else
        # echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
    # fi
@@ -2047,7 +2111,7 @@ echo && echo
         
 echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
 echo -e "${YELLOW}======================${NC}"
-bench_benchmarks=$($BENCH_CLI -testnet getbenchmarks)
+bench_benchmarks=$($BENCH_CLI getbenchmarks)
 
 if [[ "bench_benchmarks" != "" ]]; then
 bench_status=$(jq -r '.status' <<< "$bench_benchmarks")
@@ -2109,10 +2173,10 @@ function display_banner() {
     echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE BENCHMARK.${NC}" 
-    echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} -testnet getinfo${NC}"
-    echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} -testnet getbenchmarks${NC}"
-    echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} -testnet restartnodebenchmarks${NC}"
-    echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} -testnet stop${NC}"
+    echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} getinfo${NC}"
+    echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} getbenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} restartnodebenchmarks${NC}"
+    echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} stop${NC}"
     echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
     echo
     echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
@@ -2138,6 +2202,7 @@ function display_banner() {
     cd $HOME
     exec bash
 }
+
 
 function start_install() {
 
@@ -2223,21 +2288,21 @@ fi
     create_conf
     install_daemon
     zk_params
-    #if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
-   # bootstrap
-   # fi
+    if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
+    bootstrap
+    fi
     create_service_scripts
     create_service
     
- #   if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
-     # echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+   # if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
+   #   echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
   #  else
       # if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
          selfhosting
-     #  else
-       #  echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
-      # fi 
-   # fi
+      ## else
+         #echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
+      ### fi 
+  ##  fi
     
     install_process
     start_daemon
