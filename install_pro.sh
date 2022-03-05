@@ -1358,7 +1358,6 @@ function bootstrap() {
 		  DB_HIGHT=$(curl -s -m 10 https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		fi
 		
-		ckec
 		
 		
 		
