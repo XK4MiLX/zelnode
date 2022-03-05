@@ -1392,7 +1392,7 @@ fi
 
 
 # bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro.sh)
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development_halving/install_pro_testnet.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro_testnet.sh)
 
 
 }
