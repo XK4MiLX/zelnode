@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
-indexb=$(shuf -i 1-4 -n 1)   
-BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
-#rand=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
-#r=$(shuf -i 0-3 -n 1)
-#bootstrap_ip=${rand[$r]}
-#BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
@@ -25,6 +18,7 @@ fi
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
+Server_offline=0
 
 #color codes
 RED='\033[1;31m'
@@ -79,6 +73,39 @@ function config_veryfity(){
 
 }
 
+
+function bootstrap_server(){
+#rand_by_ip=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
+rand_by_domain=("1" "2" "3" "4")
+richable=()
+
+i=0
+len=${#rand_by_domain[@]}
+#echo -e "Bootstrap on list: $len"
+while [ $i -lt $len ];
+do
+
+    #echo ${rand_by_domain[$i]}
+    bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
+    #echo -e "Height: $bootstrap_check"
+    if [[ "$bootstrap_check" != "" ]]; then
+    #echo -e "Adding:  ${rand_by_domain[$i]}"
+      richable+=( ${rand_by_domain[$i]}  )
+    fi
+    i=$(($i+1))
+
+
+done
+
+len=${#richable[@]}
+if [[ "$len" == "0" ]]; then
+echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
+Server_offline=1
+return 1
+fi
+Server_offline=0
+
+}
 
 function get_ip(){
 
@@ -629,8 +656,11 @@ fi
 if [[ "$skip_bootstrap" == "0" ]]; then
 
 if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
-bootstrap_url="$BOOTSTRAP_ZIP"
+      
+bootstrap_server_index=$(shuf -i 1-4 -n 1)
+bootstrap_url="https://cdn-$bootstrap_server_index.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
 sleep 1
+
 else
 bootstrap_url=$(whiptail --inputbox "Enter your Flux bootstrap URL" 8 65 3>&1 1>&2 2>&3)
 sleep 1
@@ -1083,6 +1113,18 @@ function flux_daemon_bootstrap() {
     echo -e "${NC}"
     
     config_veryfity
+    bootstrap_server
+    
+    if [[ "$Server_offline" == "1" ]]; then
+     echo -e ""
+     exit
+    fi
+       
+    bootstrap_index=$((${#richable[@]}-1))
+    r=$(shuf -i 0-$bootstrap_index -n 1)
+    indexb=${richable[$r]}
+    BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
+    BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
     
     pm2 stop watchdog > /dev/null 2>&1 && sleep 2
     echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
@@ -1092,9 +1134,7 @@ function flux_daemon_bootstrap() {
     if [[ -e /home/$USER/$CONFIG_DIR/blocks ]] && [[ -e /home/$USER/$CONFIG_DIR/chainstate ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
         rm -rf /home/$USER/$CONFIG_DIR/blocks /home/$USER/$CONFIG_DIR/chainstate /home/$USER/$CONFIG_DIR/determ_zelnodes
-    fi
-
-    BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
+    fi 
     
     if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
     
