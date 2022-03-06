@@ -1286,7 +1286,10 @@ function bootstrap() {
     fi
        
    # bootstrap_rand_ip
-    indexb=$(shuf -i 0-${#richable[@]} -n 1)
+    bootstrap_index=$((${#richable[@]}-1))
+    r=$(shuf -i 0-$bootstrap_index -n 1)
+    indexb=${richable[$r]}
+    
     BOOTSTRAP_ZIP="https://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     #BOOTSTRAP_ZIP="http://$bootstrap_ip:11111/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
     BOOTSTRAP_ZIPFILE="${BOOTSTRAP_ZIP##*/}"
