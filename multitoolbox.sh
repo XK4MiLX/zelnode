@@ -2083,6 +2083,12 @@ then
 sudo apt-get install -y whiptail > /dev/null 2>&1
 fi
 
+if [[ -f /home/$USER/.bashrc ]]; then
+  if [[ $(cat /home/$USER/.bashrc  | grep 'multitoolbox' | wc -l) == "0"  ]]; then
+   echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'" >> /home/$USER/.bashrc
+   source /home/$USER/.bashrc
+  fi
+fi
 
 
 clear
