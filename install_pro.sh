@@ -143,16 +143,17 @@ function config_veryfity(){
 
 
  function selfhosting() {
+ 
  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
- echo -e "${ARROW} ${CYAN}Adding IP...${NC}" && sleep 1
+ echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
  
   if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
     sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
   else
-    echo -e "${WORNING} ${CYAN}Problem detected operation stopped! ${NC}" && sleep 1
+    echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
     echo -e ""
-    exit
+    return 1
   fi
  
 echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
