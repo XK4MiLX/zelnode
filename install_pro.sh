@@ -1254,7 +1254,8 @@ function install_daemon() {
    
    echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
    sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
-   
+   sudo chown -R $USER:$USER /home/$USER/.gnupg > /dev/null 2>&1
+     
 if [[ "$(lsb_release -cs)" == "xenial" ]]; then
    
      echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
