@@ -78,9 +78,6 @@ fi
 echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
 echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
 echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
-bootstrap_server $continent
-
-
 }
 
 function bootstrap_server(){
@@ -1298,6 +1295,7 @@ function flux_daemon_bootstrap() {
     config_veryfity
     get_ip
     bootstrap_geolocation
+    bootstrap_server $continent
     
     if [[ "$Server_offline" == "1" ]]; then
      echo -e ""
