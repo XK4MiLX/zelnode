@@ -58,8 +58,6 @@ richable_as=()
 
 i=0
 len=${#rand_by_domain[@]}
-echo -e "Checking servers availability..."
-echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
 
@@ -193,7 +191,6 @@ if [[ "$server_found" == "0" ]]; then
   fi
 fi
 
-##echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
 Server_offline=0
 
 }
@@ -228,6 +225,8 @@ fi
 echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
 echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
 echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
+echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
+
 }
 
 function config_veryfity(){
@@ -1299,11 +1298,13 @@ function flux_daemon_bootstrap() {
     bootstrap_geolocation
     bootstrap_server $continent
     
+    
     if [[ "$Server_offline" == "1" ]]; then
      echo -e ""
      exit
     fi
        
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"   
     bootstrap_index=$((${#richable[@]}-1))
     r=$(shuf -i 0-$bootstrap_index -n 1)
     indexb=${richable[$r]}
