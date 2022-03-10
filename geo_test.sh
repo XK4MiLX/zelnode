@@ -116,7 +116,7 @@ if [[ "$continent" == "EU" ]]; then
   len_eu=${#richable_eu[@]}
   if [[ "$len_eu" -gt "0" ]]; then
     richable=( ${richable_eu[*]} )
-    echo -e "Final: ${richable[*]}"
+    #echo -e "Final: ${richable[*]}"
   fi
   if [[ "$len_eu" == "0" ]]; then
      continent="EU"
@@ -124,6 +124,7 @@ if [[ "$continent" == "EU" ]]; then
      len_us=${#richable_us[@]}
      if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
+      echo -e "Final: ${richable[*]}" 
      fi
      if [[ "$len_us" == "0" ]]; then
        continent="US"
