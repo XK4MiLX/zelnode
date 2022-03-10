@@ -57,10 +57,9 @@ richable_as=()
 
 i=0
 len=${#rand_by_domain[@]}
+echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
-
-    echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
     #echo ${rand_by_domain[$i]}
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
     #echo -e "Height: $bootstrap_check"
@@ -83,7 +82,6 @@ do
     fi
 
     i=$(($i+1))
-
 done
 
 server_found="1"
@@ -94,16 +92,16 @@ if [[ "$continent" == "EU" ]]; then
     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_eu" == "0" ]]; then
-     continent="EU"
-     echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+     continent1="EU"
+     echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
      len_us=${#richable_us[@]}
      if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
       echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
      fi
      if [[ "$len_us" == "0" ]]; then
-       continent="US"
-       echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+       continent1="US"
+       echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
        server_found="0"
      fi
    fi
@@ -114,24 +112,24 @@ elif [[ "$continent" == "US" ]]; then
     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_us" == "0" ]]; then
-    continent="US"
-    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+    continent1="US"
+    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
     len_as=${#richable_as[@]}
     if [[ "$len_as" -gt "0" ]]; then
      richable=( ${richable_as[*]} )
      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_as" == "0" ]]; then
-      continent="AS"
-      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+      continent1="AS"
+      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
       len_eu=${#richable_eu[@]}
         if [[ "$len_eu" -gt "0" ]]; then
           richable=( ${richable_eu[*]} )
           echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
         fi
        if [[ "$len_eu" == "0" ]]; then
-        continent="EU"
-        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+        continent1="EU"
+        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
         server_found="0"
        fi
     fi
@@ -143,34 +141,33 @@ elif [[ "$continent" == "AS" ]]; then
     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_as" == "0" ]]; then
-    continent="AS"
-    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+    continent1="AS"
+    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
     len_us=${#richable_us[@]}
     if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
       echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_us" == "0" ]]; then
-      continent="US"
-      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+      continent1="US"
+      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
       len_eu=${#richable_eu[@]}
        if [[ "$len_eu" -gt "0" ]]; then
          richable=( ${richable_eu[*]} )
-         #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
        fi
        if [[ "$len_eu" == "0" ]]; then
-        continent="EU"
-        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
+        continent1="EU"
+        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent1 are offline, checking other location...${NC}" && sleep 1
         server_found="0"
        fi
     fi
   fi
 else
    len=${#richable[@]}
-   
    if [[ "$len" -gt "0" ]]; then
          richable=( ${richable[*]} )
-         #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
    fi
    
    if [[ "$len" == "0" ]]; then
