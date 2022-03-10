@@ -2235,6 +2235,11 @@ echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/Ru
 source /etc/bash.bashrc
 fi
 
+if ! wget --version > /dev/null 2>&1 ; then
+   sudo apt install -y wget > /dev/null 2>&1 && sleep 2
+fi
+
+
 
 clear
 sleep 1
