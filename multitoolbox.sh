@@ -48,7 +48,6 @@ export NEWT_COLORS='
 title=black,
 '
 
-
 function bootstrap_server(){
 rand_by_domain=("1" "2" "3" "5" "6" "7" "8" "9" "10" "11")
 richable=()
@@ -253,39 +252,6 @@ function config_veryfity(){
 
 }
 
-
-##function bootstrap_server(){
-#rand_by_ip=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
-##rand_by_domain=("1" "2" "3" "4")
-##richable=()
-
-##i=0
-##len=${#rand_by_domain[@]}
-#echo -e "Bootstrap on list: $len"
-##while [ $i -lt $len ];
-##do
-
-    #echo ${rand_by_domain[$i]}
-   ## bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
-    #echo -e "Height: $bootstrap_check"
-    ##if [[ "$bootstrap_check" != "" ]]; then
-    #echo -e "Adding:  ${rand_by_domain[$i]}"
-    ##  richable+=( ${rand_by_domain[$i]}  )
-   ## fi
-   ## i=$(($i+1))
-
-
-#done
-
-#len=${#richable[@]}
-#if [[ "$len" == "0" ]]; then
-#echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
-#Server_offline=1
-#return 1
-#fi
-#Server_offline=0
-#
-#}
 
 function get_ip(){
 
