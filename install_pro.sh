@@ -1472,11 +1472,11 @@ function zk_params() {
 function bootstrap() {
 
 
-    if ! wget --version ; then
+    if ! wget --version > /dev/null 2>&1 ; then
        sudo apt install -y wget > /dev/null 2>&1 && sleep 2
     fi
    
-    if ! wget --version ; then
+    if ! wget --version > /dev/null 2>&1 ; then
          echo -e "${WORNING} ${CYAN}Wget not installed, operation aborted.. ${NC}" && sleep 1
          echo -e ""
          return 1
