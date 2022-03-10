@@ -80,6 +80,7 @@ richable_as=()
 
 i=0
 len=${#rand_by_domain[@]}
+echo -e "${ARROW} ${CYAN}Checking servers availability... ${richable[*]}${NC}"
 #echo -e "Bootstrap on list: $len"
 while [ $i -lt $len ];
 do
