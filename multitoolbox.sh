@@ -61,6 +61,7 @@ len=${#rand_by_domain[@]}
 while [ $i -lt $len ];
 do
 
+    echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
     #echo ${rand_by_domain[$i]}
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
     #echo -e "Height: $bootstrap_check"
@@ -91,7 +92,7 @@ if [[ "$continent" == "EU" ]]; then
   len_eu=${#richable_eu[@]}
   if [[ "$len_eu" -gt "0" ]]; then
     richable=( ${richable_eu[*]} )
-    #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_eu" == "0" ]]; then
      continent="EU"
@@ -99,7 +100,7 @@ if [[ "$continent" == "EU" ]]; then
      len_us=${#richable_us[@]}
      if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
-      #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
      fi
      if [[ "$len_us" == "0" ]]; then
        continent="US"
@@ -111,7 +112,7 @@ elif [[ "$continent" == "US" ]]; then
   len_us=${#richable_us[@]}
   if [[ "$len_us" -gt "0" ]]; then
     richable=( ${richable_us[*]} )
-    #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_us" == "0" ]]; then
     continent="US"
@@ -119,7 +120,7 @@ elif [[ "$continent" == "US" ]]; then
     len_as=${#richable_as[@]}
     if [[ "$len_as" -gt "0" ]]; then
      richable=( ${richable_as[*]} )
-     #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_as" == "0" ]]; then
       continent="AS"
@@ -127,7 +128,7 @@ elif [[ "$continent" == "US" ]]; then
       len_eu=${#richable_eu[@]}
         if [[ "$len_eu" -gt "0" ]]; then
           richable=( ${richable_eu[*]} )
-          #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+          echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
         fi
        if [[ "$len_eu" == "0" ]]; then
         continent="EU"
@@ -140,7 +141,7 @@ elif [[ "$continent" == "AS" ]]; then
   len_as=${#richable_as[@]}
   if [[ "$len_as" -gt "0" ]]; then
     richable=( ${richable_as[*]} )
-    #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_as" == "0" ]]; then
     continent="AS"
@@ -148,7 +149,7 @@ elif [[ "$continent" == "AS" ]]; then
     len_us=${#richable_us[@]}
     if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
-      #echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_us" == "0" ]]; then
       continent="US"
@@ -223,7 +224,7 @@ fi
 echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
 echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
 echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
-echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
+
 
 }
 
@@ -253,38 +254,38 @@ function config_veryfity(){
 }
 
 
-function bootstrap_server(){
+##function bootstrap_server(){
 #rand_by_ip=("91.229.245.161" "91.229.245.159" "89.58.33.204" "89.58.31.71")
-rand_by_domain=("1" "2" "3" "4")
-richable=()
+##rand_by_domain=("1" "2" "3" "4")
+##richable=()
 
-i=0
-len=${#rand_by_domain[@]}
+##i=0
+##len=${#rand_by_domain[@]}
 #echo -e "Bootstrap on list: $len"
-while [ $i -lt $len ];
-do
+##while [ $i -lt $len ];
+##do
 
     #echo ${rand_by_domain[$i]}
-    bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
+   ## bootstrap_check=$(curl -s -m 10 https://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
     #echo -e "Height: $bootstrap_check"
-    if [[ "$bootstrap_check" != "" ]]; then
+    ##if [[ "$bootstrap_check" != "" ]]; then
     #echo -e "Adding:  ${rand_by_domain[$i]}"
-      richable+=( ${rand_by_domain[$i]}  )
-    fi
-    i=$(($i+1))
+    ##  richable+=( ${rand_by_domain[$i]}  )
+   ## fi
+   ## i=$(($i+1))
 
 
-done
+#done
 
-len=${#richable[@]}
-if [[ "$len" == "0" ]]; then
-echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
-Server_offline=1
-return 1
-fi
-Server_offline=0
-
-}
+#len=${#richable[@]}
+#if [[ "$len" == "0" ]]; then
+#echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
+#Server_offline=1
+#return 1
+#fi
+#Server_offline=0
+#
+#}
 
 function get_ip(){
 
@@ -836,7 +837,7 @@ if [[ "$skip_bootstrap" == "0" ]]; then
 
 if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
       
-bootstrap_server_index=$(shuf -i 1-4 -n 1)
+bootstrap_server_index=$(shuf -i 1-11 -n 1)
 bootstrap_url="https://cdn-$bootstrap_server_index.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz"
 sleep 1
 
