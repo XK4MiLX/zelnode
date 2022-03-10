@@ -226,6 +226,7 @@ if [[ "$server_found" == "0" ]]; then
   fi
 fi
 
+echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
 Server_offline=0
 
 }
