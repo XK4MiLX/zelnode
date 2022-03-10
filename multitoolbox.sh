@@ -48,37 +48,6 @@ export NEWT_COLORS='
 title=black,
 '
 
-function bootstrap_geolocation(){
-
-IP=$WANIP
-ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone | jq .)
-ip_status=$( jq -r .status <<< "$ip_output")
-
-if [[ "$ip_status" == "success" ]]; then
-country=$(jq -r .country <<< "$ip_output")
-org=$(jq -r .org <<< "$ip_output")
-continent=$(jq -r .timezone <<< "$ip_output")
-else
-country="UKNOW"
-continent="UKNOW"
-fi
-
-continent=$(cut -f1 -d"/" <<< "$continent" )
-
-if [[ "$continent" =~ "Europe" ]]; then
- continent="EU"
-elif [[ "$continent" =~ "America" ]]; then
- continent="US"
-elif [[ "$continent" =~ "Asia" ]]; then
- continent="AS"
-else
- continent="ALL"
-fi
-
-echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
-echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
-echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
-}
 
 function bootstrap_server(){
 rand_by_domain=("1" "2" "3" "5" "6" "7" "8" "9" "10" "11")
@@ -89,7 +58,8 @@ richable_as=()
 
 i=0
 len=${#rand_by_domain[@]}
-echo -e "${ARROW} ${CYAN}Checking servers availability... ${richable[*]}${NC}"
+echo -e "Checking servers availability..."
+echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
 
@@ -223,9 +193,41 @@ if [[ "$server_found" == "0" ]]; then
   fi
 fi
 
-echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+##echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
 Server_offline=0
 
+}
+
+function bootstrap_geolocation(){
+
+IP=$WANIP
+ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone | jq .)
+ip_status=$( jq -r .status <<< "$ip_output")
+
+if [[ "$ip_status" == "success" ]]; then
+country=$(jq -r .country <<< "$ip_output")
+org=$(jq -r .org <<< "$ip_output")
+continent=$(jq -r .timezone <<< "$ip_output")
+else
+country="UKNOW"
+continent="UKNOW"
+fi
+
+continent=$(cut -f1 -d"/" <<< "$continent" )
+
+if [[ "$continent" =~ "Europe" ]]; then
+ continent="EU"
+elif [[ "$continent" =~ "America" ]]; then
+ continent="US"
+elif [[ "$continent" =~ "Asia" ]]; then
+ continent="AS"
+else
+ continent="ALL"
+fi
+
+echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
+echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
+echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
 }
 
 function config_veryfity(){
