@@ -202,6 +202,12 @@ elif [[ "$continent" == "AS" ]]; then
   fi
 else
    len=${#richable[@]}
+   
+   if [[ "$len" -gt "0" ]]; then
+         richable=( ${richable[*]} )
+         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
+   fi
+   
    if [[ "$len" == "0" ]]; then
     echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
     Server_offline=1
