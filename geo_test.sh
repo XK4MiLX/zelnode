@@ -1,7 +1,5 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
-
 #color codes
 RED='\033[1;31m'
 YELLOW='\033[1;33m'
