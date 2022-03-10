@@ -1471,6 +1471,17 @@ function zk_params() {
 
 function bootstrap() {
 
+
+    if ! wget --version ; then
+       sudo apt install -y wget > /dev/null 2>&1 && sleep 2
+    fi
+   
+    if ! wget --version ; then
+         echo -e "${WORNING} ${CYAN}Wget not installed, operation aborted.. ${NC}" && sleep 1
+         echo -e ""
+         return 1
+    fi
+
     bootstrap_geolocation
     bootstrap_server $continent
     
