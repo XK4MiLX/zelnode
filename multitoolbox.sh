@@ -1298,7 +1298,7 @@ function flux_daemon_bootstrap() {
     
     
     if [[ "$Server_offline" == "1" ]]; then
-     echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation skipped.. ${NC}" && sleep 1
+     echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation aborted.. ${NC}" && sleep 1
      echo -e ""
      exit
     fi
