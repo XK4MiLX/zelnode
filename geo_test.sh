@@ -116,7 +116,7 @@ if [[ "$continent" == "EU" ]]; then
   len_eu=${#richable_eu[@]}
   if [[ "$len_eu" -gt "0" ]]; then
     richable=( ${richable_eu[*]} )
-    #echo -e "Final: ${richable[*]}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_eu" == "0" ]]; then
      continent="EU"
@@ -124,7 +124,7 @@ if [[ "$continent" == "EU" ]]; then
      len_us=${#richable_us[@]}
      if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
-      echo -e "Final: ${richable[*]}" 
+      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
      fi
      if [[ "$len_us" == "0" ]]; then
        continent="US"
@@ -136,7 +136,7 @@ elif [[ "$continent" == "US" ]]; then
   len_us=${#richable_us[@]}
   if [[ "$len_us" -gt "0" ]]; then
     richable=( ${richable_us[*]} )
-    echo -e "Final: ${richable[*]}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_us" == "0" ]]; then
     continent="US"
@@ -144,7 +144,7 @@ elif [[ "$continent" == "US" ]]; then
     len_as=${#richable_as[@]}
     if [[ "$len_as" -gt "0" ]]; then
      richable=( ${richable_as[*]} )
-     echo -e "Final: ${richable[*]}"
+     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_as" == "0" ]]; then
       continent="AS"
@@ -152,7 +152,7 @@ elif [[ "$continent" == "US" ]]; then
       len_eu=${#richable_eu[@]}
         if [[ "$len_eu" -gt "0" ]]; then
           richable=( ${richable_eu[*]} )
-          echo -e "Final: ${richable[*]}"
+          echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
         fi
        if [[ "$len_eu" == "0" ]]; then
         continent="EU"
@@ -165,7 +165,7 @@ elif [[ "$continent" == "AS" ]]; then
   len_as=${#richable_as[@]}
   if [[ "$len_as" -gt "0" ]]; then
     richable=( ${richable_as[*]} )
-    echo -e "Final: ${richable[*]}"
+    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
   fi
   if [[ "$len_as" == "0" ]]; then
     continent="AS"
@@ -173,7 +173,7 @@ elif [[ "$continent" == "AS" ]]; then
     len_us=${#richable_us[@]}
     if [[ "$len_us" -gt "0" ]]; then
       richable=( ${richable_us[*]} )
-      echo -e "Final: ${richable[*]}"
+      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
     fi
     if [[ "$len_us" == "0" ]]; then
       continent="US"
@@ -181,7 +181,7 @@ elif [[ "$continent" == "AS" ]]; then
       len_eu=${#richable_eu[@]}
        if [[ "$len_eu" -gt "0" ]]; then
          richable=( ${richable_eu[*]} )
-         echo -e "Final: ${richable[*]}"
+         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
        fi
        if [[ "$len_eu" == "0" ]]; then
         continent="EU"
