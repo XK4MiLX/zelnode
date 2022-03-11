@@ -493,7 +493,7 @@ if [[ "$WANIP" != "" ]]; then
     echo -e "${CHECK_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) matches local device(${GREEN}$device_name${CYAN}) IP(${GREEN}$local_device_ip${CYAN})${NC}"
   else
    echo -e "${X_MARK} ${CYAN} Public IP(${GREEN}$WANIP${CYAN}) not matches local device(${GREEN}$device_name${CYAN}) IP${NC}"
-   echo -e "${ARROW} ${CYAN} If you under NAT use option 12 from multitoolbox (self-hosting)${NC}"
+   echo -e "${ARROW} ${CYAN} If you under NAT use option 10 from multitoolbox (self-hosting)${NC}"
    ## dev_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2"0"}')
    ## sudo ip addr add "$WANPI" dev "$dev_name"
   # IP_FIX="1"
