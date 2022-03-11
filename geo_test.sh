@@ -213,7 +213,9 @@ Server_offline=0
 
 }
 
-
+if ! jq --version > /dev/null 2>&1; then
+  sudo apt install jq -y > /dev/null 2>&1
+fi
 
 get_ip
 bootstrap_geolocation
