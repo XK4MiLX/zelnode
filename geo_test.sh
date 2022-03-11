@@ -25,22 +25,22 @@ title=black,
 '
 
 function get_ip(){
- WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+ WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip 2>/dev/null | tr -dc '[:alnum:].')
 
   if [[ "$WANIP" == "" ]]; then
-   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')
+   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com 2>/dev/null | tr -dc '[:alnum:].')
   fi
 
   if [[ "$WANIP" == "" ]]; then
-   WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
+   WANIP=$(curl --silent -m 10 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
   fi
 }
 
 function bootstrap_geolocation(){
 
 IP=$WANIP
-ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone | jq .)
-ip_status=$( jq -r .status <<< "$ip_output")
+ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone 2>/dev/null | jq . 2>/dev/null)
+ip_status=$( jq -r .status 2>/dev/null <<< "$ip_output")
 
 if [[ "$ip_status" == "success" ]]; then
 country=$(jq -r .country <<< "$ip_output")
