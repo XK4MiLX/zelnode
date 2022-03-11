@@ -526,9 +526,9 @@ echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
 
-network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo getinfo   | jq '.info.blocks' 2> /dev/null)
+network_height_01=$(curl -sk -m 5 https://explorer.runonflux.io/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
 #network_height_02=$(curl -sk -m 5 https://explorer.flux.zelcore.io/api/status?q=getInfo | jq '.info.blocks')
-network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo getinfo  | jq '.info.blocks' 2> /dev/null)
+network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
 
 explorer_network_hight=$(max "$network_height_01" "$network_height_03")
 
@@ -589,8 +589,8 @@ fi
 fi
 
 
-flux_communication=$(curl -SsL http://"$WANIP":16127/flux/checkcommunication | jq -r .data.message)
-if [[ "$flux_communication" != "null" || "$flux_communication" != "" ]]; then
+flux_communication=$(curl -SsL -m 10 http://"$WANIP":16127/flux/checkcommunication 2>/dev/null | jq -r .data.message 2>/dev/null)
+if [[ "$flux_communication" != "null" && "$flux_communication" != "" ]]; then
 echo -e "${BOOK} ${YELLOW}Checking FluxOS communication: ${NC}"
 echo -e "${ARROW} ${CYAN}$flux_communication${NC}"
 echo -e ""
@@ -610,10 +610,10 @@ stak_info=""
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
         #collateral_index=$(awk '{print $1}' <<< "$stak_info")
-	stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	stak_info=$(curl -s -m 10 https://explorer.runonflux.io/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	
 	if [[ "$stak_info" == "" ]]; then
-	    stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
+	    stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000')
 	fi
 	
 fi
@@ -702,7 +702,7 @@ fi
               fi
 		
 	else
-	echo -e "${X_MARK} ${CYAN} Fluxnodeoutpoint is not valid${NC}"
+	echo -e "${X_MARK} ${CYAN} Flux collateral check skipped...${NC}"
 	fi
 #url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 #type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
