@@ -91,7 +91,7 @@ echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
     #echo ${rand_by_domain[$i]}
-    bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
+    bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
     #echo -e "Height: $bootstrap_check"
     if [[ "$bootstrap_check" != "" ]]; then
     #echo -e "Adding:  ${rand_by_domain[$i]}"
