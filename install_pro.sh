@@ -1,4 +1,4 @@
-#!/bin/bash
+5#!/bin/bash
 # Bootstrap settings
 #BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
@@ -299,7 +299,7 @@ sudo touch /home/$USER/ip_check.sh
 sudo chown $USER:$USER /home/$USER/ip_check.sh
     cat <<'EOF' > /home/$USER/ip_check.sh
 #!/bin/bash
-function get_ip(){
+function get8(){
  WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
     
   if [[ "$WANIP" == "" ]]; then
@@ -316,7 +316,7 @@ if [[ $1 == "restart" ]]; then
   get_ip
   device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
   if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-   date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+   date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')1
    echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
    sudo ip addr add $WANIP dev $device_name:0 && sleep 2
   fi
@@ -1161,16 +1161,16 @@ function ip_confirm() {
     
     WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
     
-    if [[ "$WANIP" == "" ]]; then
+    if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
       WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
     fi  
       
-    if [[ "$WANIP" == "" ]]; then
+    if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
       WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
     fi
       
         
-    if [[ "$WANIP" == "" ]]; then
+    if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
       	echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
 	echo
 	exit
