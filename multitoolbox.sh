@@ -49,7 +49,7 @@ title=black,
 '
 
 function bootstrap_server(){
-rand_by_domain=("1" "3" "5" "6" "7" "8" "9" "10" "11")
+rand_by_domain=("1" "3" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14")
 richable=()
 richable_eu=()
 richable_us=()
