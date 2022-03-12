@@ -90,11 +90,8 @@ len=${#rand_by_domain[@]}
 echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
-    #echo ${rand_by_domain[$i]}
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
-    #echo -e "Height: $bootstrap_check"
     if [[ "$bootstrap_check" != "" ]]; then
-    #echo -e "Adding:  ${rand_by_domain[$i]}"
 
        if [[ "${rand_by_domain[$i]}" -le "3" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
@@ -206,8 +203,6 @@ else
    fi
 fi
 
-
-
 if [[ "$server_found" == "0" ]]; then
   len=${#richable[@]}
   if [[ "$len" == "0" ]]; then
@@ -248,7 +243,7 @@ else
 fi
 
 echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
-echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
+echo -e "${ARROW} ${CYAN}Node Location: $country, Continent: $continent ${NC}"
 echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
 }
 
