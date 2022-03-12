@@ -1312,6 +1312,25 @@ addnode=explorer.flux.zelcore.io
 addnode=explorer.runonflux.io
 addnode=explorer.zelcash.online
 addnode=blockbook.runonflux.io
+addnode=202.61.202.21
+addnode=89.58.40.172
+addnode=109.90.125.189
+addnode=185.30.117.2
+addnode=185.30.117.4
+addnode=185.30.117.3
+addnode=185.30.117.5
+addnode=31.7.195.203
+addnode=65.108.192.59
+addnode=188.25.224.51
+addnode=89.58.26.142
+addnode=135.181.165.186
+addnode=89.58.3.209
+addnode=89.58.37.73
+addnode=213.231.3.224
+addnode=89.58.10.47
+addnode=65.108.40.221
+addnode=89.58.28.201
+addnode=136.243.77.25
 maxconnections=256
 EOF
     sleep 2
