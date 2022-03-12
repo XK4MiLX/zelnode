@@ -93,7 +93,7 @@ do
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
     if [[ "$bootstrap_check" != "" ]]; then
 
-       if [[ "${rand_by_domain[$i]}" -le "3" ]]; then
+       if [[ "${rand_by_domain[$i]}" -le "3" || "${rand_by_domain[$i]}" -gt "11" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
        fi
 
