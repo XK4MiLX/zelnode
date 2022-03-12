@@ -91,7 +91,7 @@ do
     if [[ "$bootstrap_check" != "" ]]; then
     #echo -e "Adding:  ${rand_by_domain[$i]}"
 
-       if [[ "${rand_by_domain[$i]}" -le "3" ]]; then
+       if [[ "${rand_by_domain[$i]}" -le "3" -o "${rand_by_domain[$i]}" -gt "3" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
        fi
 
