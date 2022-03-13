@@ -95,7 +95,7 @@ if [[ "$continent" =~ "America" ]]; then
  server_continent="US"
 fi
 
-if [[ "$continent" =~ "Asia" ]]; 
+if [[ "$continent" =~ "Asia" ]]; then
  server_continent="AS"
 fi
 
