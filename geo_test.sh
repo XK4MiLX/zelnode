@@ -27,11 +27,11 @@ title=black,
 function get_ip(){
  WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip 2>/dev/null | tr -dc '[:alnum:].')
 
-  if [[ "$WANIP" == "" ]]; then
+  if [[ "$WANIP" == "" || "$WANIP" = *hmtl* ]]; then
    WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com 2>/dev/null | tr -dc '[:alnum:].')
   fi
 
-  if [[ "$WANIP" == "" ]]; then
+  if [[ "$WANIP" == "" || "$WANIP" = *hmtl* ]]; then
    WANIP=$(curl --silent -m 10 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
   fi
 }
