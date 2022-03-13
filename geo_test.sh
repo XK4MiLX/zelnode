@@ -71,6 +71,36 @@ bootstrap_server $continent
 
 }
 
+function server_geolocation(){
+
+ip_output=$(curl -s -m 10 http://ip-api.com/json/cdn-${rand_by_domain[$i]}.runonflux.io?fields=status,country,timezone 2>/dev/null | jq . 2>/dev/null)
+ip_status=$( jq -r .status 2>/dev/null <<< "$ip_output")
+
+if [[ "$ip_status" == "success" ]]; then
+country=$(jq -r .country <<< "$ip_output")
+org=$(jq -r .org <<< "$ip_output")
+continent=$(jq -r .timezone <<< "$ip_output")
+else
+country="UKNOW"
+continent="UKNOW"
+fi
+
+continent=$(cut -f1 -d"/" <<< "$continent" )
+if [[ "$continent" =~ "Europe" ]]; then
+ server_continent="EU"
+elif [[ "$continent" =~ "America" ]]; then
+ server_continent="US"
+else [[ "$continent" =~ "Asia" ]]; 
+ server_continent="AS"
+fi
+
+echo -e "${ARROW} ${CYAN}Checking bootstrap server location....${NC}"
+echo -e "${ARROW} ${CYAN}Server Location: $country, Continent: $continent ${NC}"
+sleep 1
+
+}
+
+
 function bootstrap_server(){
 rand_by_domain=("1" "3" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14")
 richable=()
@@ -85,21 +115,22 @@ echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
 while [ $i -lt $len ];
 do
 
+    server_geolocation ${rand_by_domain[$i]}
     #echo ${rand_by_domain[$i]}
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
     #echo -e "Height: $bootstrap_check"
     if [[ "$bootstrap_check" != "" ]]; then
     #echo -e "Adding:  ${rand_by_domain[$i]}"
 
-       if [[ "${rand_by_domain[$i]}" -le "3" || "${rand_by_domain[$i]}" -gt "11" ]]; then
+       if [[ "$server_continent" == "EU" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
        fi
 
-       if [[ "${rand_by_domain[$i]}" -gt "3" &&  "${rand_by_domain[$i]}" -le "10" ]]; then
+       if [[ "$server_continent" == "US" ]]; then
          richable_us+=( ${rand_by_domain[$i]}  )
        fi
 
-       if [[ "${rand_by_domain[$i]}" -gt "10" ]]; then
+       if [[ "$server_continent" == "AS" ]]; then
          richable_as+=( ${rand_by_domain[$i]}  )
        fi
 
