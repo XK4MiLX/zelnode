@@ -74,29 +74,29 @@ bootstrap_server $continent
 
 function server_geolocation(){
 
-ip_output=$(curl -s -m 10 http://ip-api.com/json/cdn-${rand_by_domain[$i]}.runonflux.io?fields=status,country,timezone 2>/dev/null | jq . 2>/dev/null)
-ip_status=$( jq -r .status 2>/dev/null <<< "$ip_output")
+ip_output1=$(curl -s -m 10 http://ip-api.com/json/cdn-${rand_by_domain[$i]}.runonflux.io?fields=status,country,timezone 2>/dev/null | jq . 2>/dev/null)
+ip_status1=$( jq -r .status 2>/dev/null <<< "$ip_output")
 
-if [[ "$ip_status" == "success" ]]; then
-country=$(jq -r .country <<< "$ip_output")
-org=$(jq -r .org <<< "$ip_output")
-continent=$(jq -r .timezone <<< "$ip_output")
+if [[ "$ip_status1" == "success" ]]; then
+country1=$(jq -r .country <<< "$ip_output1")
+org1=$(jq -r .org <<< "$ip_output1")
+continent1=$(jq -r .timezone <<< "$ip_output1")
 else
-country="UKNOW"
-continent="UKNOW"
+country1="UKNOW"
+continent1="UKNOW"
 fi
 
-continent=$(cut -f1 -d"/" <<< "$continent" )
+continent1=$(cut -f1 -d"/" <<< "$continent1" )
 
-if [[ "$continent" =~ "Europe" ]]; then
+if [[ "$continent1" =~ "Europe" ]]; then
  server_continent="EU"
 fi
 
-if [[ "$continent" =~ "America" ]]; then
+if [[ "$continent1" =~ "America" ]]; then
  server_continent="US"
 fi
 
-if [[ "$continent" =~ "Asia" ]]; then
+if [[ "$continent1" =~ "Asia" ]]; then
  server_continent="AS"
 fi
 
