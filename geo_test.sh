@@ -26,14 +26,14 @@ title=black,
 
 function get_ip(){
 
- WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip 2>/dev/null | tr -dc '[:alnum:].')
+ WANIP=$(curl -SsL -m 5 https://api4.my-ip.io/ip 2>/dev/null | tr -dc '[:alnum:].')
 
   if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
-   WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com 2>/dev/null | tr -dc '[:alnum:].')
+   WANIP=$(curl -SsL -m 5 https://checkip.amazonaws.com 2>/dev/null | tr -dc '[:alnum:].')
   fi
 
   if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
-   WANIP=$(curl --silent -m 10 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
+   WANIP=$(curl -SsL -m 5 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
   fi
 }
 
