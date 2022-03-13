@@ -100,8 +100,8 @@ if [[ "$continent" =~ "Asia" ]]; then
  server_continent="AS"
 fi
 
-echo -e "${ARROW} ${CYAN}Checking bootstrap server location....${NC}"
-echo -e "${ARROW} ${CYAN}Server Location: $country, Continent: $continent ${NC}"
+#echo -e "${ARROW} ${CYAN}Checking bootstrap server location....${NC}"
+#echo -e "${ARROW} ${CYAN}Server Location: $country, Continent: $continent ${NC}"
 
 }
 
