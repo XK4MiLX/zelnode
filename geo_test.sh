@@ -25,13 +25,14 @@ title=black,
 '
 
 function get_ip(){
+
  WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip 2>/dev/null | tr -dc '[:alnum:].')
 
-  if [[ "$WANIP" == "" || "$WANIP" = *hmtl* ]]; then
+  if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
    WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com 2>/dev/null | tr -dc '[:alnum:].')
   fi
 
-  if [[ "$WANIP" == "" || "$WANIP" = *hmtl* ]]; then
+  if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
    WANIP=$(curl --silent -m 10 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
   fi
 }
@@ -101,7 +102,6 @@ fi
 
 echo -e "${ARROW} ${CYAN}Checking bootstrap server location....${NC}"
 echo -e "${ARROW} ${CYAN}Server Location: $country, Continent: $continent ${NC}"
-sleep 1
 
 }
 
