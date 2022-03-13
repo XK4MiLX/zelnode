@@ -86,11 +86,16 @@ continent="UKNOW"
 fi
 
 continent=$(cut -f1 -d"/" <<< "$continent" )
+
 if [[ "$continent" =~ "Europe" ]]; then
  server_continent="EU"
-elif [[ "$continent" =~ "America" ]]; then
+fi
+
+if [[ "$continent" =~ "America" ]]; then
  server_continent="US"
-else [[ "$continent" =~ "Asia" ]]; 
+fi
+
+if [[ "$continent" =~ "Asia" ]]; 
  server_continent="AS"
 fi
 
@@ -116,12 +121,9 @@ while [ $i -lt $len ];
 do
 
     server_geolocation ${rand_by_domain[$i]}
-    #echo ${rand_by_domain[$i]}
     bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
-    #echo -e "Height: $bootstrap_check"
     if [[ "$bootstrap_check" != "" ]]; then
-    #echo -e "Adding:  ${rand_by_domain[$i]}"
-
+    
        if [[ "$server_continent" == "EU" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
        fi
