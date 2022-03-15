@@ -139,9 +139,9 @@ fi
 
 if [[ -d /home/$USER/.fluxbenchmark ]]; then
   sudo mkdir -p /home/$USER/.fluxbenchmark 2>/dev/null
-  echo "apiport=$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
+  echo "fluxport=$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
 else
-  echo "apiport=$$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
+  echo "fluxport=$$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
 fi
 
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
