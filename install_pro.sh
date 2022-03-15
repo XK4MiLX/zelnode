@@ -1390,6 +1390,23 @@ addnode=202.61.206.226
 addnode=185.193.17.204
 addnode=89.58.36.108
 addnode=185.205.246.201
+addnode=194.34.232.219
+addnode=45.13.59.140
+addnode=213.239.206.214
+addnode=161.97.169.239
+addnode=89.58.38.97
+addnode=94.250.203.87
+addnode=89.58.11.9
+addnode=194.34.232.214
+addnode=89.58.5.144
+addnode=89.58.35.183
+addnode=89.58.7.64
+addnode=38.242.211.98
+addnode=185.193.17.206
+addnode=37.221.192.199
+addnode=209.145.62.74
+addnode=38.242.202.228
+addnode=37.120.176.206
 maxconnections=256
 EOF
     sleep 2
