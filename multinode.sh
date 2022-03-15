@@ -19,7 +19,6 @@ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
-
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -37,20 +36,6 @@ function get_ip(){
   fi
 }
 
-function string_limit_check_mark_port() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::65}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::65+string_diff}
-fi
-echo -e "${PIN}${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
-}
 
 function string_limit_check_mark() {
 if [[ -z "$2" ]]; then
@@ -82,16 +67,13 @@ fi
 echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
-
  function insertAfter
 {
    local file="$1" line="$2" newText="$3"
    sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
 
-
 try="0"
-
 echo -e ""
 get_ip
 
@@ -118,8 +100,7 @@ get_ip
            #echo -e ""
            #exit
            #fi
-           #fi
-           
+           #fi        
          else
            string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
            sleep 1
@@ -131,7 +112,6 @@ get_ip
           fi
         fi
     done
-
 
 if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "apiport") != "" ]]; then
 
@@ -145,7 +125,6 @@ else
 
    insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "apiport: '$FLUX_PORT',"
    echo -e "${ARROW} ${CYAN}FluxOS port set successful........................[${CHECK_MARK}${CYAN}]${NC}"
-
 
 fi
 
