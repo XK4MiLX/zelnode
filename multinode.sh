@@ -90,6 +90,8 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
 
+try="0"
+
 echo -e ""
 get_ip
 
@@ -110,6 +112,12 @@ get_ip
            else
              string_limit_x_mark "Port $FLUX_PORT is already in use..............................."
              sleep 1
+             try=$(($try+1))
+             if [[ "$try" -gt "3" ]]; then
+              echo -e "${WORNING} ${CYAN}You have reached the maximum number of try...${NC}" 
+              echo -e ""
+              exit
+             fi
            fi
 
 
@@ -117,6 +125,12 @@ get_ip
          else
            string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
            sleep 1
+           try=$(($try+1))
+           if [[ "$try" -gt "3" ]]; then
+             echo -e "${WORNING} ${CYAN}You have reached the maximum number of try...${NC}" 
+             echo -e ""
+             exit
+          fi
         fi
     done
 
