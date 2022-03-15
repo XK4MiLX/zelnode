@@ -104,24 +104,22 @@ get_ip
 
            string_limit_check_mark "Port is valid..........................................."
 
-           echo -e "${ARROW}${YELLOW} Checking port availability.....${NC}"
-           port_check=$(curl -s -m 5 http://$WANIP:$FLUX_PORT/id/loginphrase 2>/dev/null | jq -r .status 2>/dev/null )
-           if [[ "$port_check" == "" && $(cat /home/$USER/zelflux/config/userconfig.js | grep "$FLUX_PORT") == "" ]]; then
-             string_limit_check_mark "Port $FLUX_PORT is OK..........................................."
-             break
-           else
-             string_limit_x_mark "Port $FLUX_PORT is already in use..............................."
-             sleep 1
-             try=$(($try+1))
-             if [[ "$try" -gt "3" ]]; then
-              echo -e "${WORNING} ${CYAN}You have reached the maximum number of try...${NC}" 
-              echo -e ""
-              exit
-             fi
-           fi
-
-
-
+           #echo -e "${ARROW}${YELLOW} Checking port availability.....${NC}"
+           #port_check=$(curl -s -m 5 http://$WANIP:$FLUX_PORT/id/loginphrase 2>/dev/null | jq -r .status 2>/dev/null )
+           #if [[ "$port_check" == "" && $(cat /home/$USER/zelflux/config/userconfig.js | grep "$FLUX_PORT") == "" ]]; then
+           #string_limit_check_mark "Port $FLUX_PORT is OK..........................................."
+           #break    
+           #else
+           #string_limit_x_mark "Port $FLUX_PORT is already in use..............................."
+           #sleep 1
+           #try=$(($try+1))
+           #if [[ "$try" -gt "3" ]]; then
+           #echo -e "${WORNING} ${CYAN}You have reached the maximum number of try...${NC}" 
+           #echo -e ""
+           #exit
+           #fi
+           #fi
+           
          else
            string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
            sleep 1
@@ -161,6 +159,7 @@ fi
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   echo -e "${ARROW} ${CYAN}Fluxbench port set successful.....................[${CHECK_MARK}${CYAN}]${NC}"
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
+  sudo ufw allow $FLUX_PORT > /dev/null 2>&1
   sudo systemctl restart zelcash  > /dev/null 2>&1
   pm2 restart flux  > /dev/null 2>&1
   sleep 180
