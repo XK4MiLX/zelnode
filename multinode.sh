@@ -103,7 +103,7 @@ get_ip
         if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 
            string_limit_check_mark "Port is valid..........................................."
-
+           break
            #echo -e "${ARROW}${YELLOW} Checking port availability.....${NC}"
            #port_check=$(curl -s -m 5 http://$WANIP:$FLUX_PORT/id/loginphrase 2>/dev/null | jq -r .status 2>/dev/null )
            #if [[ "$port_check" == "" && $(cat /home/$USER/zelflux/config/userconfig.js | grep "$FLUX_PORT") == "" ]]; then
