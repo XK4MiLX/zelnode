@@ -139,6 +139,8 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   echo -e "${ARROW} ${CYAN}Fluxbench port set successful.....................[${CHECK_MARK}${CYAN}]${NC}"
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
   sudo ufw allow $FLUX_PORT > /dev/null 2>&1
+  sudo ufw allow 1900/udp > /dev/null 2>&1
+  sudo ufw allow 1901/udp > /dev/null 2>&1
   sudo systemctl restart zelcash  > /dev/null 2>&1
   pm2 restart flux  > /dev/null 2>&1
   sleep 180
