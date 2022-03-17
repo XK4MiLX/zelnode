@@ -139,11 +139,48 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   echo -e "${ARROW} ${CYAN}Fluxbench port set successful.....................[${CHECK_MARK}${CYAN}]${NC}"
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
   sudo ufw allow $FLUX_PORT > /dev/null 2>&1
-  sudo ufw allow 1900/udp > /dev/null 2>&1
-  sudo ufw allow 1901/udp > /dev/null 2>&1
+  
+  if ! route -h > /dev/null 2>&1 ; then
+   sudo apt install net-tools > /dev/null 2>&1
+  fi  
+  
+  router_ip=$(route -n | sed -nr 's/(0\.0\.0\.0) +([^ ]+) +\1.*/\2/p' 2>/dev/null)
+  
+  if [[ "$router_ip" != "" ]]; then
+  
+    sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
+    sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
+    sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
+    sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
+  
+  else
+   
+    while true  
+    do
+    
+      router_ip=$(whiptail --inputbox "Enter your router IP" 8 80 3>&1 1>&2 2>&3)
+   
+       if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
+          echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
+          break
+       else
+         string_limit_x_mark "IP $router_ip is not a valid ..............................."
+         sleep 1
+       fi
+      
+    done
+    
+     sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
+     sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
+     sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
+     sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
+     
+  fi
+  
   sudo systemctl restart zelcash  > /dev/null 2>&1
   pm2 restart flux  > /dev/null 2>&1
   sleep 180
+  
 fi
 
 echo -e ""
