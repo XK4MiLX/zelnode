@@ -1636,16 +1636,18 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${NC}"
     exit
 fi
-
-    echo -e "${CYAN}OPTION ALLOWN YOU: ${NC}"
+    
+    echo -e ""
+    echo -e "${ARROW}  ${CYAN}OPTION ALLOWN YOU: ${NC}"
     echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp comunication ${NC}"
     echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
     echo -e ""
     echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
     echo -e "${BOOK} ${RED}Each node need to set other port for comunnication${NC}"
     echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
+    echo -e ""
     echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
+    echo -e ""
     
      exit
     
