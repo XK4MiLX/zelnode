@@ -1623,6 +1623,44 @@ bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool
 
 }
 
+
+function multinode(){
+
+echo -e "${GREEN}Module: Multinode configuration with UPNP comunnication (Needs Router with UPNP support)${NC}"
+echo -e "${YELLOW}================================================================${NC}"
+
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+fi
+    
+    echo -e ""
+    echo -e "${ARROW}  ${CYAN}OPTION ALLOWS YOU: ${NC}"
+    echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp comunication ${NC}"
+    echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
+    echo -e ""
+    echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
+    echo -e "${BOOK} ${RED}Each node need to set different port for comunnication${NC}"
+    echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
+    echo -e ""
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e ""
+    
+    if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
+      echo -e "${WORNING} ${CYAN}First install FluxNode...${NC}"
+      echo -e "${WORNING} ${CYAN}Operation stopped...${NC}"
+      echo -e ""
+      exit
+    fi  
+    
+    sleep 15
+    bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multinode.sh)
+
+}
+
 function install_docker(){
 
 echo -e "${GREEN}Module: Install Docker${NC}"
@@ -2264,6 +2302,7 @@ echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}11 - Replace Zel ID ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
+echo -e "${CYAN}14 - Multinode configuration with UPNP comunnication (Needs Router with UPNP support)  ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -2356,6 +2395,13 @@ read -rp "Pick an option and hit ENTER: "
   clear
   sleep 1
   mongod_db_fix
+  echo -e ""
+ ;;
+ 
+   14)
+  clear
+  sleep 1
+  multinode
   echo -e ""
  ;;
  
