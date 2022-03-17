@@ -140,11 +140,12 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
   sudo ufw allow $FLUX_PORT > /dev/null 2>&1
   
-  if ! route -h > /dev/null 2>&1 ; then
-   sudo apt install net-tools > /dev/null 2>&1
-  fi  
+  #if ! route -h > /dev/null 2>&1 ; then
+  # sudo apt install net-tools > /dev/null 2>&1
+  #fi  
   
-  router_ip=$(route -n | sed -nr 's/(0\.0\.0\.0) +([^ ]+) +\1.*/\2/p' 2>/dev/null)
+  #router_ip=$(route -n | sed -nr 's/(0\.0\.0\.0) +([^ ]+) +\1.*/\2/p' 2>/dev/null)
+   router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
   
   if [[ "$router_ip" != "" ]]; then
   
