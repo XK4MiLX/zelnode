@@ -375,7 +375,9 @@ echo -e ""
 echo -e "${WORNING} ${CYAN} Detected multiple users in docker group...${NC}"
 echo -e "${WORNING} ${CYAN} More then one instance of flux daemon will cause it to malfunction...${NC}"
 echo -e "${WORNING} ${CYAN} If u installed FluxOS on more then one user you need delete one instance of it...${NC}"
-echo -e ""
+echo -e "${WORNING} ${CYAN} To check the list of users type: getent group docker ${NC}"
+echo -e "${WORNING} ${CYAN} To remove unwanted users type: sudo deluser --remove-home user_name ${NC}"
+echo -e "${WORNING} ${CYAN} To reboot server type: sudo reboot -n ${NC}"
 fi
 
 
@@ -389,7 +391,6 @@ bench_back=$(jq -r '.zelback' <<< "$bench_getatus")
 if [[ "$bench_back" == "null" ]]; then
 bench_back=$(jq -r '.flux' <<< "$bench_getatus")
 fi
-
 
 bench_getinfo=$($BENCH_CLI getinfo)
 bench_version=$(jq -r '.version' <<< "$bench_getinfo")
