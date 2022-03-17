@@ -184,5 +184,5 @@ fi
   pm2 restart flux  > /dev/null 2>&1
   sleep 180
   echo -e ""
-  echo -e "${PIN} ${CYAN}To access your frontend to Flux enter this in as your url: ${SEA}http://${WANIP}:$(($FLUX_PORT-1))${NC}"
+  echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${WANIP}:$(($FLUX_PORT-1))${NC}"
 
