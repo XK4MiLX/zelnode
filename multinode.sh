@@ -81,7 +81,7 @@ get_ip
      do
 
         echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
-        FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 120 3>&1 1>&2 2>&3)
+        FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 90 3>&1 1>&2 2>&3)
         if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 
            string_limit_check_mark "Port is valid..........................................."
@@ -159,7 +159,7 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
     while true  
     do
     
-      router_ip=$(whiptail --inputbox "Enter your router IP" 8 80 3>&1 1>&2 2>&3)
+      router_ip=$(whiptail --inputbox "Enter your router IP" 8 60 3>&1 1>&2 2>&3)
    
        if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
           echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
