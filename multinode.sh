@@ -178,10 +178,11 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
      
   fi
   
+fi
+
   sudo systemctl restart zelcash  > /dev/null 2>&1
   pm2 restart flux  > /dev/null 2>&1
   sleep 180
-  
-fi
+  echo -e ""
+  echo -e "${PIN} ${CYAN}To access your frontend to Flux enter this in as your url: ${SEA}http://${WANIP}:$(($FLUX_PORT-1))${NC}"
 
-echo -e ""
