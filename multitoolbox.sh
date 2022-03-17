@@ -1638,7 +1638,7 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
 fi
     
     echo -e ""
-    echo -e "${ARROW}  ${CYAN}OPTION ALLOW YOU: ${NC}"
+    echo -e "${ARROW}  ${CYAN}OPTION ALLOWS YOU: ${NC}"
     echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp comunication ${NC}"
     echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
     echo -e ""
