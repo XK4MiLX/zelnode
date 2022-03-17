@@ -1649,8 +1649,6 @@ fi
     echo -e "${YELLOW}================================================================${NC}"
     echo -e ""
     
-     exit
-    
     if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
       echo -e "${WORNING} ${CYAN}First install FluxNode...${NC}"
       echo -e "${WORNING} ${CYAN}Operation stopped...${NC}"
