@@ -155,6 +155,14 @@ if ! lsof -v > /dev/null 2>&1; then
 sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 2
 fi
 
+if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
+FluxAPI=$(cat /home/$USER/.fluxbenchmark/fluxbench.conf | grep -o '[[:digit:]]*' | head -n1)
+FluxUI=$(($FluxApi-1))
+else
+FluxAPI=16127
+FluxUI=16126
+fi
+
 
 if sudo lsof -i  -n | grep LISTEN | grep 27017 | grep mongod > /dev/null 2>&1; then
 echo -e "${CHECK_MARK} ${CYAN} Mongod listen on port 27017${NC}"
@@ -186,19 +194,19 @@ else
 echo -e "${X_MARK} ${CYAN} Flux benchmark not listen${NC}"
 fi
 
-if sudo lsof -i  -n | grep LISTEN | grep 16126 | grep node > /dev/null 2>&1 
+if sudo lsof -i  -n | grep LISTEN | grep $FluxUI | grep node > /dev/null 2>&1 
 then
 ZELFLUX_PORT1="1"
 fi
 
-if sudo lsof -i  -n | grep LISTEN | grep 16127 | grep node > /dev/null 2>&1 
+if sudo lsof -i  -n | grep LISTEN | grep $FluxAPI | grep node > /dev/null 2>&1 
 then
 ZELFLUX_PORT2="1"
 fi
 
 if [[ "$ZELFLUX_PORT1" == "1" && "$ZELFLUX_PORT2" == "1"  ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} Flux listen on ports 16126/16127${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Flux listen on ports $FluxUI/$FluxAPI ${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Flux not listen${NC}"
 fi
@@ -880,7 +888,7 @@ else
 echo -e "${X_MARK} ${CYAN} Pm2 is not installed${NC}"
 fi
 
-if [[ $(curl -s -m 5 --head "$WANIP:16126" | head -n 1 | grep "200 OK") ]]
+if [[ $(curl -s -m 5 --head "$WANIP:$FluxUI" | head -n 1 | grep "200 OK") ]]
 then
 echo -e "${CHECK_MARK} ${CYAN} Flux front is working${NC}"
 else
