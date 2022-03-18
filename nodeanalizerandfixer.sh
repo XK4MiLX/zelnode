@@ -972,10 +972,10 @@ echo
 echo -e "${BOOK} ${YELLOW}Checking ~/$CONFIG_DIR/$CONFIG_FILE${NC}"
 if [[ $zelnodeprivkey == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//') ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} FluxNode privkey matches${NC}"
+echo -e "${CHECK_MARK} ${CYAN} FluxNode Identity Key matches${NC}"
 else
 REPLACE="1"
-echo -e "${X_MARK} ${CYAN} FluxNode privkey does not match${NC}"
+echo -e "${X_MARK} ${CYAN} FluxNode Identity Key does not match${NC}"
 fi
 
 if [[ $zelnodeoutpoint == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//') ]]
@@ -1062,11 +1062,11 @@ if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR
 else
 	
   if [[ "$zelnodeprivkey" == "" ]]; then
-     echo -e " ${CYAN}FluxNode privkey skipped...............${NC}"
+     echo -e " ${CYAN}FluxNode Identity Key skipped...............${NC}"
   else
       sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
       if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-           echo -e " ${CYAN}FluxNode privkey replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+           echo -e " ${CYAN}FluxNode Identity Key replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
       fi
    fi
 fi
