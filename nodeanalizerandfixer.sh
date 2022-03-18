@@ -216,9 +216,9 @@ fi
 echo -e ""
 echo -e "${BOOK} ${YELLOW}FluxOS UPNP checking... ${NC}"
 if [[ "$UPNP" == "1" ]]; then
-echo -e "${ARROW} ${CYAN}UPNP MODE IS ENABLED${NC}"
+echo -e "${PIN} ${CYAN}UPNP MODE: ENABLED${NC}"
 else
-echo -e "${ARROW} ${CYAN}UPNP MODE IS DISABLED${NC}"
+echo -e "${PIN} ${CYAN}UPNP MODE: DISABLED${NC}"
 fi
 echo -e ""
 
