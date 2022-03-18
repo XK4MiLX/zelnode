@@ -158,9 +158,11 @@ fi
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
 FluxAPI=$(grep -Po "\\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
 FluxUI=$(($FluxAPI-1))
+UPNP=1
 else
 FluxAPI=16127
 FluxUI=16126
+UPNP=0
 fi
 
 
@@ -210,6 +212,15 @@ echo -e "${CHECK_MARK} ${CYAN} Flux listen on ports $FluxUI/$FluxAPI ${NC}"
 else
 echo -e "${X_MARK} ${CYAN} Flux not listen${NC}"
 fi
+
+echo -e ""
+echo -e "${BOOK} ${YELLOW}FluxOS UPNP checking... ${NC}"
+if [[ "$UPNP" == "1" ]]; then
+echo -e "${ARROW} ${CYAN}UPNP MODE IS ENABLED${NC}"
+else
+echo -e "${ARROW} ${CYAN}UPNP MODE IS DISABLED${NC}"
+fi
+echo -e ""
 
 }
 
