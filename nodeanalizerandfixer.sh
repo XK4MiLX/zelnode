@@ -214,11 +214,11 @@ echo -e "${X_MARK} ${CYAN} Flux not listen${NC}"
 fi
 
 echo -e ""
-echo -e "${BOOK} ${YELLOW}FluxOS UPNP checking... ${NC}"
+echo -e "${BOOK} ${YELLOW}FluxOS UPNP checking: ${NC}"
 if [[ "$UPNP" == "1" ]]; then
-echo -e "${PIN} ${CYAN}UPNP MODE: ENABLED${NC}"
+echo -e "${PIN} ${CYAN}UPNP MODE: ${GREEN}ENABLED${NC}"
 else
-echo -e "${PIN} ${CYAN}UPNP MODE: DISABLED${NC}"
+echo -e "${PIN} ${CYAN}UPNP MODE: ${RED}DISABLED${NC}"
 fi
 echo -e ""
 
