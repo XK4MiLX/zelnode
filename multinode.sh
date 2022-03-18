@@ -106,7 +106,7 @@ get_ip
            sleep 1
            try=$(($try+1))
            if [[ "$try" -gt "3" ]]; then
-             echo -e "${WORNING} ${CYAN}You have reached the maximum number of try...${NC}" 
+             echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
              echo -e ""
              exit
           fi
@@ -118,13 +118,13 @@ if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "apiport") != "" ]];
   sed -i "s/$(grep -e apiport /home/$USER/zelflux/config/userconfig.js)/apiport: '$FLUX_PORT',/" /home/$USER/zelflux/config/userconfig.js
 
   if [[ $(grep -w $FLUX_PORT /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-     echo -e "${ARROW} ${CYAN}FluxOS port replaced successful...................[${CHECK_MARK}${CYAN}]${NC}"
+     echo -e "${ARROW} ${CYAN}FluxOS port replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
   fi
 
 else
 
    insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "apiport: '$FLUX_PORT',"
-   echo -e "${ARROW} ${CYAN}FluxOS port set successful........................[${CHECK_MARK}${CYAN}]${NC}"
+   echo -e "${ARROW} ${CYAN}FluxOS port set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
 
 fi
 
@@ -136,7 +136,7 @@ else
 fi
 
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-  echo -e "${ARROW} ${CYAN}Fluxbench port set successful.....................[${CHECK_MARK}${CYAN}]${NC}"
+  echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
   sudo ufw allow $FLUX_PORT > /dev/null 2>&1
   
@@ -159,13 +159,13 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
     while true  
     do
     
-      router_ip=$(whiptail --inputbox "Enter your router IP" 8 60 3>&1 1>&2 2>&3)
+      router_ip=$(whiptail --inputbox "Enter your router's IP" 8 60 3>&1 1>&2 2>&3)
    
        if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
           echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
           break
        else
-         string_limit_x_mark "IP $router_ip is not a valid ..............................."
+         string_limit_x_mark "IP $router_ip is not valid ..............................."
          sleep 1
        fi
       
