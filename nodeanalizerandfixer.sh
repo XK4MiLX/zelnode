@@ -214,12 +214,14 @@ echo -e "${X_MARK} ${CYAN} Flux not listen${NC}"
 fi
 
 echo -e ""
-echo -e "${BOOK} ${YELLOW}FluxOS UPNP checking: ${NC}"
+echo -e "${BOOK} ${YELLOW}FluxOS networking: ${NC}"
 if [[ "$UPNP" == "1" ]]; then
 echo -e "${PIN} ${CYAN}UPNP MODE: ${GREEN}ENABLED${NC}"
 else
 echo -e "${PIN} ${CYAN}UPNP MODE: ${RED}DISABLED${NC}"
 fi
+echo -e "${PIN} ${CYAN}FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
+echo -e "${PIN} ${CYAN}FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
 
 }
 
