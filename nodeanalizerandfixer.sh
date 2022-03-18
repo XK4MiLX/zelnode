@@ -156,8 +156,8 @@ sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 2
 fi
 
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-FluxAPI=$(cat /home/$USER/.fluxbenchmark/fluxbench.conf | grep -o '[[:digit:]]*' | head -n1)
-FluxUI=$(($FluxApi-1))
+FluxAPI=$(grep -Po "\\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
+FluxUI=$(($FluxAPI-1))
 else
 FluxAPI=16127
 FluxUI=16126
