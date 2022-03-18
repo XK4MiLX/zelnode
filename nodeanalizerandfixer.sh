@@ -220,7 +220,6 @@ echo -e "${PIN} ${CYAN}UPNP MODE: ${GREEN}ENABLED${NC}"
 else
 echo -e "${PIN} ${CYAN}UPNP MODE: ${RED}DISABLED${NC}"
 fi
-echo -e ""
 
 }
 
