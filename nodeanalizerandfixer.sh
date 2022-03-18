@@ -155,10 +155,21 @@ if ! lsof -v > /dev/null 2>&1; then
 sudo apt-get install lsof -y > /dev/null 2>&1 && sleep 2
 fi
 
+
+
+
+
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
 FluxAPI=$(grep -Po "\\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
-FluxUI=$(($FluxAPI-1))
-UPNP=1
+FLUXOS_CONFIG=$(grep -Po "$FluxAPI" /home/$USER/zelflux/config/userconfig.js)
+  if [[ "$FLUXOS_CONFIG" != "" ]]; then
+    FluxUI=$(($FluxAPI-1))
+    UPNP=1
+  else
+    FluxAPI=16127
+    FluxUI=16126
+    UPNP=0
+  fi
 else
 FluxAPI=16127
 FluxUI=16126
