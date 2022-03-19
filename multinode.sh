@@ -145,12 +145,12 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   #fi  
   
   #router_ip=$(route -n | sed -nr 's/(0\.0\.0\.0) +([^ ]+) +\1.*/\2/p' 2>/dev/null)
-   router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+  router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
   
   if [[ "$router_ip" != "" ]]; then
   
   
-    if (whiptail --yesno "Is your router's ip is $router_ip ?" 8 70); then
+    if (whiptail --yesno "Is your router's IP is $router_ip ?" 8 70); then
       sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
       sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
       sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
