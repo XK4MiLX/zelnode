@@ -150,7 +150,7 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   if [[ "$router_ip" != "" ]]; then
   
   
-    if (whiptail --yesno "Is your router's IP is $router_ip ?" 8 70); then
+    if (whiptail --yesno "Is your router's IP $router_ip ?" 8 70); then
       sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
       sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
       sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
