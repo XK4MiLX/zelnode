@@ -215,6 +215,7 @@ fi
   if [[ "$error_check" == "" ]]; then
     echo -e ""
     echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${WANIP}:$(($FLUX_PORT-1))${NC}"
+    echo -e ""
   else
     echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down..."
     echo -e ""
