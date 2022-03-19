@@ -210,7 +210,7 @@ fi
   pm2 restart flux  > /dev/null 2>&1
   sleep 200
   echo -e "${ARROW}${YELLOW} Checking FluxOS logs.....${NC}"
-  error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log) | grep "UPnP failed to verify")
+  error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed to verify")
   
   if [[ "$error_check" == "" ]]; then
     echo -e ""
