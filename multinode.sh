@@ -149,10 +149,36 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   
   if [[ "$router_ip" != "" ]]; then
   
-    sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
-    sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
-    sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
-    sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
+  
+    if (whiptail --yesno "Is your router's ip is $router_ip ?" 8 70); then
+      sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
+      sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
+      sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
+      sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
+    else
+      
+      
+        while true  
+        do
+          
+          router_ip=$(whiptail --inputbox "Enter your router's IP" 8 60 3>&1 1>&2 2>&3)
+   
+          if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
+             echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
+             break
+          else
+            string_limit_x_mark "IP $router_ip is not valid ..............................."
+            sleep 1
+          fi
+      
+        done
+    
+       sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
+       sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
+       sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
+       sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
+       
+    fi
   
   else
    
