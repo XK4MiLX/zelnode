@@ -227,12 +227,12 @@ fi
 echo -e ""
 echo -e "${BOOK} ${YELLOW}FluxOS networking: ${NC}"
 if [[ "$UPNP" == "1" ]]; then
-echo -e "${PIN} ${CYAN}UPNP MODE: ${GREEN}ENABLED${NC}"
+echo -e "${PIN} ${CYAN} UPNP MODE: ${GREEN}ENABLED${NC}"
 else
-echo -e "${PIN} ${CYAN}UPNP MODE: ${RED}DISABLED${NC}"
+echo -e "${PIN} ${CYAN} UPNP MODE: ${RED}DISABLED${NC}"
 fi
-echo -e "${PIN} ${CYAN}FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
-echo -e "${PIN} ${CYAN}FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
+echo -e "${PIN} ${CYAN} FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
+echo -e "${PIN} ${CYAN} FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
 
 }
 
