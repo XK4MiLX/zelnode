@@ -227,12 +227,21 @@ fi
 echo -e ""
 echo -e "${BOOK} ${YELLOW}FluxOS networking: ${NC}"
 if [[ "$UPNP" == "1" ]]; then
-echo -e "${PIN} ${CYAN} UPNP MODE: ${GREEN}ENABLED${NC}"
+echo -e "${PIN} ${CYAN} UPnP MODE: ${GREEN}ENABLED${NC}"
 else
-echo -e "${PIN} ${CYAN} UPNP MODE: ${RED}DISABLED${NC}"
+echo -e "${PIN} ${CYAN} UPnP MODE: ${RED}DISABLED${NC}"
 fi
 echo -e "${PIN} ${CYAN} FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
 echo -e "${PIN} ${CYAN} FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
+
+error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed to verify")
+  if [[ "$error_check" != "" ]]; then
+    echo -e ""
+    echo -e "${ARROW} ${YELLOW}Checking FluxOS logs... ${NC}"
+    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down..."
+    echo -e ""
+  fi
+
 
 }
 
