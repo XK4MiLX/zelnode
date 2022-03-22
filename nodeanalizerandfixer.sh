@@ -234,7 +234,7 @@ fi
 echo -e "${PIN} ${CYAN} FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
 echo -e "${PIN} ${CYAN} FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
 
-error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed to verify")
+error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
   if [[ "$error_check" != "" ]]; then
     echo -e ""
     echo -e "${ARROW} ${YELLOW}Checking FluxOS logs... ${NC}"
