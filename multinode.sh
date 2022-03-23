@@ -65,7 +65,6 @@ echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 function upnp_enable() {
 
 try="0"
-echo -e ""
 
  if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
        echo -e "${WORNING} ${CYAN}Missing FluxOS configuration file - install/re-install Flux Node...${NC}" 
@@ -210,7 +209,6 @@ fi
 
 function upnp_disable() {
 
- echo -e ""
  if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
        echo -e "${WORNING} ${CYAN}Missing FluxOS configuration file - install/re-install Flux Node...${NC}" 
        echo -e ""
