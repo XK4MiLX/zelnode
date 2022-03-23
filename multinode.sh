@@ -67,6 +67,12 @@ function upnp_enable() {
 try="0"
 echo -e ""
 
+ if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
+       echo -e "${WORNING} ${CYAN}Missing FluxOS configuration file - install/re-install Flux Node...${NC}" 
+       echo -e ""
+       exit
+ fi
+
   while true
      do
 
@@ -236,7 +242,7 @@ whiptail --title "UPnP Configuration" --menu "Make your choice" 16 30 9 \
 
 case $CHOICE in
 	"1)")   
-		upnp_enable
+         upnp_enable
 	;;
 	"2)")   
 	 upnp_disable
