@@ -214,7 +214,7 @@ function upnp_disable() {
    exit
  fi
 
- if [[ $(cat /home/$USER/zelflux/config/userconfig.js) | grep 'apiport' | wc -l) == "1" ]]; then
+ if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep 'apiport' | wc -l) == "1" ]]; then
   cat /home/$USER/zelflux/config/userconfig.js | sed '/apiport/d' | sudo tee "/home/$USER/zelflux/config/userconfig.js" > /dev/null
  fi
 
