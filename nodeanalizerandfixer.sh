@@ -234,6 +234,7 @@ fi
 echo -e "${PIN} ${CYAN}FluxAPI PORT: ${ORANGE}$FluxAPI ${NC}"
 echo -e "${PIN} ${CYAN}FluxUI PORT: ${ORANGE}$FluxUI ${NC}"
 
+if [[ -f /home/$USER/.pm2/logs/flux-out.log ]]; then
 error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
   if [[ "$error_check" != "" ]]; then
     echo -e ""
@@ -241,7 +242,7 @@ error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
     echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down..."
     echo -e ""
   fi
-
+fi
 
 }
 
