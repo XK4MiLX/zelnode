@@ -1697,6 +1697,13 @@ then
 echo -e "${ARROW} ${YELLOW}Installing ufw firewall..${NC}"
 sudo apt-get install -y ufw > /dev/null 2>&1
 fi
+
+cron_check=$(systemctl status cron 2> /dev/null | grep 'active' | wc -l)
+if [[ "$cron_check" == "0" ]]; then
+echo -e "${ARROW} ${YELLOW}Installing crontab...${NC}"
+sudo apt-get install -y cron > /dev/null 2>&1
+fi
+
 echo -e "${ARROW} ${YELLOW}Installing docker...${NC}"
 echo -e "${ARROW} ${CYAN}Architecture: ${GREEN}$(dpkg --print-architecture)${NC}"
            
