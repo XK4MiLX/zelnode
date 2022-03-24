@@ -242,7 +242,8 @@ else
  continent="ALL"
 fi
 
-echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Selecting bootstrap server....${NC}"
 echo -e "${ARROW} ${CYAN}Node Location: $country, Continent: $continent ${NC}"
 echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
 }
