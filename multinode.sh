@@ -201,7 +201,7 @@ fi
     echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${LOCAL_IP}:$(($FLUX_PORT-1))${NC}"
     echo -e ""
   else
-    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down..."
+    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
     echo -e ""
   fi
 
