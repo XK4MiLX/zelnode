@@ -2295,8 +2295,8 @@ fi
 
 function status_loop() {
 
-network_height_01=$(curl -sk -m 10 https://explorer.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks')
-network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks')
+network_height_01=$(curl -sk -m 10 https://explorer.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
 
 EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 
