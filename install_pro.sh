@@ -440,18 +440,20 @@ function config_file() {
 if [[ -f /home/$USER/install_conf.json ]]; then
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
 ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
-firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
+#firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
 bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
-swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
+#swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
 #mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
-watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
+#watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+
+discord_hook_url=$(cat /home/$USER/watchdog/config.js | jq -r '.outpoint')
 
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
@@ -470,11 +472,11 @@ if [[ "$ssh_port" != "" ]]; then
 echo -e "${PIN}${CYAN} SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN}${CYAN} Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-else
-echo -e "${PIN}${CYAN} Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$firewall_disable" == "1" ]]; then
+#echo -e "${PIN}${CYAN} Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#else
+#echo -e "${PIN}${CYAN} Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 if [[ "$use_old_chain" == "1" ]]; then
 echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -495,17 +497,17 @@ fi
 
 fi
 
-if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN}${CYAN} Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$swapon" == "1" ]]; then
+#echo -e "${PIN}${CYAN} Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 #if [[ "$mongo_bootstrap" == "1" ]]; then
 #echo -e "${PIN}${CYAN} Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 #fi
 
-if [[ "$watchdog" == "1" ]]; then
-echo -e "${PIN}${CYAN} Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$watchdog" == "1" ]]; then
+#echo -e "${PIN}${CYAN} Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 
 
@@ -561,17 +563,43 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 
            if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
                
-               ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-               
+               ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//') 
 	       if [[ "$ZELID" != "" ]]; then
 	         echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 	         IMPORT_ZELID="1"
 	       fi
 
-               KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+              KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
               if [[ "$KDA_A" != "" ]]; then
                   echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-             fi
+              fi
+	      
+	      echo -e ""
+	      echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
+
+	      fix_action=$(cat /home/$USER/watchdog/config.js | jq -r '.fix_action')
+	      echo -e "${PIN}${CYAN} Fix action = ${GREEN}$fix_action${NC}" && sleep 1
+	      
+	      node_label=$(cat /home/$USER/watchdog/config.js | jq -r '.node_label')
+	      echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
+
+	      tier_eps_min=$(cat /home/$USER/watchdog/config.js | jq -r '.tier_eps_min')
+	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$tier_eps_min${NC}" && sleep 1
+	      
+	      web_hook_url=$(cat /home/$USER/watchdog/config.js | jq -r '.web_hook_url')
+	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$web_hook_url${NC}" && sleep 1
+	      
+	      ping=$(cat /home/$USER/watchdog/config.js | jq -r '.ping')
+	      echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
+	      
+	      telegram_alert=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_alert')
+	      echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}$telegram_alert${NC}" && sleep 1
+	      
+	      telegram_bot_token=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_bot_token')
+	      echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	      
+	      
+	      telegram_chat_id=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_chat_id')
+	      echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1	
 
          fi
     fi
@@ -580,13 +608,13 @@ else
 
     if [[ "$import_settings" == "1" ]]; then
     
-            OLD_CONFIG=0
+        OLD_CONFIG=0
 	
-	    if [[ -d /home/$USER/.zelcash ]]; then
-	     CONFIG_DIR='.zelcash'
-	     CONFIG_FILE='zelcash.conf' 
-	     OLD_CONFIG=1
-	    fi 
+	if [[ -d /home/$USER/.zelcash ]]; then
+	   CONFIG_DIR='.zelcash'
+	   CONFIG_FILE='zelcash.conf' 
+	   OLD_CONFIG=1
+	fi 
     
     IMPORT_ZELCONF="1"
     echo
@@ -606,18 +634,24 @@ else
 
          if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
 	 
-          ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
-	 
+               ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 	       if [[ "$ZELID" != "" ]]; then
 	         echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 	         IMPORT_ZELID="1"
 	       fi
 	       
-            KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+               KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
                if [[ "$KDA_A" != "" ]]; then
                     echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
                fi
-          fi
+	       
+	       
+
+	       
+         fi
+	  
+	  
+	  
       fi
 
    fi
@@ -665,47 +699,52 @@ echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 
-#if whiptail --yesno "Would you like enable FluxOS auto update?" 8 60; then
 flux_update='1'
-#sleep 1
-#else
-#lux_update='0'
-#sleep 1
-#fi
-
-#if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 60; then
 daemon_update='1'
-#sleep 1
-#else
-#daemon_update='0'
-#sleep 1
-#fi
-
-#if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 60; then
 bench_update='1'
-#sleep 1
-#else
-#bench_update='0'
-#sleep 1
-#fi
-
-#if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 75; then
 fix_action='1'
-#sleep 1
-#else
-#fix_action='0'
-#sleep 1
-#fi
 
-telegram_alert=0;
-discord=0;
+if [[ "IMPORT_ZELCONF" == "1" ]]; then
 
+sudo touch /home/$USER/watchdog/config.js
+sudo chown $USER:$USER /home/$USER/watchdog/config.js
+    cat << EOF >  /home/$USER/watchdog/config.js
+module.exports = {
+    label: '${node_label}',
+    tier_eps_min: '${eps_limit}',
+    zelflux_update: '${flux_update}',
+    zelcash_update: '${daemon_update}',
+    zelbench_update: '${bench_update}',
+    action: '${fix_action}',
+    ping: '${ping}',
+    web_hook_url: '${discord}',
+    telegram_alert: '${telegram_alert}',
+    telegram_bot_token: '${telegram_bot_token}',
+    telegram_chat_id: '${telegram_chat_id}'
+}
+EOF
+
+
+
+  if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
+    current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+    string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
+    echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
+    pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+    pm2 save > /dev/null 2>&1
+  else
+    string_limit_x_mark "Watchdog was not installed................................."
+  fi
+  
+  return 1
+
+fi
+
+discord='0'
 if whiptail --yesno "Would you like enable alert notification?" 8 60; then
 
 sleep 1
-
 whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
-
 sleep 1
 
 CHOICES=$(whiptail --title "Choose options: " --separate-output --checklist "Choose options: " 10 45 5 \
@@ -825,6 +864,7 @@ if [[ "$telegram_alert" == 0 ]]; then
 fi
 
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
@@ -832,6 +872,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
     if [[ "$stak_info" == "" ]]; then
       stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
+    
 fi
 
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
