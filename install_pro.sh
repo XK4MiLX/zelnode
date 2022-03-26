@@ -577,28 +577,28 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	      echo -e ""
 	      echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
 
-	      fix_action=$(cat /home/$USER/watchdog/config.js | jq -r '.fix_action')
+	      fix_action=$(grep -w action /home/$USER/watchdog/config.js | sed -e 's/.*action: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Fix action = ${GREEN}$fix_action${NC}" && sleep 1
 	      
-	      node_label=$(cat /home/$USER/watchdog/config.js | jq -r '.node_label')
+	      node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
 
-	      tier_eps_min=$(cat /home/$USER/watchdog/config.js | jq -r '.tier_eps_min')
+	      tier_eps_min=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$tier_eps_min${NC}" && sleep 1
 	      
-	      web_hook_url=$(cat /home/$USER/watchdog/config.js | jq -r '.web_hook_url')
+	      web_hook_url=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$web_hook_url${NC}" && sleep 1
 	      
-	      ping=$(cat /home/$USER/watchdog/config.js | jq -r '.ping')
+	      ping=$(grep -w ping /home/$USER/watchdog/config.js | sed -e 's/.*ping: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
 	      
-	      telegram_alert=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_alert')
+	      telegram_alert=$(grep -w telegram_alert /home/$USER/watchdog/config.js | sed -e 's/.*telegram_alert: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}$telegram_alert${NC}" && sleep 1
 	      
-	      telegram_bot_token=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_bot_token')
+	      telegram_bot_token=$(grep -w telegram_bot_token /home/$USER/watchdog/config.js | sed -e 's/.*telegram_bot_token: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	      
 	      
-	      telegram_chat_id=$(cat /home/$USER/watchdog/config.js | jq -r '.telegram_chat_id')
+	      telegram_chat_id=$(grep -w telegram_chat_id /home/$USER/watchdog/config.js | sed -e 's/.*telegram_chat_id: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1	
 
          fi
