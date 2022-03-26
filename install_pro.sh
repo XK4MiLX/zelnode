@@ -584,7 +584,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	      echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
 
 	      eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
-	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$tier_eps_min${NC}" && sleep 1
+	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" && sleep 1
 	      
 	      discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$discord${NC}" && sleep 1
