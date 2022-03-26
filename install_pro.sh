@@ -576,7 +576,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	      
 	      echo -e ""
 	      echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
-
+   
 	      fix_action=$(grep -w action /home/$USER/watchdog/config.js | sed -e 's/.*action: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Fix action = ${GREEN}$fix_action${NC}" && sleep 1
 	      
@@ -586,8 +586,8 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	      tier_eps_min=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$tier_eps_min${NC}" && sleep 1
 	      
-	      web_hook_url=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
-	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$web_hook_url${NC}" && sleep 1
+	      discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$discord${NC}" && sleep 1
 	      
 	      ping=$(grep -w ping /home/$USER/watchdog/config.js | sed -e 's/.*ping: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
@@ -704,7 +704,7 @@ daemon_update='1'
 bench_update='1'
 fix_action='1'
 
-if [[ "IMPORT_ZELCONF" == "1" ]]; then
+if [[ "$IMPORT_ZELCONF" == "1" ]]; then
 
 sudo touch /home/$USER/watchdog/config.js
 sudo chown $USER:$USER /home/$USER/watchdog/config.js
