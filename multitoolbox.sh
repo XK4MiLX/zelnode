@@ -816,7 +816,7 @@ else
          ;;
          "2")
 
-          telegram_alert="1";
+          telegram_alert="1"
 
          while true
          do
@@ -877,12 +877,12 @@ fi
 
 
 if [[ "$discord" == 0 ]]; then
-    ping=0;
+    ping="0"
 fi
 
 
 if [[ "$telegram_alert" == 0 || "$telegram_alert" == "" ]]; then
-    telegram_alert == "0"
+    telegram_alert="0"
     telegram_bot_token="0"
     telegram_chat_id="0"
 fi
