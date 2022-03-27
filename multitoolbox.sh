@@ -390,14 +390,10 @@ function pm2_install(){
 function config_file() {
 
 if [[ -f /home/$USER/install_conf.json ]]; then
+
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
-firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
 bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
-swapon=$(cat /home/$USER/install_conf.json | jq -r '.swapon')
-mongo_bootstrap=$(cat /home/$USER/install_conf.json | jq -r '.mongo_bootstrap')
-watchdog=$(cat /home/$USER/install_conf.json | jq -r '.watchdog')
 use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
@@ -406,7 +402,6 @@ zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 
 echo -e "${ARROW} ${YELLOW}Install config summary:"
-
 if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
 echo -e "${PIN}${CYAN}Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
@@ -415,11 +410,6 @@ if [[ "$import_settings" == "1" ]]; then
 echo -e "${PIN}${CYAN}Import settings from exist config files..........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-fi
-
-if [[ "$ssh_port" != "" ]]; then
-string_limit_check_mark_port "SSH port: $ssh_port ...................................................................." "SSH port: ${GREEN}$ssh_port ${CYAN}...................................................................."
-sleep 1
 fi
 
 if [[ "$firewall_disable" == "1" ]]; then
@@ -451,11 +441,8 @@ if [[ "$swapon" == "1" ]]; then
 echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
-#if [[ "$mongo_bootstrap" == "1" ]]; then
-#echo -e "${PIN}${CYAN}Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-#fi
 
-if [[ "$discord" == "" || "$telegram_alert" == '0' ]]; then
+if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
 echo -e "${PIN}${CYAN}Enable watchdog notification.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
 echo -e "${PIN}${CYAN}Disable watchdog notification.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -933,7 +920,7 @@ else
   eps_limit=0;
 fi
 
-firewall_disable='1'
+
 
 if [[ "$skip_bootstrap" == "0" ]]; then
 
@@ -959,7 +946,7 @@ fi
 
 fi
 
-
+firewall_disable='1'
 swapon='1'
 
 rm /home/$USER/install_conf.json > /dev/null 2>&1
@@ -980,10 +967,10 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "use_old_chain": "${use_old_chain}",
   "node_label": "${node_label}",
   "discord": "${discord}",
-  "ping": "${ping}"
-  "telegram_alert": "${telegram_alert}"
-  "telegram_bot_token": "${telegram_bot_token}"
-  "telegram_chat_id": "${telegram_chat_id}"
+  "ping": "${ping}",
+  "telegram_alert": "${telegram_alert}",
+  "telegram_bot_token": "${telegram_bot_token}",
+  "telegram_chat_id": "${telegram_chat_id}",
   "eps_limit": "${eps_limit}"
 }
 EOF
