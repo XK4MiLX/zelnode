@@ -2718,11 +2718,11 @@ IMPORT_ZELCONF="1"
 IMPORT_ZELID="1"
 echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
 zelnodeprivkey="$prvkey"
-echo -e "${PIN}${CYAN}Identity Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
 zelnodeoutpoint="$outpoint"
-echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex="$index"
-echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
 
 if [[ "$ZELID" != "" ]]; then
