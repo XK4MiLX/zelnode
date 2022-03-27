@@ -483,7 +483,7 @@ echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use............
 
 else
 
-if [[ "$bootstrap_url" == "" ]]; then
+if [[ "$bootstrap_url" == "0" ]]; then
 echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...........[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
 echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -1688,6 +1688,7 @@ function bootstrap() {
     
     if [[ -z "$bootstrap_url" ]]; then
 
+      
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
             echo -e "${ARROW} ${CYAN}Cleaning...1${NC}"
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
@@ -1817,7 +1818,7 @@ function bootstrap() {
 	fi
 
 
-        if [[ "$bootstrap_url" == "" ]]; then
+        if [[ "$bootstrap_url" == "0" ]]; then
 
             if [ -f "/home/$USER/$BOOTSTRAP_ZIPFILE" ]; then
 
