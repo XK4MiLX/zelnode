@@ -692,6 +692,8 @@ fi
 }
 
 function create_config() {
+
+
 if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
     echo -e "${CYAN}Please switch to the user account.${NC}"
@@ -705,22 +707,22 @@ echo -e "${YELLOW}==============================================================
 
 
 if jq --version > /dev/null 2>&1; then
-sleep 0.2
+  sleep 0.2
 else
-echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
-sudo apt  install jq -y > /dev/null 2>&1
+  echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
+  sudo apt  install jq -y > /dev/null 2>&1
 
-  if jq --version > /dev/null 2>&1
-  then
-    #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
-    string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
-    echo
-  else
-    #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
-    string_limit_x_mark "JQ was not installed................................."
-    echo
-    exit
-  fi
+    if jq --version > /dev/null 2>&1
+    then
+      #echo -e "${ARROW} ${CYAN}Nodejs version: ${GREEN}$(node -v)${CYAN} installed${NC}"
+      string_limit_check_mark "JQ $(jq --version) installed................................." "JQ ${GREEN}$(jq --version)${CYAN} installed................................."
+      echo
+    else
+     #echo -e "${ARROW} ${CYAN}Nodejs was not installed${NC}"
+      string_limit_x_mark "JQ was not installed................................."
+      echo
+      exit
+    fi
 fi
 
 skip_zelcash_config='0'
@@ -745,48 +747,47 @@ if [[ -d /home/$USER/$CONFIG_DIR ]]; then
     use_old_chain='0'
     sleep 1
   fi
-
-
+  
 fi
 
 if [[ "$skip_zelcash_config" == "1" ]]; then
 
-prvkey=""
-outpoint=""
-index=""
-zelid=""
-kda_address=""
-node_label="0" 
-fix_action="1"      
-eps_limit=0;
-discord="0"
-ping="0"
-telegram_alert="0"    
-telegram_bot_token="0"	      	      
-telegram_chat_id="0"	
+  prvkey=""
+  outpoint=""
+  index=""
+  zelid=""
+  kda_address=""
+  node_label="0" 
+  fix_action="1"      
+  eps_limit=0;
+  discord="0"
+  ping="0"
+  telegram_alert="0"    
+  telegram_bot_token="0"	      	      
+  telegram_chat_id="0"	
    
 else
 
-prvkey=$(whiptail --inputbox "Enter your FluxNode Identity Key from Zelcore" 8 65 3>&1 1>&2 2>&3)
-sleep 1
-outpoint=$(whiptail --inputbox "Enter your FluxNode Collateral TX ID from Zelcore" 8 72 3>&1 1>&2 2>&3)
-sleep 1
-index=$(whiptail --inputbox "Enter your FluxNode Output Index from Zelcore" 8 65 3>&1 1>&2 2>&3)
-sleep 1
-zel_id=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
-sleep 1
-KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
-sleep 1
+  prvkey=$(whiptail --inputbox "Enter your FluxNode Identity Key from Zelcore" 8 65 3>&1 1>&2 2>&3)
+  sleep 1
+  outpoint=$(whiptail --inputbox "Enter your FluxNode Collateral TX ID from Zelcore" 8 72 3>&1 1>&2 2>&3)
+  sleep 1
+  index=$(whiptail --inputbox "Enter your FluxNode Output Index from Zelcore" 8 65 3>&1 1>&2 2>&3)
+  sleep 1
+  zel_id=$(whiptail --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
+  sleep 1
+  KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+  sleep 1
 
 
 
-    if [[ "$KDA_A" == "" ]]; then 
-        kda_address=""
-    else
-        kda_address="kadena:$KDA_A?chainid=0"
-    fi
+  if [[ "$KDA_A" == "" ]]; then 
+      kda_address=""
+  else
+      kda_address="kadena:$KDA_A?chainid=0"
+  fi
     
-    if whiptail --yesno "Would you like enable alert notification?" 8 65; then
+  if whiptail --yesno "Would you like enable alert notification?" 8 65; then
 
       whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
       sleep 1
@@ -807,6 +808,7 @@ sleep 1
         node_label=0;
 
       else
+      
          for CHOICE in $CHOICES; do
          case "$CHOICE" in
          "1")
@@ -908,7 +910,7 @@ if [[ "$telegram_alert" == 0 ]]; then
 fi
 
   index_from_file="$index"
-  tx_from_file="$output"
+  tx_from_file="$outpoint"
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
@@ -928,7 +930,7 @@ if [[ $stak_info == ?(-)+([0-9]) ]]; then
   esac
  
 else
-eps_limit=0;
+  eps_limit=0;
 fi
 
 firewall_disable='1'
@@ -953,6 +955,8 @@ if [[ "$skip_bootstrap" == "0" ]]; then
     sleep 1
   fi
   
+fi
+
 fi
 
 
@@ -983,10 +987,9 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "eps_limit": "${eps_limit}"
 }
 EOF
+
 config_file
 echo
-
-
 
 }
 
