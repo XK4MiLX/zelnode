@@ -739,7 +739,7 @@ daemon_update='1'
 bench_update='1'
 fix_action='1'
 
-if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
+if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
 
 sudo touch /home/$USER/watchdog/config.js
 sudo chown $USER:$USER /home/$USER/watchdog/config.js
@@ -2735,14 +2735,26 @@ zelnodeoutpoint="$outpoint"
 echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex="$index"
 echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
-echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
 
 
+if [[ "$ZELID" != "" ]]; then
+  echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+fi
+     
+if [[ "$KDA_A" != "" ]]; then
+    echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
+fi
 
-
-
-
-echo
+echo -e ""
+echo -e "${ARROW} ${YELLOW}Watchdog conf settings:${NC}"
+echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$discord${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}$telegram_alert${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	      
+echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1
+echo -e ""
 fi
 
 fi
