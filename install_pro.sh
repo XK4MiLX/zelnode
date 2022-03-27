@@ -818,12 +818,12 @@ if [ -z "$CHOICES" ]; then
 
   echo -e "${ARROW} ${CYAN}No option was selected...Alert notification disabled! ${NC}"
   sleep 1
-  discord=0;
-  ping=0;
-  telegram_alert=0;
-  telegram_bot_token=0;
-  telegram_chat_id=0;
-  node_label=0;
+  discord="0"
+  ping="0"
+  telegram_alert="0"
+  telegram_bot_token="0"
+  telegram_chat_id="0"
+  node_label="0"
 
 else
   for CHOICE in $CHOICES; do
@@ -857,7 +857,7 @@ else
       ;;
     "2")
 
- telegram_alert=1;
+ telegram_alert="1"
 
   while true
      do
@@ -906,24 +906,24 @@ fi
 
 else
 
-    discord=0;
-    ping=0;
-    telegram_alert=0;
-    telegram_bot_token=0;
-    telegram_chat_id=0;
-    node_label=0;
+    discord="0"
+    ping="0"
+    telegram_alert="0"
+    telegram_bot_token="0"
+    telegram_chat_id="0"
+    node_label="0"
     sleep 1
 fi
 
 
 if [[ "$discord" == 0 ]]; then
-    ping=0;
+    ping="0";
 fi
 
 
 if [[ "$telegram_alert" == 0 ]]; then
-    telegram_bot_token=0;
-    telegram_chat_id=0;
+    telegram_bot_token="0";
+    telegram_chat_id="0";
 fi
 
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
@@ -1690,7 +1690,7 @@ function bootstrap() {
 
       
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-            echo -e "${ARROW} ${CYAN}Cleaning...1${NC}"
+            echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
 	
         fi
@@ -1787,7 +1787,7 @@ function bootstrap() {
     else
 
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-            echo -e "${ARROW} ${CYAN}Cleaning...2${NC}"
+            echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
         fi
 
