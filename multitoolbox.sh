@@ -931,29 +931,7 @@ else
 eps_limit=0;
 fi
 
-    
-#ssh_port=$(whiptail --inputbox "Enter port you are using for SSH (default 22)" 8 65 3>&1 1>&2 2>&3)
-#sleep 1
-
-
-#pettern='^[0-9]+$'
-#if [[ $ssh_port =~ $pettern ]] ; then
-#sleep 1
-#else
-#echo -e "${ARROW} ${CYAN}SSH port must be integer.................................[${X_MARK}${CYAN}]${NC}"
-#echo
-#exit
-#fi
-
-
-#if whiptail --yesno "Would you like disable firewall diuring installation?" 8 65; then
 firewall_disable='1'
-#sleep 1
-#else
-#firewall_disable='0'
-#sleep 1
-#fi
-
 
 if [[ "$skip_bootstrap" == "0" ]]; then
 
@@ -974,24 +952,11 @@ if [[ "$skip_bootstrap" == "0" ]]; then
     bootstrap_zip_del='1'
     sleep 1
   fi
+  
 fi
 
-#if whiptail --yesno "Would you like create swapfile?" 8 65; then
+
 swapon='1'
-#sleep 1
-#else
-#swapon='0'
-#sleep 1
-#fi
-#if whiptail --yesno "Would you like use mongod bootstrap file?" 8 65; then
-#mongo_bootstrap='1'
-#sleep 1
-#else
-#mongo_bootstrap='0'
-#sleep 1
-#fi
-
-
 
 rm /home/$USER/install_conf.json > /dev/null 2>&1
 sudo touch /home/$USER/install_conf.json
