@@ -412,12 +412,6 @@ fi
 
 fi
 
-if [[ "$firewall_disable" == "1" ]]; then
-echo -e "${PIN}${CYAN}Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-else
-echo -e "${PIN}${CYAN}Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
-
 if [[ "$use_old_chain" == "1" ]]; then
 echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 
@@ -437,15 +431,10 @@ fi
 
 fi
 
-if [[ "$swapon" == "1" ]]; then
-echo -e "${PIN}${CYAN}Create a file that will be used for swap.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
-
-
 if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
-echo -e "${PIN}${CYAN}Enable watchdog notification.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Disable watchdog notification.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 
