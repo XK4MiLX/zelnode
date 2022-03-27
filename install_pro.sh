@@ -439,7 +439,7 @@ function config_file() {
 
 if [[ -f /home/$USER/install_conf.json ]]; then
 import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
+#ssh_port=$(cat /home/$USER/install_conf.json | jq -r '.ssh_port')
 #firewall_disable=$(cat /home/$USER/install_conf.json | jq -r '.firewall_disable')
 bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
@@ -452,8 +452,17 @@ outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
+node_label=$(cat /home/$USER/install_conf.json | jq -r '.node_label')
+eps_limit=$(cat /home/$USER/install_conf.json | jq -r '.eps_limit')
+discord=$(cat /home/$USER/install_conf.json | jq -r '.discord')
+ping=$(cat /home/$USER/install_conf.json | jq -r '.ping')
+telegram_alert=$(cat /home/$USER/install_conf.json | jq -r '.telegram_alert')
+telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
+telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 
-discord_hook_url=$(cat /home/$USER/watchdog/config.js | jq -r '.outpoint')
+   
+	  
 
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
@@ -468,9 +477,9 @@ fi
 
 fi
 
-if [[ "$ssh_port" != "" ]]; then
-echo -e "${PIN}${CYAN} SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-fi
+#if [[ "$ssh_port" != "" ]]; then
+#echo -e "${PIN}${CYAN} SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+#fi
 
 #if [[ "$firewall_disable" == "1" ]]; then
 #echo -e "${PIN}${CYAN} Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -505,9 +514,11 @@ fi
 #echo -e "${PIN}${CYAN} Use Bootstrap for MongoDB........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 #fi
 
-#if [[ "$watchdog" == "1" ]]; then
-#echo -e "${PIN}${CYAN} Install watchdog.................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-#fi
+if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
+echo -e "${PIN}${CYAN}Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+else
+echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
 
 
 
@@ -644,12 +655,36 @@ else
                if [[ "$KDA_A" != "" ]]; then
                     echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
                fi
-	       
-	       
-
-	       
+	       	       
          fi
-	  
+	 
+	 
+	      echo -e ""
+	      echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
+   
+	      fix_action=$(grep -w action /home/$USER/watchdog/config.js | sed -e 's/.*action: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Fix action = ${GREEN}$fix_action${NC}" && sleep 1
+	      
+	      node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
+
+	      eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" && sleep 1
+	      
+	      discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$discord${NC}" && sleep 1
+	      
+	      ping=$(grep -w ping /home/$USER/watchdog/config.js | sed -e 's/.*ping: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
+	      
+	      telegram_alert=$(grep -w telegram_alert /home/$USER/watchdog/config.js | sed -e 's/.*telegram_alert: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}$telegram_alert${NC}" && sleep 1
+	      
+	      telegram_bot_token=$(grep -w telegram_bot_token /home/$USER/watchdog/config.js | sed -e 's/.*telegram_bot_token: .//' | sed -e 's/.\{2\}$//')
+	      echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	      
+	      
+	      telegram_chat_id=$(grep -w telegram_chat_id /home/$USER/watchdog/config.js | sed -e 's/.*telegram_chat_id: .//' | sed -e 's/.\{1\}$//')
+	      echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1	
 	  
 	  
       fi
@@ -704,6 +739,43 @@ daemon_update='1'
 bench_update='1'
 fix_action='1'
 
+if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
+
+sudo touch /home/$USER/watchdog/config.js
+sudo chown $USER:$USER /home/$USER/watchdog/config.js
+    cat << EOF >  /home/$USER/watchdog/config.js
+module.exports = {
+    label: '${node_label}',
+    tier_eps_min: '${eps_limit}',
+    zelflux_update: '${flux_update}',
+    zelcash_update: '${daemon_update}',
+    zelbench_update: '${bench_update}',
+    action: '${fix_action}',
+    ping: '${ping}',
+    web_hook_url: '${discord}',
+    telegram_alert: '${telegram_alert}',
+    telegram_bot_token: '${telegram_bot_token}',
+    telegram_chat_id: '${telegram_chat_id}'
+}
+EOF
+
+
+
+  if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
+    current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
+    string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
+    #echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
+    pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
+    pm2 save > /dev/null 2>&1
+  else
+    string_limit_x_mark "Watchdog was not installed................................."
+  fi
+  
+  return 1
+
+fi
+
+
 if [[ "$IMPORT_ZELCONF" == "1" ]]; then
 
 sudo touch /home/$USER/watchdog/config.js
@@ -739,6 +811,9 @@ EOF
   return 1
 
 fi
+
+
+
 
 discord='0'
 if whiptail --yesno "Would you like enable alert notification?" 8 60; then
@@ -2661,6 +2736,12 @@ echo -e "${PIN}${CYAN}Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
 zelnodeindex="$index"
 echo -e "${PIN}${CYAN}Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+
+
+
+
+
+
 echo
 fi
 
