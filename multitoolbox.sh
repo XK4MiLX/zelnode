@@ -916,7 +916,7 @@ if [[ "$skip_bootstrap" == "0" ]]; then
 
   if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
       
-    bootstrap_url=""
+    bootstrap_url="0"
     sleep 1
 
   else
