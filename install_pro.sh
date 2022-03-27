@@ -1685,10 +1685,11 @@ function bootstrap() {
     
     echo -e ""
     echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
+    
     if [[ -z "$bootstrap_url" ]]; then
 
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-            echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+            echo -e "${ARROW} ${CYAN}Cleaning...1${NC}"
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
 	
         fi
@@ -1785,7 +1786,7 @@ function bootstrap() {
     else
 
         if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
-            echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
+            echo -e "${ARROW} ${CYAN}Cleaning...2${NC}"
             rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes
         fi
 
@@ -1830,10 +1831,11 @@ function bootstrap() {
 		
             else
 	    
-	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -sSL -m 10 http://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -sSL -m 10 http://cdn-$indexb.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json | jq -r '.block_height' 2>/dev/null)
 		fi
+		
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
                 echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
