@@ -735,7 +735,7 @@ if [[ "$skip_zelcash_config" == "1" ]]; then
   kda_address=""
   node_label="0" 
   fix_action="1"      
-  eps_limit=0;
+  eps_limit="0"
   discord="0"
   ping="0"
   telegram_alert="0"    
@@ -776,12 +776,12 @@ else
 
         echo -e "${ARROW} ${CYAN}No option was selected...Alert notification disabled! ${NC}"
         sleep 1
-        discord=0;
-        ping=0;
-        telegram_alert=0;
-        telegram_bot_token=0;
-        telegram_chat_id=0;
-        node_label=0;
+        discord="0"
+        ping="0"
+        telegram_alert="0"
+        telegram_bot_token="0"
+        telegram_chat_id="0"
+        node_label="0"
 
       else
       
@@ -809,14 +809,14 @@ else
              sleep 1
 
             else
-             ping=0;
+             ping="0"
              sleep 1
            fi
 
          ;;
          "2")
 
-          telegram_alert=1;
+          telegram_alert="1";
 
          while true
          do
@@ -865,13 +865,14 @@ fi
 
 else
 
-    discord=0;
-    ping=0;
-    telegram_alert=0;
-    telegram_bot_token=0;
-    telegram_chat_id=0;
-    node_label=0;
+    discord="0"
+    ping="0"
+    telegram_alert="0"
+    telegram_bot_token="0"
+    telegram_chat_id="0"
+    node_label="0"
     sleep 1
+    
 fi
 
 
@@ -880,19 +881,19 @@ if [[ "$discord" == 0 ]]; then
 fi
 
 
-if [[ "$telegram_alert" == 0 ]]; then
-    telegram_bot_token=0;
-    telegram_chat_id=0;
+if [[ "$telegram_alert" == 0 || "$telegram_alert" == "" ]]; then
+    telegram_alert == "0"
+    telegram_bot_token="0"
+    telegram_chat_id="0"
 fi
 
   index_from_file="$index"
   tx_from_file="$outpoint"
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
 	
-    if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
-    fi	
-
+if [[ "$stak_info" == "" ]]; then
+    stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+fi	
 
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
