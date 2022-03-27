@@ -750,11 +750,21 @@ if [[ -d /home/$USER/$CONFIG_DIR ]]; then
 fi
 
 if [[ "$skip_zelcash_config" == "1" ]]; then
+
 prvkey=""
 outpoint=""
 index=""
 zelid=""
 kda_address=""
+node_label="0" 
+fix_action="1"      
+eps_limit=0;
+discord="0"
+ping="0"
+telegram_alert="0"    
+telegram_bot_token="0"	      	      
+telegram_chat_id="0"	
+   
 else
 
 prvkey=$(whiptail --inputbox "Enter your FluxNode Identity Key from Zelcore" 8 65 3>&1 1>&2 2>&3)
@@ -897,7 +907,6 @@ if [[ "$telegram_alert" == 0 ]]; then
     telegram_chat_id=0;
 fi
 
-if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
   index_from_file="$index"
   tx_from_file="$output"
   stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
@@ -905,7 +914,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
     if [[ "$stak_info" == "" ]]; then
       stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
     fi	
-fi
+
 
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
@@ -922,50 +931,7 @@ else
 eps_limit=0;
 fi
 
-    else
     
-        fix_action="1"
-	node_label="0" 
-	fix_action="1"      
-	node_label="0"
-	      
-        index_from_file=$index
-        tx_from_file=$outpoint
-        stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
-	
-         if [[ "$stak_info" == "" ]]; then
-           stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
-         fi	
-
-
-     if [[ $stak_info == ?(-)+([0-9]) ]]; then
-
-       case $stak_info in
-      "10000") eps_limit=90 ;;
-      "25000")  eps_limit=180 ;;
-      "100000") eps_limit=300 ;;
-      "1000") eps_limit=90 ;;
-      "12500")  eps_limit=180 ;;
-      "40000") eps_limit=300 ;;
-       esac
- 
-    else
-       eps_limit=0;
-    fi
-	 
-	#eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
-	discord="0"
-	ping="0"
-	telegram_alert="0"    
-	telegram_bot_token="0"	      	      
-	telegram_chat_id="0"	
-    
-    
-    
-    fi
-    
-fi
-
 #ssh_port=$(whiptail --inputbox "Enter port you are using for SSH (default 22)" 8 65 3>&1 1>&2 2>&3)
 #sleep 1
 
@@ -991,23 +957,23 @@ firewall_disable='1'
 
 if [[ "$skip_bootstrap" == "0" ]]; then
 
-if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
+  if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
       
-bootstrap_url=""
-sleep 1
+    bootstrap_url=""
+    sleep 1
 
-else
-bootstrap_url=$(whiptail --inputbox "Enter your Flux bootstrap URL" 8 65 3>&1 1>&2 2>&3)
-sleep 1
-fi
+  else
+    bootstrap_url=$(whiptail --inputbox "Enter your Flux bootstrap URL" 8 65 3>&1 1>&2 2>&3)
+    sleep 1
+  fi
 
-if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 65; then
-bootstrap_zip_del='0'
-sleep 1
-else
-bootstrap_zip_del='1'
-sleep 1
-fi
+  if whiptail --yesno "Would you like keep bootstrap archive file localy?" 8 65; then
+    bootstrap_zip_del='0'
+    sleep 1
+  else
+    bootstrap_zip_del='1'
+    sleep 1
+  fi
 fi
 
 #if whiptail --yesno "Would you like create swapfile?" 8 65; then
