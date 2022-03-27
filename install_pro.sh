@@ -472,20 +472,11 @@ echo -e "${PIN}${CYAN} Import settings from install_conf.json...................
 else
 
 if [[ "$import_settings" == "1" ]]; then
-echo -e "${PIN}${CYAN} Import settings from Flux..............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Import settings from Flux........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
 
-#if [[ "$ssh_port" != "" ]]; then
-#echo -e "${PIN}${CYAN} SSH port set.....................................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-#fi
-
-#if [[ "$firewall_disable" == "1" ]]; then
-#echo -e "${PIN}${CYAN} Firewall disabled diuring installation...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-#else
-#echo -e "${PIN}${CYAN} Firewall enabled diuring installation............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-#fi
 
 if [[ "$use_old_chain" == "1" ]]; then
 echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -493,15 +484,15 @@ echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use............
 else
 
 if [[ "$bootstrap_url" == "" ]]; then
-echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...........[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 if [[ "$bootstrap_zip_del" == "1" ]]; then
-echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 fi
@@ -515,9 +506,9 @@ fi
 #fi
 
 if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
-echo -e "${PIN}${CYAN}Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 else
-echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 
@@ -587,9 +578,6 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
 	      
 	      echo -e ""
 	      echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
-   
-	      fix_action=$(grep -w action /home/$USER/watchdog/config.js | sed -e 's/.*action: .//' | sed -e 's/.\{2\}$//')
-	      echo -e "${PIN}${CYAN} Fix action = ${GREEN}$fix_action${NC}" && sleep 1
 	      
 	      node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
 	      echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
