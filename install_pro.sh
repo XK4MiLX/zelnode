@@ -2754,36 +2754,66 @@ import_date
 else
 
 if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != ""  && "$ZELID" != ""  ]]; then
-echo
-IMPORT_ZELCONF="1"
-IMPORT_ZELID="1"
-echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
-zelnodeprivkey="$prvkey"
-echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
-zelnodeoutpoint="$outpoint"
-echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
-zelnodeindex="$index"
-echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
+  IMPORT_ZELCONF="1"
+  IMPORT_ZELID="1"
+  echo -e ""
+  echo -e "${ARROW} ${YELLOW}Install conf settings:${NC}"
+  zelnodeprivkey="$prvkey"
+  echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
+  zelnodeoutpoint="$outpoint"
+  echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+  zelnodeindex="$index"
+  echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 
-if [[ "$ZELID" != "" ]]; then
-  echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
-fi
+  if [[ "$ZELID" != "" ]]; then
+    echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}" && sleep 1
+  fi
      
-if [[ "$KDA_A" != "" ]]; then
+  if [[ "$KDA_A" != "" ]]; then
     echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}" && sleep 1
-fi
+  fi
 
-echo -e ""
-echo -e "${ARROW} ${YELLOW}Watchdog conf settings:${NC}"
-echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}" && sleep 1
-echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" && sleep 1
-echo -e "${PIN}${CYAN} Discord hook URL = ${GREEN}$discord${NC}" && sleep 1
-echo -e "${PIN}${CYAN} Discord ping = ${GREEN}$ping${NC}" && sleep 1
-echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}$telegram_alert${NC}" && sleep 1
-echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	      
-echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1
-echo -e ""
+  echo -e ""
+  echo -e "${ARROW} ${YELLOW}Watchdog conf settings:${NC}"
+
+  if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
+     echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}" && sleep 1
+  else
+     echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}" && sleep 1
+  fi
+  
+  echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" && sleep 1   
+  
+  if [[ "$discord" != "" && "$discord" != "0" ]]; then
+     echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}" && sleep 1
+  else
+     echo -e "${PIN}${CYAN} Discord alert = ${RED}Disabled${NC}" && sleep 1
+  fi
+
+  if [[ "$ping" != "" && "$ping" != "0" ]]; then      
+     if [[ "$discord" != "" && "$discord" != "0" ]]; then
+       echo -e "${PIN}${CYAN} Discord ping = ${GREEN}Enabled${NC}" && sleep 1
+     else
+       echo -e "${PIN}${CYAN} Discord ping = ${RED}Disabled${NC}" && sleep 1
+     fi
+  fi
+	      
+  if [[ "$telegram_alert" != "" && "$telegram_alert" != "0" ]]; then
+    echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}Enabled${NC}" && sleep 1
+  else
+    echo -e "${PIN}${CYAN} Telegram alert = ${RED}Disabled${NC}" && sleep 1
+  fi
+	      
+  if [[ "$telegram_alert" == "1" ]]; then
+    echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}" && sleep 1	
+  fi
+	      
+  if [[ "$telegram_alert" == "1" ]]; then
+     echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" && sleep 1	
+  fi
+  echo -e ""
+  
 fi
 
 fi
