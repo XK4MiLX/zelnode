@@ -503,11 +503,11 @@ fi
 
 if [[ "$WANIP" != "" ]]; then
 
-back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .status )
+back_error_check=$(curl -s -m 5 http://$WANIP:$FluxAPI/zelid/loginphrase | jq -r .status )
 
   if [[ "$back_error_check" != "success" &&  "$back_error_check" != "" ]]; then
   
-        back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message.message 2>/dev/null )
+        back_error=$(curl -s -m 8 http://$WANIP:$FluxAPI/zelid/loginphrase | jq -r .data.message.message 2>/dev/null )
 	
 	if [[ "$back_error" != "" ]]; then
 	
@@ -515,7 +515,7 @@ back_error_check=$(curl -s -m 5 http://$WANIP:16127/zelid/loginphrase | jq -r .s
 	  
         else
 	
-           back_error=$(curl -s -m 8 http://$WANIP:16127/zelid/loginphrase | jq -r .data.message 2>/dev/null )
+           back_error=$(curl -s -m 8 http://$WANIP:$FluxAPI/zelid/loginphrase | jq -r .data.message 2>/dev/null )
 	   
    	   if [[ "$back_error" != "" ]]; then  
 	   
