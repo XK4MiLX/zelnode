@@ -431,7 +431,6 @@ fi
 
 fi
 
-if [[ ( "$A" -eq "0" || "$B" -ne "0" ) && "$C" -eq "0" ]]; then ...
 
 if [[ ( "$discord" != "" && "$discord" != "0" ) || "$telegram_alert" == '1' ]]; then
 echo -e "${PIN}${CYAN}Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
