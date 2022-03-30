@@ -609,7 +609,7 @@ fi
 echo -e "${PIN} ${CYAN}Node status: $node_status_color${NC}"
 
 if [[ "$node_status" == "DOS" ]]; then
-blocks_till=$($COIN_CLI  getdoslist | jq .[] | grep "$collateral" -A4 -B1 | jq .eligible_in)
+blocks_till=$($COIN_CLI  getdoslist | jq .[] | grep "$collateral" -A5 -B1 | jq .eligible_in)
 dos_till=$((blocks_hight+blocks_till))
 echo -e "${PIN} ${RED}DOS ${CYAN}Till: ${ORANGE}$dos_till ${CYAN}EXPIRE_COUNT: ${ORANGE}$blocks_till${CYAN} Time left: ${RED}~$((2*blocks_till)) min. ${NC}"
 fi
