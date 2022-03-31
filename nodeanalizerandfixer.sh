@@ -949,12 +949,12 @@ if [[ "$required_ver" != "" ]]; then
 echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
 
 ZELIDLG=`echo -n $(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e "s/'//g" | sed -e "s/,//g" | sed -e "s/.*zelid://g") | wc -m`
-if [ "$ZELIDLG" -eq "35" ] || [ "$ZELIDLG" -eq "34" ]; then
-echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
+if [[ "$ZELIDLG" -eq "35" || "$ZELIDLG" -eq "34" || "$ZELIDLG" -eq "33" ]]; then
+ echo -e "${CHECK_MARK} ${CYAN} Zel ID is valid${NC}"
 elif [[ "$ZELIDLG" == "0" || "$ZELIDLG" == "2" ]]; then
-echo -e "${X_MARK} ${CYAN} Zel ID is missing...${NC}"
+ echo -e "${X_MARK} ${CYAN} Zel ID is missing...${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Zel ID is not valid${NC}"
+ echo -e "${X_MARK} ${CYAN} Zel ID is not valid${NC}"
 fi
 
 if [ -f ~/$FLUX_DIR/error.log ]
