@@ -121,7 +121,11 @@ fi
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
   echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
+  #API PORT
   sudo ufw allow $FLUX_PORT > /dev/null 2>&1
+  #HOME UI PORT
+  sudo ufw allow $(($FLUX_PORT-1)) > /dev/null 2>&1
+  
   
   #if ! route -h > /dev/null 2>&1 ; then
   # sudo apt install net-tools > /dev/null 2>&1
