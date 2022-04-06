@@ -320,7 +320,11 @@ fi
 if [[ $1 == "ip_check" ]]; then
   get_ip
   device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-  confirmed_ip=$(curl -SsL -m 10 http://localhost:16127/flux/info | jq -r .data.node.status.ip)
+  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
+  if [[ "$api_port" == "" ]]; then
+  api_port="16127"
+  fi
+  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip)
   if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
     if [[ "$WANIP" != "$confirmed_ip" ]]; then
       date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
