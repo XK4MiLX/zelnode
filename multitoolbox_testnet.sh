@@ -1416,7 +1416,7 @@ fi
     echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
     echo -e ""
     echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
-    echo -e "${BOOK} ${RED}Each node need to set different port for comunnication${NC}"
+    echo -e "${BOOK} ${RED}Each node need to set different port for communication${NC}"
     echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
     echo -e ""
     echo -e "${YELLOW}================================================================${NC}"
