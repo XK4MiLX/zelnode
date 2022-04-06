@@ -1725,7 +1725,7 @@ bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool
 
 function multinode(){
 
-echo -e "${GREEN}Module: Multinode configuration with UPNP comunnication (Needs Router with UPNP support)${NC}"
+echo -e "${GREEN}Module: Multinode configuration with UPNP communication (Needs Router with UPNP support)${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
@@ -1738,11 +1738,11 @@ fi
     
     echo -e ""
     echo -e "${ARROW}  ${CYAN}OPTION ALLOWS YOU: ${NC}"
-    echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp comunication ${NC}"
+    echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp communication ${NC}"
     echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
     echo -e ""
     echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
-    echo -e "${BOOK} ${RED}Each node need to set different port for comunnication${NC}"
+    echo -e "${BOOK} ${RED}Each node need to set different port for communication${NC}"
     echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
     echo -e ""
     echo -e "${YELLOW}================================================================${NC}"
@@ -2408,7 +2408,7 @@ echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}11 - Replace Zel ID ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
-echo -e "${CYAN}14 - Multinode configuration with UPNP comunnication (Needs Router with UPNP support)  ${NC}"
+echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
