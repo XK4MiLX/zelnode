@@ -1708,7 +1708,7 @@ if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 fi
 
 
-if docker run hello-world > /dev/null 2>&1
+if sudo docker run hello-world > /dev/null 2>&1
 then
 echo -e ""
 else
