@@ -1909,7 +1909,7 @@ sleep 1
 
 if [[ "$zelnodeprivkey" == "" ]]; then
 skip_change=$((skip_change-1))
-echo -e "${ARROW} ${CYAN}Replace FluxNode public key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
 fi
 
 if [[ "$zelnodeoutpoint" == "" ]]; then
@@ -1942,11 +1942,11 @@ sudo fuser -k 16125/tcp > /dev/null 2>&1
 if [[ "$zelnodeprivkey" != "" ]]; then
 
 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-echo -e "${ARROW} ${CYAN}Replace FluxNode private key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
         else
         sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e "${ARROW} ${CYAN}FluxNode private key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
+                        echo -e "${ARROW} ${CYAN}FluxNode identity key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
                 fi
 fi
 
