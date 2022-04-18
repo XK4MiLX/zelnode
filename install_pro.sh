@@ -324,7 +324,7 @@ if [[ $1 == "ip_check" ]]; then
   if [[ "$api_port" == "" ]]; then
   api_port="16127"
   fi
-  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip)
+  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip | sed -r 's/:.+//')
   if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
     if [[ "$WANIP" != "$confirmed_ip" ]]; then
       date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
