@@ -764,9 +764,9 @@ echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 
-flux_update='1'
-daemon_update='1'
-bench_update='1'
+flux_update='0'
+daemon_update='0'
+bench_update='0'
 fix_action='1'
 
 if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
