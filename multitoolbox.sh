@@ -1010,29 +1010,29 @@ cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 
 
-#if whiptail --yesno "Would you like enable FluxOS auto update?" 8 60; then
+if whiptail --yesno "Would you like enable FluxOS auto update?" 8 60; then
 flux_update='1'
-#sleep 1
-#else
-##flux_update='0'
-#sleep 1
-#fi
+sleep 1
+else
+flux_update='0'
+sleep 1
+fi
 
-#if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 60; then
+if whiptail --yesno "Would you like enable Flux daemon auto update?" 8 60; then
 daemon_update='1'
-##sleep 1
-#else
-#daemon_update='0'
-##sleep 1
-#fi
+sleep 1
+else
+daemon_update='0'
+sleep 1
+fi
 
-#if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 60; then
+if whiptail --yesno "Would you like enable Flux benchmark auto update?" 8 60; then
 bench_update='1'
-#sleep 1
-#else
-##bench_update='0'
-##sleep 1
-#fi
+sleep 1
+else
+bench_update='0'
+sleep 1
+fi
 
 #if whiptail --yesno "Would you like enable fix action (restart daemon, benchmark, mongodb)?" 8 75; then
 fix_action='1'
