@@ -1784,8 +1784,10 @@ if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
 fi
 
-usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+if [[ -z $usernew ]]; then
+  usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+  usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+fi
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
 adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
