@@ -76,7 +76,11 @@ try="0"
      do
 
         echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
-        FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
+        # Check if upnp_port is set
+        if [[ -z "$upnp_port" ]]; then
+          FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
+        else
+          FLUX_PORT=$upnp_port
         if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 
            string_limit_check_mark "Port is valid..........................................."
@@ -132,12 +136,23 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   #fi  
   
   #router_ip=$(route -n | sed -nr 's/(0\.0\.0\.0) +([^ ]+) +\1.*/\2/p' 2>/dev/null)
-  router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
-  
+  if [[ -z "$gateway_ip" ]]; then
+    router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+  else
+    router_ip=$gateway_ip
+  fi
+
   if [[ "$router_ip" != "" ]]; then
   
-  
-    if (whiptail --yesno "Is your router's IP $router_ip ?" 8 70); then
+    if [[ -z "$gateway_ip" ]]; then
+      if (whiptail --yesno "Is your router's IP $router_ip ?" 8 70); then
+        is_correct="0"
+      fi
+    else
+      is_correct="0"
+    fi
+
+    if [[ "$is_correct" == "0" ]]; then
       sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
       sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
       sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
@@ -240,12 +255,42 @@ function upnp_disable() {
 
 }
 
+# Import settings from upnp_conf.json if it exists
+# if [[ -f /home/$USER/upnp_conf.json ]]; then
+if [[ -f /tmp/upnp_conf.json ]]; then
+  echo -e "${ARROW} ${CYAN}Importing UPnP configuration.....${NC}"
+  echo -e ""
+  # Import settings from upnp_conf.json
+  # enable_upnp=$(cat /home/$USER/upnp_conf.json | jq -r '.enable_upnp')
+  enable_upnp=$(cat /tmp/upnp_conf.json | jq -r '.enable_upnp')
+  # upnp_port=$(cat /home/$USER/upnp_conf.json | jq -r '.upnp_port')
+  upnp_port=$(cat /tmp/upnp_conf.json | jq -r '.upnp_port')
+  # router_ip=$(cat /home/$USER/upnp_conf.json | jq -r '.router_ip')
+  gateway_ip=$(cat /tmp/upnp_conf.json | jq -r '.gateway_ip')
 
+  echo -e "${ARROW} ${YELLOW}UPNP conf settings:${NC}"
+  echo -e "${PIN}${CYAN} Enable UPNP Key = ${GREEN}$enable_upnp${NC}" && sleep 1
+  echo -e "${PIN}${CYAN} UPNP Port = ${GREEN}$upnp_port${NC}" && sleep 1
+  echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}" && sleep 1
+  echo -e ""
+fi
+
+
+if [[ -z $enable_upnp ]]; then
  CHOICE=$(
 whiptail --title "UPnP Configuration" --menu "Make your choice" 16 30 9 \
 "1)" "Enable UPnP Mode"   \
 "2)" "Disable UPnP Mode"  3>&2 2>&1 1>&3
 )
+else
+  # if enable_upnp is 1 then set choice to 1 else set choice to 2
+  if [[ "$enable_upnp" == "1" ]]; then
+    CHOICE="1)"
+  else
+    CHOICE="2)"
+  fi
+fi
+
 
 
 case $CHOICE in
