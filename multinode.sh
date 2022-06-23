@@ -261,12 +261,9 @@ if [[ -f /tmp/upnp_conf.json ]]; then
   echo -e "${ARROW} ${CYAN}Importing UPnP configuration.....${NC}"
   echo -e ""
   # Import settings from upnp_conf.json
-  # enable_upnp=$(cat /home/$USER/upnp_conf.json | jq -r '.enable_upnp')
-  enable_upnp=$(cat /tmp/upnp_conf.json | jq -r '.enable_upnp')
-  # upnp_port=$(cat /home/$USER/upnp_conf.json | jq -r '.upnp_port')
-  upnp_port=$(cat /tmp/upnp_conf.json | jq -r '.upnp_port')
-  # router_ip=$(cat /home/$USER/upnp_conf.json | jq -r '.router_ip')
-  gateway_ip=$(cat /tmp/upnp_conf.json | jq -r '.gateway_ip')
+  enable_upnp=$(cat /home/$USER/upnp_conf.json | jq -r '.enable_upnp')
+  upnp_port=$(cat /home/$USER/upnp_conf.json | jq -r '.upnp_port')
+  gateway_ip=$(cat /home/$USER/upnp_conf.json | jq -r '.gateway_ip')
 
   echo -e "${ARROW} ${YELLOW}UPNP conf settings:${NC}"
   echo -e "${PIN}${CYAN} Enable UPNP Key = ${GREEN}$enable_upnp${NC}" && sleep 1
