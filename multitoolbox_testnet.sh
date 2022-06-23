@@ -1911,7 +1911,7 @@ if [[ $(dpkg --print-architecture) = *amd* ]]; then
   sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
 
   sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-Linux-v3.2.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-Linux-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
   sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
   sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
@@ -1926,7 +1926,7 @@ else
   sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
 
   sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-arm-v3.2.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-arm-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
   sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
   sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
