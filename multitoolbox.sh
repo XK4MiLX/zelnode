@@ -49,7 +49,7 @@ title=black,
 '
 
 function bootstrap_server(){
-rand_by_domain=("1" "3" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14")
+rand_by_domain=("5" "6" "7" "8" "9" "10" "11")
 richable=()
 richable_eu=()
 richable_us=()
@@ -66,16 +66,12 @@ do
     if [[ "$bootstrap_check" != "" ]]; then
     #echo -e "Adding:  ${rand_by_domain[$i]}"
 
-       if [[ "${rand_by_domain[$i]}" -le "3" || "${rand_by_domain[$i]}" -gt "11" ]]; then
+       if [[ "${rand_by_domain[$i]}" -ge "8" && "${rand_by_domain[$i]}" -le "11" ]]; then
          richable_eu+=( ${rand_by_domain[$i]}  )
        fi
 
-       if [[ "${rand_by_domain[$i]}" -gt "3" &&  "${rand_by_domain[$i]}" -le "10" ]]; then
+       if [[ "${rand_by_domain[$i]}" -gt "4" &&  "${rand_by_domain[$i]}" -le "7" ]]; then
          richable_us+=( ${rand_by_domain[$i]}  )
-       fi
-
-       if [[ "${rand_by_domain[$i]}" -gt "10" ]]; then
-         richable_as+=( ${rand_by_domain[$i]}  )
        fi
 
         richable+=( ${rand_by_domain[$i]} )
