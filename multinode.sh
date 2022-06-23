@@ -80,7 +80,7 @@ try="0"
         if [[ -z "$upnp_port" ]]; then
           FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
         else
-          FLUX_PORT=$upnp_port
+          FLUX_PORT=$(echo $upnp_port)
         if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 
            string_limit_check_mark "Port is valid..........................................."
@@ -139,7 +139,7 @@ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
   if [[ -z "$gateway_ip" ]]; then
     router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
   else
-    router_ip=$gateway_ip
+    router_ip=$(echo $gateway_ip)
   fi
 
   if [[ "$router_ip" != "" ]]; then
