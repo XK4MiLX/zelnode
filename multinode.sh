@@ -82,7 +82,7 @@ try="0"
         else
           FLUX_PORT=$(echo $upnp_port)
         fi
-        
+
         if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 
            string_limit_check_mark "Port is valid..........................................."
@@ -259,7 +259,7 @@ function upnp_disable() {
 
 # Import settings from upnp_conf.json if it exists
 # if [[ -f /home/$USER/upnp_conf.json ]]; then
-if [[ -f /tmp/upnp_conf.json ]]; then
+if [[ -f /home/$USER/upnp_conf.json ]]; then
   echo -e "${ARROW} ${CYAN}Importing UPnP configuration.....${NC}"
   echo -e ""
   # Import settings from upnp_conf.json
