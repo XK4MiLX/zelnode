@@ -763,10 +763,6 @@ sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
-
-flux_update='0'
-daemon_update='0'
-bench_update='0'
 fix_action='1'
 
 if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
@@ -843,6 +839,15 @@ EOF
 fi
 
 
+if whiptail --yesno "Would you like enable autoupdate?" 8 60; then
+  flux_update='1'
+  daemon_update='1'
+  bench_update='1'
+else
+  flux_update='0'
+  daemon_update='0'
+  bench_update='0'
+fi
 
 
 discord='0'
