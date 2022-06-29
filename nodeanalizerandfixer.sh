@@ -1002,18 +1002,18 @@ fi
 
 if [[ $zelnodeoutpoint == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//') ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} FluxNode outpoint matches${NC}"
+echo -e "${CHECK_MARK} ${CYAN} FluxNode Collateral TX ID matches${NC}"
 else
 REPLACE="1"
-echo -e "${X_MARK} ${CYAN} FluxNode outpoint does not match${NC}"
+echo -e "${X_MARK} ${CYAN} FluxNode Collateral TX ID does not match${NC}"
 fi
 
 if [[ $zelnodeindex == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//') ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} FluxNode index matches${NC}"
+echo -e "${CHECK_MARK} ${CYAN} FluxNode Output Index matches${NC}"
 else
 REPLACE="1"
-echo -e "${X_MARK} ${CYAN} FluxNode index does not match${NC}"
+echo -e "${X_MARK} ${CYAN} FluxNode Output Index does not match${NC}"
 fi
 
 fi
@@ -1099,11 +1099,11 @@ echo -e "\c"
         else
 	
      if [[ "$zelnodeoutpoint" == "" ]]; then
-       echo -e " ${CYAN}FluxNode zelnodeoutpoint skipped...............${NC}"
+       echo -e " ${CYAN}FluxNode Collateral TX ID skipped...............${NC}"
      else
         sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e " ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e " ${CYAN}FluxNode Collateral TX ID replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
      fi
 fi
@@ -1112,11 +1112,11 @@ echo -e "\c"
         else
 	
 	 if [[ "$zelnodeindex" == "" ]]; then
-          echo -e " ${CYAN}FluxNode zelnodeindex skipped...............${NC}"
+          echo -e " ${CYAN}FluxNode Output Index skipped...............${NC}"
          else
           sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
                 if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-                        echo -e " ${CYAN}FluxNode index replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e " ${CYAN}FluxNode Output Index replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
                 fi
 	 fi
 fi
