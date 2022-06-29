@@ -457,6 +457,9 @@ index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
+flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
+daemon_update=$(cat /home/$USER/install_conf.json | jq -r '.zelcash_update')
+bench_update=$(cat /home/$USER/install_conf.json | jq -r '.zelbench_update')
 node_label=$(cat /home/$USER/install_conf.json | jq -r '.node_label')
 eps_limit=$(cat /home/$USER/install_conf.json | jq -r '.eps_limit')
 discord=$(cat /home/$USER/install_conf.json | jq -r '.discord')
@@ -466,8 +469,6 @@ telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_to
 telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 
    
-	  
-
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
