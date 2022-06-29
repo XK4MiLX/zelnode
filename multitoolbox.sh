@@ -752,6 +752,15 @@ else
   KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
   sleep 1
 
+    if whiptail --yesno "Would you like enable autoupdate?" 8 65; then
+      zelflux_update='1'
+      zelcash_update='1'
+      zelbench_update='1'
+    else
+      zelflux_update='0'
+      zelcash_update='0'
+      zelbench_update='0'   
+    fi
 
 
   if [[ "$KDA_A" == "" ]]; then 
@@ -953,6 +962,9 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "swapon": "${swapon}",
   "use_old_chain": "${use_old_chain}",
   "node_label": "${node_label}",
+  "zelflux_update": "${zelflux_update}",
+  "zelcash_update": "${zelcash_update}",
+  "zelbench_update": "${zelbench_update}",
   "discord": "${discord}",
   "ping": "${ping}",
   "telegram_alert": "${telegram_alert}",
