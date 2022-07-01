@@ -1584,8 +1584,8 @@ EOF
 	
       #  if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
 	
-	    tier
-	    if [[ "$kadena_possible" == "1" ]]; then
+	    #tier
+	    #if [[ "$kadena_possible" == "1" ]]; then
 	
 	      while true
                 do
@@ -1604,7 +1604,7 @@ EOF
 		    fi
               done
 	                 
-           fi
+           #fi
 	
  fi      
  
