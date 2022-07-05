@@ -1798,6 +1798,13 @@ if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
 fi
 
+if [[ $(lsb_release -cs) == "jammy" ]]; then
+   echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+   echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+   echo
+   exit
+fi
+
 usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 usernew=$(awk '{print tolower($0)}' <<< "$usernew")
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
