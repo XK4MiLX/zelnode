@@ -457,6 +457,9 @@ index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
+flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
+daemon_update=$(cat /home/$USER/install_conf.json | jq -r '.zelcash_update')
+bench_update=$(cat /home/$USER/install_conf.json | jq -r '.zelbench_update')
 node_label=$(cat /home/$USER/install_conf.json | jq -r '.node_label')
 eps_limit=$(cat /home/$USER/install_conf.json | jq -r '.eps_limit')
 discord=$(cat /home/$USER/install_conf.json | jq -r '.discord')
@@ -466,8 +469,6 @@ telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_to
 telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 
    
-	  
-
 echo
 echo -e "${ARROW} ${YELLOW}Install config:"
 
@@ -558,7 +559,7 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash
             zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
             echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}" && sleep 1
             zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-            echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
+            echo -e "${PIN}${CYAN} Collateral TX ID = ${GREEN}$zelnodeoutpoint${NC}" && sleep 1
             zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
             echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}" && sleep 1
 	    
@@ -763,10 +764,6 @@ sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
-
-flux_update='0'
-daemon_update='0'
-bench_update='0'
 fix_action='1'
 
 if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
@@ -843,6 +840,15 @@ EOF
 fi
 
 
+if whiptail --yesno "Would you like enable autoupdate?" 8 60; then
+  flux_update='1'
+  daemon_update='1'
+  bench_update='1'
+else
+  flux_update='0'
+  daemon_update='0'
+  bench_update='0'
+fi
 
 
 discord='0'
@@ -1578,8 +1584,8 @@ EOF
 	
       #  if whiptail --yesno "Are you planning to run Kadena node? Please note that only Nimbus/Stratus nodes are allowed to run it. ( to get reward you still NEED INSTALL KadenaChainWebNode under Apps -> Local Apps section via FluxOS Web UI )" 10 90 3>&1 1>&2 2>&3; then
 	
-	    tier
-	    if [[ "$kadena_possible" == "1" ]]; then
+	    #tier
+	    #if [[ "$kadena_possible" == "1" ]]; then
 	
 	      while true
                 do
@@ -1598,7 +1604,7 @@ EOF
 		    fi
               done
 	                 
-           fi
+           #fi
 	
  fi      
  
