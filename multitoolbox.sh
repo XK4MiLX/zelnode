@@ -1810,9 +1810,6 @@ if [[ -z $usernew ]]; then
   usernew=$(awk '{print tolower($0)}' <<< "$usernew")
 fi
 
-usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-usernew=$(awk '{print tolower($0)}' <<< "$usernew")
-
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
 adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
