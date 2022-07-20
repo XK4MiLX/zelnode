@@ -855,6 +855,32 @@ else
       ;;
     esac
   done
+
+  if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
+    enable_upnp='1'
+    try="0"
+    while true
+      do
+        echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
+        FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
+        if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
+          string_limit_check_mark "Port is valid..........................................."
+          break
+        else
+          string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
+          sleep 1
+          try=$(($try+1))
+          if [[ "$try" -gt "3" ]]; then
+            echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
+            echo -e ""
+            exit
+          fi
+        fi
+      done
+    gateway_ip=$(whiptail --inputbox "Enter the gateway ip for this node:" 8 60 3>&1 1>&2 2>&3)
+  else
+    enable_upnp='0'
+  fi
 fi
 
  while true
@@ -970,7 +996,10 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "telegram_alert": "${telegram_alert}",
   "telegram_bot_token": "${telegram_bot_token}",
   "telegram_chat_id": "${telegram_chat_id}",
-  "eps_limit": "${eps_limit}"
+  "eps_limit": "${eps_limit}",
+  "enable_upnp": "${enable_upnp}"
+  "upnp_port": "${FLUX_PORT}"
+  "gateway_ip": "${gateway_ip}"
 }
 EOF
 
