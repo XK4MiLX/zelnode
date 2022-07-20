@@ -1808,6 +1808,8 @@ fi
 if [[ -z $usernew ]]; then
   usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
   usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+else
+  echo -e "${PIN}${CYAN} Import docker user `$usernew` from environment variable............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
