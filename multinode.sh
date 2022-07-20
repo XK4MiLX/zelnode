@@ -259,19 +259,33 @@ function upnp_disable() {
 
 # Import settings from upnp_conf.json if it exists
 # if [[ -f /home/$USER/upnp_conf.json ]]; then
-if [[ -f /home/$USER/upnp_conf.json ]]; then
-  echo -e "${ARROW} ${CYAN}Importing UPnP configuration.....${NC}"
-  echo -e ""
+if [[ -f /home/$USER/install_conf.json ]]; then
   # Import settings from upnp_conf.json
-  enable_upnp=$(cat /home/$USER/upnp_conf.json | jq -r '.enable_upnp')
-  upnp_port=$(cat /home/$USER/upnp_conf.json | jq -r '.upnp_port')
-  gateway_ip=$(cat /home/$USER/upnp_conf.json | jq -r '.gateway_ip')
+  enable_upnp=$(cat /home/$USER/install_conf.json | jq -r '.enable_upnp')
+  upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
+  gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 
-  echo -e "${ARROW} ${YELLOW}UPNP conf settings:${NC}"
-  echo -e "${PIN}${CYAN} Enable UPNP Key = ${GREEN}$enable_upnp${NC}" && sleep 1
-  echo -e "${PIN}${CYAN} UPNP Port = ${GREEN}$upnp_port${NC}" && sleep 1
-  echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}" && sleep 1
-  echo -e ""
+  if [[ "$import_settings" == "1" ]]; then
+    echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+
+    if [[ -n $enable_upnp && "$enable_upnp" != "" && "$enable_upnp" != "0" ]]; then
+      echo -e "${PIN}${CYAN} UPnP state = ${GREEN}Enable${NC}" && sleep 1
+    else
+      echo -e "${PIN}${CYAN} UPnP state = ${RED}Disable${NC}" && sleep 1
+    fi
+
+    if [[ -n $upnp_port && "$upnp_port" != "" && "$upnp_port" != "0" ]]; then
+      echo -e "${PIN}${CYAN} UPnP port  = ${GREEN}$upnp_port${NC}" && sleep 1
+    else
+      echo -e "${PIN}${CYAN} UPnP port  = ${RED}NULL${NC}" && sleep 1
+    fi
+
+    if [[ -n $gateway_ip && "$gateway_ip" != "" && "$gateway_ip" != "0" ]]; then
+      echo -e "${PIN}${CYAN} Gateway    = ${GREEN}$gateway_ip${NC}" && sleep 1
+    else
+      echo -e "${PIN}${CYAN} Gateway    = ${RED}NULL${NC}" && sleep 1
+    fi
+  fi
 fi
 
 
