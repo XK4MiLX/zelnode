@@ -261,30 +261,33 @@ function upnp_disable() {
 # if [[ -f /home/$USER/upnp_conf.json ]]; then
 if [[ -f /home/$USER/install_conf.json ]]; then
   # Import settings from upnp_conf.json
-  enable_upnp=$(cat /home/$USER/install_conf.json | jq -r '.enable_upnp')
-  upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
-  gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
+  import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
 
   if [[ "$import_settings" == "1" ]]; then
-    echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+    echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 0.5
+
+    enable_upnp=$(cat /home/$USER/install_conf.json | jq -r '.enable_upnp')
+    upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
+    gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 
     if [[ -n $enable_upnp && "$enable_upnp" != "" && "$enable_upnp" != "0" ]]; then
-      echo -e "${PIN}${CYAN} UPnP state = ${GREEN}Enable${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} UPnP state = ${GREEN}Enable${NC}" && sleep 0.5
     else
-      echo -e "${PIN}${CYAN} UPnP state = ${RED}Disable${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} UPnP state = ${RED}Disable${NC}" && sleep 0.5
     fi
 
     if [[ -n $upnp_port && "$upnp_port" != "" && "$upnp_port" != "0" ]]; then
-      echo -e "${PIN}${CYAN} UPnP port  = ${GREEN}$upnp_port${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} UPnP port  = ${GREEN}$upnp_port${NC}" && sleep 0.5
     else
-      echo -e "${PIN}${CYAN} UPnP port  = ${RED}NULL${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} UPnP port  = ${RED}NULL${NC}" && sleep 0.5
     fi
 
     if [[ -n $gateway_ip && "$gateway_ip" != "" && "$gateway_ip" != "0" ]]; then
-      echo -e "${PIN}${CYAN} Gateway    = ${GREEN}$gateway_ip${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} Gateway    = ${GREEN}$gateway_ip${NC}" && sleep 0.5
     else
-      echo -e "${PIN}${CYAN} Gateway    = ${RED}NULL${NC}" && sleep 1
+      echo -e "${PIN}${CYAN} Gateway    = ${RED}NULL${NC}" && sleep 0.5
     fi
+    echo -e ""
   fi
 fi
 
