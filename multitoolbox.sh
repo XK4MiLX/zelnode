@@ -859,6 +859,7 @@ else
   if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
     enable_upnp='1'
     try="0"
+    gateway_ip=$(whiptail --inputbox "Enter the gateway ip for this node:" 8 60 3>&1 1>&2 2>&3)
     while true
       do
         echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
@@ -877,7 +878,6 @@ else
           fi
         fi
       done
-    gateway_ip=$(whiptail --inputbox "Enter the gateway ip for this node:" 8 60 3>&1 1>&2 2>&3)
   else
     enable_upnp='0'
   fi
@@ -997,8 +997,8 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "telegram_bot_token": "${telegram_bot_token}",
   "telegram_chat_id": "${telegram_chat_id}",
   "eps_limit": "${eps_limit}",
-  "enable_upnp": "${enable_upnp}"
-  "upnp_port": "${FLUX_PORT}"
+  "enable_upnp": "${enable_upnp}",
+  "upnp_port": "${FLUX_PORT}",
   "gateway_ip": "${gateway_ip}"
 }
 EOF
