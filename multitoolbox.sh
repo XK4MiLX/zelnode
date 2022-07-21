@@ -435,9 +435,9 @@ echo -e "${PIN}${CYAN}Disable watchdog notification.............................
 fi
 
 if [[ ( "$enable_upnp" != "" && "$enable_upnp" != "0" ) ]]; then
-  echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+  echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 0.5
   echo -e "${CYAN}   UPnP Port:  ${GREEN}$upnp_port${NC}" && sleep 0.5
-  echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" && sleep 
+  echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" && sleep 0.5
 fi
 
 fi
