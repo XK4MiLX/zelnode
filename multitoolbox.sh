@@ -772,27 +772,48 @@ else
   if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
     enable_upnp='1'
     try="0"
-    gateway_ip=$(whiptail --inputbox "Enter the gateway ip for this node:" 8 60 3>&1 1>&2 2>&3)
-    while true
+    router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+    if [[ "$router_ip" != "" ]]; then
+      if (whiptail --yesno "Is your router's IP $router_ip ?" 8 70); then
+        is_correct="0"
+      fi
+    fi
+
+    if [[ -z $is_correct ]]; then
+      while true  
       do
-        echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
-        FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
-        if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
-          string_limit_check_mark "Port is valid..........................................."
-          break
+        router_ip=$(whiptail --inputbox "Enter your router's IP" 8 60 3>&1 1>&2 2>&3)
+        if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
+            echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
+            break
         else
-          string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
+          string_limit_x_mark "IP $router_ip is not valid ..............................."
           sleep 1
-          try=$(($try+1))
-          if [[ "$try" -gt "3" ]]; then
-            echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
-            echo -e ""
-            exit
-          fi
         fi
+      done
+    gateway_ip=$router_ip
+    while true
+    do
+      echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
+      FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
+      if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
+        string_limit_check_mark "Port is valid..........................................."
+        break
+      else
+        string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
+        sleep 1
+        try=$(($try+1))
+        if [[ "$try" -gt "3" ]]; then
+          echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
+          echo -e ""
+          exit
+        fi
+      fi
     done
   else
-    enable_upnp='0'
+    enable_upnp="0"
+    gateway_ip=""
+    FLUX_PORT=""
   fi
     
   if whiptail --yesno "Would you like enable alert notification?" 8 65; then
