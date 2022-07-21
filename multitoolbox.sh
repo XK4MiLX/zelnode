@@ -437,9 +437,8 @@ fi
 if [[ ( "$enable_upnp" != "" && "$enable_upnp" != "0" ) ]]; then
   echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
   echo -e "${CYAN}   UPnP Port:  ${GREEN}$upnp_port${NC}" && sleep 0.5
-  echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" && sleep 0.5
+  echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" && sleep 
 fi
-
 
 fi
 }
@@ -777,50 +776,21 @@ else
 
   if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
     enable_upnp='1'
-    try="0"
-    router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
-    if [[ "$router_ip" != "" ]]; then
-      if (whiptail --yesno "Is your router's IP $router_ip ?" 8 70); then
-        is_correct="0"
-      fi
-    fi
-
-    if [[ -z $is_correct ]]; then
-      while true  
-      do
-        router_ip=$(whiptail --inputbox "Enter your router's IP" 8 60 3>&1 1>&2 2>&3)
-        if [[ "$router_ip" =~ ^(([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))\.){3}([1-9]?[0-9]|1[0-9][0-9]|2([0-4][0-9]|5[0-5]))$ ]]; then
-            echo -e "${ARROW} ${CYAN}IP $router_ip format is valid........................[${CHECK_MARK}${CYAN}]${NC}"
-            break
-        else
-          string_limit_x_mark "IP $router_ip is not valid ..............................."
-          sleep 1
-        fi
-      done
-    fi
-    gateway_ip=$router_ip
-    while true
-    do
-      echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
-      FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
-      if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
-        string_limit_check_mark "Port is valid..........................................."
-        break
-      else
-        string_limit_x_mark "Port $FLUX_PORT is not allowed..............................."
-        sleep 1
-        try=$(($try+1))
-        if [[ "$try" -gt "3" ]]; then
-          echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
-          echo -e ""
-          exit
-        fi
-      fi
-    done
+    gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
+    upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
+      "Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
+      "16127" "" ON \
+      "16137" "" OFF \
+      "16147" "" OFF \
+      "16157" "" OFF \
+      "16167" "" OFF \
+      "16177" "" OFF \
+      "16187" "" OFF \
+      "16197" "" OFF 3>&1 1>&2 2>&3)
   else
     enable_upnp="0"
     gateway_ip=""
-    FLUX_PORT=""
+    upnp_port=""
   fi
     
   if whiptail --yesno "Would you like enable alert notification?" 8 65; then
