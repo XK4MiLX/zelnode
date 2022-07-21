@@ -791,6 +791,7 @@ else
           sleep 1
         fi
       done
+    fi
     gateway_ip=$router_ip
     while true
     do
