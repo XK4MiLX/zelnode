@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh > ~/.flux_helpers.sh
+curl https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh >> ~/.flux_helpers.sh
 source ~/.flux_helpers.sh
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
