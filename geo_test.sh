@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /opt/.flux_helpers.sh
+source ~/.flux_helpers.sh
 
 function get_ip(){
 

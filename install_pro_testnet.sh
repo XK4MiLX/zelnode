@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /opt/.flux_helpers.sh
+source ~/.flux_helpers.sh
 
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
