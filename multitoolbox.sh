@@ -1,6 +1,7 @@
 #!/bin/bash
 
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh)
+curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh > /opt/.flux_helpers.sh
+source /opt/.flux_helpers.sh
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'

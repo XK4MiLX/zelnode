@@ -1,13 +1,12 @@
 #!/bin/bash
 
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh)
+source /opt/.flux_helpers.sh
 
  function insertAfter
 {
    local file="$1" line="$2" newText="$3"
    sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
-
 
 
 function upnp_enable() {

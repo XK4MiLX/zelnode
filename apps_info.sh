@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /opt/.flux_helpers.sh
+
 function max(){
 
     local m="0"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh)
+source /opt/.flux_helpers.sh
 
 #const
 REPLACE="0"

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh)
+source /opt/.flux_helpers.sh
+
+
+source /opt/
 
 # Bootstrap settings
 #BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
@@ -319,36 +322,6 @@ echo -e ""
  }
 
 
-function max(){
-
-    m="0"
-    for n in "$@"
-    do        
-        if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
-            [ "$n" -gt "$m" ] && m="$n"
-        fi
-    done
-    
-    echo "$m"
-    
-}
-
-function string_limit_x_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::40}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::40+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
-}
-
-
 function integration_check() {
 FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
 ELEMENTS=${#FILE_ARRAY[@]}
@@ -485,10 +458,6 @@ fi
 
 
 fi
-}
-
-function round() {
-  printf "%.${2}f" "${1}"
 }
 
 function check_benchmarks() {
