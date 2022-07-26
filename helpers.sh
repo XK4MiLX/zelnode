@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Collection of common vars and functions used throughout multitoolbox.
+
 #color codes
 RED='\033[1;31m'
 YELLOW='\033[1;33m'
