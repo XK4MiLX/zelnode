@@ -1,4 +1,7 @@
 #!/bin/bash
+
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/helpers.sh)
+
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
@@ -36,43 +39,6 @@ ZELNODEPORT=16128
 RPCPORT=16124
 PORT=16125
 
-#color codes
-RED='\033[1;31m'
-YELLOW='\033[1;33m'
-BLUE="\\033[38;5;27m"
-SEA="\\033[38;5;49m"
-GREEN='\033[1;32m'
-CYAN='\033[1;36m'
-NC='\033[0m'
-
-#emoji codes
-CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
-X_MARK="${RED}\xE2\x9C\x96${NC}"
-PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
-ARROW="${SEA}\xE2\x96\xB6${NC}"
-BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
-WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-
-#dialog color
-export NEWT_COLORS='
-title=black,
-'
-function string_limit_check_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::40}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::40+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
-}
 
  function selfhosting() {
  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
@@ -164,21 +130,6 @@ function max(){
     
     echo "$m"
     
-}
-
-function string_limit_x_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::40}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::40+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
 }
 
 
@@ -285,10 +236,6 @@ fi
 
 
 fi
-}
-
-function round() {
-  printf "%.${2}f" "${1}"
 }
 
 function check_benchmarks() {
@@ -865,22 +812,6 @@ fi
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
  fi
  
-}
-
-function spinning_timer() {
-    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-    end=$((SECONDS+NUM))
-    while [ $SECONDS -lt $end ];
-    do
-        for i in "${animation[@]}";
-        do
-	    echo -e ""
-            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-            sleep 0.1
-	    
-        done
-    done
-    echo -ne "${MSG2}"
 }
 
 
