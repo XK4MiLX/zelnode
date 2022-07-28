@@ -1357,6 +1357,11 @@ function create_service_scripts() {
     echo -e "${ARROW} ${CYAN}Creating file /home/$USER/start_daemon_service.sh${NC}" && sleep 1
     sudo touch /home/$USER/start_daemon_service.sh
     sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
+
+    if [[ -f /home/$USER/start_daemon_service.sh ]]; then
+        echo -e "${WORNING} ${RED}Failed to create file /home/$USER/stop_daemon_service.sh${NC}" && sleep 1
+    fi
+
     cat <<'EOF' > /home/$USER/start_daemon_service.sh
 #!/bin/bash
 #color codes
