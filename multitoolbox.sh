@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --silent https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/common.sh > ~/.flux_common.sh
+curl --silent https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/common.sh > /home/$USER/.flux_common.sh
 source ~/.flux_common.sh
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
