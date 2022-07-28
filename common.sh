@@ -517,7 +517,7 @@ function zk_params() {
 }
 
 function create_service_scripts() {
-    #echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
+    echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
     sudo touch /home/$USER/start_daemon_service.sh
     sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
     cat <<'EOF' > /home/$USER/start_daemon_service.sh
