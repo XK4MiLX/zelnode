@@ -1,19 +1,7 @@
 #!/bin/bash
 
-source ~/.flux_helpers.sh
+source ~/.flux_common.sh
 
-function max(){
-
-    local m="0"
-    for n in "$@"
-    do
-         if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
-            [ "$n" -gt "$m" ] && m="$n"
-        fi
-    done
-    echo "$m"
-
-}
 
 apps_info=$(curl -SsL -m 10 https://api.runonflux.io/apps/globalappsspecifications)
 name=($(jq -r .data[].name <<< "$apps_info"))
