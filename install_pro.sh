@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ~/.flux_common.sh
 
 
 # Bootstrap settings
