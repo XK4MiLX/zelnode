@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm -f ~/.flux_common.sh
 curl --silent -o ~/.flux_common.sh https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/common.sh
 source ~/.flux_common.sh
 
