@@ -26,6 +26,9 @@ export NEWT_COLORS='
 title=black,
 '
 
+echo -e "${ARROW} ${CYAN}Importing Common Multitoolbox Resources..."
+echo ""
+
 function round() {
   printf "%.${2}f" "${1}"
 }
