@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ~/.flux_helpers.sh
+curl --silent -o /dev/null https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/helpers.sh >> ~/.flux_common.sh
+source ~/.flux_common.sh
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
@@ -914,24 +915,6 @@ function flux_daemon_bootstrap() {
 }
 
 
-function analyzer_and_fixer(){
-
-echo -e "${GREEN}Module: FluxNode analyzer and fixer${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
-fi
-
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/nodeanalizerandfixer.sh)
-
-
-}
-
 
 function install_node(){
 
@@ -1204,48 +1187,6 @@ echo -e "" && echo -e ""
 
 }
 
-
-
-function replace_zelid() {
-
- echo -e "${GREEN}Module: Replace Zel ID${NC}"
- echo -e "${YELLOW}================================================================${NC}"
- 
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
- fi 
-
-while true
-  do
-  
-    new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-
-    if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
-      string_limit_check_mark "Zel ID is valid..........................................."
-      break
-    else
-      string_limit_x_mark "Zel ID is not valid try again..........................................."
-      sleep 2
-   fi
-   
-  done
-   
-  if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-     echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped........................[${CHECK_MARK}${CYAN}]${NC}"
-   else
-        sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
-
-        if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-                        echo -e "${ARROW} ${CYAN}ZEL ID replaced successful.....................[${CHECK_MARK}${CYAN}]${NC}"
-        fi
-
-   fi
-
-}
  
  function update_binary(){
  

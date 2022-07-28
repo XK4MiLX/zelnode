@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ~/.flux_helpers.sh
+source ~/.flux_common.sh
 
  function insertAfter
 {

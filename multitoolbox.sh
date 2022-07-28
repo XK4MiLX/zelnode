@@ -1,7 +1,7 @@
 #!/bin/bash
 
-curl --silent -o /dev/null https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/helpers.sh >> ~/.flux_helpers.sh
-source ~/.flux_helpers.sh
+curl --silent -o /dev/null https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/common.sh => ~/.flux_common.sh
+source ~/.flux_common.sh
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
@@ -28,190 +28,6 @@ dversion="v7.1"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
 
-<<<<<<< HEAD
-=======
-#dialog color
-export NEWT_COLORS='
-title=black,
-'
-
-function bootstrap_server(){
-rand_by_domain=("5" "6" "7" "8" "9" "10" "11" "12")
-richable=()
-richable_eu=()
-richable_us=()
-richable_as=()
-
-i=0
-len=${#rand_by_domain[@]}
-echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
-while [ $i -lt $len ];
-do
-    #echo ${rand_by_domain[$i]}
-    bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
-    #echo -e "Height: $bootstrap_check"
-    if [[ "$bootstrap_check" != "" ]]; then
-    #echo -e "Adding:  ${rand_by_domain[$i]}"
-
-       if [[ "${rand_by_domain[$i]}" -ge "8" && "${rand_by_domain[$i]}" -le "11" ]]; then
-         richable_eu+=( ${rand_by_domain[$i]}  )
-       fi
-
-       if [[ "${rand_by_domain[$i]}" -gt "4" &&  "${rand_by_domain[$i]}" -le "7" ]]; then
-         richable_us+=( ${rand_by_domain[$i]}  )
-       fi
-       
-       if [[ "${rand_by_domain[$i]}" -ge "12" ]]; then
-         richable_as+=( ${rand_by_domain[$i]}  )
-       fi
-
-        richable+=( ${rand_by_domain[$i]} )
-    fi
-
-    i=$(($i+1))
-done
-
-server_found="1"
-if [[ "$continent" == "EU" ]]; then
-  len_eu=${#richable_eu[@]}
-  if [[ "$len_eu" -gt "0" ]]; then
-    richable=( ${richable_eu[*]} )
-    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-  fi
-  if [[ "$len_eu" == "0" ]]; then
-     continent="EU"
-     echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-     len_us=${#richable_us[@]}
-     if [[ "$len_us" -gt "0" ]]; then
-      richable=( ${richable_us[*]} )
-      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-     fi
-     if [[ "$len_us" == "0" ]]; then
-       continent="US"
-       echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-       server_found="0"
-     fi
-   fi
-elif [[ "$continent" == "US" ]]; then
-  len_us=${#richable_us[@]}
-  if [[ "$len_us" -gt "0" ]]; then
-    richable=( ${richable_us[*]} )
-    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-  fi
-  if [[ "$len_us" == "0" ]]; then
-    continent="US"
-    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-    len_as=${#richable_as[@]}
-    if [[ "$len_as" -gt "0" ]]; then
-     richable=( ${richable_as[*]} )
-     echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-    fi
-    if [[ "$len_as" == "0" ]]; then
-      continent="AS"
-      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-      len_eu=${#richable_eu[@]}
-        if [[ "$len_eu" -gt "0" ]]; then
-          richable=( ${richable_eu[*]} )
-          echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-        fi
-       if [[ "$len_eu" == "0" ]]; then
-        continent="EU"
-        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-        server_found="0"
-       fi
-    fi
-  fi
-elif [[ "$continent" == "AS" ]]; then
-  len_as=${#richable_as[@]}
-  if [[ "$len_as" -gt "0" ]]; then
-    richable=( ${richable_as[*]} )
-    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-  fi
-  if [[ "$len_as" == "0" ]]; then
-    continent="AS"
-    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-    len_us=${#richable_us[@]}
-    if [[ "$len_us" -gt "0" ]]; then
-      richable=( ${richable_us[*]} )
-      echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-    fi
-    if [[ "$len_us" == "0" ]]; then
-      continent="US"
-      echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-      len_eu=${#richable_eu[@]}
-       if [[ "$len_eu" -gt "0" ]]; then
-         richable=( ${richable_eu[*]} )
-         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-       fi
-       if [[ "$len_eu" == "0" ]]; then
-        continent="EU"
-        echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-        server_found="0"
-       fi
-    fi
-  fi
-else
-   len=${#richable[@]}
-   if [[ "$len" -gt "0" ]]; then
-         richable=( ${richable[*]} )
-         echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-   fi
-   
-   if [[ "$len" == "0" ]]; then
-    Server_offline=1
-    return 1
-   fi
-fi
-
-
-
-if [[ "$server_found" == "0" ]]; then
-  len=${#richable[@]}
-  if [[ "$len" == "0" ]]; then
-    Server_offline=1
-    return 1
-  fi
-fi
-
-Server_offline=0
-
-}
-
-function bootstrap_geolocation(){
-
-IP=$WANIP
-ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone | jq .)
-ip_status=$( jq -r .status <<< "$ip_output")
-
-if [[ "$ip_status" == "success" ]]; then
-country=$(jq -r .country <<< "$ip_output")
-org=$(jq -r .org <<< "$ip_output")
-continent=$(jq -r .timezone <<< "$ip_output")
-else
-country="UKNOW"
-continent="UKNOW"
-fi
-
-continent=$(cut -f1 -d"/" <<< "$continent" )
-
-if [[ "$continent" =~ "Europe" ]]; then
- continent="EU"
-elif [[ "$continent" =~ "America" ]]; then
- continent="US"
-elif [[ "$continent" =~ "Asia" ]]; then
- continent="AS"
-else
- continent="ALL"
-fi
-
-echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
-echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
-echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
-
-
-}
-
->>>>>>> 9e0de904a2406df7f270beb163f8a687826b5c3e
 function config_veryfity(){
 
  if [[ -f /home/$USER/.flux/flux.conf ]]; then
@@ -1286,25 +1102,6 @@ function flux_daemon_bootstrap() {
 }
 
 
-function analyzer_and_fixer(){
-
-echo -e "${GREEN}Module: FluxNode analyzer and fixer${NC}"
-echo -e "${YELLOW}================================================================${NC}"
-
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
-fi
-
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/nodeanalizerandfixer.sh)
-
-
-}
-
-
 function install_node(){
 
 echo -e "${GREEN}Module: Install FluxNode${NC}"
@@ -1599,48 +1396,6 @@ MSG1='Restarting daemon service...'
 MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
 spinning_timer
 echo -e "" && echo -e ""
-
-}
-
-
-function replace_zelid() {
-
- echo -e "${GREEN}Module: Replace Zel ID${NC}"
- echo -e "${YELLOW}================================================================${NC}"
- 
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
- fi 
-
-while true
-  do
-  
-    new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-
-    if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
-      string_limit_check_mark "Zel ID is valid..........................................."
-      break
-    else
-      string_limit_x_mark "Zel ID is not valid try again..........................................."
-      sleep 2
-   fi
-   
-  done
-   
-  if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-     echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped........................[${CHECK_MARK}${CYAN}]${NC}"
-   else
-        sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
-
-        if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-                        echo -e "${ARROW} ${CYAN}ZEL ID replaced successful.....................[${CHECK_MARK}${CYAN}]${NC}"
-        fi
-
-   fi
 
 }
  
