@@ -948,7 +948,7 @@ fi
 
 
 # bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro.sh)
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro_testnet.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/install_pro_testnet.sh)
 
 
 }
