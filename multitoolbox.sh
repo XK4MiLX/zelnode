@@ -1177,7 +1177,7 @@ if [[ $(lsb_release -cs) == "jammy" ]]; then
    exit
 fi
 
-if [[ -z $usernew ]]; then
+if [[ -z "$usernew" ]]; then
   usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
   usernew=$(awk '{print tolower($0)}' <<< "$usernew")
 else
