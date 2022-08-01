@@ -204,8 +204,6 @@ function upnp_disable() {
 
 }
 
-# Import settings from upnp_conf.json if it exists
-# if [[ -f /home/$USER/upnp_conf.json ]]; then
 if [[ -f /home/$USER/install_conf.json ]]; then
   # Import settings from upnp_conf.json
   import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
