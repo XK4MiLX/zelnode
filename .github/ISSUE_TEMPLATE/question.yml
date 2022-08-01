@@ -1,0 +1,65 @@
+name: Question 🤷‍♂️
+description: Got a question about multitoolbox, deployment, development or usage?
+title: '[QUESTION] <title>'
+labels: ['🤷‍♂️ Question']
+
+body:
+  # Filed 1 - Intro Text
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for using multitoolbox! Questions are welcome.
+        Quick questions should be asked in the [Official RunOnFlux Discord](https://discord.io/runonflux) support channels, Please. :)
+    validations:
+      required: false
+
+  # Field 2 - The actual question
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: Outline your question in a clear and concise manner
+    validations:
+      required: true
+
+  # Field 3 - Category
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What part of the application does this relate to?
+      options:
+        - Option 1
+        - Option 2
+        - Option 3
+        - Option 4
+        - Option 5
+        - Option 6
+        - Option 7
+        - Option 8
+        - Option 9
+        - Option 10
+        - Option 11
+        - Option 12
+        - Option 13
+        - Option 14
+    validations:
+      required: true
+
+  # Field 4 - User has RTFM first, and agrees to code of conduct, etc
+  - type: checkboxes
+    id: idiot-check
+    attributes:
+      label: Please tick the boxes
+      description: Before submitting, please ensure that
+      options:
+        - label: You have explained the issue clearly, and included all relevant info
+          required: true
+        - label: You are using the latest version of multitoolbox
+          required: true
+        - label: You've checked that this [issue hasn't already been raised](https://github.com/RunOnFlux/fluxnode-multitool/issues?q=is%3Aissue)
+          required: true
+        - label: You've checked the official [RunOnFlux Discord](https://discord.io/runonflux) Pinned messages and FAQ ![important](https://img.shields.io/badge/Important!-F6094E)
+          required: true
+        - label: You agree to the [code of conduct](https://github.com/RunOnFlux/fluxnode-multitool/blob/master/.github/CODE_OF_CONDUCT.md)
+          required: true
