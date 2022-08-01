@@ -38,7 +38,7 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-dversion="v7.1"
+dversion="v7.2"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -438,6 +438,11 @@ else
 echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 fi
 
+if [[ ( "$enable_upnp" != "" && "$enable_upnp" != "0" ) ]]; then
+  echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 0.5
+  echo -e "${CYAN}   UPnP Port:  ${GREEN}$upnp_port${NC}" && sleep 0.5
+  echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" && sleep 0.5
+fi
 
 fi
 }
@@ -772,6 +777,25 @@ else
   else
       kda_address="kadena:$KDA_A?chainid=0"
   fi
+
+  if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
+    enable_upnp='1'
+    gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
+    upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
+      "Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
+      "16127" "" ON \
+      "16137" "" OFF \
+      "16147" "" OFF \
+      "16157" "" OFF \
+      "16167" "" OFF \
+      "16177" "" OFF \
+      "16187" "" OFF \
+      "16197" "" OFF 3>&1 1>&2 2>&3)
+  else
+    enable_upnp="0"
+    gateway_ip=""
+    upnp_port=""
+  fi
     
   if whiptail --yesno "Would you like enable alert notification?" 8 65; then
 
@@ -974,7 +998,10 @@ sudo chown $USER:$USER /home/$USER/install_conf.json
   "telegram_alert": "${telegram_alert}",
   "telegram_bot_token": "${telegram_bot_token}",
   "telegram_chat_id": "${telegram_chat_id}",
-  "eps_limit": "${eps_limit}"
+  "eps_limit": "${eps_limit}",
+  "enable_upnp": "${enable_upnp}",
+  "upnp_port": "${FLUX_PORT}",
+  "gateway_ip": "${gateway_ip}"
 }
 EOF
 
@@ -1809,8 +1836,13 @@ if [[ $(lsb_release -cs) == "jammy" ]]; then
    exit
 fi
 
-usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+if [[ -z $usernew ]]; then
+  usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+  usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+else
+  echo -e "${PIN}${CYAN} Import docker user `$usernew` from environment variable............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+fi
+
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
 adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
@@ -2421,7 +2453,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: X4MiLX from Flux's team${NC}"
-echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
+echo -e "${GREEN}Special thanks to dk808, CryptoWrench , jriggs28 && TechDufus${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
