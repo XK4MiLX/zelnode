@@ -1554,8 +1554,8 @@ read -rp "Pick an option and hit ENTER: "
  9)
   clear
   sleep 1
-  create_service
-  create_service_scripts
+  create_oldnode_service
+  create_oldnode_service_scripts
  ;;
  
   10)
