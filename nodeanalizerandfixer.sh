@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ~/.flux_common.sh
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh)"
 
 #const
 REPLACE="0"

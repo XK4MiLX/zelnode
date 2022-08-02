@@ -1,8 +1,6 @@
 #!/bin/bash
 
-rm -f ~/.flux_common.sh
-curl --silent -o ~/.flux_common.sh https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh
-source ~/.flux_common.sh
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh)"
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
