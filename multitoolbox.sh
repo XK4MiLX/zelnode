@@ -1,8 +1,6 @@
 #!/bin/bash
 
-rm -f ~/.flux_common.sh
-curl --silent -o ~/.flux_common.sh https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh
-source ~/.flux_common.sh
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh)"
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
