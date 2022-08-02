@@ -24,7 +24,7 @@ FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
 Server_offline=0
 
-dversion="v7.1"
+dversion="v7.3"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -1474,7 +1474,7 @@ echo -e "${YELLOW}==============================================================
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: X4MiLX from Flux's team${NC}"
-echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
+echo -e "${GREEN}Special thanks to dk808, CryptoWrench, jriggs28 && TechDufus${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
