@@ -24,7 +24,29 @@ FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
 Server_offline=0
 
+<<<<<<< HEAD
 dversion="v7.3"
+=======
+#color codes
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
+BLUE="\\033[38;5;27m"
+SEA="\\033[38;5;49m"
+GREEN='\033[1;32m'
+CYAN='\033[1;36m'
+NC='\033[0m'
+
+#emoji codes
+CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
+X_MARK="${RED}\xE2\x9C\x96${NC}"
+PIN="${RED}\xF0\x9F\x93\x8C${NC}"
+CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
+ARROW="${SEA}\xE2\x96\xB6${NC}"
+BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
+WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+dversion="v7.2"
+>>>>>>> 4894bba80af57763ff31571183d4b5291d029f83
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -1474,7 +1496,11 @@ echo -e "${YELLOW}==============================================================
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: X4MiLX from Flux's team${NC}"
+<<<<<<< HEAD
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench, jriggs28 && TechDufus${NC}"
+=======
+echo -e "${GREEN}Special thanks to dk808, CryptoWrench , jriggs28 && TechDufus${NC}"
+>>>>>>> 4894bba80af57763ff31571183d4b5291d029f83
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
