@@ -1,6 +1,7 @@
 #!/bin/bash
 
-curl --silent -o /dev/null https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/helpers.sh >> ~/.flux_common.sh
+rm -f ~/.flux_common.sh
+curl --silent -o ~/.flux_common.sh https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh
 source ~/.flux_common.sh
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
@@ -948,7 +949,7 @@ fi
 
 
 # bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro.sh)
-bash -i <(curl -s https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/install_pro_testnet.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro_testnet.sh)
 
 
 }
