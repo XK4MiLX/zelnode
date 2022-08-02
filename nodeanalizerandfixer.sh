@@ -962,7 +962,7 @@ echo
 echo -e "${BOOK} ${YELLOW}Checking Watchdog:${NC}"
 
 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
-required_ver=$(curl -sS https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/package.json | jq -r '.version')
+required_ver=$(curl -sS https://raw.githubusercontent.com/RunOnFlux/fluxnode-watchdog/master/package.json | jq -r '.version')
 
   if [[ "$required_ver" != "" ]]; then
      if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
