@@ -1496,11 +1496,8 @@ echo -e "${YELLOW}==============================================================
 echo -e "${GREEN}Version: $dversion${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: X4MiLX from Flux's team${NC}"
-<<<<<<< HEAD
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench, jriggs28 && TechDufus${NC}"
-=======
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench , jriggs28 && TechDufus${NC}"
->>>>>>> 4894bba80af57763ff31571183d4b5291d029f83
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${CYAN}1  - Install Docker${NC}"
 echo -e "${CYAN}2  - Install FluxNode${NC}"
