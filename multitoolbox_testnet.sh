@@ -1,5 +1,10 @@
 #!/bin/bash
 
+ROOT_BRANCH="master"
+if ! [ -z "$1" ]; then
+    ROOT_BRANCH="$1"
+fi
+
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
@@ -701,7 +706,7 @@ sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
@@ -1354,7 +1359,7 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
     exit
 fi
 
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/nodeanalizerandfixer.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
 
 
 }
@@ -1391,8 +1396,8 @@ exit
 fi
 
 
-# bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro.sh)
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/install_pro_testnet.sh)
+# bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/install_pro.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/install_pro_testnet.sh)
 
 
 }
@@ -1430,7 +1435,7 @@ fi
     fi  
     
     sleep 15
-    bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multinode.sh)
+    bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
 
 }
 
@@ -2095,6 +2100,7 @@ echo -e "${BLUE}"
 figlet -f slant "Multitoolbox TESTNET"
 echo -e "${YELLOW}================================================================${NC}"
 echo -e "${GREEN}Version: $dversion${NC}"
+echo -e "${GREEN}Branch:  ${ROOT_BRANCH}${NC}"
 echo -e "${GREEN}OS: Ubuntu 16/18/19/20, Debian 9/10 ${NC}"
 echo -e "${GREEN}Created by: X4MiLX from Flux's team${NC}"
 echo -e "${GREEN}Special thanks to dk808, CryptoWrench && jriggs28${NC}"
