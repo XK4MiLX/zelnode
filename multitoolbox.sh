@@ -5,6 +5,8 @@ if ! [[ -z $1 ]]; then
         export ROOT_BRANCH="$1"
         export BRANCH_ALREADY_REFERENCED='1'
         bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
+        unset ROOT_BRANCH
+        unset BRANCH_ALREADY_REFERENCED
         exit
     fi
 else
