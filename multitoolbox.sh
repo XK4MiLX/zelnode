@@ -4,7 +4,7 @@ if ! [[ -z $1 ]]; then
     if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
         export ROOT_BRANCH="$1"
         export BRANCH_ALREADY_REFERENCED='1'
-        bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox_testnet.sh) $ROOT_BRANCH
+        bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
         unset ROOT_BRANCH
         unset BRANCH_ALREADY_REFERENCED
         exit
@@ -14,6 +14,7 @@ else
 fi
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
+
 
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
