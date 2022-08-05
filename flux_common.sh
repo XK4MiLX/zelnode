@@ -1349,7 +1349,7 @@ function multinode(){
     fi  
     
     sleep 15
-    bash -i <(curl -s https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/multinode.sh)
+    bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
 }
 
 function create_service_scripts() {
@@ -1532,7 +1532,7 @@ function analyzer_and_fixer(){
         echo -e "${NC}"
         exit
     fi
-    bash -i <(curl -s https://raw.githubusercontent.com/matthewjdegarmo/fluxnode-multitool/source_cleanup/nodeanalizerandfixer.sh)
+    bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
 }
 
 
