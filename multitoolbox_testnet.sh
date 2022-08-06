@@ -10,7 +10,7 @@ if ! [[ -z $1 ]]; then
         exit
     fi
 else
-    ROOT_BRANCH='master'
+    export ROOT_BRANCH='master'
 fi
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
@@ -2150,3 +2150,7 @@ read -rp "Pick an option and hit ENTER: "
     multinode
  ;;
     esac
+
+# USED FOR CLEANUP AT END OF SCRIPT
+unset ROOT_BRANCH
+unset BRANCH_ALREADY_REFERENCED
