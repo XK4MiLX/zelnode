@@ -160,7 +160,7 @@ fi
 
 
 if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-FluxAPI=$(grep -Po "\\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
+FluxAPI=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
 FLUXOS_CONFIG=$(grep -Po "$FluxAPI" /home/$USER/zelflux/config/userconfig.js)
   if [[ "$FLUXOS_CONFIG" != "" ]]; then
     FluxUI=$(($FluxAPI-1))
