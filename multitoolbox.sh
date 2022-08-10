@@ -61,6 +61,12 @@ export NEWT_COLORS='
 title=black,
 '
 
+function insertAfter
+{
+   local file="$1" line="$2" newText="$3"
+   sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
+}
+
 function bootstrap_server(){
 rand_by_domain=("5" "6" "7" "8" "9" "10" "11" "12")
 richable=()
@@ -2204,22 +2210,46 @@ EOF
 }
 
 
-function replace_zelid() {
 
- echo -e "${GREEN}Module: Replace Zel ID${NC}"
- echo -e "${YELLOW}================================================================${NC}"
- 
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-    echo -e "${CYAN}Please switch to the user account.${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${NC}"
-    exit
- fi 
+function replace_kadena {
+
+ while true
+  do
+   KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+   kda_address="kadena:$KDA_A?chainid=0"
+   if [[ "$KDA_A" == "" ]]; then
+     echo -e "${WORNING} ${CYAN}Kadena address can't be empty string, operation aborted...${NC}"
+     echo -e ""
+     exit
+   fi
+   break
+ done
+
+
+if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "kadena") != "" ]]; then
+
+  sed -i "s/$(grep -e kadena /home/$USER/zelflux/config/userconfig.js)/kadena: '$kda_address',/" /home/$USER/zelflux/config/userconfig.js
+
+  if [[ $(grep -w $KDA_A /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+     echo -e "${ARROW} ${CYAN}Kadena address replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
+  fi
+
+else
+
+   insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "kadena: '$kda_address',"
+   echo -e "${ARROW} ${CYAN}Kadena address set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
+
+fi
+
+
+}
+
+
+function replace_zelid() {
 
 while true
   do
-  
+
     new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
 
     if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
@@ -2229,21 +2259,60 @@ while true
       string_limit_x_mark "Zel ID is not valid try again..........................................."
       sleep 2
    fi
-   
+
   done
-   
+
   if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-     echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped........................[${CHECK_MARK}${CYAN}]${NC}"
+     echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped............................[${CHECK_MARK}${CYAN}]${NC}"
    else
         sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
 
         if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-                        echo -e "${ARROW} ${CYAN}ZEL ID replaced successful.....................[${CHECK_MARK}${CYAN}]${NC}"
+                        echo -e "${ARROW} ${CYAN}ZEL ID replaced successful........................[${CHECK_MARK}${CYAN}]${NC}"
         fi
-
    fi
 
 }
+
+
+function fluxos_reconfiguration {
+
+ echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+
+ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi
+
+ if ! [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
+   echo -e "${WORNING} ${CYAN}FluxOS userconfig.js not exist, operation aborted${NC}"
+   echo -e ""
+   exit
+ fi
+
+
+ CHOICE=$(
+ whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
+ "1)" "Replace ZELID"   \
+ "2)" "Add/Replace kadena address"  3>&2 2>&1 1>&3
+ )
+
+
+case $CHOICE in
+        "1)")
+         replace_zelid
+        ;;
+        "2)")
+         replace_kadena
+        ;;
+esac
+
+}
+
 
  function install_watchtower(){
  
@@ -2479,7 +2548,7 @@ echo -e "${CYAN}7  - Re-install FluxOS${NC}"
 echo -e "${CYAN}8  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
-echo -e "${CYAN}11 - Replace Zel ID ${NC}"
+echo -e "${CYAN}11 - FluxOS reconfiguration ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
@@ -2560,7 +2629,7 @@ read -rp "Pick an option and hit ENTER: "
    11)
   clear
   sleep 1
-  replace_zelid
+  fluxos_reconfiguration
   echo -e ""
  ;;
  
