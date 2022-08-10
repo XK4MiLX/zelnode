@@ -1406,8 +1406,6 @@ spinning_timer
 echo -e "" && echo -e ""
 
 }
-<<<<<<< HEAD
-=======
 
 function create_service_scripts() {
 
@@ -1584,7 +1582,6 @@ echo -e "${ARROW} ${CYAN}flux_watchtower installion failed...${NC}"
 fi
  
  }
->>>>>>> 4abec2c01aaeabb138fdcb850673a5c21806d431
  
  
  function mongod_db_fix() {
