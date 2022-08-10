@@ -1724,7 +1724,7 @@ read -rp "Pick an option and hit ENTER: "
  8)
    clear
    sleep 1
-   fluxos_reconfiguration
+   daemon_reconfiguration
    
  ;;
  
