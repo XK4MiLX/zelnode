@@ -10,7 +10,7 @@ if ! [[ -z $1 ]]; then
         exit
     fi
 else
-    ROOT_BRANCH='master'
+    export ROOT_BRANCH='master'
 fi
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
@@ -44,36 +44,115 @@ zelflux_setting_import="0"
 
 
 function pm2_install(){
-    
-    tmux kill-server > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
-    npm install pm2@latest -g > /dev/null 2>&1
-    
-    if pm2 -v > /dev/null 2>&1
-    then
-        rm restart_zelflux.sh > /dev/null 2>&1
-     	echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
-   	pm2 startup systemd -u $USER > /dev/null 2>&1
-   	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
-	pm2 install pm2-logrotate > /dev/null 2>&1
-	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
-	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
-  	PM2_INSTALL="1"
+  tmux kill-server > /dev/null 2>&1 && sleep 1
+  echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
+  npm install pm2@latest -g > /dev/null 2>&1
 
+  if pm2 -v > /dev/null 2>&1
+  then
+    rm restart_zelflux.sh > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
+    pm2 startup systemd -u $USER > /dev/null 2>&1
+    sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+    pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+    pm2 install pm2-logrotate > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+    source ~/.bashrc
+    #echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+    string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
+    PM2_INSTALL="1"
+  else
+    string_limit_x_mark "PM2 was not installed....................................................."
+    echo
+  fi 
+}
+
+function replace_kadena {
+  while true
+  do
+    KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+    kda_address="kadena:$KDA_A?chainid=0"
+
+    if [[ "$KDA_A" == "" ]]; then
+      echo -e "${WORNING} ${CYAN}Kadena address can't be empty string, operation aborted...${NC}"
+      echo -e ""
+      exit
+    fi
+      break
+  done
+
+  if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "kadena") != "" ]]; then
+    sed -i "s/$(grep -e kadena /home/$USER/zelflux/config/userconfig.js)/kadena: '$kda_address',/" /home/$USER/zelflux/config/userconfig.js
+
+    if [[ $(grep -w $KDA_A /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+      echo -e "${ARROW} ${CYAN}Kadena address replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
+    fi
+  else
+    insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "kadena: '$kda_address',"
+    echo -e "${ARROW} ${CYAN}Kadena address set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
+  fi
+}
+
+
+function replace_zelid() {
+  while true
+  do
+    new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+    
+    if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
+      string_limit_check_mark "Zel ID is valid..........................................."
+      break
     else
+      string_limit_x_mark "Zel ID is not valid try again..........................................."
+      sleep 2
+    fi
+  done
 
-	 string_limit_x_mark "PM2 was not installed....................................................."
-	 echo
-    fi 
+  if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+    echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped............................[${CHECK_MARK}${CYAN}]${NC}"
+  else
+    sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
 
+    if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+      echo -e "${ARROW} ${CYAN}ZEL ID replaced successful........................[${CHECK_MARK}${CYAN}]${NC}"
+    fi
+  fi
+}
+
+function fluxos_reconfiguration {
+  echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
+  echo -e "${YELLOW}================================================================${NC}"
+  if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+      echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+      echo -e "${CYAN}Please switch to the user account.${NC}"
+      echo -e "${YELLOW}================================================================${NC}"
+      echo -e "${NC}"
+      exit
+  fi
+
+  if ! [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
+    echo -e "${WORNING} ${CYAN}FluxOS userconfig.js not exist, operation aborted${NC}"
+    echo -e ""
+    exit
+  fi
+  CHOICE=$(
+  whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
+  "1)" "Replace ZELID"   \
+  "2)" "Add/Replace kadena address"  3>&2 2>&1 1>&3
+  )
+  case $CHOICE in
+          "1)")
+          replace_zelid
+          ;;
+          "2)")
+          replace_kadena
+          ;;
+  esac
 }
 
 
@@ -1353,3 +1432,7 @@ read -rp "Pick an option and hit ENTER: "
     multinode
  ;;
     esac
+
+# USED FOR CLEANUP AT END OF SCRIPT
+unset ROOT_BRANCH
+unset BRANCH_ALREADY_REFERENCED

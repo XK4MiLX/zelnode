@@ -98,6 +98,35 @@ fi
 
 }
 
+function pm2_install(){
+  echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
+  npm install pm2@latest -g > /dev/null 2>&1
+  
+  if pm2 -v > /dev/null 2>&1; then
+    echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+    pm2 startup systemd -u $USER > /dev/null 2>&1
+    sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+
+    #pm2 start ~/zelflux/start.sh --name zelflux > /dev/null 2>&1
+    #pm2 save > /dev/null 2>&1
+
+    pm2 install pm2-logrotate > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+
+    source ~/.bashrc
+    #echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+    string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................."
+    echo
+  else  	 
+    string_limit_x_mark "PM2 was not installed................................."
+    echo
+  fi 
+}
+
 
 function import_date() {
 

@@ -10,7 +10,7 @@ if ! [[ -z $1 ]]; then
         exit
     fi
 else
-    ROOT_BRANCH='master'
+    export ROOT_BRANCH='master'
 fi
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
@@ -39,6 +39,7 @@ dversion="v7.3"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
 
+
 function config_veryfity(){
 
  if [[ -f /home/$USER/.flux/flux.conf ]]; then
@@ -65,36 +66,32 @@ function config_veryfity(){
 }
 
 function pm2_install(){
-    
-    tmux kill-server > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
-    npm install pm2@latest -g > /dev/null 2>&1
-    
-    if pm2 -v > /dev/null 2>&1
-    then
-        rm restart_zelflux.sh > /dev/null 2>&1
-     	echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
-   	pm2 startup systemd -u $USER > /dev/null 2>&1
-   	sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-   	pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
-    	pm2 save > /dev/null 2>&1
-	pm2 install pm2-logrotate > /dev/null 2>&1
-	pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-	pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-    	pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-    	pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-	source ~/.bashrc
-	#echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
-	string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
-  	PM2_INSTALL="1"
+  tmux kill-server > /dev/null 2>&1 && sleep 1
+  echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
+  npm install pm2@latest -g > /dev/null 2>&1
 
-    else
-
-	 string_limit_x_mark "PM2 was not installed....................................................."
-	 echo
-    fi 
-
+  if pm2 -v > /dev/null 2>&1
+  then
+    rm restart_zelflux.sh > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
+    pm2 startup systemd -u $USER > /dev/null 2>&1
+    sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+    pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+    pm2 install pm2-logrotate > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+    source ~/.bashrc
+    #echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+    string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
+    PM2_INSTALL="1"
+  else
+    string_limit_x_mark "PM2 was not installed....................................................."
+    echo
+  fi 
 }
 
 
@@ -1409,6 +1406,185 @@ spinning_timer
 echo -e "" && echo -e ""
 
 }
+<<<<<<< HEAD
+=======
+
+function create_service_scripts() {
+
+echo -e "${ARROW} ${CYAN}Creating Flux daemon service scripts...${NC}" && sleep 1
+sudo touch /home/$USER/start_daemon_service.sh
+sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
+    cat <<'EOF' > /home/$USER/start_daemon_service.sh
+#!/bin/bash
+#color codes
+RED='\033[1;31m'
+CYAN='\033[1;36m'
+NC='\033[0m'
+#emoji codes
+BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+sleep 2
+echo -e "${BOOK} ${CYAN}Pre-start process starting...${NC}"
+echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
+bench_status_pind=$(pgrep fluxbenchd)
+daemon_status_pind=$(pgrep fluxd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall -9 fluxbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall -9 fluxd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+bench_status_pind=$(pgrep zelbenchd)
+daemon_status_pind=$(pgrep zelcashd)
+if [[ "$bench_status_pind" == "" && "$daemon_status_pind" == "" ]]; then
+echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
+else
+if [[ "$bench_status_pind" != "" ]]; then
+echo -e "${WORNING} Running benchmark process detected${NC}"
+echo -e "${WORNING} Killing benchmark...${NC}"
+sudo killall -9 zelbenchd > /dev/null 2>&1  && sleep 2
+fi
+if [[ "$daemon_status_pind" != "" ]]; then
+echo -e "${WORNING} Running daemon process detected${NC}"
+echo -e "${WORNING} Killing daemon...${NC}"
+sudo killall -9 zelcashd > /dev/null 2>&1  && sleep 2
+fi
+sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+fi
+if [[ -f /usr/local/bin/fluxd ]]; then
+bash -c "fluxd"
+exit
+else
+bash -c "zelcashd"
+exit
+fi
+EOF
+
+
+sudo touch /home/$USER/stop_daemon_service.sh
+sudo chown $USER:$USER /home/$USER/stop_daemon_service.sh
+    cat <<'EOF' > /home/$USER/stop_daemon_service.sh
+#!/bin/bash
+if [[ -f /usr/local/bin/flux-cli ]]; then
+bash -c "flux-cli stop"
+else
+bash -c "zelcash-cli stop"
+fi
+exit
+EOF
+
+echo -e "${ARROW} ${CYAN}Setting scripts permissions...${NC}" && sleep 1
+sudo chmod +x /home/$USER/stop_daemon_service.sh
+sudo chmod +x /home/$USER/start_daemon_service.sh
+echo -e "${ARROW} ${CYAN}Reloading service config...${NC}" && sleep 1
+sudo systemctl daemon-reload > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Starting Flux daemon....${NC}" && sleep 1
+sudo systemctl start zelcash > /dev/null 2>&1
+echo -e ""
+}
+
+function create_service() {
+
+ echo -e "${GREEN}Module: Flux Daemon service creator${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+ 
+echo -e ""
+echo -e "${ARROW} ${CYAN}Cleaning...${NC}" && sleep 1
+sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+sudo rm -rf /home/$USER/start_daemon_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_daemon_service.sh > /dev/null 2>&1 
+sudo rm -rf /home/$USER/start_zelcash_service.sh > /dev/null 2>&1  
+sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1 
+sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
+    
+echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
+sudo touch /etc/systemd/system/zelcash.service
+sudo chown $USER:$USER /etc/systemd/system/zelcash.service
+cat << EOF > /etc/systemd/system/zelcash.service
+[Unit]
+Description=Flux daemon service
+After=network.target
+[Service]
+Type=forking
+User=$USER
+Group=$USER
+ExecStart=/home/$USER/start_daemon_service.sh
+ExecStop=-/home/$USER/stop_daemon_service.sh
+Restart=always
+RestartSec=10
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=15s
+StartLimitInterval=120s
+StartLimitBurst=5
+[Install]
+WantedBy=multi-user.target
+EOF
+    sudo chown root:root /etc/systemd/system/zelcash.service
+}
+
+
+ function install_watchtower(){
+ 
+ echo -e "${GREEN}Module: Install flux_watchtower for docker images autoupdate${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ 
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+ fi 
+ 
+echo -e ""
+echo -e "${ARROW} ${CYAN}Checking if flux_watchtower is installed....${NC}"
+apps_check=$(docker ps | grep "flux_watchtower")
+
+if [[ "$apps_check" != "" ]]; then
+echo -e "${ARROW} ${CYAN}Stopping flux_watchtower...${NC}"
+docker stop flux_watchtower > /dev/null 2>&1
+sleep 2
+echo -e "${ARROW} ${CYAN}Removing flux_watchtower...${NC}"
+docker rm flux_watchtower > /dev/null 2>&1
+fi
+
+echo -e "${ARROW} ${CYAN}Downloading containrrr/watchtower image...${NC}"
+docker pull containrrr/watchtower:latest > /dev/null 2>&1
+echo -e "${ARROW} ${CYAN}Starting containrrr/watchtower...${NC}"
+random=$(shuf -i 7500-35000 -n 1)
+echo -e "${ARROW} ${CYAN}Interval: ${GREEN} $random sec.${NC}"
+apps_id=$(docker run -d \
+--restart unless-stopped \
+--name flux_watchtower \
+-v /var/run/docker.sock:/var/run/docker.sock \
+containrrr/watchtower \
+--cleanup --interval $random 2> /dev/null) 
+if [[ $apps_id =~ ^[[:alnum:]]+$ ]]; then
+echo -e "${ARROW} ${CYAN}flux_watchtower installed successful, id: ${GREEN}$apps_id${NC}"
+else
+echo -e "${ARROW} ${CYAN}flux_watchtower installion failed...${NC}"
+fi
+ 
+ }
+>>>>>>> 4abec2c01aaeabb138fdcb850673a5c21806d431
  
  
  function mongod_db_fix() {
@@ -1497,7 +1673,7 @@ echo -e "${CYAN}7  - Re-install FluxOS${NC}"
 echo -e "${CYAN}8  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
-echo -e "${CYAN}11 - Replace Zel ID ${NC}"
+echo -e "${CYAN}11 - FluxOS reconfiguration ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
@@ -1578,7 +1754,7 @@ read -rp "Pick an option and hit ENTER: "
    11)
   clear
   sleep 1
-  replace_zelid
+  fluxos_reconfiguration
   echo -e ""
  ;;
  
@@ -1611,3 +1787,7 @@ read -rp "Pick an option and hit ENTER: "
 # ;;
 
     esac
+
+# USED FOR CLEANUP AT END OF SCRIPT
+unset ROOT_BRANCH
+unset BRANCH_ALREADY_REFERENCED
