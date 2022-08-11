@@ -1610,7 +1610,7 @@ sudo apt-get install -y whiptail > /dev/null 2>&1
 fi
 
 if [[ $(cat /etc/bash.bashrc | grep 'multitoolbox' | wc -l) == "0" ]]; then
-echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
+echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
 source /etc/bash.bashrc
 fi
 
