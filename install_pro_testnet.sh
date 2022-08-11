@@ -1024,63 +1024,63 @@ function basic_security() {
 
 function start_daemon() {
 
-  sudo systemctl enable zelcash.service > /dev/null 2>&1
-  sudo systemctl start zelcash > /dev/null 2>&1
-
-  NUM='250'
-  MSG1='Starting daemon & syncing with chain please be patient this will take about 3 min...'
-  MSG2=''
-  spinning_timer
-
-  if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
-    # if $COIN_DAEMON > /dev/null 2>&1; then
-
-    NUM='2'
-    MSG1='Getting info...'
-    MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
+    sudo systemctl enable zelcash.service > /dev/null 2>&1
+    sudo systemctl start zelcash > /dev/null 2>&1
+    
+    NUM='250'
+    MSG1='Starting daemon & syncing with chain please be patient this will take about 3 min...'
+    MSG2=''
     spinning_timer
-    echo && echo
+    
+    if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+    # if $COIN_DAEMON > /dev/null 2>&1; then
+        
+        NUM='2'
+        MSG1='Getting info...'
+        MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
+        spinning_timer
+        echo && echo
+	
+	
+	daemon_version=$($COIN_CLI getinfo | jq -r '.version')
+	string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
+	#echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
+	bench_version=$($BENCH_CLI -testnet getinfo | jq -r '.version')
+	string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
+	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
+	echo
+	pm2_install()
+	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
+    else
+        echo
+        echo -e "${WORNING} ${RED}Something is not right the daemon did not start or still loading...${NC}"
+	
+	if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
+	  error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
+	     if [[ "$error_line" != "" ]]; then	  
+	       echo -e "${WORNING} ${CYAN}Last error from ~/$CONFIG_DIR/debug.log: ${NC}"
+	       echo -e "${WORNING} ${CYAN}$error_line${NC}"
+	       echo
+	       exit
+	     fi  	       
+        fi
+	
+	
+	if whiptail --yesno "Something is not right the daemon did not start or still loading....\nWould you like continue the installation (make sure that flux daemon working) Y/N?" 8 90; then
+       
+          echo -e "${ARROW} ${CYAN}Problem with daemon noticed but user want continue installation...  ${NC}"
+	  echo -n ""
 
+	else
+	
+	  echo -e "${WORNING} ${RED}Installation stopped by user...${NC}"
+	  echo -n ""
+	  exit
 
-    daemon_version=$($COIN_CLI getinfo | jq -r '.version')
-    string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
-    #echo -e "Zelcash version: ${GREEN}v$zelcash_version${CYAN} installed................................."
-    bench_version=$($BENCH_CLI -testnet getinfo | jq -r '.version')
-    string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
-    #echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
-    echo
-    pm2_install()
-    #zelbench-cli stop > /dev/null 2>&1  && sleep 2
-  else
-    echo
-    echo -e "${WORNING} ${RED}Something is not right the daemon did not start or still loading...${NC}"
+	fi
 
-    if [[ -f /home/$USER/$CONFIG_DIR/debug.log ]]; then
-      error_line=$(egrep -a --color 'Error:' /home/$USER/$CONFIG_DIR/debug.log | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.//')	  
-    if [[ "$error_line" != "" ]]; then	  
-      echo -e "${WORNING} ${CYAN}Last error from ~/$CONFIG_DIR/debug.log: ${NC}"
-      echo -e "${WORNING} ${CYAN}$error_line${NC}"
-      echo
-      exit
-    fi  	       
-  fi
-
-
-  if whiptail --yesno "Something is not right the daemon did not start or still loading....\nWould you like continue the installation (make sure that flux daemon working) Y/N?" 8 90; then
-
-    echo -e "${ARROW} ${CYAN}Problem with daemon noticed but user want continue installation...  ${NC}"
-    echo -n ""
-
-  else
-
-    echo -e "${WORNING} ${RED}Installation stopped by user...${NC}"
-    echo -n ""
-    exit
-
-  fi
-
-
-  fi
+		
+    fi
 }
 
 #TODO: RESEARCH, This defaults to mongodb 5.0 in install_pro, why not here?
