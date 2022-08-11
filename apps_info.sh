@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 
 apps_info=$(curl -SsL -m 10 https://api.runonflux.io/apps/globalappsspecifications)
