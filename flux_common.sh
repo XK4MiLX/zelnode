@@ -534,7 +534,7 @@ function create_oldnode_service_scripts() {
 #color codes
 RED='\033[1;31m'
 CYAN='\033[1;36m'
-NC='\033[0m'
+NC='\033[0m'then
 #emoji codes
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
@@ -1138,6 +1138,34 @@ function kda_bootstrap() {
     echo -e "" 
     echo -e "${ARROW} ${CYAN}Kadena Node initial process can take about ~15min. ${NC}"
     echo -e "" 
+}
+
+function pm2_install(){
+  tmux kill-server > /dev/null 2>&1 && sleep 1
+  echo -e "${ARROW} ${CYAN}PM2 installing...${NC}"
+  npm install pm2@latest -g > /dev/null 2>&1
+  
+  if pm2 -v > /dev/null 2>&1; then
+    rm restart_zelflux.sh > /dev/null 2>&1
+    echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
+    pm2 startup systemd -u $USER > /dev/null 2>&1
+    sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
+    pm2 start ~/$FLUX_DIR/start.sh --name flux > /dev/null 2>&1
+    pm2 save > /dev/null 2>&1
+    pm2 install pm2-logrotate > /dev/null 2>&1
+    pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
+    pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
+    pm2 set pm2-logrotate:compress true > /dev/null 2>&1
+    pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
+    pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
+    source ~/.bashrc
+    #echo -e "${ARROW} ${CYAN}PM2 version: ${GREEN}v$(pm2 -v)${CYAN} installed${NC}"
+    string_limit_check_mark "PM2 v$(pm2 -v) installed....................................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed....................................................." 
+    PM2_INSTALL="1"
+  else
+    string_limit_x_mark "PM2 was not installed....................................................."
+    echo
+  fi 
 }
 
 function mongodb_bootstrap() {

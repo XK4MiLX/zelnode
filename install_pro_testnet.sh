@@ -1049,7 +1049,7 @@ function start_daemon() {
 	string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 	#echo -e "${ARROW} ${CYAN}Zelbench version: ${GREEN}v$zelbench_version${CYAN} installed${NC}"
 	echo
-	pm2_install()
+	pm2_install
 	#zelbench-cli stop > /dev/null 2>&1  && sleep 2
     else
         echo
