@@ -980,7 +980,7 @@ function create_kda_bootstrap {
     	 fi
     fi
     
-    if [ ! -d /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db ]; then
+    if [ ! -d /home/$USER/kadena/chainweb-db ]; then
         echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
         echo
         exit
@@ -992,7 +992,7 @@ function create_kda_bootstrap {
 
     network_height=$(max "$network_height_node_01" "$network_height_node_02" "$network_height_node_03")
     echo -e "${ARROW} ${CYAN}Kadena Global Network Height: ${GREEN}$network_height${NC}"
-    kda_height=$(curl -sk https://$WANIP:30004/chainweb/0.0/mainnet01/cut | jq '.height')
+    kda_height=$(curl -sk https://$WANIP:31350/chainweb/0.0/mainnet01/cut | jq '.height')
     echo -e "${ARROW} ${CYAN}Kadena Local Node Height: ${GREEN}$kda_height${NC}"
 
     check_height=$((network_height-kda_height))
@@ -1016,15 +1016,15 @@ function create_kda_bootstrap {
 
         data=$(date -u)
         unix=$(date +%s)
-        docker_check=$(docker ps | grep 'zelKadenaChainWebNode' | wc -l)
+        docker_check=$(docker ps | grep 'fluxkadenachainwebnode' | wc -l)
 
         if [[ "$docker_check" != "" && "$docker_check" != "0" ]]; then
 
             echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-            docker stop zelKadenaChainWebNode > /dev/null 2>&1
+            docker stop fluxkadenachainwebnode > /dev/null 2>&1
 
             #echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-            cd /home/$USER/$FLUX_DIR/$FLUX_APPS_DIR/zelKadenaChainWebNode/chainweb-db/0  	    
+            cd /home/$USER/kadena/chainweb-db/0  	    
             #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
 	    tar_file_pack "rocksDb  sqlite" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
             cd
@@ -1045,7 +1045,7 @@ EOF
             fi
 
             echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
-            docker start zelKadenaChainWebNode > /dev/null 2>&1
+            docker start fluxkadenachainwebnode > /dev/null 2>&1
 
         fi
 	
@@ -1138,7 +1138,7 @@ function kda_bootstrap() {
 
     sudo chown -R $USER:$USER /home/$USER/kadena
     echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-    docker stop KadenaChainWebNode > /dev/null 2>&1 && sleep 2
+    docker stop fluxkadenachainwebnode > /dev/null 2>&1 && sleep 2
 
     if [[ -d /home/$USER/kadena/chainweb-db  ]]; then
         echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
@@ -1206,7 +1206,7 @@ function kda_bootstrap() {
         rm -rf $KDA_BOOTSTRAP_ZIPFILE
     fi
 
-    docker start KadenaChainWebNode > /dev/null 2>&1
+    docker start fluxkadenachainwebnode > /dev/null 2>&1
     NUM='15'
     MSG1='Starting Kadena Node...'
     MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
