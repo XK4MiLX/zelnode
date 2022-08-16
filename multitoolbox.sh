@@ -160,8 +160,8 @@ fi
 if [[ $docker_check != 0 ]]; then
 echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
 echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
-sudo aa-remove-unknown && sudo service docker restart > /dev/null 2>&1 && sleep 2 
-sleep 5
+sudo aa-remove-unknown > /dev/null 2>&1 && sudo service docker restart > /dev/null 2>&1 && sleep 2 
+
 #docker ps | grep -Eo "^[0-9a-z]{8,}\b" |
 docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" |
 while read line; do
@@ -1713,6 +1713,7 @@ fi
 
 if [[ $(cat /etc/bash.bashrc | grep 'multitoolbox' | wc -l) == "0" ]]; then
 echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
+echo "alias multitoolbox_testnet='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox_testnet.sh)'" | sudo tee -a /etc/bash.bashrc
 source /etc/bash.bashrc
 fi
 
