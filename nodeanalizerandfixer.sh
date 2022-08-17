@@ -637,9 +637,9 @@ fi
 		esac
 		
 		case $bench_benchmark in
- 		 "CUMULUS")  bench_benchmark_value=10000 ;;
- 		 "NIMBUS")  bench_benchmark_value=25000 ;;
-	 	 "STRATUS") bench_benchmark_value=100000 ;;
+ 		 "CUMULUS")  bench_benchmark_value=1000 ;;
+ 		 "NIMBUS")  bench_benchmark_value=12500 ;;
+	 	 "STRATUS") bench_benchmark_value=40000 ;;
 		esac
 		
 		#echo -e "$zelbench_benchmark_value" -> 10000 BASIC
@@ -698,7 +698,7 @@ echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Checking listen ports:${NC}"
 check_listen_ports
 echo -e "${NC}"
-echo -e "${BOOK} ${YELLOW}File integration checking:${NC}"
+echo -e "${BOOK} ${YELLOW}Daemon files integrity checking:${NC}"
 integration
 echo -e ""
 #if ! whiptail --yesno "Detected IP address is $WANIP is this correct?" 8 60; then
@@ -887,7 +887,7 @@ fi
 if [ -f ~/$FLUX_DIR/error.log ]
 then
 echo
-echo -e "${BOOK} ${YELLOW}Flux error.log file detected, check ~/zelflux/error.log"
+echo -e "${BOOK} ${YELLOW}FluxOS error.log file detected, check ~/zelflux/error.log"
 echo -e "${YELLOW}${WORNING} ${CYAN}Found: ${RED}$(wc -l  < /home/$USER/$FLUX_DIR/error.log)${CYAN} error events${NC}"
 error_line=$(cat /home/$USER/$FLUX_DIR/error.log | grep 'Error' | tail -1 | sed 's/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{2\}.[0-9]\{3\}Z//' | xargs)
 echo -e "${PIN} ${CYAN}Last error line: $error_line${NC}"
