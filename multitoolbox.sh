@@ -15,11 +15,6 @@ fi
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
 
-BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
-BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIP='http://38.242.202.86:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=8ba005f55511d806f9d4ec5f56bf5c14ae02a50bfb80f5bdb08a1ded22f7b159'
 
 if [[ -d /home/$USER/.zelcash ]]; then
    CONFIG_DIR='.zelcash'
