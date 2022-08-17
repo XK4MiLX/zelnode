@@ -1104,7 +1104,6 @@ function bootstrap() {
     fi
 
     bootstrap_geolocation
-    bootstrap_server $continent
     
     if [[ "$Server_offline" == "1" ]]; then
      echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation aborted.. ${NC}" && sleep 1
