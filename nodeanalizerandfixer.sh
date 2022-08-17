@@ -826,10 +826,10 @@ pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi
 if [[ "$pm2_flux_status" == "online" ]]; then
 pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
 pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-echo -e "${CHECK_MARK} ${CYAN} Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}"
+echo -e "${CHECK_MARK} ${CYAN} Pm2 FluxOS info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}"
 else
 if [[ "$pm2_flux_status" != "" ]]; then
-echo -e "${X_MARK} ${CYAN} Pm2 Flux status: ${RED}$pm2_flux_status ${NC}" 
+echo -e "${X_MARK} ${CYAN} Pm2 FluxOS status: ${RED}$pm2_flux_status ${NC}" 
 fi
 fi
 
@@ -840,7 +840,7 @@ pm2_flux_restarts=$(pm2 info zelflux | grep 'restarts' | sed -r 's/│//gi' | xa
 echo -e "${CHECK_MARK} ${CYAN} Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}"
 else
 if [[ "$pm2_flux_status" != "" ]]; then
-echo -e "${X_MARK} ${CYAN} Pm2 Flux status: ${RED}$pm2_flux_status ${NC}" 
+echo -e "${X_MARK} ${CYAN} Pm2 FluxOS status: ${RED}$pm2_flux_status ${NC}" 
 fi
 fi
 
@@ -850,9 +850,9 @@ fi
 
 if [[ $(curl -s -m 5 --head "$WANIP:$FluxUI" | head -n 1 | grep "200 OK") ]]
 then
-echo -e "${CHECK_MARK} ${CYAN} Flux front is working${NC}"
+echo -e "${CHECK_MARK} ${CYAN} FluxOS front is working${NC}"
 else
-echo -e "${X_MARK} ${CYAN} Flux front is not working${NC}"
+echo -e "${X_MARK} ${CYAN} FluxOS front is not working${NC}"
 fi
 
 if [ -d /home/$USER/$FLUX_DIR ]
@@ -866,14 +866,14 @@ then
 
 if [[ "$required_ver" != "" ]]; then
    if [ "$(printf '%s\n' "$required_ver" "$current_ver" | sort -V | head -n1)" = "$required_ver" ]; then 
-      echo -e "${CHECK_MARK} ${CYAN} You have the current version of Flux ${GREEN}(v$required_ver)${NC}"     
+      echo -e "${CHECK_MARK} ${CYAN} You have the current version of FluxOS ${GREEN}(v$required_ver)${NC}"     
    else
-      echo -e "${HOT} ${CYAN}New version of Flux available ${SEA}$required_ver${NC}"
+      echo -e "${HOT} ${CYAN}New version of FluxOS available ${SEA}$required_ver${NC}"
       FLUX_UPDATE="1"
    fi
  fi
 
-echo -e "${CHECK_MARK} ${CYAN} Flux config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
+echo -e "${CHECK_MARK} ${CYAN} FluxOS config  ~/$FLUX_DIR/config/userconfig.js exists${NC}"
 
 ZELIDLG=`echo -n $(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e "s/'//g" | sed -e "s/,//g" | sed -e "s/.*zelid://g") | wc -m`
 if [[ "$ZELIDLG" -eq "35" || "$ZELIDLG" -eq "34" || "$ZELIDLG" -eq "33" ]]; then
