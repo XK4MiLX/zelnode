@@ -1382,7 +1382,7 @@ else
  #  fi
 
     check
-    display_banner
+    display_banner "-testnet"
 }
 
 
