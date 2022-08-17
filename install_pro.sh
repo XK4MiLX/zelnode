@@ -2,14 +2,10 @@
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
-# Bootstrap settings
-BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
-
 #wallet information
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
 CONFIG_FILE='flux.conf'
-kadena_possible="0"
 
 BENCH_NAME='fluxbench'
 BENCH_CLI='fluxbench-cli'
