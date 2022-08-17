@@ -25,6 +25,7 @@ i=0
 len=${#rand_by_domain[@]}
 echo -e ""
 echo -e "${YELLOW}Running quick download speed test for flux_explorer_bootstrap...${NC}"
+echo -e ""
 while [ $i -lt $len ];
 do
     testing=$(curl -m 4 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz  --output testspeed -fail --silent --show-error 2>&1)
