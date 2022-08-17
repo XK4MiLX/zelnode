@@ -591,10 +591,10 @@ stak_info=""
 if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 	index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
         #collateral_index=$(awk '{print $1}' <<< "$stak_info")
-	stak_info=$(curl -s -m 10 https://explorer.runonflux.io/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000|1000|12500|40000')
+	stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | egrep '1000|12500|40000')
 	
 	if [[ "$stak_info" == "" ]]; then
-	    stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep '10000|25000|100000|1000|12500|40000')
+	    stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | egrep '1000|12500|40000')
 	fi
 	
 fi
@@ -631,9 +631,6 @@ fi
 		if [[ $type == ?(-)+([0-9]) ]]; then
 
 		case $type in
- 		 "10000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}CUMULUS${NC}" ;;
- 		 "25000")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}NIMBUS${NC}";;
-	 	 "100000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}STRATUS${NC}";;
 		  "1000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}CUMULUS${NC}" ;;
  		 "12500")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}NIMBUS${NC}";;
 	 	 "40000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}STRATUS${NC}";;
@@ -655,9 +652,6 @@ fi
 		 	if [[ "$bench_benchmark_value" -ge "$type" ]]; then
 			
 				case $type in
- 				 "10000")  bench_benchmark_value_name="CUMULUS" ;;
- 				 "25000")  bench_benchmark_value_name="NIMBUS" ;;
-	 			 "100000") bench_benchmark_value_name="STRATUS" ;;
 				 "1000")  bench_benchmark_value_name="CUMULUS" ;;
  				 "12500")  bench_benchmark_value_name="NIMBUS" ;;
 	 			 "40000") bench_benchmark_value_name="STRATUS" ;;
@@ -667,9 +661,6 @@ fi
 			else
 			
 				case $type in
- 				 "10000")  bench_benchmark_value_name="CUMULUS" ;;
- 				 "25000")  bench_benchmark_value_name="NIMBUS" ;;
-	 			 "100000") bench_benchmark_value_name="STRATUS" ;;
 				 "1000")  bench_benchmark_value_name="CUMULUS" ;;
  				 "12500")  bench_benchmark_value_name="NIMBUS" ;;
 	 			 "40000") bench_benchmark_value_name="STRATUS" ;;
