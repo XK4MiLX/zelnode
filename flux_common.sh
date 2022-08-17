@@ -29,7 +29,7 @@ export NEWT_COLORS='
 title=black,
 '
 
-echo -e "${ARROW} ${CYAN}Importing Common Multitoolbox Resources..."
+#echo -e "${ARROW} ${CYAN}Importing Common Multitoolbox Resources..."
 
 
 function round() {
