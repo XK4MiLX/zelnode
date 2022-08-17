@@ -18,6 +18,7 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+RIGHT_ANGLE="${GREEN}\xE2\x88\x9F${NC}"
 
 rand_by_domain=("5" "6" "7" "8" "9" "10" "11" "12")
 size_list=()
@@ -25,13 +26,12 @@ i=0
 len=${#rand_by_domain[@]}
 echo -e ""
 echo -e "${YELLOW}Running quick download speed test for flux_explorer_bootstrap...${NC}"
-echo -e ""
 while [ $i -lt $len ];
 do
     testing=$(curl -m 4 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz  --output testspeed -fail --silent --show-error 2>&1)
     testing_size=$(grep -Po "\d+" <<< "$testing" | paste - - - - | awk '{printf  "%d\n",$3}')
     mb=$(bc <<<"scale=2; $testing_size / 1048576 / 4" | awk '{printf "%2.2f\n", $1}')
-    echo -e "  ${PIN} ${GREEN}cdn-${YELLOW}${rand_by_domain[$i]}${GREEN} - Bits Downloaded: ${YELLOW}$testing_size${NC} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
+    echo -e "   ${RIGHT_ANGLE} ${GREEN}cdn-${YELLOW}${rand_by_domain[$i]}${GREEN} - Bits Downloaded: ${YELLOW}$testing_size${NC} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
     size_list+=($testing_size)
     i=$(($i+1))
 done
