@@ -819,7 +819,7 @@ if [[ "$verifity_mongod" != "0" ]]; then
 
 fi
 
-echo -e "${BOOK} ${YELLOW}Checking Flux:${NC}"
+echo -e "${BOOK} ${YELLOW}Checking FluxOS:${NC}"
 
 if pm2 -v > /dev/null 2>&1; then
 pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
