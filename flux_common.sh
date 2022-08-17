@@ -1079,137 +1079,6 @@ function pm2_install(){
   fi 
 }
 
-function mongodb_bootstrap() {
-    echo -e "${GREEN}Module: Restore Flux MongoDB datatable from bootstrap (explorer only)${NC}"
-    echo -e "${YELLOW}================================================================${NC}"
-    echo -e "${ARROW} ${CYAN}Module disabled...${NC}"
-    echo -e ""
-    exit
-
-    if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-        echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-        echo -e "${CYAN}Please switch to the user account.${NC}"
-        echo -e "${YELLOW}================================================================${NC}"
-        echo -e "${NC}"
-        exit
-    fi
-
-    sudo rm /home/$USER/fluxdb_dump.tar.gz  > /dev/null 2>&1
-    sudo rm /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD  > /dev/null 2>&1
-
-    if ! pm2 -v > /dev/null 2>&1; then
-        pm2_install 
-        if [[ "$PM2_INSTALL" == "0" ]]; then
-            exit
-        fi
-    fi
-
-    WANIP=$(wget http://ipecho.net/plain -O - -q)
-
-    DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-    if [[ "$DB_HIGHT" == "" ]]; then
-        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-    fi
-
-    BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')	
-    FORCE_BOOTSTRAP=0
-
-    if [[ "$DB_HIGHT" == "" ]]; then
-        echo -e "${ARROW} ${CYAN}MongoDB bootstrap server offline...${NC}"
-        string_limit_x_mark "Operation aborted....................."
-        exit
-    fi
-
-
-    if [[ "$BLOCKHIGHT" == ""  ||  "$BLOCKHIGHT" == "null" ]]; then
-        if whiptail --yesno "Local Explorer not respondin...Would you like force bootstrap installation?" 8 60; then   
-            FORCE_BOOTSTRAP=1		
-        else
-            string_limit_x_mark "Local Explorer not responding........."
-            string_limit_x_mark "Operation aborted....................."	
-            echo -e ""
-            exit  
-        fi
-    fi
-    if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then	
-        if [[ "$BLOCKHIGHT" == "null" ]]; then
-            message=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq -r .data.message)
-            if whiptail --yesno "Flux explorer error noticed...Would you like force bootstrap installation?" 8 60; then 
-                FORCE_BOOTSTRAP=1
-            else
-                echo -e "${ARROW} ${CYAN}Flux explorer error: ${RED}$message${NC}"
-                string_limit_x_mark "Operation aborted....................."
-                echo -e ""
-                exit
-            fi
-        fi
-    fi
-
-    if [[ "$BLOCKHIGHT" != "" && "$BLOCKHIGHT" != "null" ]]; then
-        if [[ "$BLOCKHIGHT" -gt "$DB_HIGHT" ]]; then
-            if whiptail --yesno "Datatable is out of date....Would you like force bootstrap installation?" 8 60; then   
-                FORCE_BOOTSTRAP=1		
-            else
-                echo -e "${ARROW} ${CYAN}Current Node block hight ${RED}$BLOCKHIGHT${CYAN} > Bootstrap block hight ${RED}$DB_HIGHT${CYAN}. Datatable is out of date.${NC}"
-                string_limit_x_mark "Operation aborted....................."
-                echo -e ""
-                exit
-            fi
-        fi	         
-    fi
-
-
-    echo -e "${ARROW} ${CYAN}IP: ${RED}$WANIP${NC}"
-
-    if [[ "$FORCE_BOOTSTRAP" != "1" ]]; then
-        echo -e "${ARROW} ${CYAN}Node block hight: ${GREEN}$BLOCKHIGHT${NC}"
-    fi
-
-    echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
-    echo -e ""
-
-
-    echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
-    wget $BOOTSTRAP_URL_MONGOD -q --show-progress 
-    echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-    tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-    echo -e "${ARROW} ${CYAN}Stoping Flux...${NC}"
-    pm2 stop flux > /dev/null 2>&1
-    echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-    mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-    echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-    sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-    sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-    pm2 start flux > /dev/null 2>&1
-    pm2 save > /dev/null 2>&1
-
-    NUM='120'
-    MSG1='Flux starting...'
-    MSG2="${CYAN}.....................[${CHECK_MARK}${CYAN}]${NC}"
-    spinning_timer
-    echo
-
-    #BLOCKHIGHT_AFTER_BOOTSTRAP=$(curl -s -m 3 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-    BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)	
-    if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" != "" && "$BLOCKHIGHT_AFTER_BOOTSTRAP" != "null" ]]; then
-        echo -e "${ARROW} ${CYAN}Node block hight after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}"
-        if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
-            string_limit_check_mark "MongoDB bootstrap installed successful.................................."
-            echo -e ""
-        else
-            if [[ "$FORCE_BOOTSTRAP" == "1" ]]; then
-                string_limit_check_mark "MongoDB bootstrap installed successful.................................."
-                echo -e ""
-            else
-                string_limit_x_mark "MongoDB bootstrap installation failed.................................."
-                echo -e ""
-            fi
-        fi
-    else
-        string_limit_x_mark "MongoDB bootstrap installation failed.................................."
-        echo -e ""
-    fi
-}
 
 function install_kernel(){
     echo -e "${GREEN}Module: Install Linux Kernel 5.X for Ubuntu 18.04${NC}"
@@ -1339,14 +1208,8 @@ fi
 exit
 EOF
 
-    echo -e "${ARROW} ${CYAN}Setting scripts permissions...${NC}" && sleep 1
     sudo chmod +x /home/$USER/stop_daemon_service.sh
     sudo chmod +x /home/$USER/start_daemon_service.sh
-    echo -e "${ARROW} ${CYAN}Reloading service config...${NC}" && sleep 1
-    sudo systemctl daemon-reload > /dev/null 2>&1
-    echo -e "${ARROW} ${CYAN}Starting Flux daemon....${NC}" && sleep 1
-    sudo systemctl start zelcash > /dev/null 2>&1
-    echo -e ""
 }
 
 function create_oldnode_service() {
