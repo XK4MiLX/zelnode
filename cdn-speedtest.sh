@@ -36,6 +36,7 @@ do
     i=$(($i+1))
 done
 
+sudo rm -rf testspeed > /dev/null 2>&1
 
 arr_max=$(printf '%s\n' "${size_list[@]}" | sort -n | tail -1)
 for i in "${!size_list[@]}"; do
