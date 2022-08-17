@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+
 #const
 REPLACE="0"
 FLUXCONF="0"
@@ -13,25 +15,6 @@ FLUX_UPDATE="0"
 OWNER="0"
 IP_FIX="0"
 SCVESION=v4.0
-
-#color codes
-RED='\033[1;31m'
-YELLOW='\033[1;33m'
-BLUE="\\033[38;5;27m"
-SEA="\\033[38;5;49m"
-GREEN='\033[1;32m'
-CYAN='\033[1;36m'
-NC='\033[0m'
-ORANGE='\e[38;5;202m'
-
-#emoji codes
-CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
-X_MARK="${RED}\xE2\x9C\x96${NC}"
-PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
-ARROW="${CYAN}\xE2\x96\xB6${NC}"
 
 FLUX_DIR='zelflux'
 COIN_NAME='zelcash'
@@ -77,11 +60,6 @@ fi
 
 
 
-#dialog color
-export NEWT_COLORS='
-title=black,
-'
-
  WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].') 
     if [[ "$WANIP" == "" ]]; then
       WANIP=$(curl --silent -m 15 https://ipv4bot.whatismyipaddress.com | tr -dc '[:alnum:].')  
@@ -118,36 +96,6 @@ function show_time() {
     echo -e "${RED}$day"d "$hour"h "$min"m "$sec"s"${CYAN} ago.${NC}"
 }
 
-function max(){
-
-    local m="0"
-    for n in "$@"
-    do        
-         if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
-            [ "$n" -gt "$m" ] && m="$n"
-        fi
-    done
-    echo "$m"
-    
-}
-
-function spinning_timer() {
-    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-    end=$((SECONDS+NUM))
-    while [ $SECONDS -lt $end ];
-    do
-        for i in "${animation[@]}";
-        do
-            echo -ne "${RED}\r$i ${CYAN}${MSG1}${NC}"
-            sleep 0.1
-        done
-    done
-    echo -e "${MSG2}"
-}
-
-round() {
-  printf "%.${2}f" "${1}"
-}
 
 function check_listen_ports(){
 
@@ -314,15 +262,6 @@ done
 
 }
 
-function check_benchmarks() {
- var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
- limit=$2
- if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]; then
-  var_round=$(round "$var_benchmark" 2)
-  echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
- fi
-
-}
 
 if [[ "$USER" == "root" ]]
 then

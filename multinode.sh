@@ -1,65 +1,12 @@
 #!/bin/bash
 
-#color codes
-RED='\033[1;31m'
-YELLOW='\033[1;33m'
-BLUE="\\033[38;5;27m"
-SEA="\\033[38;5;49m"
-GREEN='\033[1;32m'
-CYAN='\033[1;36m'
-NC='\033[0m'
-
-#emoji codes
-CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
-X_MARK="${RED}\xE2\x9C\x96${NC}"
-PIN="${RED}\xF0\x9F\x93\x8C${NC}"
-CLOCK="${GREEN}\xE2\x8C\x9B${NC}"
-ARROW="${SEA}\xE2\x96\xB6${NC}"
-BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
-WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-
-#dialog color
-export NEWT_COLORS='
-title=black,
-'
-
-function string_limit_check_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::50}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::50+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
-}
-
-function string_limit_x_mark() {
-if [[ -z "$2" ]]; then
-string="$1"
-string=${string::50}
-else
-string=$1
-string_color=$2
-string_leght=${#string}
-string_leght_color=${#string_color}
-string_diff=$((string_leght_color-string_leght))
-string=${string_color::50+string_diff}
-fi
-echo -e "${ARROW} ${CYAN}$string[${X_MARK}${CYAN}]${NC}"
-}
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
  function insertAfter
 {
    local file="$1" line="$2" newText="$3"
    sudo sed -i -e "/$line/a"$'\\\n'"$newText"$'\n' "$file"
 }
-
 
 
 function upnp_enable() {
@@ -257,8 +204,6 @@ function upnp_disable() {
 
 }
 
-# Import settings from upnp_conf.json if it exists
-# if [[ -f /home/$USER/upnp_conf.json ]]; then
 if [[ -f /home/$USER/install_conf.json ]]; then
   # Import settings from upnp_conf.json
   import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')

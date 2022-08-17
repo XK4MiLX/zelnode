@@ -1,17 +1,20 @@
 #!/bin/bash
 
-function max(){
+if ! [[ -z $1 ]]; then
+    if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
+        export ROOT_BRANCH="$1"
+        export BRANCH_ALREADY_REFERENCED='1'
+        bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/apps_info.sh) $ROOT_BRANCH
+        unset ROOT_BRANCH
+        unset BRANCH_ALREADY_REFERENCED
+        exit
+    fi
+else
+    export ROOT_BRANCH='master'
+fi
 
-    local m="0"
-    for n in "$@"
-    do
-         if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
-            [ "$n" -gt "$m" ] && m="$n"
-        fi
-    done
-    echo "$m"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
-}
 
 apps_info=$(curl -SsL -m 10 https://api.runonflux.io/apps/globalappsspecifications)
 name=($(jq -r .data[].name <<< "$apps_info"))
@@ -49,3 +52,6 @@ do
  fi
 
 done
+
+unset ROOT_BRANCH
+unset BRANCH_ALREADY_REFERENCED
