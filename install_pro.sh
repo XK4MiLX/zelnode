@@ -2,12 +2,8 @@
 
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
-
 # Bootstrap settings
-#BOOTSTRAP_ZIP='https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
-BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
-BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
 COIN_NAME='flux'
@@ -604,52 +600,6 @@ else
 #echo -e "${ARROW} ${CYAN}Watchdog installion failed.${NC}"
 string_limit_x_mark "Watchdog was not installed................................."
 fi
-}
-
-function mongodb_bootstrap(){
-
-    echo -e ""
-    echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
-      
-     DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-     if [[ "$DB_HIGHT" == "" ]]; then
-         DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-     fi
-    
-    #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
-    echo -e "${ARROW} ${CYAN}Bootstrap block height: ${GREEN}$DB_HIGHT${NC}"
-    echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_URL_MONGOD${NC}"
-    wget --tries=5 $BOOTSTRAP_URL_MONGOD -q --show-progress 
-    
-    if [[ -f /home/$USER/$BOOTSTRAP_ZIPFILE_MONGOD ]]; then
-    
-        echo -e "${ARROW} ${CYAN}Unpacking...${NC}"
-        tar xvf $BOOTSTRAP_ZIPFILE_MONGOD -C /home/$USER > /dev/null 2>&1 && sleep 1
-        echo -e "${ARROW} ${CYAN}Importing mongodb datatable...${NC}"
-        mongorestore --port 27017 --db zelcashdata /home/$USER/dump/zelcashdata --drop > /dev/null 2>&1
-        echo -e "${ARROW} ${CYAN}Cleaning...${NC}"
-        sudo rm -rf /home/$USER/dump > /dev/null 2>&1 && sleep 1
-        sudo rm -rf $BOOTSTRAP_ZIPFILE_MONGOD > /dev/null 2>&1  && sleep 1
-
-
-        BLOCKHIGHT_AFTER_BOOTSTRAP=$(mongoexport -d zelcashdata -c scannedheight  --jsonArray --pretty --quiet | jq -r .[].generalScannedHeight)
-        echo -e ${ARROW} ${CYAN}Node block height after restored: ${GREEN}$BLOCKHIGHT_AFTER_BOOTSTRAP${NC}
-		
-     else
-     
-          echo -e "${ARROW} ${RED}MongoDB bootstrap server offline...try again later use option 5${NC}"   
-     fi
-     
-        echo -e ""
-    
-    #if [[ "$BLOCKHIGHT_AFTER_BOOTSTRAP" -ge  "$DB_HIGHT" ]]; then
-      #echo -e "${ARROW} ${CYAN}Mongo bootstrap installed successful.${NC}"
-      #echo -e ""
-   # else
-     # echo -e "${ARROW} ${CYAN}Mongo bootstrap installation failed.${NC}"
-     # echo -e ""
-   # fi
-  
 }
 
 function wipe_clean() {
