@@ -378,8 +378,7 @@ EOF
         (crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
         (crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
         echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
-    else
-        echo -e "${ARROW} ${CYAN}Cron jobs already added! ${NC}" 
+    else 
         echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
     fi
     echo -e "" 
