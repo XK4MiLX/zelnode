@@ -732,7 +732,7 @@ daemon_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|f
 
   if sudo systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/null 2>&1; then
     echo -e "${ARROW}  ${CYAN}Docker service running ${SEA}$docker_running${NC}"
-    docker_working=1
+    #docker_working=1
   else
     if [[ "$docker_inactive" != "" ]]; then
        echo -e "${ARROW}  ${CYAN}Docker service not running ${RED}$docker_inactive${NC}"
@@ -741,11 +741,11 @@ daemon_inactive=$(sudo systemctl status zelcash 2> /dev/null | egrep 'inactive|f
   fi
 fi
 
-if [[ "$docker_working" == "1" ]]; then
-echo -e "${CHECK_MARK} ${CYAN} Docker is working correct${NC}"
-else
-echo -e "${X_MARK} ${CYAN} Docker is not working${NC}"
-fi
+#if [[ "$docker_working" == "1" ]]; then
+#echo -e "${CHECK_MARK} ${CYAN} Docker is working correct${NC}"
+#else
+#echo -e "${X_MARK} ${CYAN} Docker is not working${NC}"
+#fi
 
 #if systemctl list-units | grep docker.socket | egrep -wi 'running' > /dev/null 2>&1; then
 #echo -e "${CHECK_MARK} ${CYAN} Docker Socket for the API running ${SEA}$docker_socket_running${NC}"
