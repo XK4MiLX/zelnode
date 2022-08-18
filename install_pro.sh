@@ -287,13 +287,13 @@ echo -e "${ARROW} ${YELLOW}Install watchdog for FluxNode${NC}"
 if pm2 -v > /dev/null 2>&1
 then
 WATCHDOG_INSTALL="1"
-echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
+echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
-echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
+echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
 wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
-echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
+echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
 cd watchdog && npm install > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
 fix_action='1'
@@ -510,10 +510,10 @@ if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 
   index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
   tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-  stak_info=$(curl -s -m 5 https://explorer.runonflux.io/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+  stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 	
     if [[ "$stak_info" == "" ]]; then
-      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '10000|25000|100000|1000|12500|40000')
+      stak_info=$(curl -s -m 5 https://explorer.zelcash.online/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
     fi	
     
 fi
@@ -521,9 +521,6 @@ fi
 if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
   case $stak_info in
-   "10000") eps_limit=90 ;;
-   "25000")  eps_limit=180 ;;
-   "100000") eps_limit=300 ;;
    "1000") eps_limit=90 ;;
    "12500")  eps_limit=180 ;;
    "40000") eps_limit=300 ;;
@@ -552,7 +549,7 @@ module.exports = {
 }
 EOF
 
-#echo -e "${ARROW} ${YELLOW}Starting watchdog...${NC}"
+#echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
 pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
 pm2 save > /dev/null 2>&1
 if [[ -f /home/$USER/watchdog/watchdog.js ]]
