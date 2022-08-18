@@ -20,17 +20,16 @@ ARROW="${SEA}\xE2\x96\xB6${NC}"
 BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+RIGHT_ANGLE="${GREEN}\xE2\x88\x9F${NC}"
 
-#bootstrap settings
-BOOTSTRAP_ZIPFILE='flux_explorer_bootstrap.tar.gz'
+#bootstrap variable
+server_offline="0"
+failed_counter="0"
 
 #dialog color
 export NEWT_COLORS='
 title=black,
 '
-
-#echo -e "${ARROW} ${CYAN}Importing Common Multitoolbox Resources..."
-
 
 function round() {
   printf "%.${2}f" "${1}"
@@ -129,172 +128,25 @@ function spinning_timer() {
     echo -ne "${MSG2}"
 }
 
-function bootstrap_server(){
-    rand_by_domain=("5" "6" "7" "8" "9" "10" "11" "12")
-    richable=()
-    richable_eu=()
-    richable_us=()
-    richable_as=()
-
-    i=0
-    len=${#rand_by_domain[@]}
-    echo -e "${ARROW} ${CYAN}Checking servers availability... ${NC}"
-    while [ $i -lt $len ];
-    do
-        bootstrap_check=$(curl -sSL -m 10 http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.json 2>/dev/null | jq -r '.block_height' 2>/dev/null)
-        if [[ "$bootstrap_check" != "" ]]; then
-
-            if [[ "${rand_by_domain[$i]}" -ge "8" && "${rand_by_domain[$i]}" -le "11" ]]; then
-                richable_eu+=( ${rand_by_domain[$i]}  )
-            fi
-
-            if [[ "${rand_by_domain[$i]}" -gt "4" &&  "${rand_by_domain[$i]}" -le "7" ]]; then
-                richable_us+=( ${rand_by_domain[$i]}  )
-            fi
-
-            if [[ "${rand_by_domain[$i]}" -ge "12" ]]; then
-                richable_as+=( ${rand_by_domain[$i]}  )
-            fi
-
-            richable+=( ${rand_by_domain[$i]} )
-        fi
-
-        i=$(($i+1))
-    done
-
-    server_found="1"
-    if [[ "$continent" == "EU" ]]; then
-        len_eu=${#richable_eu[@]}
-        if [[ "$len_eu" -gt "0" ]]; then
-            richable=( ${richable_eu[*]} )
-            echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-        fi
-        if [[ "$len_eu" == "0" ]]; then
-            continent="EU"
-            echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-            len_us=${#richable_us[@]}
-            if [[ "$len_us" -gt "0" ]]; then
-                richable=( ${richable_us[*]} )
-                echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-            fi
-            if [[ "$len_us" == "0" ]]; then
-                continent="US"
-                echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-                server_found="0"
-            fi
-        fi
-    elif [[ "$continent" == "US" ]]; then
-        len_us=${#richable_us[@]}
-        if [[ "$len_us" -gt "0" ]]; then
-            richable=( ${richable_us[*]} )
-            echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-        fi
-        if [[ "$len_us" == "0" ]]; then
-            continent="US"
-            echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-            len_as=${#richable_as[@]}
-            if [[ "$len_as" -gt "0" ]]; then
-                richable=( ${richable_as[*]} )
-                echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-            fi
-            if [[ "$len_as" == "0" ]]; then
-                continent="AS"
-                echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-                len_eu=${#richable_eu[@]}
-                if [[ "$len_eu" -gt "0" ]]; then
-                    richable=( ${richable_eu[*]} )
-                    echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-                fi
-                if [[ "$len_eu" == "0" ]]; then
-                    continent="EU"
-                    echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-                    server_found="0"
-                fi
-            fi
-        fi
-    elif [[ "$continent" == "AS" ]]; then
-        len_as=${#richable_as[@]}
-        if [[ "$len_as" -gt "0" ]]; then
-            richable=( ${richable_as[*]} )
-            echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-        fi
-        if [[ "$len_as" == "0" ]]; then
-            continent="AS"
-            echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-            len_us=${#richable_us[@]}
-            if [[ "$len_us" -gt "0" ]]; then
-                richable=( ${richable_us[*]} )
-                echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-            fi
-            if [[ "$len_us" == "0" ]]; then
-                continent="US"
-                echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-                len_eu=${#richable_eu[@]}
-            if [[ "$len_eu" -gt "0" ]]; then
-                richable=( ${richable_eu[*]} )
-                echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-            fi
-            if [[ "$len_eu" == "0" ]]; then
-                continent="EU"
-                echo -e "${WORNING} ${CYAN}All Bootstrap in $continent are offline, checking other location...${NC}" && sleep 1
-                server_found="0"
-            fi
-        fi
-    fi
-    else
-        len=${#richable[@]}
-        if [[ "$len" -gt "0" ]]; then
-            richable=( ${richable[*]} )
-            echo -e "${ARROW} ${CYAN}Reachable servers: ${richable[*]}${NC}"
-        fi
-    
-        if [[ "$len" == "0" ]]; then
-            Server_offline=1
-            return 1
-        fi
-    fi
-
-    if [[ "$server_found" == "0" ]]; then
-        len=${#richable[@]}
-        if [[ "$len" == "0" ]]; then
-            Server_offline=1
-            return 1
-        fi
-    fi
-
-    Server_offline=0
+function tar_file_unpack() {
+    echo -e "${ARROW} ${CYAN}Unpacking bootstrap archive file...${NC}"
+    pv $1 | tar -zx -C $2
 }
 
-function bootstrap_geolocation(){
-    IP=$WANIP
-    ip_output=$(curl -s -m 10 http://ip-api.com/json/$1?fields=status,country,timezone 2>/dev/null | jq . 2>/dev/null)
-    ip_status=$( jq -r .status 2>/dev/null <<< "$ip_output")
 
-    if [[ "$ip_status" == "success" ]]; then
-        country=$(jq -r .country <<< "$ip_output")
-        org=$(jq -r .org <<< "$ip_output")
-        continent=$(jq -r .timezone <<< "$ip_output")
+function check_tar() {
+    echo -e "${ARROW} ${CYAN}Checking file integrity...${NC}"
+    if gzip -t "$1" &>/dev/null; then
+        echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
     else
-        country="UKNOW"
-        continent="UKNOW"
+        echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
+        rm -rf $1
     fi
+}
 
-    continent=$(cut -f1 -d"/" <<< "$continent" )
-
-    if [[ "$continent" =~ "Europe" ]]; then
-        continent="EU"
-    elif [[ "$continent" =~ "America" ]]; then
-        continent="US"
-    elif [[ "$continent" =~ "Asia" ]]; then
-        continent="AS"
-    else
-        continent="ALL"
-    fi
-
-    echo -e "${ARROW} ${CYAN}Selecting bootstrap server....${NC}"
-    echo -e "${ARROW} ${CYAN}Node Location -> IP:$IP, Country: $country, Continent: $continent ${NC}"
-    echo -e "${ARROW} ${CYAN}Searching in $continent....${NC}"
-    bootstrap_server $continent
+function tar_file_pack() {
+    echo -e "${ARROW} ${CYAN}Creating bootstrap archive file...${NC}"
+    tar -czf - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
 }
 
 function get_ip(){
@@ -308,6 +160,253 @@ function get_ip(){
         WANIP=$(curl -SsL -m 5 https://api.ipify.org 2>/dev/null | tr -dc '[:alnum:].')
     fi
 }
+
+###### Bootstrap Section ##########################################################################
+function cdn_speedtest() {
+
+    if [[ -z $1 || "$1" == "0" ]]; then
+      BOOTSTRAP_FILE="flux_explorer_bootstrap.tar.gz"
+    else
+      BOOTSTRAP_FILE="$1"
+    fi
+
+    if [[ -z $2 ]]; then
+      dTime="5"
+    else
+      dTime="$2"
+    fi
+
+    if [[ -z $3 ]]; then
+     rand_by_domain=("5" "6" "7" "8" "9" "10" "11" "12")
+    else
+     msg="$3"
+     shift
+     shift
+     rand_by_domain=("$@")
+     custom_url="1"
+    fi
+
+    size_list=()
+    i=0
+    len=${#rand_by_domain[@]}
+    echo -e "${ARROW} ${CYAN}Running quick download speed test for ${BOOTSTRAP_FILE}, Servers: ${GREEN}$len${NC}"
+    while [ $i -lt $len ];
+    do
+        if [[ "$custom_url" == "1" ]]; then
+             testing=$(curl -m ${dTime} ${rand_by_domain[$i]}${BOOTSTRAP_FILE}  --output testspeed -fail --silent --show-error 2>&1)
+        else
+             testing=$(curl -m ${dTime} http://cdn-${rand_by_domain[$i]}.runonflux.io/apps/fluxshare/getfile/${BOOTSTRAP_FILE}  --output testspeed -fail --silent --show-error 2>&1)
+        fi
+        testing_size=$(grep -Po "\d+" <<< "$testing" | paste - - - - | awk '{printf  "%d\n",$3}')
+        mb=$(bc <<<"scale=2; $testing_size / 1048576 / $dTime" | awk '{printf "%2.2f\n", $1}')
+
+        if [[ "$custom_url" == "1" ]]; then
+          domain=$(sed -e 's|^[^/]*//||' -e 's|/.*$||' <<< ${rand_by_domain[$i]})
+          echo -e "  ${RIGHT_ANGLE} ${GREEN}URL - ${YELLOW}${domain}${GREEN} - Bits Downloaded: ${YELLOW}$testing_size${NC} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
+        else
+          echo -e "  ${RIGHT_ANGLE} ${GREEN}cdn-${YELLOW}${rand_by_domain[$i]}${GREEN} - Bits Downloaded: ${YELLOW}$testing_size${NC} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
+        fi
+        size_list+=($testing_size)
+        if [[ "$testing_size" == "0" ]]; then
+           failed_counter=$(($failed_counter+1))
+        fi
+        i=$(($i+1))
+    done
+
+    rServerList=$((${#size_list[@]}-$failed_counter))
+    echo -e "${ARROW} ${CYAN}Valid servers: ${GREEN}${rServerList}${NC}"
+    sudo rm -rf testspeed > /dev/null 2>&1
+
+    if [[ "$rServerList" == "0" ]]; then
+      server_offline="1"
+      return 1
+    fi
+
+    arr_max=$(printf '%s\n' "${size_list[@]}" | sort -n | tail -1)
+    for i in "${!size_list[@]}"; do
+        [[ "${size_list[i]}" == "$arr_max" ]] &&
+        max_indexes+=($i)
+    done
+
+    server_index=${rand_by_domain[${max_indexes[0]}]}
+    if [[ "$custom_url" == "1" ]]; then
+      BOOTSTRAP_URL="$server_index"
+    else
+      BOOTSTRAP_URL="http://cdn-${server_index}.runonflux.io/apps/fluxshare/getfile/"
+    fi
+    DOWNLOAD_URL="${BOOTSTRAP_URL}${BOOTSTRAP_FILE}"
+
+    # Print the results
+    mb=$(bc <<<"scale=2; $arr_max / 1048576 / $dTime" | awk '{printf "%2.2f\n", $1}')
+    if [[ "$custom_url" == "1" ]]; then
+        domain=$(sed -e 's|^[^/]*//||' -e 's|/.*$||' <<< ${server_index})
+        echo -e "${ARROW} ${CYAN}Best server is: ${YELLOW}${domain} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
+    else
+        echo -e "${ARROW} ${CYAN}Best server is: ${GREEN}cdn-${YELLOW}${rand_by_domain[${max_indexes[0]}]} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
+    fi
+    #echo -e "${CHECK_MARK} ${GREEN}Fastest Server: ${YELLOW}$DOWNLOAD_URL${NC}"
+}
+
+function bootstrap() {
+    echo -e ""
+    echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
+
+    if ! wget --version > /dev/null 2>&1 ; then
+        sudo apt install -y wget > /dev/null 2>&1 && sleep 2
+    fi
+
+    if ! wget --version > /dev/null 2>&1 ; then
+        echo -e "${WORNING} ${CYAN}Wget not installed, operation aborted.. ${NC}" && sleep 1
+        echo -e ""
+        return 1
+    fi
+
+    Mode="$1"
+    bootstrap_local
+    if [[ -f "$FILE_PATH" ]]; then
+        if [[ "$Mode" != "install" ]]; then
+            start_service
+            if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+                sudo rm -rf $FILE_PATH > /dev/null 2>&1 && sleep 2
+            fi
+        fi
+        return 1
+    else
+        if [[ -z $bootstrap_url ]]; then
+            bootstrap_manual
+            if [[ "$Mode" != "install" && "$Server_offline" == "0" ]]; then
+                start_service
+                if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
+                    sudo rm -rf $FILE_PATH /dev/null 2>&1 && sleep 2
+                fi
+            fi
+            return 1
+       fi
+    fi
+
+    if [[  "$bootstrap_url" == "0"  || "$bootstrap_url" == "" ]]; then
+        cdn_speedtest "0" "6"
+        if [[ "$server_offline" == "1" ]]; then
+            echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation aborted.. ${NC}" && sleep 1
+            echo -e ""
+            return 1
+        fi
+        echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
+        wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
+        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+    else
+        DOWNLOAD_URL="$bootstrap_url"
+        echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
+        wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
+        echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+        tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+    fi
+
+    if [[ -z "$bootstrap_zip_del" ]]; then
+        rm -rf /home/$USER/$BOOTSTRAP_FILE > /dev/null 2>&1
+    else
+        if [[ "$bootstrap_zip_del" == "1" ]]; then
+            rm -rf /home/$USER/$BOOTSTRAP_FILE > /dev/null 2>&1
+        fi
+    fi
+}
+
+function bootstrap_manual() {
+
+  CHOICE=$(
+    whiptail --title "FluxNode Installation" --menu "Choose a method how to get bootstrap file" 10 47 2  \
+    "1)" "Download from source build in script" \
+    "2)" "Download from own source" 3>&2 2>&1 1>&3
+   )
+
+    case $CHOICE in
+        "1)")
+
+            #server_list=("http://cdn-11.runonflux.io/apps/fluxshare/getfile/" "http://cdn-12.runonflux.io/apps/fluxshare/getfile/" "http://cdn-13.runonflux.io/apps/fluxshare/getfile/" "http://cdn-10.runonflux.io/apps/fluxshare/getfile/")
+            #cdn_speedtest "0" "8" "${server_list[@]}"
+            cdn_speedtest "0" "6"
+            if [[ "$server_offline" == "1" ]]; then
+                echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation aborted.. ${NC}" && sleep 1
+                echo -e ""
+                return 1
+            fi
+            DB_HIGHT=$(curl -sSL -m 10 "${BOOTSTRAP_URL}flux_explorer_bootstrap.json" | jq -r '.block_height' 2>/dev/null)
+            if [[ "$DB_HIGHT" == "" ]]; then
+                DB_HIGHT=$(curl -sSL -m 10 "${BOOTSTRAP_URL}flux_explorer_bootstrap.json" | jq -r '.block_height' 2>/dev/null)
+            fi
+            if [[ "$DB_HIGHT" != "" ]]; then
+                echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
+            fi
+
+            echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
+            wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
+            if [[ "$Mode" != "install" ]]; then
+                stop_service
+            fi
+            tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+            sleep 1
+            ;;
+        "2)")
+            DOWNLOAD_URL="$(whiptail --title "Flux daemon bootstrap setup" --inputbox "Enter your URL (zip, tar.gz)" 8 72 3>&1 1>&2 2>&3)"
+            echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
+            BOOTSTRAP_FILE="${DOWNLOAD_URL##*/}"
+            wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
+            if [[ "$Mode" != "install" ]]; then
+               stop_service
+            fi
+            if [[ "$BOOTSTRAP_FILE" == *".zip"* ]]; then
+                echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
+                unzip -o $BOOTSTRAP_FILE -d /home/$USER/$CONFIG_DIR > /dev/null 2>&1
+            else
+                tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
+                sleep 1
+            fi
+            ;;
+    esac
+}
+
+function bootstrap_local() {
+
+    BOOTSTRAP_FILE="flux_explorer_bootstrap.tar.gz"
+    FILE_PATH="/home/$USER/$BOOTSTRAP_FILE"
+
+    if [ -f "$FILE_PATH" ]; then
+        echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
+        check_tar "$FILE_PATH"
+        if [ -f "$FILE_PATH" ]; then
+            stop_service
+            tar_file_unpack "$FILE_PATH" "/home/$USER/$CONFIG_DIR"
+        fi
+    fi
+}
+
+function flux_chain_date_wipe() {
+    if [[ -e ~/$CONFIG_DIR/blocks ]] && [[ -e ~/$CONFIG_DIR/chainstate ]]; then
+        echo -e "${ARROW} ${CYAN}Removing blocks, chainstate, determ_zelnodes directories...${NC}"
+        rm -rf ~/$CONFIG_DIR/blocks ~/$CONFIG_DIR/chainstate ~/$CONFIG_DIR/determ_zelnodes > /dev/null 2>&1
+    fi
+}
+
+function stop_service() {
+    pm2 stop watchdog > /dev/null 2>&1 && sleep 2
+    echo -e "${ARROW} ${CYAN}Stopping Flux daemon service${NC}"
+    sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+    sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
+    flux_chain_date_wipe
+}
+
+function start_service() {
+    sudo systemctl start zelcash  > /dev/null 2>&1 && sleep 2
+    NUM='35'
+    MSG1='Starting Flux daemon service...'
+    MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+    spinning_timer
+    echo -e "" && echo -e ""
+    pm2 restart flux > /dev/null 2>&1 && sleep 2
+    pm2 start watchdog --watch > /dev/null 2>&1 && sleep 2
+}
+###################################################################################################
 
 function selfhosting() {
  
@@ -489,27 +588,6 @@ function check_benchmarks() {
         var_round=$(round "$var_benchmark" 2)
         echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
     fi
-}
-
-function tar_file_unpack() {
-    echo -e "${ARROW} ${YELLOW}Unpacking bootstrap archive file...${NC}"
-    pv $1 | tar -zx -C $2
-}
-
-
-function check_tar() {
-    echo -e "${ARROW} ${YELLOW}Checking  bootstrap file integration...${NC}"
-    if gzip -t "$1" &>/dev/null; then
-        echo -e "${ARROW} ${CYAN}Bootstrap file is valid.................[${CHECK_MARK}${CYAN}]${NC}"
-    else
-        echo -e "${ARROW} ${CYAN}Bootstrap file is corrupted.............[${X_MARK}${CYAN}]${NC}"
-        rm -rf $1
-    fi
-}
-
-function tar_file_pack() {
-    echo -e "${ARROW} ${YELLOW}Creating bootstrap archive file...${NC}"
-    tar -czf - $1 | (pv -p --timer --rate --bytes > $2) 2>&1
 }
 
 function flux_package() {
