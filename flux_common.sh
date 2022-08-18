@@ -190,6 +190,7 @@ function cdn_speedtest() {
     i=0
     len=${#rand_by_domain[@]}
     echo -e "${ARROW} ${CYAN}Running quick download speed test for ${BOOTSTRAP_FILE}, Servers: ${GREEN}$len${NC}"
+    start_test=`date +%s`
     while [ $i -lt $len ];
     do
         if [[ "$custom_url" == "1" ]]; then
@@ -214,7 +215,7 @@ function cdn_speedtest() {
     done
 
     rServerList=$((${#size_list[@]}-$failed_counter))
-    echo -e "${ARROW} ${CYAN}Valid servers: ${GREEN}${rServerList}${NC}"
+    echo -e "${ARROW} ${CYAN}Valid servers: ${GREEN}${rServerList} ${CYAN}- Duration: ${GREEN}$((($(date +%s)-$start_test)/60)) min. $((($(date +%s)-$start_test) % 60)) sec.${NC}"
     sudo rm -rf testspeed > /dev/null 2>&1
 
     if [[ "$rServerList" == "0" ]]; then
