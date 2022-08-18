@@ -273,7 +273,7 @@ function bootstrap() {
         fi
         return 1
     else
-        if [[ -z $bootstrap_url ]]; then
+        if [[ ! -f /home/$USER/install_conf.json ]]; then
             bootstrap_manual
             if [[ "$Mode" != "install" && "$Server_offline" == "0" ]]; then
                 start_service
@@ -376,7 +376,9 @@ function bootstrap_local() {
         echo -e "${ARROW} ${CYAN}Local bootstrap file detected...${NC}"
         check_tar "$FILE_PATH"
         if [ -f "$FILE_PATH" ]; then
-            stop_service
+	    if [[ "$Mode" != "install" ]]; then
+                stop_service
+	    fi
             tar_file_unpack "$FILE_PATH" "/home/$USER/$CONFIG_DIR"
         fi
     fi
