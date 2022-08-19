@@ -24,6 +24,7 @@ NC='\033[0m'
 #emoji codes
 ARROW="${SEA}\xE2\x96\xB6${NC}"
 RIGHT_ANGLE="${GREEN}\xE2\x88\x9F${NC}"
+CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 
 #global variable
 server_offline="0"
@@ -110,3 +111,4 @@ if [[ "$custom_url" == "1" ]]; then
 else
     echo -e "${ARROW} ${CYAN}Best server is: ${GREEN}cdn-${YELLOW}${rand_by_domain[${max_indexes[0]}]} ${GREEN}Average speed: ${YELLOW}$mb ${GREEN}MB/s${NC}"
 fi
+echo -e "${CHECK_MARK} ${GREEN}Fastest Server: ${YELLOW}${DOWNLOAD_URL}${NC}"
