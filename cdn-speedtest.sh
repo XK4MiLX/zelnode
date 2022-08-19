@@ -11,7 +11,7 @@
 #   Example 2 ( for testing cdn with 6s download test of each server )
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "0" "6"
 #
-#   Example 3 ( for testing cdn with default setting )
+#   Example 3 ( for testing cdn with default settings )
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh)
 ################################################################################################################################
 
