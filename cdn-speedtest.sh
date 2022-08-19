@@ -1,5 +1,16 @@
 #!/bin/bash
 
+################################################################################################################################
+#
+#   Usage:
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<file_name>" "<test_time_in_s>" "<array_url_list_via_export>" 
+#
+#   Example:
+#   export list=("http://cdn-11.runonflux.io/apps/fluxshare/getfile/" "http://cdn-11.runonflux.io/apps/fluxshare/getfile/")
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "0" "6" "${list[@]}"
+#
+################################################################################################################################
+
 #color codes
 YELLOW='\033[1;33m'
 GREEN='\033[1;32m'
