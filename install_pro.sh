@@ -133,15 +133,20 @@ function import_date() {
             
                     if [[ -f /home/$USER/watchdog/config.js ]]; then
                         echo -e ""
-                        echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"	      
+                        echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
+			
                         node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
                         if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
                             echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
                         else
                             echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
                         fi
+			
                         eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
-                        echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}"    
+			if [[ "$eps_limit" != "" && "$eps_limit" != "0" ]]; then
+			    echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}"   
+			fi
+			
                         discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')	      
                         if [[ "$discord" != "" && "$discord" != "0" ]]; then
                             echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}"
