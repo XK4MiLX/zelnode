@@ -71,7 +71,7 @@ sudo rm -rf testspeed > /dev/null 2>&1
 
 if [[ "$rServerList" == "0" ]]; then
     server_offline="1"
-    return 1
+    exit
 fi
 
 arr_max=$(printf '%s\n' "${size_list[@]}" | sort -n | tail -1)
