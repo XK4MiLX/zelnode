@@ -12,7 +12,7 @@ RIGHT_ANGLE="${GREEN}\xE2\x88\x9F${NC}"
 
 #global variable
 server_offline="0"
-failed_counter"0"
+failed_counter="0"
 
 
 if [[ -z $1 || "$1" == "0" ]]; then
