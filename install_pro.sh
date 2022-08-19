@@ -261,7 +261,7 @@ function import_date() {
         fi
     fi
     sleep 3
-    echo - e ""
+    echo -e ""
 }
 
 function install_watchdog() {
