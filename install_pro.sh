@@ -1360,139 +1360,77 @@ fi
 
 function status_loop() {
 
-network_height_01=$(curl -sk -m 10 https://explorer.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+    network_height_01=$(curl -sk -m 10 https://blockbook.zel.network/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
+    network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+    EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
 
-EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
+    if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks' 2> /dev/null) ]]; then
 
-
-if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks' 2> /dev/null) ]]; then
-echo
-echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
-
-
-LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-
-NUM='2'
-MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
-MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
-spinning_timer
-echo && echo
-
-else
-	
-   echo
-   echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
-   
-   f=0
-   start_sync=`date +%s`
-
-	
-    while true
-    do
-        
-        network_height_01=$(curl -sk -m 10 https://explorer.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-        network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-
-        EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
-	
+        echo -e ""
+        echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
         LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-	CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-	LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-	
-	if [[ "$LEFT" == "0" ]]; then	
-	  time_break='5'
-	else
-	  time_break='20'
-	fi
-	
-	#if [[ "$CONNECTIONS" == "0" ]]; then
-	 # c=$((c+1))
-	 # if [[ "$c" > 3 ]]; then
-	  # c=0;
-	   #LOCAL_BLOCK_HIGHT=""
-	#  fi
-	
-	#fi
-	#
-	if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then
-	
-	  f=$((f+1))
-	  LOCAL_BLOCK_HIGHT="N/A"
-	  LEFT="N/A"
-	  CONNECTIONS="N/A"
-	  sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
-	  sudo systemctl start zelcash > /dev/null 2>&1
-	
-          NUM='60'
-          MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-          MSG2=''
-          spinning_timer
-	  
-	 network_height_01=$(curl -sk -m 10 https://explorer.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-         network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-
-          EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
-	  
-       	  LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
-	  CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
-	  LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-
-	fi
-	
-	NUM="$time_break"
-        MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-        MSG2=''
+        CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
+        LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+        NUM='2'
+        MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
+        MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
         spinning_timer
+        echo && echo
+
+    else
 	
-        if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-	    echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-            break
-        fi
-    done
-    
+        echo -e ""
+        echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
+        f=0
+        start_sync=`date +%s`
+
+        while true
+        do
+        
+            network_height_01=$(curl -sk -m 10 https://blockbook.zel.network/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
+            network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+            EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
+            LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
+            CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
+            LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+	
+            if [[ "$LEFT" == "0" ]]; then	
+                time_break='5'
+            else
+                time_break='20'
+            fi
+	
+            if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then  
+                f=$((f+1))
+                LOCAL_BLOCK_HIGHT="N/A"
+                LEFT="N/A"
+                CONNECTIONS="N/A"
+                sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+                sudo systemctl start zelcash > /dev/null 2>&1
+                NUM='60'
+                MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+                MSG2=''
+                spinning_timer
+                network_height_01=$(curl -sk -m 10 https://blockbook.zel.network/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
+                network_height_03=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+                EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_03")
+                LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
+                CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
+                LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+            fi
+
+	        NUM="$time_break"
+            MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+            MSG2=''
+            spinning_timer
+
+            if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
+            echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+                break
+            fi
+        done
     fi
-    
-       
-   #pm2 start ~/$FLUX_DIR/start.sh --name flux --time > /dev/null 2>&1
-
-    
- # if [[ -z "$mongo_bootstrap" ]]; then
-    
-   # if   whiptail --yesno "Would you like to restore Mongodb datatable from bootstrap?" 8 60; then
-   #      mongodb_bootstrap
-   # else
-  #      echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
-   # fi
- #   
- # else
-   
-  #  if [[ "$mongo_bootstrap" == "1" ]]; then
- #     mongodb_bootstrap
-  #  else
-  #    echo -e "${ARROW} ${YELLOW}Restore Mongodb datatable skipped...${NC}"
-   # fi
-   
- # fi
-    
-  #if [[ -z "$watchdog" ]]; then
-    #if   whiptail --yesno "Would you like to install watchdog for FluxNode?" 8 60; then
-   install_watchdog
-   # else
-       # echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
-   # fi
- #  else
-   
-    # if [[ "$watchdog" == "1" ]]; then
-    #  install_watchdog
-    # else
-   #   echo -e "${ARROW} ${YELLOW}Watchdog installation skipped...${NC}"
-    # fi
-   
- #  fi
-
+    install_watchdog
     check
     display_banner
 }
@@ -1508,21 +1446,11 @@ else
     install_daemon
     zk_params
     if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
-    bootstrap "install"
+        bootstrap "install"
     fi
     create_service_scripts
     create_service
-    
-   # if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
-   #   echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
-  #  else
-      # if whiptail --yesno "Would you like to install cron service for rotate ip (required for dynamic ip)?" 8 60; then
-         selfhosting
-      ## else
-         #echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
-      ### fi 
-  ##  fi
-    
+    selfhosting
     install_process
     start_daemon
     log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
