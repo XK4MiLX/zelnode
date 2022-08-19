@@ -2,14 +2,14 @@
 
 ################################################################################################################################
 #   Usage:
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<file_name>" "<test_time_in_s>" "<array_url_list_via_export>" 
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<test_time_in_s>" "<file_name>" "<array_url_list_via_export>" 
 #
 #   Example 1 ( for testing custom servers ):
 #   export list=("http://cdn-11.runonflux.io/apps/fluxshare/getfile/" "http://cdn-11.runonflux.io/apps/fluxshare/getfile/")
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "flux_explorer_bootstrap.tar.gz" "6" "${list[@]}"
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "6" "flux_explorer_bootstrap.tar.gz" "${list[@]}"
 #
 #   Example 2 ( for testing cdn with 6s download test of each server )
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "0" "6"
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "6"
 #
 #   Example 3 ( for testing cdn with default settings )
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh)
@@ -30,17 +30,16 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 server_offline="0"
 failed_counter="0"
 
-
-if [[ -z $1 || "$1" == "0" ]]; then
-    BOOTSTRAP_FILE="flux_explorer_bootstrap.tar.gz"
-else
-    BOOTSTRAP_FILE="$1"
-fi
-
-if [[ -z $2 ]]; then
+if [[ -z $1 ]]; then
     dTime="5"
 else
-    dTime="$2"
+    dTime="$1"
+fi
+
+if [[ -z $2 || "$2" == "0" ]]; then
+    BOOTSTRAP_FILE="flux_explorer_bootstrap.tar.gz"
+else
+    BOOTSTRAP_FILE="$2"
 fi
 
 if [[ -z $3 ]]; then
