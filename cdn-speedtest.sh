@@ -1,14 +1,18 @@
 #!/bin/bash
 
 ################################################################################################################################
-#
 #   Usage:
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<file_name>" "<test_time_in_s>" "<array_url_list_via_export>" 
 #
-#   Example:
+#   Example 1 ( for testing custom servers ):
 #   export list=("http://cdn-11.runonflux.io/apps/fluxshare/getfile/" "http://cdn-11.runonflux.io/apps/fluxshare/getfile/")
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "0" "6" "${list[@]}"
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "flux_explorer_bootstrap.tar.gz" "6" "${list[@]}"
 #
+#   Example 2 ( for testing cdn with 6s download test of each server )
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "0" "6"
+#
+#   Example 3 ( for testing cdn with default setting )
+#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh)
 ################################################################################################################################
 
 #color codes
