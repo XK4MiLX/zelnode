@@ -30,6 +30,10 @@ CHECK_MARK="${GREEN}\xE2\x9C\x94${NC}"
 server_offline="0"
 failed_counter="0"
 
+if ! bc -v > /dev/null 2>&1 ; then
+    sudo apt install -y bc > /dev/null 2>&1 && sleep 1
+fi
+
 if [[ -z $1 ]]; then
     dTime="5"
 else
