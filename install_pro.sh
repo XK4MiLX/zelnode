@@ -1106,7 +1106,7 @@ zk_params
 if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
     bootstrap "install"
 fi
-create_service
+create_service "install"
 selfhosting
 install_process
 start_daemon
