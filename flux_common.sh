@@ -1025,7 +1025,7 @@ function create_service() {
 		sudo rm -rf /home/$USER/stop_zelcash_service.sh > /dev/null 2>&1 
 		sudo rm -rf /etc/systemd/system/zelcash.service > /dev/null 2>&1
 	fi
-	echo -e "${ARROW} ${CYAN}Creating Flux daemon service...${NC}" && sleep 1
+	echo -e "${ARROW} ${YELLOW}Creating Flux daemon service...${NC}" && sleep 1
 	sudo touch /etc/systemd/system/zelcash.service
 	sudo chown $USER:$USER /etc/systemd/system/zelcash.service
 	cat <<-EOF > /etc/systemd/system/zelcash.service
