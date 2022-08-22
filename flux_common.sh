@@ -207,7 +207,6 @@ function cdn_speedtest() {
    #echo -e "${CHECK_MARK} ${GREEN}Fastest Server: ${YELLOW}$DOWNLOAD_URL${NC}"
 }
 function bootstrap() {
-	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
 	if ! wget --version > /dev/null 2>&1 ; then
 		sudo apt install -y wget > /dev/null 2>&1 && sleep 2
@@ -457,7 +456,7 @@ function integration_check() {
 		echo -e ""
 		exit
 	fi	
-	echo -e ""
+	
 }
 function config_file() {
 	if [[ -f /home/$USER/install_conf.json ]]; then
