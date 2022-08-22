@@ -81,11 +81,11 @@ function import_date() {
                 IMPORT_ZELCONF="1"
                 echo
                 echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-                zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//') | sed 's/ //g'
+                zelnodeprivkey=$(grep -w zelnodeprivkey home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//' | sed 's/ //g') 
                 echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}"
-                zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//') | sed 's/ //g'
+                zelnodeoutpoint=$(grep -w zelnodeoutpoint home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//' | sed 's/ //g') 
                 echo -e "${PIN}${CYAN} Collateral TX ID = ${GREEN}$zelnodeoutpoint${NC}"
-                zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//') | sed 's/ //g'
+                zelnodeindex=$(grep -w zelnodeindex home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"
             
                 if [[ "$OLD_CONFIG" == "1" ]]; then 
@@ -168,23 +168,23 @@ function import_date() {
             IMPORT_ZELCONF="1"
             echo -e ""
             echo -e "${ARROW} ${YELLOW}Imported settings:${NC}"
-            zelnodeprivkey=$(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//')
-            echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}" 
-            zelnodeoutpoint=$(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-            echo -e "${PIN}${CYAN} Output TX ID = ${GREEN}$zelnodeoutpoint${NC}" 
-            zelnodeindex=$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-            echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"         
+            zelnodeprivkey=$(grep -w zelnodeprivkey /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//' | sed 's/ //g') 
+            echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}"
+            zelnodeoutpoint=$(grep -w zelnodeoutpoint home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//' | sed 's/ //g') 
+            echo -e "${PIN}${CYAN} Collateral TX ID = ${GREEN}$zelnodeoutpoint${NC}"
+            zelnodeindex=$(grep -w zelnodeindex home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//' | sed 's/ //g')
+            echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"       
             if [[ "$OLD_CONFIG" == "1" ]]; then 
                 CONFIG_DIR='.flux'
                 CONFIG_FILE='flux.conf' 
             fi
             if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
-                ZELID=$(grep -w zelid ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+                ZELID=$(grep -w zelid home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$ZELID" != "" ]]; then
                     echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}"
                     IMPORT_ZELID="1"
                 fi  
-                KDA_A=$(grep -w kadena ~/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
+                KDA_A=$(grep -w kadena home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$KDA_A" != "" ]]; then
                     echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
                 fi               
