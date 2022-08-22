@@ -296,7 +296,6 @@ EOF
             if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
                 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
                 string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
-                echo -e "${ARROW} ${CYAN}Starting watchdog...${NC}"
                 pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
                 pm2 save > /dev/null 2>&1
             else
@@ -306,7 +305,8 @@ EOF
         fi
         if whiptail --yesno "Would you like enable autoupdate?" 8 60; then
             flux_update='1'
-            daemon_update='1'
+       
+       daemon_update='1'
             bench_update='1'
         else
             flux_update='0'
@@ -1001,12 +1001,12 @@ function install_flux() {
         done
     fi
     if [ -d "./$FLUX_DIR" ]; then
-        echo -e "${ARROW} ${YELLOW}Removing any instances of FluxOS${NC}"
+        echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS${NC}"
         sudo rm -rf $FLUX_DIR
     fi
     
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
-    echo -e "${ARROW} ${YELLOW}Creating FluxOS configuration file...${NC}"
+    echo -e "${ARROW} ${CYAN}Creating FluxOS configuration file...${NC}"
     touch ~/$FLUX_DIR/config/userconfig.js
     cat << EOF > ~/$FLUX_DIR/config/userconfig.js
     module.exports = {
