@@ -971,18 +971,19 @@ function install_process() {
 }
 
 function install_flux() {
+    echo -e "${ARROW} ${YELLOW}FluxOS installing...${NC}"
     docker_check=$(docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
     resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
     mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 
     if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
-        echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
+        #echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}" && sleep 1
         echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}" && sleep 1
         echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
     fi
 
     if [[ $docker_check != 0 ]]; then
-        echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
+        #echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}" && sleep 1
         echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
         sudo service docker restart > /dev/null 2>&1 && sleep 2
         docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" |
@@ -992,20 +993,20 @@ function install_flux() {
         done
     fi
     if [[ $resource_check != 0 ]]; then
-        echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
-        echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}" && sleep 1
+        #echo -e "${ARROW} ${YELLOW}Detected locked resource${NC}" && sleep 1
+        echo -e "${ARROW} ${CYAN}Unmounting locked FluxOS resource${NC}" && sleep 1
         df | egrep 'flux' | awk '{ print $1}' |
         while read line; do
             sudo umount -l $line && sleep 1
         done
     fi
     if [ -d "./$FLUX_DIR" ]; then
-        echo -e "${ARROW} ${YELLOW}Removing any instances of Flux${NC}"
+        echo -e "${ARROW} ${YELLOW}Removing any instances of FluxOS${NC}"
         sudo rm -rf $FLUX_DIR
     fi
-    echo -e "${ARROW} ${YELLOW}Flux installing...${NC}"
+    
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
-    echo -e "${ARROW} ${YELLOW}Creating Flux configuration file...${NC}"
+    echo -e "${ARROW} ${YELLOW}Creating FluxOS configuration file...${NC}"
     touch ~/$FLUX_DIR/config/userconfig.js
     cat << EOF > ~/$FLUX_DIR/config/userconfig.js
     module.exports = {
@@ -1019,10 +1020,10 @@ function install_flux() {
 EOF
     if [ -d ~/$FLUX_DIR ]; then
         current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
-        string_limit_check_mark "Flux v$current_ver installed................................." "Flux ${GREEN}v$current_ver${CYAN} installed................................."
+        string_limit_check_mark "FluxOS v$current_ver installed................................." "FluxOS ${GREEN}v$current_ver${CYAN} installed................................."
         echo -e ""
     else
-        string_limit_x_mark "Flux was not installed................................."
+        string_limit_x_mark "FluxOS was not installed................................."
         echo -e ""
     fi
 }
