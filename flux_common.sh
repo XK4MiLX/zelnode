@@ -369,6 +369,17 @@ function get_ip() {
 	fi
 }
 function selfhosting() {
+	if [[ "$1" != "install" ]]; then
+		echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+	   		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+	    		echo -e "${CYAN}Please switch to the user account.${NC}"
+	    		echo -e "${YELLOW}================================================================${NC}"
+	    		echo -e "${NC}"
+	    		exit
+		fi
+	 fi 
 	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 	echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
 	if [[ "$1" != "install" ]]; then
