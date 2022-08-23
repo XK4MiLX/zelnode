@@ -222,7 +222,7 @@ function bootstrap() {
 		if [[ "$Mode" != "install" ]]; then
 			start_service
 			if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
-					sudo rm -rf $FILE_PATH > /dev/null 2>&1 && sleep 2
+				sudo rm -rf $FILE_PATH > /dev/null 2>&1 && sleep 2
 			fi
 		fi
 		return
@@ -320,7 +320,7 @@ function bootstrap_local() {
 		check_tar "$FILE_PATH"
 		if [ -f "$FILE_PATH" ]; then
 			if [[ "$Mode" != "install" ]]; then
-						stop_service
+				stop_service
 			fi
 			tar_file_unpack "$FILE_PATH" "/home/$USER/$CONFIG_DIR"
 		fi
@@ -503,11 +503,11 @@ function config_file() {
 			echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 		else
 			if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
-				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...........[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
 				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
-			if [[ "$bootstrap_zip_del" == "1" ]]; then
+			if [[ "$bootstrap_zip_del" == "1" || -z "$bootstrap_zip_del" ]]; then
 				echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
 				echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -1104,3 +1104,5 @@ function analyzer_and_fixer(){
 	fi
 	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
 }
+
+
