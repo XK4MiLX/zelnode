@@ -351,14 +351,14 @@ function start_service() {
 }
 function get_ip() {
 	WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
-	if [[ "$WANIP" == "" ]]; then
+	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
 		WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
 	fi  
-	if [[ "$WANIP" == "" ]]; then
+	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
 		WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
 	fi
 	if [[ "$1" == "install" ]]; then
-		if [[ "$WANIP" == "" ]]; then
+		if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
 			echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
 			echo
 			exit
