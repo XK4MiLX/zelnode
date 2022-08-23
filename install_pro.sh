@@ -233,16 +233,16 @@ function import_date() {
 }
 
 function install_watchdog() {
-    echo -e "${ARROW} ${YELLOW}Install watchdog for FluxNode${NC}"
+    echo -e "${ARROW} ${YELLOW}Watchdog installing...${NC}"
     if pm2 -v > /dev/null 2>&1; then
         WATCHDOG_INSTALL="1"
-        echo -e "${ARROW} ${CYAN}Downloading...${NC}"
+        #echo -e "${ARROW} ${CYAN}Downloading...${NC}"
         cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
-        echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
+        #echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
         wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
         mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
         sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
-        echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
+        #echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
         cd watchdog && npm install > /dev/null 2>&1
         echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
         fix_action='1'
