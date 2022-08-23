@@ -34,9 +34,9 @@ function config_veryfity(){
         echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
         insightexplorer=$(cat /home/$USER/.flux/flux.conf | grep 'insightexplorer=1' | wc -l)
         if [[ "$insightexplorer" == "1" ]]; then
-            echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${CHECK_MARK}${CYAN}]${NC}"
+            echo -e "${ARROW} ${CYAN}Insightexplorer enabled.................[${CHECK_MARK}${CYAN}]${NC}"
         else
-            echo -e "${ARROW} ${CYAN}Insightexplorer enabled.............[${X_MARK}${CYAN}]${NC}"
+            echo -e "${ARROW} ${CYAN}Insightexplorer enabled.................[${X_MARK}${CYAN}]${NC}"
             echo -e "${ARROW} ${CYAN}Removing wallet.dat...${NC}"
             echo -e "${ARROW} ${CYAN}Use old chain will be skipped...${NC}"
             sudo rm -rf /home/$USER/$CONFIG_DIR/wallet.dat && sleep 1
@@ -158,7 +158,6 @@ function import_date() {
         fi
     else 
         if [[ "$import_settings" == "1" ]]; then
-     
             OLD_CONFIG=0
             if [[ -d /home/$USER/.zelcash ]]; then
                 CONFIG_DIR='.zelcash'
