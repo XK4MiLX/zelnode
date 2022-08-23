@@ -1109,7 +1109,7 @@ if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
 fi
 create_service_scripts
 create_service "install"
-selfhosting
+selfhosting "install"
 install_process
 start_daemon
 log_rotate "Flux benchmark" "bench_debug_log" "/home/$USER/$BENCH_DIR_LOG/debug.log" "monthly" "2"
