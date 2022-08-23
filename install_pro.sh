@@ -49,7 +49,7 @@ function pm2_install(){
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
     if pm2 -v > /dev/null 2>&1; then
-        echo -e "${ARROW} ${YELLOW}Configuring PM2...${NC}"
+        echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
         pm2 startup systemd -u $USER > /dev/null 2>&1
         sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
         pm2 install pm2-logrotate > /dev/null 2>&1
