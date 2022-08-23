@@ -371,11 +371,11 @@ function selfhosting() {
 		echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
 		echo -e "${YELLOW}================================================================${NC}"
 		if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-	   		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-	    		echo -e "${CYAN}Please switch to the user account.${NC}"
-	    		echo -e "${YELLOW}================================================================${NC}"
-	    		echo -e "${NC}"
-	    		exit
+			echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+			echo -e "${CYAN}Please switch to the user account.${NC}"
+			echo -e "${YELLOW}================================================================${NC}"
+			echo -e "${NC}"
+			exit
 		fi
 	 fi 
 	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
@@ -495,13 +495,14 @@ function config_file() {
 			echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 		else
 			if [[ "$import_settings" == "1" ]]; then
-				echo -e "${PIN}${CYAN} Import settings from Flux........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				echo -e "${PIN}${CYAN} Import installation configurations........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
 		fi
+
 		if [[ "$use_old_chain" == "1" ]]; then
 			echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 		else
-			if [[ "$bootstrap_url" == "0" ]]; then
+			if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
 				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in scripts...........[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
 				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -835,8 +836,6 @@ function create_swap() {
 			sudo swapon /swapfile > /dev/null 2>&1
 			echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
 			echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
-		else
-			echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
 		fi
 	else
 		if [[ "$swapon" == "1" ]]; then
@@ -858,15 +857,12 @@ function create_swap() {
 				sudo swapon /swapfile > /dev/null 2>&1
 				echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
 				echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
-			else
-				echo -e "${ARROW} ${YELLOW}Creating a swapfile skipped...${NC}"
 			fi
 		fi
 	fi
 	sleep 2
 }
 function install_packages() {
-	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Installing Packages...${NC}"
 	if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
 		sudo apt-get install dirmngr apt-transport-https -y > /dev/null 2>&1
