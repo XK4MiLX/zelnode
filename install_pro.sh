@@ -152,11 +152,10 @@ function import_date() {
                     fi
                 fi 
 
-            fi
-        fi
-    else 
-        if [[ "$import_settings" == "1" ]]; then
-            OLD_CONFIG=0
+            fi   
+        else 
+            if [[ "$import_settings" == "1" ]]; then
+                OLD_CONFIG=0
             if [[ -d /home/$USER/.zelcash ]]; then
                 CONFIG_DIR='.zelcash'
                 CONFIG_FILE='zelcash.conf' 
