@@ -115,7 +115,7 @@ function spinning_timer() {
 	echo -ne "${MSG2}"
 }
 function tar_file_unpack() {
-	echo -e "${ARROW} ${CYAN}Unpacking bootstrap archive file...${NC}"
+	echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 	pv $1 | tar -zx -C $2
 }
 function check_tar() {
@@ -248,13 +248,11 @@ function bootstrap() {
 		fi
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
-		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
 	else
 		DOWNLOAD_URL="$bootstrap_url"
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
-		echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
 	fi
 	if [[ -z "$bootstrap_zip_del" ]]; then
