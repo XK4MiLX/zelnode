@@ -1,6 +1,5 @@
 #!/bin/bash
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
-
 #wallet information
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
@@ -28,7 +27,6 @@ ZELNODEPORT=16128
 RPCPORT=16124
 PORT=16125
 
-
 function config_veryfity(){
     if [[ -f /home/$USER/.flux/flux.conf ]]; then
         echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
@@ -44,7 +42,6 @@ function config_veryfity(){
         fi
     fi
 }
-
 function pm2_install(){
     echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
     npm install pm2@latest -g > /dev/null 2>&1
@@ -66,7 +63,6 @@ function pm2_install(){
         echo -e ""
     fi 
 }
-
 function import_date() {
     if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
         if [[ -z "$import_settings" ]]; then
@@ -181,52 +177,53 @@ function import_date() {
                         echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
                     fi               
                 fi
-                echo -e ""
-                echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"  
-                node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
-                if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
-                    echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
-                else
-                    echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
-                fi
-                eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
-                if [[ "$eps_limit" != "" && "$eps_limit" != "0" ]]; then
-                    echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" 
-                fi
-                discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')	      
-                if [[ "$discord" != "" && "$discord" != "0" ]]; then
-                    echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}"
+                if [[ -f /home/$USER/watchdog/config.js ]]; then
+                    echo -e ""
+                    echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"  
+                    node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
+                    if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
+                        echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
                     else
-                    echo -e "${PIN}${CYAN} Discord alert = ${RED}Disabled${NC}"
-                fi
-                ping=$(grep -w ping /home/$USER/watchdog/config.js | sed -e 's/.*ping: .//' | sed -e 's/.\{2\}$//')    
-                if [[ "$ping" != "" && "$ping" != "0" ]]; then
-                    if [[ "$discord" != "" && "$discord" != "0" ]]; then
-                        echo -e "${PIN}${CYAN} Discord ping = ${GREEN}Enabled${NC}"
-                    else
-                        echo -e "${PIN}${CYAN} Discord ping = ${RED}Disabled${NC}"
+                        echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
                     fi
-                fi
-                telegram_alert=$(grep -w telegram_alert /home/$USER/watchdog/config.js | sed -e 's/.*telegram_alert: .//' | sed -e 's/.\{2\}$//')
-                if [[ "$telegram_alert" != "" && "$telegram_alert" != "0" ]]; then
-                    echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}Enabled${NC}"
-                else
-                    echo -e "${PIN}${CYAN} Telegram alert = ${RED}Disabled${NC}"
-                fi
-                telegram_bot_token=$(grep -w telegram_bot_token /home/$USER/watchdog/config.js | sed -e 's/.*telegram_bot_token: .//' | sed -e 's/.\{2\}$//')
-                if [[ "$telegram_alert" == "1" ]]; then
-                    echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}"	
-                fi
-                telegram_chat_id=$(grep -w telegram_chat_id /home/$USER/watchdog/config.js | sed -e 's/.*telegram_chat_id: .//' | sed -e 's/.\{1\}$//')
-                if [[ "$telegram_alert" == "1" ]]; then
-                    echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" 	
-                fi	    
+                    eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
+                    if [[ "$eps_limit" != "" && "$eps_limit" != "0" ]]; then
+                        echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}" 
+                    fi
+                    discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')	      
+                    if [[ "$discord" != "" && "$discord" != "0" ]]; then
+                        echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}"
+                        else
+                        echo -e "${PIN}${CYAN} Discord alert = ${RED}Disabled${NC}"
+                    fi
+                    ping=$(grep -w ping /home/$USER/watchdog/config.js | sed -e 's/.*ping: .//' | sed -e 's/.\{2\}$//')    
+                    if [[ "$ping" != "" && "$ping" != "0" ]]; then
+                        if [[ "$discord" != "" && "$discord" != "0" ]]; then
+                            echo -e "${PIN}${CYAN} Discord ping = ${GREEN}Enabled${NC}"
+                        else
+                            echo -e "${PIN}${CYAN} Discord ping = ${RED}Disabled${NC}"
+                        fi
+                    fi
+                    telegram_alert=$(grep -w telegram_alert /home/$USER/watchdog/config.js | sed -e 's/.*telegram_alert: .//' | sed -e 's/.\{2\}$//')
+                    if [[ "$telegram_alert" != "" && "$telegram_alert" != "0" ]]; then
+                        echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}Enabled${NC}"
+                    else
+                        echo -e "${PIN}${CYAN} Telegram alert = ${RED}Disabled${NC}"
+                    fi
+                    telegram_bot_token=$(grep -w telegram_bot_token /home/$USER/watchdog/config.js | sed -e 's/.*telegram_bot_token: .//' | sed -e 's/.\{2\}$//')
+                    if [[ "$telegram_alert" == "1" ]]; then
+                        echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_alert${NC}"	
+                    fi
+                    telegram_chat_id=$(grep -w telegram_chat_id /home/$USER/watchdog/config.js | sed -e 's/.*telegram_chat_id: .//' | sed -e 's/.\{1\}$//')
+                    if [[ "$telegram_alert" == "1" ]]; then
+                        echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}" 	
+                    fi	  
+                fi    
             fi
         fi
     fi
     echo -e ""
 }
-
 function install_watchdog() {
     echo -e "${ARROW} ${YELLOW}Watchdog installing...${NC}"
     if pm2 -v > /dev/null 2>&1; then
@@ -454,7 +451,6 @@ EOF
         string_limit_x_mark "Watchdog was not installed................................."
     fi
 }
-
 function wipe_clean() {
     echo -e "${ARROW} ${YELLOW}Removing any instances of FluxNode${NC}"
     apt_number=$(ps aux | grep 'apt' | wc -l)
@@ -578,7 +574,6 @@ function wipe_clean() {
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
     fi
 }
-
 function spinning_timer() {
     animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
     end=$((SECONDS+NUM))
@@ -593,7 +588,6 @@ function spinning_timer() {
     done
     echo -ne "${MSG2}"
 }
-
 function ssh_port() { 
     if [[ -z "$ssh_port" ]]; then
         SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
@@ -610,7 +604,6 @@ function ssh_port() {
 	    fi	   
     fi
 }
-
 function create_conf() {
 
     echo -e "${ARROW} ${YELLOW}Creating Flux daemon config file...${NC}"
@@ -783,7 +776,6 @@ EOF
         done	                 
     fi      
 }
-
 function install_daemon() {
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
@@ -835,7 +827,6 @@ function install_daemon() {
         fi
     fi
 }
-
 function basic_security() {
     echo -e "${ARROW} ${YELLOW}Configuring firewall and enabling fail2ban...${NC}"
     sudo ufw allow "$SSHPORT"/tcp > /dev/null 2>&1
@@ -854,7 +845,6 @@ function basic_security() {
     sudo systemctl enable fail2ban > /dev/null 2>&1
     sudo systemctl start fail2ban > /dev/null 2>&1
 }
-
 function start_daemon() {
     sudo systemctl enable zelcash.service > /dev/null 2>&1
     sudo systemctl start zelcash > /dev/null 2>&1
@@ -913,7 +903,6 @@ function start_daemon() {
         fi	
     fi
 }
-
 function install_process() {
     echo -e "${ARROW} ${YELLOW}Configuring firewall...${NC}"
     sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
@@ -962,7 +951,6 @@ function install_process() {
     install_flux
     sleep 2
 }
-
 function install_flux() {
     echo -e "${ARROW} ${YELLOW}FluxOS installing...${NC}"
     docker_check=$(docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
@@ -1020,7 +1008,6 @@ EOF
         echo -e ""
     fi
 }
-
 function status_loop() {
     network_height_01=$(curl -sk -m 10 https://blockbook.zel.network/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
     network_height_02=$(curl -sk -m 10 https://explorer.zelcash.online/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
