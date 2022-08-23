@@ -495,7 +495,7 @@ function config_file() {
 			echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 		else
 			if [[ "$import_settings" == "1" ]]; then
-				echo -e "${PIN}${CYAN} Import installation configurations........................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				echo -e "${PIN}${CYAN} Import installation configurations...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
 		fi
 
@@ -513,7 +513,7 @@ function config_file() {
 				echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
 		fi
-		if [[ "$discord" != "" || "$telegram_alert" == '1' ]]; then
+		if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
 			echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 		else
 			echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
