@@ -1048,7 +1048,6 @@ function status_loop() {
             fi
         done
     fi
-    echo -e ""
     install_watchdog
     check
     display_banner
