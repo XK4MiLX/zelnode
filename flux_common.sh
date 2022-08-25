@@ -54,10 +54,10 @@ function fluxos_conf_create(){
 	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
 	module.exports = {
 	  initial: {
-	    ipaddress: '${WANIP}',
-	    zelid: '${ZELID}',
-	    kadena: '${KDA_A}',
-	    testnet: false
+	  ipaddress: '${WANIP}',
+	  zelid: '${ZELID}',
+	  kadena: '${KDA_A}',
+	  testnet: false
 	  }
 	}
 	EOF
@@ -867,7 +867,7 @@ function start_install() {
 					echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}" && sleep 1
 			fi
 			if [[ "$eps_limit" != "" && "$eps_limit" != "0" ]]; then
-			    echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}"   
+				echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}"   
 			fi  
 			if [[ "$discord" != "" && "$discord" != "0" ]]; then
 					echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}" && sleep 1
@@ -1028,14 +1028,14 @@ function create_service_scripts() {
 	  echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
 	else
 	  if [[ "$bench_status_pind" != "" ]]; then
-	    echo -e "${WORNING} Running benchmark process detected${NC}"
-	    echo -e "${WORNING} Killing benchmark...${NC}"
-	    sudo killall -9 fluxbenchd > /dev/null 2>&1  && sleep 2
+		echo -e "${WORNING} Running benchmark process detected${NC}"
+		echo -e "${WORNING} Killing benchmark...${NC}"
+		sudo killall -9 fluxbenchd > /dev/null 2>&1  && sleep 2
 	  fi
 	  if [[ "$daemon_status_pind" != "" ]]; then
-	    echo -e "${WORNING} Running daemon process detected${NC}"
-	    echo -e "${WORNING} Killing daemon...${NC}"
-	    sudo killall -9 fluxd > /dev/null 2>&1  && sleep 2
+		echo -e "${WORNING} Running daemon process detected${NC}"
+		echo -e "${WORNING} Killing daemon...${NC}"
+		sudo killall -9 fluxd > /dev/null 2>&1  && sleep 2
 	  fi
 	  sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
 	fi
@@ -1045,19 +1045,19 @@ function create_service_scripts() {
 	  echo -e "${BOOK} ${CYAN}No running instance detected...${NC}"
 	else
 	  if [[ "$bench_status_pind" != "" ]]; then
-	    echo -e "${WORNING} Running benchmark process detected${NC}"
-	    echo -e "${WORNING} Killing benchmark...${NC}"
-	    sudo killall -9 zelbenchd > /dev/null 2>&1  && sleep 2
+		echo -e "${WORNING} Running benchmark process detected${NC}"
+		echo -e "${WORNING} Killing benchmark...${NC}"
+		sudo killall -9 zelbenchd > /dev/null 2>&1  && sleep 2
 	  fi
 	  if [[ "$daemon_status_pind" != "" ]]; then
-	    echo -e "${WORNING} Running daemon process detected${NC}"
-	    echo -e "${WORNING} Killing daemon...${NC}"
-	    sudo killall -9 zelcashd > /dev/null 2>&1  && sleep 2
+		echo -e "${WORNING} Running daemon process detected${NC}"
+		echo -e "${WORNING} Killing daemon...${NC}"
+		sudo killall -9 zelcashd > /dev/null 2>&1  && sleep 2
 	  fi
 	  sudo fuser -k 16125/tcp > /dev/null 2>&1 && sleep 1
   fi
   if [[ -f /usr/local/bin/fluxd ]]; then
-    bash -c "fluxd"
+	bash -c "fluxd"
 	 exit
   else
 	  bash -c "zelcashd"
@@ -1193,9 +1193,9 @@ function selfhosting() {
 	  get_ip
 	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-	    date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-	    echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-	    sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+		date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+		echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+		sudo ip addr add $WANIP dev $device_name:0 && sleep 2
 	  fi
 	fi
 	if [[ $1 == "ip_check" ]]; then
@@ -1203,15 +1203,15 @@ function selfhosting() {
 	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
 	  if [[ "$api_port" == "" ]]; then
-	    api_port="16127"
+		api_port="16127"
 	  fi
 	  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip | sed -r 's/:.+//')
 	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
-	     if [[ "$WANIP" != "$confirmed_ip" ]]; then
-	        date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-	        echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-	        sudo ip addr add $WANIP dev $device_name:0 && sleep 2
-	     fi
+		 if [[ "$WANIP" != "$confirmed_ip" ]]; then
+			date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+			echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+			sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+		 fi
 	  fi
 	fi
 	EOF
