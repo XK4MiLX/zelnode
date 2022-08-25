@@ -21,11 +21,209 @@ RIGHT_ANGLE="${GREEN}\xE2\x88\x9F${NC}"
 #bootstrap variable
 server_offline="0"
 failed_counter="0"
+#Explorers
+network_url_1="explorer.zelcash.online"
+network_url_2="explorer.runonflux.io"
+network_url_3="blockbook.zel.network"
 #dialog color
 export NEWT_COLORS='
 title=black,
 '
-
+##### CONFIGS SECTION ######################################
+function watchdog_conf_create(){
+	sudo touch /home/$USER/watchdog/config.js
+	sudo chown $USER:$USER /home/$USER/watchdog/config.js
+	cat <<- EOF >  /home/$USER/watchdog/config.js
+  module.exports = {
+	  label: '${node_label}',
+	  tier_eps_min: '${eps_limit}',
+	  zelflux_update: '${flux_update}',
+	  zelcash_update: '${daemon_update}',
+	  zelbench_update: '${bench_update}',
+	  action: '${fix_action}',
+	  ping: '${ping}',
+	  web_hook_url: '${discord}',
+	  telegram_alert: '${telegram_alert}',
+	  telegram_bot_token: '${telegram_bot_token}',
+	  telegram_chat_id: '${telegram_chat_id}'
+  }
+	EOF
+}
+function fluxos_conf_create(){
+	touch /home/$USER/$FLUX_DIR/config/userconfig.js
+	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
+	module.exports = {
+	  initial: {
+	    ipaddress: '${WANIP}',
+	    zelid: '${ZELID}',
+	    kadena: '${KDA_A}',
+	    testnet: false
+	  }
+	}
+	EOF
+}
+function flux_daemon_conf_create() {
+	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+	cat <<- EOF > /home/$CONFIG_DIR/$CONFIG_FILE
+	rpcuser=$RPCUSER
+	rpcpassword=$PASSWORD
+	rpcallowip=127.0.0.1
+	rpcallowip=172.18.0.1
+	rpcport=$RPCPORT
+	port=$PORT
+	zelnode=1
+	zelnodeprivkey=$zelnodeprivkey
+	zelnodeoutpoint=$zelnodeoutpoint
+	zelnodeindex=$zelnodeindex
+	server=1
+	daemon=1
+	txindex=1
+	addressindex=1
+	timestampindex=1
+	spentindex=1
+	insightexplorer=1
+	experimentalfeatures=1
+	listen=1
+	externalip=$WANIP
+	bind=0.0.0.0
+	addnode=80.211.207.17
+	addnode=95.217.12.176
+	addnode=89.58.3.209
+	addnode=161.97.85.103
+	addnode=194.163.176.185
+	addnode=explorer.flux.zelcore.io
+	addnode=explorer.runonflux.io
+	addnode=explorer.zelcash.online
+	addnode=blockbook.runonflux.io
+	addnode=202.61.202.21
+	addnode=89.58.40.172
+	addnode=37.120.176.206
+	addnode=66.119.15.83
+	addnode=66.94.118.208
+	addnode=99.48.162.169
+	addnode=97.120.40.143
+	addnode=99.48.162.167
+	addnode=108.30.50.162
+	addnode=154.12.242.89
+	addnode=67.43.96.139
+	addnode=66.94.107.219
+	addnode=66.94.110.117
+	addnode=154.12.225.203
+	addnode=176.9.72.41
+	addnode=65.108.198.119
+	addnode=65.108.200.110
+	addnode=46.38.251.110
+	addnode=95.214.55.47
+	addnode=202.61.236.202
+	addnode=65.108.141.153
+	addnode=178.170.46.91
+	addnode=66.119.15.64
+	addnode=65.108.46.178
+	addnode=94.130.220.41
+	addnode=178.170.48.110
+	addnode=78.35.147.57
+	addnode=66.119.15.101
+	addnode=66.119.15.96
+	addnode=38.88.125.25
+	addnode=66.119.15.110
+	addnode=103.13.31.149
+	addnode=212.80.212.238
+	addnode=212.80.213.172
+	addnode=212.80.212.228
+	addnode=121.112.224.186
+	addnode=114.181.141.16
+	addnode=167.179.115.100
+	addnode=153.226.219.80
+	addnode=24.79.73.50
+	addnode=76.68.219.102
+	addnode=70.52.20.8
+	addnode=184.145.181.147
+	addnode=68.150.72.135
+	addnode=198.27.83.181
+	addnode=167.114.82.63
+	addnode=24.76.166.6
+	addnode=173.33.170.150
+	addnode=99.231.229.245
+	addnode=70.82.102.140
+	addnode=192.95.30.188
+	addnode=75.158.245.77
+	addnode=142.113.239.49
+	addnode=66.70.176.241
+	addnode=174.93.146.224
+	addnode=216.232.124.38
+	addnode=207.34.248.197
+	addnode=76.68.219.102
+	addnode=149.56.25.82
+	addnode=74.57.74.166
+	addnode=142.169.180.47
+	addnode=70.67.210.148
+	addnode=86.5.78.14
+	addnode=87.244.105.94
+	addnode=86.132.192.193
+	addnode=86.27.168.85
+	addnode=86.31.168.107
+	addnode=84.71.79.220
+	addnode=154.57.235.104
+	addnode=86.13.102.145
+	addnode=86.31.168.107
+	addnode=86.13.68.100
+	addnode=151.225.136.163
+	addnode=5.45.110.123
+	addnode=45.142.178.251
+	addnode=89.58.5.234
+	addnode=45.136.30.81
+	addnode=202.61.255.238
+	addnode=89.58.7.2
+	addnode=89.58.36.46
+	addnode=89.58.32.76
+	addnode=89.58.39.81
+	addnode=89.58.39.153
+	addnode=202.61.244.71
+	addnode=89.58.37.172
+	addnode=89.58.36.118
+	addnode=31.145.161.44
+	addnode=217.131.61.221
+	addnode=80.28.72.254
+	addnode=85.49.210.36
+	addnode=84.77.69.203
+	addnode=51.38.1.195
+	addnode=51.38.1.194
+	maxconnections=256
+	EOF
+}
+function install_conf_create(){
+	sudo touch /home/$USER/install_conf.json
+	sudo chown $USER:$USER /home/$USER/install_conf.json
+	cat <<- EOF > /home/$USER/install_conf.json
+	{
+	  "import_settings": "${import_settings}",
+	  "prvkey": "${prvkey}",
+	  "outpoint": "${outpoint}",
+	  "index": "${index}",
+	  "zelid": "${zel_id}",
+	  "kda_address": "${kda_address}",
+	  "firewall_disable": "${firewall_disable}",
+	  "bootstrap_url": "${bootstrap_url}",
+	  "bootstrap_zip_del": "${bootstrap_zip_del}",
+	  "swapon": "${swapon}",
+	  "use_old_chain": "${use_old_chain}",
+	  "node_label": "${node_label}",
+	  "zelflux_update": "${zelflux_update}",
+	  "zelcash_update": "${zelcash_update}",
+	  "zelbench_update": "${zelbench_update}",
+	  "discord": "${discord}",
+	  "ping": "${ping}",
+	  "telegram_alert": "${telegram_alert}",
+	  "telegram_bot_token": "${telegram_bot_token}",
+	  "telegram_chat_id": "${telegram_chat_id}",
+	  "eps_limit": "${eps_limit}",
+	  "enable_upnp": "${enable_upnp}",
+	  "upnp_port": "${FLUX_PORT}",
+	  "gateway_ip": "${gateway_ip}"
+	}
+	EOF
+}
+###### HELPERS SECTION
 function round() {
 	printf "%.${2}f" "${1}"
 }
@@ -114,6 +312,209 @@ function spinning_timer() {
 	done
 	echo -ne "${MSG2}"
 }
+function integration_check() {
+	FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
+	ELEMENTS=${#FILE_ARRAY[@]}
+	for (( i=0;i<$ELEMENTS;i++)); do
+		string="${FILE_ARRAY[${i}]}......................................"
+		string=${string::40}
+		if [ -f "$COIN_PATH/${FILE_ARRAY[${i}]}" ]; then
+			echo -e "${ARROW}${CYAN} $string[${CHECK_MARK}${CYAN}]${NC}"
+		else
+			echo -e "${ARROW}${CYAN} $string[${X_MARK}${CYAN}]${NC}"
+			CORRUPTED="1"
+		fi
+	done
+	if [[ "$CORRUPTED" == "1" ]]; then
+		echo -e "${WORNING} ${CYAN}Flux daemon package corrupted...${NC}"
+		echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again...${NC}"
+		echo -e ""
+		exit
+	fi	
+	
+}
+function import_config_file() {
+	if [[ -f /home/$USER/install_conf.json ]]; then
+		import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
+		bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
+		bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
+		use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
+		prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
+		outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
+		index=$(cat /home/$USER/install_conf.json | jq -r '.index')
+		ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
+		KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+		fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
+		flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
+		daemon_update=$(cat /home/$USER/install_conf.json | jq -r '.zelcash_update')
+		bench_update=$(cat /home/$USER/install_conf.json | jq -r '.zelbench_update')
+		node_label=$(cat /home/$USER/install_conf.json | jq -r '.node_label')
+		eps_limit=$(cat /home/$USER/install_conf.json | jq -r '.eps_limit')
+		discord=$(cat /home/$USER/install_conf.json | jq -r '.discord')
+		ping=$(cat /home/$USER/install_conf.json | jq -r '.ping')
+		telegram_alert=$(cat /home/$USER/install_conf.json | jq -r '.telegram_alert')
+		telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
+		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
+		echo -e ""
+		echo -e "${ARROW} ${YELLOW}Install config:"
+		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+			echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+		else
+			if [[ "$import_settings" == "1" ]]; then
+				echo -e "${PIN}${CYAN} Import installation configurations...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			fi
+		fi
+
+		if [[ "$use_old_chain" == "1" ]]; then
+			echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+		else
+			if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
+				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			else
+				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			fi
+			if [[ "$bootstrap_zip_del" == "1" || -z "$bootstrap_zip_del" ]]; then
+				echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			else
+				echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			fi
+		fi
+		if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
+			echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+		else
+			echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+		fi
+	fi
+}
+function get_ip() {
+	WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
+		WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+	fi  
+	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
+		WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
+	fi
+	if [[ "$1" == "install" ]]; then
+		if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
+			echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
+			echo
+			exit
+		fi
+		string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................."
+	fi
+}
+function check_benchmarks() {
+	var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
+	limit=$2
+	if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]; then
+		var_round=$(round "$var_benchmark" 2)
+		echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
+	fi
+}
+function display_banner() {
+	echo -e "${BLUE}"
+	figlet -t -k "FLUXNODE"
+	figlet -t -k "INSTALLATION   COMPLETED"
+	echo -e "${YELLOW}================================================================================================================================"
+	echo -e ""
+	if pm2 -v > /dev/null 2>&1; then
+		pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
+		if [[ "$pm2_flux_status" == "online" ]]; then
+			pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
+			pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+			echo -e "${BOOK} ${CYAN}Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
+		else
+			if [[ "$pm2_flux_status" != "" ]]; then
+				pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
+				echo -e "${PIN} ${CYAN}PM2 Flux status: ${RED}$pm2_flux_status${NC}, restarts: ${RED}$pm2_flux_restarts${NC}" 
+			fi
+		fi
+		echo -e ""
+	fi
+	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX DAEMON.${NC}" 
+	echo -e "${PIN} ${CYAN}Start Flux daemon: ${SEA}sudo systemctl start zelcash${NC}"
+	echo -e "${PIN} ${CYAN}Stop Flux daemon: ${SEA}sudo systemctl stop zelcash${NC}"
+	echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
+	echo
+	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE BENCHMARK.${NC}" 
+	echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} $1 getinfo${NC}"
+	echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} $1 getbenchmarks${NC}"
+	echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} $1 restartnodebenchmarks${NC}"
+	echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} $1 stop${NC}"
+	echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
+	echo
+	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
+	echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info flux${NC}"
+	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+	echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop flux${NC}"
+	echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start flux${NC}"
+	echo -e ""
+	if [[ "$WATCHDOG_INSTALL" == "1" ]]; then
+		echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE WATCHDOG.${NC}"
+		echo -e "${PIN} ${CYAN}Stop watchdog: ${SEA}pm2 stop watchdog${NC}"
+		echo -e "${PIN} ${CYAN}Start watchdog: ${SEA}pm2 start watchdog --watch${NC}"
+		echo -e "${PIN} ${CYAN}Restart watchdog: ${SEA}pm2 reload watchdog --watch${NC}"
+		echo -e "${PIN} ${CYAN}Error logs: ${SEA}~/watchdog/watchdog_error.log${NC}"
+		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+		echo
+		echo -e "${PIN} ${RED}IMPORTANT: After installation check ${SEA}'pm2 list'${RED} if not work, type ${SEA}'source /home/$USER/.bashrc'${NC}"
+		echo -e ""
+	fi
+	echo -e "${PIN} ${CYAN}To access your frontend to Flux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
+	echo -e "${YELLOW}===================================================================================================================[${GREEN}Duration: $((($(date +%s)-$start_install)/60)) min. $((($(date +%s)-$start_install) % 60)) sec.${YELLOW}]${NC}"
+	sleep 1
+	cd $HOME
+	exec bash
+}
+function create_swap() {
+	if [[ -z "$swapon" ]]; then
+		#echo -e "${YELLOW}Creating swap if none detected...${NC}" && sleep 1
+		MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+		gb=$(awk "BEGIN {print $MEM/1048576}")
+		GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
+		if [ "$GB" -lt 2 ]; then
+			(( swapsize=GB*2 ))
+			swap="$swapsize"G
+		elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
+			swap=4G
+		elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
+			swap=2G
+		fi
+		if ! grep -q "swapfile" /etc/fstab; then
+			#  if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
+			sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
+			sudo chmod 600 /swapfile > /dev/null 2>&1
+			sudo mkswap /swapfile > /dev/null 2>&1
+			sudo swapon /swapfile > /dev/null 2>&1
+			echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
+			echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
+		fi
+	else
+		if [[ "$swapon" == "1" ]]; then
+			MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
+			gb=$(awk "BEGIN {print $MEM/1048576}")
+			GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
+			if [ "$GB" -lt 2 ]; then
+				(( swapsize=GB*2 ))
+				swap="$swapsize"G
+			elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
+				swap=4G
+			elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
+				swap=2G
+			fi
+			if ! grep -q "swapfile" /etc/fstab; then
+				sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
+				sudo chmod 600 /swapfile > /dev/null 2>&1
+				sudo mkswap /swapfile > /dev/null 2>&1
+				sudo swapon /swapfile > /dev/null 2>&1
+				echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
+				echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
+			fi
+		fi
+	fi
+	sleep 2
+}
+######### BOOTSTRAP SECTION ############################
 function tar_file_unpack() {
 	echo -e "${ARROW} ${CYAN}Unpacking wallet bootstrap please be patient...${NC}"
 	pv $1 | tar -zx -C $2
@@ -349,217 +750,7 @@ function start_service() {
 	pm2 restart flux > /dev/null 2>&1 && sleep 2
 	pm2 start watchdog --watch > /dev/null 2>&1 && sleep 2
 }
-function get_ip() {
-	WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
-	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
-		WANIP=$(curl --silent -m 15 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
-	fi  
-	if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
-		WANIP=$(curl --silent -m 15 https://api.ipify.org | tr -dc '[:alnum:].')
-	fi
-	if [[ "$1" == "install" ]]; then
-		if [[ "$WANIP" == "" || "$WANIP" = *htmlhead* ]]; then
-			echo -e "${ARROW} ${CYAN}IP address could not be found, installation stopped .........[${X_MARK}${CYAN}]${NC}"
-			echo
-			exit
-		fi
-		string_limit_check_mark "IP: $WANIP ..........................................." "IP: ${GREEN}$WANIP${CYAN} ..........................................."
-	fi
-}
-function selfhosting() {
-	if [[ "$1" != "install" ]]; then
-		echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
-		echo -e "${YELLOW}================================================================${NC}"
-		if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-			echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-			echo -e "${CYAN}Please switch to the user account.${NC}"
-			echo -e "${YELLOW}================================================================${NC}"
-			echo -e "${NC}"
-			exit
-		fi
-	 fi 
-	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
-	echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
-	if [[ "$1" != "install" ]]; then
-		get_ip
-	fi
-	device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-		sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
-	else
-		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
-		echo -e ""
-		return 1
-	fi
-	echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
-	sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
-	sudo touch /home/$USER/ip_check.sh
-	sudo chown $USER:$USER /home/$USER/ip_check.sh
-	cat <<-'EOF' > /home/$USER/ip_check.sh
-	#!/bin/bash
-	function get_ip(){
-	WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
-	if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
-	  WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
-	fi    
-	if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
-	  WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
-	fi
-	}
-	if [[ $1 == "restart" ]]; then
-	  #give 3min to connect with internet
-	  sleep 180
-	  get_ip
-	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-	    date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-	    echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-	    sudo ip addr add $WANIP dev $device_name:0 && sleep 2
-	  fi
-	fi
-	if [[ $1 == "ip_check" ]]; then
-	  get_ip
-	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
-	  if [[ "$api_port" == "" ]]; then
-	    api_port="16127"
-	  fi
-	  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip | sed -r 's/:.+//')
-	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
-	     if [[ "$WANIP" != "$confirmed_ip" ]]; then
-	        date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-	        echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-	        sudo ip addr add $WANIP dev $device_name:0 && sleep 2
-	     fi
-	  fi
-	fi
-	EOF
-	sudo chmod +x /home/$USER/ip_check.sh
-	echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
-	sudo [ -f /var/spool/cron/crontabs/$USER ] && crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l) || crontab_check=0
-	if [[ "$crontab_check" == "0" ]]; then
-		(crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
-		(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
-		echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
-	else 
-		echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
-	fi
-	echo -e "" 
-}
-function integration_check() {
-	FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
-	ELEMENTS=${#FILE_ARRAY[@]}
-	for (( i=0;i<$ELEMENTS;i++)); do
-		string="${FILE_ARRAY[${i}]}......................................"
-		string=${string::40}
-		if [ -f "$COIN_PATH/${FILE_ARRAY[${i}]}" ]; then
-			echo -e "${ARROW}${CYAN} $string[${CHECK_MARK}${CYAN}]${NC}"
-		else
-			echo -e "${ARROW}${CYAN} $string[${X_MARK}${CYAN}]${NC}"
-			CORRUPTED="1"
-		fi
-	done
-	if [[ "$CORRUPTED" == "1" ]]; then
-		echo -e "${WORNING} ${CYAN}Flux daemon package corrupted...${NC}"
-		echo -e "${WORNING} ${CYAN}Will exit out so try and run the script again...${NC}"
-		echo -e ""
-		exit
-	fi	
-	
-}
-function config_file() {
-	if [[ -f /home/$USER/install_conf.json ]]; then
-		import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-		bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
-		bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
-		use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
-		prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
-		outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
-		index=$(cat /home/$USER/install_conf.json | jq -r '.index')
-		ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
-		KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
-		fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
-		flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
-		daemon_update=$(cat /home/$USER/install_conf.json | jq -r '.zelcash_update')
-		bench_update=$(cat /home/$USER/install_conf.json | jq -r '.zelbench_update')
-		node_label=$(cat /home/$USER/install_conf.json | jq -r '.node_label')
-		eps_limit=$(cat /home/$USER/install_conf.json | jq -r '.eps_limit')
-		discord=$(cat /home/$USER/install_conf.json | jq -r '.discord')
-		ping=$(cat /home/$USER/install_conf.json | jq -r '.ping')
-		telegram_alert=$(cat /home/$USER/install_conf.json | jq -r '.telegram_alert')
-		telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
-		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
-		echo -e ""
-		echo -e "${ARROW} ${YELLOW}Install config:"
-		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
-			echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			if [[ "$import_settings" == "1" ]]; then
-				echo -e "${PIN}${CYAN} Import installation configurations...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			fi
-		fi
-
-		if [[ "$use_old_chain" == "1" ]]; then
-			echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
-				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			else
-				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			fi
-			if [[ "$bootstrap_zip_del" == "1" || -z "$bootstrap_zip_del" ]]; then
-				echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			else
-				echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			fi
-		fi
-		if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
-			echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		fi
-	fi
-}
-function check_benchmarks() {
-	var_benchmark=$($BENCH_CLI getbenchmarks | jq ".$1")
-	limit=$2
-	if [[ $(echo "$limit>$var_benchmark" | bc) == "1" ]]; then
-		var_round=$(round "$var_benchmark" 2)
-		echo -e "${X_MARK} ${CYAN}$3 $var_round $4${NC}"
-	fi
-}
-function flux_package() {
-	sudo apt-get update -y > /dev/null 2>&1 && sleep 2
-	echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
-	sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
-	sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
-	integration_check
-}
-function zk_params() {
-	echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
-	bash flux-fetch-params.sh > /dev/null 2>&1 && sleep 2
-	sudo chown -R $USER:$USER /home/$USER  > /dev/null 2>&1
-}
-function log_rotate() {
-	echo -e "${ARROW} ${YELLOW}Configuring log rotate function for $1 logs...${NC}"
-	sleep 1
-	if [ -f /etc/logrotate.d/$2 ]; then
-		sudo rm -rf /etc/logrotate.d/$2
-		sleep 2
-	fi
-	sudo touch /etc/logrotate.d/$2
-	sudo chown $USER:$USER /etc/logrotate.d/$2
-	cat <<-EOF > /etc/logrotate.d/$2
-	$3 {
-	compress
-	copytruncate
-	missingok
-	$4
-	rotate $5
-	}
-	EOF
-	sudo chown root:root /etc/logrotate.d/$2
-}
+######### INSTALLATION SECTION ############################
 function install_mongod() {
 	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
@@ -613,115 +804,6 @@ function install_nodejs() {
 		echo
 	fi
 }
-function check() {
-	cd
-	pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
-	pm2 save > /dev/null 2>&1
-	#sleep 120
-	#cd /home/$USER/zelflux
-	#pm2 stop flux
-	#npm install --legacy-peer-deps > /dev/null 2>&1
-	#pm2 start flux 
-	#cd
-	NUM='300'
-	MSG1='Finalizing Flux installation please be patient this will take about ~5min...'
-	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-	echo && spinning_timer
-	echo 
-	$BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
-	NUM='300'
-	MSG1='Restarting benchmark...'
-	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-	spinning_timer
-	echo && echo		
-	echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
-	echo -e "${YELLOW}======================${NC}"
-	bench_benchmarks=$($BENCH_CLI getbenchmarks)
-	if [[ "bench_benchmarks" != "" ]]; then
-		bench_status=$(jq -r '.status' <<< "$bench_benchmarks")
-		if [[ "$bench_status" == "failed" ]]; then
-			echo -e "${ARROW} ${CYAN}Flux benchmark failed...............[${X_MARK}${CYAN}]${NC}"
-			check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
-			check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
-		else
-			echo -e "${BOOK}${CYAN} STATUS: ${GREEN}$bench_status${NC}"
-			bench_cores=$(jq -r '.cores' <<< "$bench_benchmarks")
-			echo -e "${BOOK}${CYAN} CORES: ${GREEN}$bench_cores${NC}"
-			bench_ram=$(jq -r '.ram' <<< "$bench_benchmarks")
-			bench_ram=$(round "$bench_ram" 2)
-			echo -e "${BOOK}${CYAN} RAM: ${GREEN}$bench_ram${NC}"
-			bench_ssd=$(jq -r '.ssd' <<< "$bench_benchmarks")
-			bench_ssd=$(round "$bench_ssd" 2)
-			echo -e "${BOOK}${CYAN} SSD: ${GREEN}$bench_ssd${NC}"
-			bench_hdd=$(jq -r '.hdd' <<< "$bench_benchmarks")
-			bench_hdd=$(round "$bench_hdd" 2)
-			echo -e "${BOOK}${CYAN} HDD: ${GREEN}$bench_hdd${NC}"
-			bench_ddwrite=$(jq -r '.ddwrite' <<< "$bench_benchmarks")
-			bench_ddwrite=$(round "$bench_ddwrite" 2)
-			echo -e "${BOOK}${CYAN} DDWRITE: ${GREEN}$bench_ddwrite${NC}"
-			bench_eps=$(jq -r '.eps' <<< "$bench_benchmarks")
-			bench_eps=$(round "$bench_eps" 2)
-			echo -e "${BOOK}${CYAN} EPS: ${GREEN}$bench_eps${NC}"
-		fi
-	else
-		echo -e "${ARROW} ${CYAN}Flux benchmark not responding.................[${X_MARK}${CYAN}]${NC}"
-	fi
-}
-function display_banner() {
-	echo -e "${BLUE}"
-	figlet -t -k "FLUXNODE"
-	figlet -t -k "INSTALLATION   COMPLETED"
-	echo -e "${YELLOW}================================================================================================================================"
-	echo -e ""
-	if pm2 -v > /dev/null 2>&1; then
-		pm2_flux_status=$(pm2 info flux 2> /dev/null | grep 'status' | sed -r 's/│//gi' | sed 's/status.//g' | xargs)
-		if [[ "$pm2_flux_status" == "online" ]]; then
-			pm2_flux_uptime=$(pm2 info flux | grep 'uptime' | sed -r 's/│//gi' | sed 's/uptime//g' | xargs)
-			pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-			echo -e "${BOOK} ${CYAN}Pm2 Flux info => status: ${GREEN}$pm2_flux_status${CYAN}, uptime: ${GREEN}$pm2_flux_uptime${NC} ${SEA}$pm2_flux_restarts${NC}" 
-		else
-			if [[ "$pm2_flux_status" != "" ]]; then
-				pm2_flux_restarts=$(pm2 info flux | grep 'restarts' | sed -r 's/│//gi' | xargs)
-				echo -e "${PIN} ${CYAN}PM2 Flux status: ${RED}$pm2_flux_status${NC}, restarts: ${RED}$pm2_flux_restarts${NC}" 
-			fi
-		fi
-		echo -e ""
-	fi
-	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX DAEMON.${NC}" 
-	echo -e "${PIN} ${CYAN}Start Flux daemon: ${SEA}sudo systemctl start zelcash${NC}"
-	echo -e "${PIN} ${CYAN}Stop Flux daemon: ${SEA}sudo systemctl stop zelcash${NC}"
-	echo -e "${PIN} ${CYAN}Help list: ${SEA}${COIN_CLI} help${NC}"
-	echo
-	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE BENCHMARK.${NC}" 
-	echo -e "${PIN} ${CYAN}Get info: ${SEA}${BENCH_CLI} $1 getinfo${NC}"
-	echo -e "${PIN} ${CYAN}Check benchmark: ${SEA}${BENCH_CLI} $1 getbenchmarks${NC}"
-	echo -e "${PIN} ${CYAN}Restart benchmark: ${SEA}${BENCH_CLI} $1 restartnodebenchmarks${NC}"
-	echo -e "${PIN} ${CYAN}Stop benchmark: ${SEA}${BENCH_CLI} $1 stop${NC}"
-	echo -e "${PIN} ${CYAN}Start benchmark: ${SEA}sudo systemctl restart zelcash${NC}"
-	echo
-	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
-	echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info flux${NC}"
-	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
-	echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop flux${NC}"
-	echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start flux${NC}"
-	echo -e ""
-	if [[ "$WATCHDOG_INSTALL" == "1" ]]; then
-		echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE WATCHDOG.${NC}"
-		echo -e "${PIN} ${CYAN}Stop watchdog: ${SEA}pm2 stop watchdog${NC}"
-		echo -e "${PIN} ${CYAN}Start watchdog: ${SEA}pm2 start watchdog --watch${NC}"
-		echo -e "${PIN} ${CYAN}Restart watchdog: ${SEA}pm2 reload watchdog --watch${NC}"
-		echo -e "${PIN} ${CYAN}Error logs: ${SEA}~/watchdog/watchdog_error.log${NC}"
-		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
-		echo
-		echo -e "${PIN} ${RED}IMPORTANT: After installation check ${SEA}'pm2 list'${RED} if not work, type ${SEA}'source /home/$USER/.bashrc'${NC}"
-		echo -e ""
-	fi
-	echo -e "${PIN} ${CYAN}To access your frontend to Flux enter this in as your url: ${SEA}${WANIP}:${ZELFRONTPORT}${NC}"
-	echo -e "${YELLOW}===================================================================================================================[${GREEN}Duration: $((($(date +%s)-$start_install)/60)) min. $((($(date +%s)-$start_install) % 60)) sec.${YELLOW}]${NC}"
-	sleep 1
-	cd $HOME
-	exec bash
-}
 function start_install() {
 	start_install=`date +%s`
 	sudo echo -e "$USER ALL=(ALL) NOPASSWD:ALL" | sudo EDITOR='tee -a' visudo 
@@ -756,7 +838,7 @@ function start_install() {
 		echo -e "${ARROW} ${CYAN}Current directory ${GREEN}$(pwd)${CYAN}${NC}"
 	fi
 	sleep 1
-	config_file
+	import_config_file
 	if [[ -z "$index" || -z "$outpoint" || -z "$prvkey" ]]; then
 		import_date
 	else
@@ -814,54 +896,6 @@ function start_install() {
 		fi
 	fi
 }
-function create_swap() {
-	if [[ -z "$swapon" ]]; then
-		#echo -e "${YELLOW}Creating swap if none detected...${NC}" && sleep 1
-		MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-		gb=$(awk "BEGIN {print $MEM/1048576}")
-		GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
-		if [ "$GB" -lt 2 ]; then
-			(( swapsize=GB*2 ))
-			swap="$swapsize"G
-		elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
-			swap=4G
-		elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
-			swap=2G
-		fi
-		if ! grep -q "swapfile" /etc/fstab; then
-			#  if whiptail --yesno "No swapfile detected would you like to create one?" 8 54; then
-			sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
-			sudo chmod 600 /swapfile > /dev/null 2>&1
-			sudo mkswap /swapfile > /dev/null 2>&1
-			sudo swapon /swapfile > /dev/null 2>&1
-			echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
-			echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
-		fi
-	else
-		if [[ "$swapon" == "1" ]]; then
-			MEM=$(grep MemTotal /proc/meminfo | awk '{print $2}')
-			gb=$(awk "BEGIN {print $MEM/1048576}")
-			GB=$(echo "$gb" | awk '{printf("%d\n",$1 + 0.5)}')
-			if [ "$GB" -lt 2 ]; then
-				(( swapsize=GB*2 ))
-				swap="$swapsize"G
-			elif [[ $GB -ge 2 ]] && [[ $GB -le 16 ]]; then
-				swap=4G
-			elif [[ $GB -gt 16 ]] && [[ $GB -lt 32 ]]; then
-				swap=2G
-			fi
-			if ! grep -q "swapfile" /etc/fstab; then
-				sudo fallocate -l "$swap" /swapfile > /dev/null 2>&1
-				sudo chmod 600 /swapfile > /dev/null 2>&1
-				sudo mkswap /swapfile > /dev/null 2>&1
-				sudo swapon /swapfile > /dev/null 2>&1
-				echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null 2>&1
-				echo -e "${ARROW} ${YELLOW}Created ${SEA}${swap}${YELLOW} swapfile${NC}"
-			fi
-		fi
-	fi
-	sleep 2
-}
 function install_packages() {
 	echo -e "${ARROW} ${YELLOW}Installing Packages...${NC}"
 	if [[ $(lsb_release -d) = *Debian* ]] && [[ $(lsb_release -d) = *9* ]]; then
@@ -906,35 +940,71 @@ function pm2_install(){
 		echo
 	fi 
 }
-function multinode(){
-	echo -e "${GREEN}Module: Multinode configuration with UPNP communication (Needs Router with UPNP support)${NC}"
-	echo -e "${YELLOW}================================================================${NC}"
-	if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-		echo -e "${CYAN}Please switch to the user account.${NC}"
-		echo -e "${YELLOW}================================================================${NC}"
-		echo -e "${NC}"
-		exit
+function finalizing() {
+	cd
+	pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+	pm2 save > /dev/null 2>&1
+	#sleep 120
+	#cd /home/$USER/zelflux
+	#pm2 stop flux
+	#npm install --legacy-peer-deps > /dev/null 2>&1
+	#pm2 start flux 
+	#cd
+	NUM='300'
+	MSG1='Finalizing Flux installation please be patient this will take about ~5min...'
+	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+	echo && spinning_timer
+	echo 
+	$BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
+	NUM='300'
+	MSG1='Restarting benchmark...'
+	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+	spinning_timer
+	echo && echo		
+	echo -e "${BOOK}${YELLOW} Flux benchmarks:${NC}"
+	echo -e "${YELLOW}======================${NC}"
+	bench_benchmarks=$($BENCH_CLI getbenchmarks)
+	if [[ "bench_benchmarks" != "" ]]; then
+		bench_status=$(jq -r '.status' <<< "$bench_benchmarks")
+		if [[ "$bench_status" == "failed" ]]; then
+			echo -e "${ARROW} ${CYAN}Flux benchmark failed...............[${X_MARK}${CYAN}]${NC}"
+			check_benchmarks "eps" "89.99" " CPU speed" "< 90.00 events per second"
+			check_benchmarks "ddwrite" "159.99" " Disk write speed" "< 160.00 events per second"
+		else
+			echo -e "${BOOK}${CYAN} STATUS: ${GREEN}$bench_status${NC}"
+			bench_cores=$(jq -r '.cores' <<< "$bench_benchmarks")
+			echo -e "${BOOK}${CYAN} CORES: ${GREEN}$bench_cores${NC}"
+			bench_ram=$(jq -r '.ram' <<< "$bench_benchmarks")
+			bench_ram=$(round "$bench_ram" 2)
+			echo -e "${BOOK}${CYAN} RAM: ${GREEN}$bench_ram${NC}"
+			bench_ssd=$(jq -r '.ssd' <<< "$bench_benchmarks")
+			bench_ssd=$(round "$bench_ssd" 2)
+			echo -e "${BOOK}${CYAN} SSD: ${GREEN}$bench_ssd${NC}"
+			bench_hdd=$(jq -r '.hdd' <<< "$bench_benchmarks")
+			bench_hdd=$(round "$bench_hdd" 2)
+			echo -e "${BOOK}${CYAN} HDD: ${GREEN}$bench_hdd${NC}"
+			bench_ddwrite=$(jq -r '.ddwrite' <<< "$bench_benchmarks")
+			bench_ddwrite=$(round "$bench_ddwrite" 2)
+			echo -e "${BOOK}${CYAN} DDWRITE: ${GREEN}$bench_ddwrite${NC}"
+			bench_eps=$(jq -r '.eps' <<< "$bench_benchmarks")
+			bench_eps=$(round "$bench_eps" 2)
+			echo -e "${BOOK}${CYAN} EPS: ${GREEN}$bench_eps${NC}"
+		fi
+	else
+		echo -e "${ARROW} ${CYAN}Flux benchmark not responding.................[${X_MARK}${CYAN}]${NC}"
 	fi
-	echo -e ""
-	echo -e "${ARROW}  ${CYAN}OPTION ALLOWS YOU: ${NC}"
-	echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp communication ${NC}"
-	echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
-	echo -e ""
-	echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
-	echo -e "${BOOK} ${RED}Each node need to set different port for communication${NC}"
-	echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
-	echo -e ""
-	echo -e "${YELLOW}================================================================${NC}"
-	echo -e ""
-	if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
-		echo -e "${WORNING} ${CYAN}First install FluxNode...${NC}"
-		echo -e "${WORNING} ${CYAN}Operation stopped...${NC}"
-		echo -e ""
-		exit
-	fi  
-	sleep 8
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
+}
+function zk_params() {
+	echo -e "${ARROW} ${YELLOW}Installing zkSNARK params...${NC}"
+	bash flux-fetch-params.sh > /dev/null 2>&1 && sleep 2
+	sudo chown -R $USER:$USER /home/$USER  > /dev/null 2>&1
+}
+function flux_package() {
+	sudo apt-get update -y > /dev/null 2>&1 && sleep 2
+	echo -e "${ARROW} ${YELLOW}Flux Daemon && Benchmark installing...${NC}"
+	sudo apt install $COIN_NAME $BENCH_NAME -y > /dev/null 2>&1 && sleep 2
+	sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
+	integration_check
 }
 function create_service_scripts() {
 	echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
@@ -1054,6 +1124,138 @@ function create_service() {
 	EOF
 	sudo chown root:root /etc/systemd/system/zelcash.service
 	sudo systemctl daemon-reload
+}
+#### LOGS SECTION
+function log_rotate() {
+	echo -e "${ARROW} ${YELLOW}Configuring log rotate function for $1 logs...${NC}"
+	sleep 1
+	if [ -f /etc/logrotate.d/$2 ]; then
+		sudo rm -rf /etc/logrotate.d/$2
+		sleep 1
+	fi
+	sudo touch /etc/logrotate.d/$2
+	sudo chown $USER:$USER /etc/logrotate.d/$2
+	cat <<-EOF > /etc/logrotate.d/$2
+	$3 {
+	compress
+	copytruncate
+	missingok
+	$4
+	rotate $5
+	}
+	EOF
+	sudo chown root:root /etc/logrotate.d/$2
+}
+#### MULTITOOLBOX OPTIONS SECTION
+function selfhosting() {
+	if [[ "$1" != "install" ]]; then
+		echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+			echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+			echo -e "${CYAN}Please switch to the user account.${NC}"
+			echo -e "${YELLOW}================================================================${NC}"
+			echo -e "${NC}"
+			exit
+		fi
+	 fi 
+	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
+	echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
+	if [[ "$1" != "install" ]]; then
+		get_ip
+	fi
+	device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+		sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
+	else
+		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
+		echo -e ""
+		return 1
+	fi
+	echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
+	sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
+	sudo touch /home/$USER/ip_check.sh
+	sudo chown $USER:$USER /home/$USER/ip_check.sh
+	cat <<-'EOF' > /home/$USER/ip_check.sh
+	#!/bin/bash
+	function get_ip(){
+	WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
+	if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
+	  WANIP=$(curl --silent -m 10 https://checkip.amazonaws.com | tr -dc '[:alnum:].')    
+	fi    
+	if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
+	  WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
+	fi
+	}
+	if [[ $1 == "restart" ]]; then
+	  #give 3min to connect with internet
+	  sleep 180
+	  get_ip
+	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
+	    date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+	    echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+	    sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+	  fi
+	fi
+	if [[ $1 == "ip_check" ]]; then
+	  get_ip
+	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
+	  if [[ "$api_port" == "" ]]; then
+	    api_port="16127"
+	  fi
+	  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip | sed -r 's/:.+//')
+	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
+	     if [[ "$WANIP" != "$confirmed_ip" ]]; then
+	        date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+	        echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+	        sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+	     fi
+	  fi
+	fi
+	EOF
+	sudo chmod +x /home/$USER/ip_check.sh
+	echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
+	sudo [ -f /var/spool/cron/crontabs/$USER ] && crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l) || crontab_check=0
+	if [[ "$crontab_check" == "0" ]]; then
+		(crontab -l -u "$USER" 2>/dev/null; echo "@reboot /home/$USER/ip_check.sh restart") | crontab -
+		(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
+		echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
+	else 
+		echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
+	fi
+	echo -e "" 
+}
+function multinode(){
+	echo -e "${GREEN}Module: Multinode configuration with UPNP communication (Needs Router with UPNP support)${NC}"
+	echo -e "${YELLOW}================================================================${NC}"
+	if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+		echo -e "${CYAN}Please switch to the user account.${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		echo -e "${NC}"
+		exit
+	fi
+	echo -e ""
+	echo -e "${ARROW}  ${CYAN}OPTION ALLOWS YOU: ${NC}"
+	echo -e "${HOT} ${CYAN}Run node as selfhosting with upnp communication ${NC}"
+	echo -e "${HOT} ${CYAN}Create up to 8 node using same public address ${NC}"
+	echo -e ""
+	echo -e "${ARROW}  ${RED}IMPORTANT:${NC}"
+	echo -e "${BOOK} ${RED}Each node need to set different port for communication${NC}"
+	echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
+	echo -e ""
+	echo -e "${YELLOW}================================================================${NC}"
+	echo -e ""
+	if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
+		echo -e "${WORNING} ${CYAN}First install FluxNode...${NC}"
+		echo -e "${WORNING} ${CYAN}Operation stopped...${NC}"
+		echo -e ""
+		exit
+	fi  
+	sleep 8
+	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/multinode.sh)
 }
 function install_watchtower(){
 	echo -e "${GREEN}Module: Install flux_watchtower for docker images autoupdate${NC}"

@@ -26,173 +26,7 @@ ZELNODEPORT=16128
 #MDBPORT=27017
 RPCPORT=16124
 PORT=16125
-#explorer networks
-network_url_1="explorer.zelcash.online"
-#network_url_2="explorer.runonflux.io"
-network_url_3="blockbook.zel.network"
-##### Config layout section ######################################
-function watchdog_conf(){
-    sudo touch /home/$USER/watchdog/config.js
-    sudo chown $USER:$USER /home/$USER/watchdog/config.js
-    cat << EOF >  /home/$USER/watchdog/config.js
-    module.exports = {
-        label: '${node_label}',
-        tier_eps_min: '${eps_limit}',
-        zelflux_update: '${flux_update}',
-        zelcash_update: '${daemon_update}',
-        zelbench_update: '${bench_update}',
-        action: '${fix_action}',
-        ping: '${ping}',
-        web_hook_url: '${discord}',
-        telegram_alert: '${telegram_alert}',
-        telegram_bot_token: '${telegram_bot_token}',
-        telegram_chat_id: '${telegram_chat_id}'
-    }
-EOF
-}
-function fluxOS_conf(){
-    touch /home/$USER/$FLUX_DIR/config/userconfig.js
-    cat << EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
-    module.exports = {
-        initial: {
-          ipaddress: '${WANIP}',
-          zelid: '${ZELID}',
-          kadena: '${KDA_A}',
-          testnet: false
-        }
-    }
-EOF
-}
-function flux_daemon_conf() {
-    touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-    cat << EOF > ~/$CONFIG_DIR/$CONFIG_FILE
-    rpcuser=$RPCUSER
-    rpcpassword=$PASSWORD
-    rpcallowip=127.0.0.1
-    rpcallowip=172.18.0.1
-    rpcport=$RPCPORT
-    port=$PORT
-    zelnode=1
-    zelnodeprivkey=$zelnodeprivkey
-    zelnodeoutpoint=$zelnodeoutpoint
-    zelnodeindex=$zelnodeindex
-    server=1
-    daemon=1
-    txindex=1
-    addressindex=1
-    timestampindex=1
-    spentindex=1
-    insightexplorer=1
-    experimentalfeatures=1
-    listen=1
-    externalip=$WANIP
-    bind=0.0.0.0
-    addnode=80.211.207.17
-    addnode=95.217.12.176
-    addnode=89.58.3.209
-    addnode=161.97.85.103
-    addnode=194.163.176.185
-    addnode=explorer.flux.zelcore.io
-    addnode=explorer.runonflux.io
-    addnode=explorer.zelcash.online
-    addnode=blockbook.runonflux.io
-    addnode=202.61.202.21
-    addnode=89.58.40.172
-    addnode=37.120.176.206
-    addnode=66.119.15.83
-    addnode=66.94.118.208
-    addnode=99.48.162.169
-    addnode=97.120.40.143
-    addnode=99.48.162.167
-    addnode=108.30.50.162
-    addnode=154.12.242.89
-    addnode=67.43.96.139
-    addnode=66.94.107.219
-    addnode=66.94.110.117
-    addnode=154.12.225.203
-    addnode=176.9.72.41
-    addnode=65.108.198.119
-    addnode=65.108.200.110
-    addnode=46.38.251.110
-    addnode=95.214.55.47
-    addnode=202.61.236.202
-    addnode=65.108.141.153
-    addnode=178.170.46.91
-    addnode=66.119.15.64
-    addnode=65.108.46.178
-    addnode=94.130.220.41
-    addnode=178.170.48.110
-    addnode=78.35.147.57
-    addnode=66.119.15.101
-    addnode=66.119.15.96
-    addnode=38.88.125.25
-    addnode=66.119.15.110
-    addnode=103.13.31.149
-    addnode=212.80.212.238
-    addnode=212.80.213.172
-    addnode=212.80.212.228
-    addnode=121.112.224.186
-    addnode=114.181.141.16
-    addnode=167.179.115.100
-    addnode=153.226.219.80
-    addnode=24.79.73.50
-    addnode=76.68.219.102
-    addnode=70.52.20.8
-    addnode=184.145.181.147
-    addnode=68.150.72.135
-    addnode=198.27.83.181
-    addnode=167.114.82.63
-    addnode=24.76.166.6
-    addnode=173.33.170.150
-    addnode=99.231.229.245
-    addnode=70.82.102.140
-    addnode=192.95.30.188
-    addnode=75.158.245.77
-    addnode=142.113.239.49
-    addnode=66.70.176.241
-    addnode=174.93.146.224
-    addnode=216.232.124.38
-    addnode=207.34.248.197
-    addnode=76.68.219.102
-    addnode=149.56.25.82
-    addnode=74.57.74.166
-    addnode=142.169.180.47
-    addnode=70.67.210.148
-    addnode=86.5.78.14
-    addnode=87.244.105.94
-    addnode=86.132.192.193
-    addnode=86.27.168.85
-    addnode=86.31.168.107
-    addnode=84.71.79.220
-    addnode=154.57.235.104
-    addnode=86.13.102.145
-    addnode=86.31.168.107
-    addnode=86.13.68.100
-    addnode=151.225.136.163
-    addnode=5.45.110.123
-    addnode=45.142.178.251
-    addnode=89.58.5.234
-    addnode=45.136.30.81
-    addnode=202.61.255.238
-    addnode=89.58.7.2
-    addnode=89.58.36.46
-    addnode=89.58.32.76
-    addnode=89.58.39.81
-    addnode=89.58.39.153
-    addnode=202.61.244.71
-    addnode=89.58.37.172
-    addnode=89.58.36.118
-    addnode=31.145.161.44
-    addnode=217.131.61.221
-    addnode=80.28.72.254
-    addnode=85.49.210.36
-    addnode=84.77.69.203
-    addnode=51.38.1.195
-    addnode=51.38.1.194
-    maxconnections=256
-EOF
-}
-##################################################################
+
 function config_veryfity(){
     if [[ -f /home/$USER/.flux/flux.conf ]]; then
         echo -e "${ARROW} ${YELLOW}Checking config file...${NC}"
@@ -207,27 +41,6 @@ function config_veryfity(){
             SKIP_OLD_CHAIN="1"
         fi
     fi
-}
-function pm2_install(){
-    echo -e "${ARROW} ${YELLOW}PM2 installing...${NC}"
-    npm install pm2@latest -g > /dev/null 2>&1
-    if pm2 -v > /dev/null 2>&1; then
-        echo -e "${ARROW} ${CYAN}Configuring PM2...${NC}"
-        pm2 startup systemd -u $USER > /dev/null 2>&1
-        sudo env PATH=$PATH:/home/$USER/.nvm/versions/node/$(node -v)/bin pm2 startup systemd -u $USER --hp /home/$USER > /dev/null 2>&1
-        pm2 install pm2-logrotate > /dev/null 2>&1
-        pm2 set pm2-logrotate:max_size 6M > /dev/null 2>&1
-        pm2 set pm2-logrotate:retain 6 > /dev/null 2>&1
-        pm2 set pm2-logrotate:compress true > /dev/null 2>&1
-        pm2 set pm2-logrotate:workerInterval 3600 > /dev/null 2>&1
-        pm2 set pm2-logrotate:rotateInterval '0 12 * * 0' > /dev/null 2>&1
-        source ~/.bashrc
-        string_limit_check_mark "PM2 v$(pm2 -v) installed................................." "PM2 ${GREEN}v$(pm2 -v)${CYAN} installed................................."
-        echo -e ""
-    else  	 
-        string_limit_x_mark "PM2 was not installed................................."
-        echo -e ""
-    fi 
 }
 function import_date() {
     if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE || -f /home/$USER/.zelcash/zelcash.conf ]]; then
@@ -402,7 +215,7 @@ function install_watchdog() {
         echo -e "${ARROW} ${CYAN}Creating config file....${NC}"
         fix_action='1'
         if [[ "$import_settings" == "0"  && -f /home/$USER/install_conf.json ]]; then
-            watchdog_conf
+            watchdog_conf_create
             if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
                 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
                 string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
@@ -414,7 +227,7 @@ function install_watchdog() {
             return 
         fi
         if [[ "$IMPORT_ZELCONF" == "1" ]]; then
-            watchdog_conf
+            watchdog_conf_create
             if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
                 current_ver=$(jq -r '.version' /home/$USER/watchdog/package.json)
                 string_limit_check_mark "Watchdog v$current_ver installed................................." "Watchdog ${GREEN}v$current_ver${CYAN} installed................................."
@@ -552,7 +365,7 @@ function install_watchdog() {
         else
             eps_limit=0;
         fi
-        watchdog_conf
+        watchdog_conf_create
         pm2 start /home/$USER/watchdog/watchdog.js --name watchdog --watch /home/$USER/watchdog --ignore-watch '"./**/*.git" "./**/*node_modules" "./**/*watchdog_error.log" "./**/*config.js"' --watch-delay 20 > /dev/null 2>&1 
         pm2 save > /dev/null 2>&1
         if [[ -f /home/$USER/watchdog/watchdog.js ]]; then
@@ -688,20 +501,6 @@ function wipe_clean() {
         echo -e "${ARROW} ${CYAN}Firewall status: ${RED}Disabled${NC}"
     fi
 }
-function spinning_timer() {
-    animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-    end=$((SECONDS+NUM))
-    while [ $SECONDS -lt $end ];
-    do
-        for i in "${animation[@]}";
-        do
-	        echo -e ""
-            echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-            sleep 0.1
-        done
-    done
-    echo -ne "${MSG2}"
-}
 function ssh_port() { 
     if [[ -z "$ssh_port" ]]; then
         SSHPORT=$(grep -w Port /etc/ssh/sshd_config | sed -e 's/.*Port //')
@@ -736,7 +535,7 @@ function create_conf() {
         PASSWORD=${WANIP}-$(date +%s)
     fi
     mkdir /home/$USER/$CONFIG_DIR > /dev/null 2>&1
-    flux_daemon_conf
+    flux_daemon_conf_create
     if [[ "$IMPORT_ZELID" == "0" ]]; then
         while true
         do
@@ -976,7 +775,7 @@ function install_flux() {
     
     git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1
     echo -e "${ARROW} ${CYAN}Creating FluxOS configuration file...${NC}"
-    fluxOS_conf
+    fluxos_conf_create
     if [ -d ~/$FLUX_DIR ]; then
         current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
         string_limit_check_mark "FluxOS v$current_ver installed................................." "FluxOS ${GREEN}v$current_ver${CYAN} installed................................."
@@ -1049,7 +848,7 @@ function status_loop() {
         done
     fi
     install_watchdog
-    check
+    finalizing
     display_banner
 }
 #end of functions
