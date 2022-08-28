@@ -102,7 +102,7 @@ function check_listen_ports(){
 		echo -e "${X_MARK} ${CYAN} Mongod not listen${NC}"
 	fi
 	if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep fluxd > /dev/null 2>&1; then
-	echo -e "${CHECK_MARK} ${CYAN} Flux daemon listen on port 16125${NC}"
+		echo -e "${CHECK_MARK} ${CYAN} Flux daemon listen on port 16125${NC}"
 	else
 		if sudo lsof -i  -n | grep LISTEN | grep 16125 | grep zelcashd > /dev/null 2>&1; then
 			echo -e "${CHECK_MARK} ${CYAN} Flux daemon listen on port 16125${NC}"
@@ -541,14 +541,15 @@ if sudo systemctl list-units | grep docker.service | egrep -wi 'running' > /dev/
 	#docker_working=1
 else
 	if [[ "$docker_inactive" != "" ]]; then
-			echo -e "${X_MARK}  ${CYAN}Docker service not running ${RED}$docker_inactive${NC}"
+		echo -e "${X_MARK}  ${CYAN}Docker service not running ${RED}$docker_inactive${NC}"
 	else
-	echo -e "${X_MARK}  ${CYAN}Docker is not installed${NC}"
+		echo -e "${X_MARK}  ${CYAN}Docker is not installed${NC}"
+	fi
 fi
 verifity_mongod=0
 if sudo systemctl list-units | grep mongod | egrep -wi 'running' > /dev/null 2>&1; then
 	echo -e "${CHECK_MARK} ${CYAN} MongoDB service running ${SEA}$mongod_running${NC}"
-	else
+else
 	if [[ "$mongod_inactive" != "" ]]; then
 		echo -e "${X_MARK} ${CYAN} MongoDB service not running ${RED}$mongod_inactive${NC}"
 		verifity_mongod=1
