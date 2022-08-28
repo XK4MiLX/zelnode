@@ -210,8 +210,8 @@ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
 	exit
 fi
 sleep 1
-if [[ ! bc -v ]]; then
-	sudo apt install bc > /dev/null 2>&1
+if ! bc -v > /dev/null 2>&1 ; then
+	sudo apt install -y bc > /dev/null 2>&1 && sleep 1
 fi
 echo -e "${NC}"
 if [ -f /home/$USER/$BENCH_DIR_LOG/debug.log ]; then
