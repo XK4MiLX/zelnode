@@ -458,9 +458,9 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 
 			if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 				index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
-				stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
+				stak_info=$(curl -s -m 10 https://$network_url_1/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 				if [[ "$stak_info" == "" ]]; then
-					stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
+					stak_info=$(curl -s -m 10 https://$network_url_2/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 				fi
 			fi
 
