@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 #   Usage:
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<test_time_in_s>" "<file_name>" "<array_url_list_via_export>" 
 #
@@ -11,7 +12,8 @@
 #
 #   Example 3 ( for testing cdn with default settings )
 #   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh)
-###########################################################################################################################################
+#
+#
 #color codes
 YELLOW='\033[1;33m'
 GREEN='\033[1;32m'
@@ -27,13 +29,11 @@ failed_counter="0"
 if ! bc -v > /dev/null 2>&1 ; then
 	sudo apt install -y bc > /dev/null 2>&1 && sleep 1
 fi
-
 if [[ -z $1 ]]; then
 	dTime="5"
 else
 	dTime="$1"
 fi
-
 if [[ -z $2 || "$2" == "0" ]]; then
 	BOOTSTRAP_FILE="flux_explorer_bootstrap.tar.gz"
 else
