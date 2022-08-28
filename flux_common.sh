@@ -50,6 +50,13 @@ function watchdog_conf_create(){
 	EOF
 }
 function fluxos_conf_create(){
+
+  if [[ "$1" == "true" ]]; then
+		testnet=true
+	else
+		testnet=false
+	fi
+	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
 	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
 	module.exports = {
@@ -57,7 +64,7 @@ function fluxos_conf_create(){
 	  ipaddress: '${WANIP}',
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
-	  testnet: false
+	  testnet: `${testnet}`
 	  }
 	}
 	EOF
