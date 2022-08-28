@@ -202,7 +202,7 @@ function integration(){
 	done
 }
 
-if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin"]]; then
+if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
 	echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
 	echo -e "${CYAN}Please switch to the user accont.${NC}"
 	echo -e "${YELLOW}================================================================${NC}"
