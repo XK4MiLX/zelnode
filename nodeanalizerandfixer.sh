@@ -455,6 +455,7 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 		txhash=$(egrep "\w{10,50}" <<< "$txhash")
 		if [[ "$txhash" != "" ]]; then
 			stak_info=""
+
 			if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 				index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 				stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash  2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId"  2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
@@ -462,6 +463,7 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 					stak_info=$(curl -s -m 10 https://explorer.zelcash.online/api/tx/$txhash 2>/dev/null | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2>/dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 				fi
 			fi
+
 			if [[ "$stak_info" != "" ]]; then
 				type=$(awk '{print $1}' <<< "$stak_info")
 				conf=$($COIN_CLI gettxout $txhash $index_from_file | jq .confirmations)
@@ -474,17 +476,17 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 				else
 					echo -e "${X_MARK} ${CYAN} FluxNode outpoint is not valid${NC}"
 				fi
-					if [[ $type == ?(-)+([0-9]) ]]; then
-						case $type in
-							"1000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}CUMULUS${NC}" ;;
-							"12500")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}NIMBUS${NC}";;
-							"40000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}STRATUS${NC}";;
-						esac
-						case $bench_benchmark in
- 						 "CUMULUS")  bench_benchmark_value=1000 ;;
- 						 "NIMBUS")  bench_benchmark_value=12500 ;;
-							"STRATUS") bench_benchmark_value=40000 ;;
-						esac
+				if [[ $type == ?(-)+([0-9]) ]]; then
+					case $type in
+						"1000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}CUMULUS${NC}" ;;
+						"12500")  echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}NIMBUS${NC}";;
+						"40000") echo -e "${ARROW}  ${CYAN}Tier: ${GREEN}STRATUS${NC}";;
+					esac
+					case $bench_benchmark in
+						"CUMULUS")  bench_benchmark_value=1000 ;;
+						"NIMBUS")  bench_benchmark_value=12500 ;;
+						"STRATUS") bench_benchmark_value=40000 ;;
+					esac
 						if [[ -z bench_benchmark_value ]]; then
 							echo -e ""
 	 		 			else
@@ -507,17 +509,17 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 								fi
 							fi
 						fi	
-					fi
-				else
-					echo -e "${X_MARK} ${CYAN} Flux collateral check skipped...${NC}"
 				fi
+			else
+				echo -e "${X_MARK} ${CYAN} Flux collateral check skipped...${NC}"
+			fi
 				#url_to_check="https://explorer.zel.cash/api/tx/$txhash"
 				#type=$(wget -nv -qO - $url_to_check | jq '.vout' | grep '"value"' | egrep -o '10000|25000|100000')
 				#type=$(zelcash-cli gettxout $txhash 0 | jq .value)
-			fi
 		fi
 	fi
 fi
+
 echo -e "${NC}"
 echo -e "${BOOK} ${YELLOW}Checking listen ports:${NC}"
 check_listen_ports
