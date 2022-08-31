@@ -71,7 +71,7 @@ function fluxos_conf_create(){
 }
 function flux_daemon_conf_create() {
 	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	cat <<- EOF > /home/$CONFIG_DIR/$CONFIG_FILE
+	cat <<- EOF > /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 	rpcuser=$RPCUSER
 	rpcpassword=$PASSWORD
 	rpcallowip=127.0.0.1
