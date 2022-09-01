@@ -207,7 +207,7 @@ function install_flux() {
 			fi
 		done	 
 	fi
-	fluxOS_conf
+	fluxos_conf_create
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
