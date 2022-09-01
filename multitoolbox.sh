@@ -165,7 +165,6 @@ function install_flux() {
 	echo -e "${ARROW} ${CYAN}FluxOS downloading...${NC}"
 	git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 1
 	if [[ -d /home/$USER/$FLUX_DIR ]]; then
-
 		if [[ -f /home/$USER/$FLUX_DIR/package.json ]]; then
 			current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 		else
@@ -207,9 +206,8 @@ function install_flux() {
 				sleep 2		     
 			fi
 		done	 
-		fluxOS_conf
 	fi
-	 
+	fluxOS_conf
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
