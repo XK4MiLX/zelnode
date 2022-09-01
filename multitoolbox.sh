@@ -142,8 +142,8 @@ function install_flux() {
 	fi
 
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
-		echo -e "${ARROW} ${CYAN}Importing setting...${NC}"
-		zel_id=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
+		echo -e "${ARROW} ${CYAN}Import settings...${NC}"
+		ZELID=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
 		WANIP=$(grep -w ipaddress /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*ipaddress: .//' | sed -e 's/.\{2\}$//')
 		echo -e "${PIN}${CYAN}Zel ID = ${GREEN}$zel_id${NC}"
 		KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
