@@ -52,9 +52,9 @@ function watchdog_conf_create(){
 function fluxos_conf_create(){
 
   if [[ "$1" == "true" ]]; then
-		testnet=true
+		testnet='true'
 	else
-		testnet=false
+		testnet='false'
 	fi
 	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
