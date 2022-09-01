@@ -64,7 +64,7 @@ function fluxos_conf_create(){
 	  ipaddress: '${WANIP}',
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
-	  testnet: '${testnet}'
+	  testnet: $testnet
 	  }
 	}
 	EOF
