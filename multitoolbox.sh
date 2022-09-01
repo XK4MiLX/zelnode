@@ -116,13 +116,13 @@ function install_flux() {
 	resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
 	mongod_check=$(mongoexport -d localzelapps -c zelappsinformation --jsonArray --pretty --quiet  | jq -r .[].name | head -n1)
 	if [[ "$mongod_check" != "" && "$mongod_check" != "null" ]]; then
-	echo -e "${ARROW} ${YELLOW}Detected Flux MongoDB local apps collection ...${NC}"
+	echo -e "${ARROW} ${CYAN}Detected Flux MongoDB local apps collection ...${NC}"
 	echo -e "${ARROW} ${CYAN}Cleaning MongoDB Flux local apps collection...${NC}"
 	echo "db.zelappsinformation.drop()" | mongo localzelapps > /dev/null 2>&1
 	fi
 
 	if [[ $docker_check != 0 ]]; then
-		echo -e "${ARROW} ${YELLOW}Detected running docker container...${NC}"
+		echo -e "${ARROW} ${CYAN}Detected running docker container...${NC}"
 		echo -e "${ARROW} ${CYAN}Removing containers...${NC}"
 		sudo aa-remove-unknown > /dev/null 2>&1 && sudo service docker restart > /dev/null 2>&1
 		docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" |
@@ -133,7 +133,7 @@ function install_flux() {
 	fi
 
 	if [[ $resource_check != 0 ]]; then
-		echo -e "${ARROW} ${YELLOW}Detected locked resource...${NC}"
+		echo -e "${ARROW} ${CYAN}Detected locked resource...${NC}"
 		echo -e "${ARROW} ${CYAN}Unmounting locked Flux resource${NC}"
 		df | egrep 'flux' | awk '{ print $1}' |
 		while read line; do
@@ -152,30 +152,30 @@ function install_flux() {
 		fi
 		echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}"  
 		echo -e ""
-		echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
+		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
 		zelflux_setting_import="1"
 	fi
 
 	if [ -d /home/$USER/$FLUX_DIR ]; then
-		echo -e "${ARROW} ${CYAN}Removing any instances of Flux....${NC}"
+		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
 	fi
 
-	echo -e "${ARROW} ${CYAN}Flux downloading...${NC}"
+	echo -e "${ARROW} ${CYAN}FluxOS downloading...${NC}"
 	git clone https://github.com/RunOnFlux/flux.git zelflux > /dev/null 2>&1 && sleep 1
 	if [[ -d /home/$USER/$FLUX_DIR ]]; then
 
 		if [[ -f /home/$USER/$FLUX_DIR/package.json ]]; then
 			current_ver=$(jq -r '.version' /home/$USER/$FLUX_DIR/package.json)
 		else
-			string_limit_x_mark "Flux was not downloaded, run script again..........................................."
+			string_limit_x_mark "FluxOS was not downloaded, run script again..........................................."
 			echo
 			exit
 		fi
-		string_limit_check_mark "Flux v$current_ver downloaded..........................................." "Flux ${GREEN}v$current_ver${CYAN} downloaded..........................................."
+		string_limit_check_mark "FluxOS v$current_ver downloaded..........................................." "FluxOS ${GREEN}v$current_ver${CYAN} downloaded..........................................."
 	else
-		string_limit_x_mark "Flux was not downloaded, run script again..........................................."
+		string_limit_x_mark "FluxOS was not downloaded, run script again..........................................."
 		echo
 		exit
 	fi
@@ -211,9 +211,9 @@ function install_flux() {
 	fi
 	 
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
-		string_limit_check_mark "Flux configuration successfull..........................................."
+		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
-		string_limit_x_mark "Flux installation failed, missing config file..........................................."
+		string_limit_x_mark "FluxOS installation failed, missing config file..........................................."
 		echo
 		exit
 	fi
@@ -223,8 +223,8 @@ function install_flux() {
 		pm2 del flux > /dev/null 2>&1
 		pm2 del zelflux > /dev/null 2>&1
 		pm2 save > /dev/null 2>&1
-		echo -e "${ARROW} ${CYAN}Starting Flux....${NC}"
-		echo -e "${ARROW} ${CYAN}Flux loading will take 2-3min....${NC}"
+		echo -e "${ARROW} ${CYAN}Starting FluxOS....${NC}"
+		echo -e "${ARROW} ${CYAN}FluxOS loading will take 2-3min....${NC}"
 		echo -e ""
 		pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
 		pm2 save > /dev/null 2>&1
@@ -232,8 +232,8 @@ function install_flux() {
 	else
 		pm2_install
 		if [[ "$PM2_INSTALL" == "1" ]]; then
-			echo -e "${ARROW} ${CYAN}Starting Flux....${NC}"
-			echo -e "${ARROW} ${CYAN}Flux loading will take 2-3min....${NC}"
+			echo -e "${ARROW} ${CYAN}Starting FluxOS....${NC}"
+			echo -e "${ARROW} ${CYAN}FluxOS loading will take 2-3min....${NC}"
 			echo
 			pm2 list
 		fi
