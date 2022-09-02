@@ -178,19 +178,14 @@ if [[ -f /home/$USER/install_conf.json ]]; then
 	fi
 fi
 
-if [[ -z $enable_upnp ]]; then
+if [[ -z $enable_upnp || -z $gateway_ip || -z $upnp_port ]]; then
 	CHOICE=$(
 	whiptail --title "UPnP Configuration" --menu "Make your choice" 16 30 9 \
 	"1)" "Enable UPnP Mode"   \
 	"2)" "Disable UPnP Mode"  3>&2 2>&1 1>&3
 	)
 else
-	# if enable_upnp is 1 then set choice to 1 else set choice to 2
-	if [[ "$enable_upnp" == "1" ]]; then
-		CHOICE="1)"
-	else
-		CHOICE="2)"
-	fi
+	CHOICE="1)"
 fi
 
 case $CHOICE in
