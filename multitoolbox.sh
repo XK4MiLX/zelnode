@@ -68,7 +68,7 @@ function config_file() {
 		if [[ "$use_old_chain" == "1" ]]; then
 			echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}"
 		else
-			if [[ "$bootstrap_url" == "" ]]; then
+			if [[ "$bootstrap_url" == "" || "$bootstrap_url" == "0" ]]; then
 				echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts..................[${CHECK_MARK}${CYAN}]${NC}"
 			else
 				echo -e "${PIN}${CYAN}Use Flux Bootstrap from own source...............................[${CHECK_MARK}${CYAN}]${NC}"
@@ -86,7 +86,8 @@ function config_file() {
 			echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}"
 		fi
 
-		if [[ ( "$enable_upnp" != "" && "$enable_upnp" != "0" ) ]]; then
+
+		if [[ ! -z $enable_upnp && ! -z $gateway_ip && ! -z $upnp_port ]]; then
 			echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}"
 			echo -e "${CYAN}   UPnP Port:  ${GREEN}$upnp_port${NC}" 
 			echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" 
