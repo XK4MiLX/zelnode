@@ -15,7 +15,7 @@ function upnp_enable() {
 		if [[ -z "$upnp_port" ]]; then
 			FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
 		else
-			FLUX_PORT=$(echo $upnp_port)
+			FLUX_PORT="$upnp_port"
 		fi
 		if [[ $FLUX_PORT == "16127" || $FLUX_PORT == "16137" || $FLUX_PORT == "16147" || $FLUX_PORT == "16157" || $FLUX_PORT == "16167" || $FLUX_PORT == "16177" || $FLUX_PORT == "16187" || $FLUX_PORT == "16197" ]]; then
 			string_limit_check_mark "Port is valid..........................................."
@@ -60,7 +60,7 @@ function upnp_enable() {
 		if [[ -z "$gateway_ip" ]]; then
 			router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
 		else
-			router_ip=$(echo $gateway_ip)
+			router_ip="$gateway_ip"
 		fi
 		if [[ "$router_ip" != "" ]]; then
 			if [[ -z "$gateway_ip" ]]; then
@@ -153,32 +153,17 @@ function upnp_disable() {
 }
 
 if [[ -f /home/$USER/install_conf.json ]]; then
-	import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
-	if [[ "$import_settings" == "1" ]]; then
+	upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
+	gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
+	if [[ "$upnp_port" != "" && "$gateway_ip" != "" ]]; then
 		echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 0.5
-		enable_upnp=$(cat /home/$USER/install_conf.json | jq -r '.enable_upnp')
-		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
-		gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
-		if [[ -n $enable_upnp && "$enable_upnp" != "" && "$enable_upnp" != "0" ]]; then
-			echo -e "${PIN}${CYAN} UPnP state = ${GREEN}Enable${NC}" && sleep 0.5
-		else
-			echo -e "${PIN}${CYAN} UPnP state = ${RED}Disable${NC}" && sleep 0.5
-		fi
-		if [[ -n $upnp_port && "$upnp_port" != "" && "$upnp_port" != "0" ]]; then
-			echo -e "${PIN}${CYAN} UPnP port  = ${GREEN}$upnp_port${NC}" && sleep 0.5
-		else
-			echo -e "${PIN}${CYAN} UPnP port  = ${RED}NULL${NC}" && sleep 0.5
-		fi
-		if [[ -n $gateway_ip && "$gateway_ip" != "" && "$gateway_ip" != "0" ]]; then
-			echo -e "${PIN}${CYAN} Gateway    = ${GREEN}$gateway_ip${NC}" && sleep 0.5
-		else
-			echo -e "${PIN}${CYAN} Gateway    = ${RED}NULL${NC}" && sleep 0.5
-		fi
+		echo -e "${PIN}${CYAN} UPnP port  = ${GREEN}$upnp_port${NC}" 
+		echo -e "${PIN}${CYAN} Gateway    = ${GREEN}$gateway_ip${NC}" 
 		echo -e ""
 	fi
 fi
 
-if [[ -z $enable_upnp || -z $gateway_ip || -z $upnp_port ]]; then
+if [[ -z "$gateway_ip" || -z "$upnp_port" ]]; then
 	CHOICE=$(
 	whiptail --title "UPnP Configuration" --menu "Make your choice" 16 30 9 \
 	"1)" "Enable UPnP Mode"   \
