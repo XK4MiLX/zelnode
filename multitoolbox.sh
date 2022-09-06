@@ -914,17 +914,22 @@ function daemon_reconfiguration(){
 	echo -e "" && echo -e ""
 }
 function replace_kadena {
- while true
+
+	while true
 	do
-	 KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
-	 kda_address="kadena:$KDA_A?chainid=0"
-	 if [[ "$KDA_A" == "" ]]; then
-		 echo -e "${WORNING} ${CYAN}Kadena address can't be empty string, operation aborted...${NC}"
-		 echo -e ""
-		 exit
-	 fi
-	 break
- done
+		KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+		KDA_A=$(grep -Eo "^k:[0-9a-z]{64}\b" <<< "$KDA_A")
+		if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* && "$KDA_A" = *k:*  ]]; then    
+			echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"	
+			KDA_A="kadena:$KDA_A?chainid=0"			    
+			sleep 2
+			break
+		else	     
+			echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
+			sleep 2		     
+		fi
+	done	 
+
 	if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "kadena") != "" ]]; then
 		sed -i "s/$(grep -e kadena /home/$USER/zelflux/config/userconfig.js)/kadena: '$kda_address',/" /home/$USER/zelflux/config/userconfig.js
 		if [[ $(grep -w $KDA_A /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
