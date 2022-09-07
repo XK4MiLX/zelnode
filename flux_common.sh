@@ -224,7 +224,7 @@ function install_conf_create(){
 	  "telegram_bot_token": "${telegram_bot_token}",
 	  "telegram_chat_id": "${telegram_chat_id}",
 	  "eps_limit": "${eps_limit}",
-	  "upnp_port": "${FLUX_PORT}",
+	  "upnp_port": "${upnp_port}",
 	  "gateway_ip": "${gateway_ip}"
 	}
 	EOF
