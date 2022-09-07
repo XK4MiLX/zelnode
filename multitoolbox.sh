@@ -903,7 +903,7 @@ function mongod_db_fix() {
 function node_reconfiguration() {
 	reset=""
 	if [[ -f /home/$USER/install_conf.json ]]; then
-		import_config_file
+		import_config_file "silent"
 		get_ip
 		if [[ -d /home/$USER/zelflux ]]; then
 			echo -e "${ARROW} ${CYAN}Creating FluxOS config file...${NC}"
