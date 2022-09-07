@@ -936,7 +936,7 @@ function node_reconfiguration() {
 			sleep 10
 		fi
 	else
-	 echo -e "${ARROW} ${CYAN}Install config not exist, operation aborted...${NC}"
+	 echo -e "${ARROW} ${CYAN}Install config file not exist, operation aborted...${NC}"
 	 echo -e ""
 	fi
 }
