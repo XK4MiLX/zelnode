@@ -401,9 +401,9 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 	echo -e "${PIN} ${CYAN}Protocolversion: ${SEA}$protocolversion${NC}"
 	echo -e "${PIN} ${CYAN}Connections: ${SEA}$connections${NC}"
 	echo -e "${PIN} ${CYAN}Blocks: ${SEA}$blocks_hight${NC}"
-	network_height_01=$(curl -sk -m 5 https://$network/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
-	network_height_03=$(curl -sk -m 5 https://explorer.zelcash.online/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
-	explorer_network_hight=$(max "$network_height_01" "$network_height_03")
+	network_height_01=$(curl -sk -m 5 https://$network_url_1/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
+	network_height_02=$(curl -sk -m 5 https://$network_url_2/api/status?q=getInfo getinfo 2>/dev/null | jq '.info.blocks' 2> /dev/null)
+	explorer_network_hight=$(max "$network_height_01" "$network_height_02")
 	block_diff=$((explorer_network_hight-blocks_hight))
 	if [[ "$explorer_network_hight" != "0" ]]; then
 		if [[ "$block_diff" < 10 ]]; then
@@ -442,7 +442,7 @@ if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" 
 			zelnodeindex="$(whiptail --title "Deamon configuration" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
 		fi
 	fi
-	flux_communication=$(curl -SsL -m 10 http://"$WANIP":16127/flux/checkcommunication 2>/dev/null | jq -r .data.message 2>/dev/null)
+	flux_communication=$(curl -SsL -m 10 http://"$WANIP":"$FluxAPI"/flux/checkcommunication 2>/dev/null | jq -r .data.message 2>/dev/null)
 	if [[ "$flux_communication" != "null" && "$flux_communication" != "" ]]; then
 		echo -e "${BOOK} ${YELLOW}Checking FluxOS communication: ${NC}"
 		echo -e "${ARROW} ${CYAN}$flux_communication${NC}"
