@@ -363,42 +363,42 @@ function import_config_file() {
 		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
 		gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
-
-		echo -e ""
-		echo -e "${ARROW} ${YELLOW}Install config:"
-		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
-			echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			if [[ "$import_settings" == "1" ]]; then
-				echo -e "${PIN}${CYAN} Import installation configurations...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-			fi
-		fi
-
-		if [[ "$use_old_chain" == "1" ]]; then
-			echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
-				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+		if [[ "$1" != "silent" ]]; then
+			echo -e ""
+			echo -e "${ARROW} ${YELLOW}Install config:"
+			if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
+				echo -e "${PIN}${CYAN} Import settings from install_conf.json...........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
-				echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				if [[ "$import_settings" == "1" ]]; then
+					echo -e "${PIN}${CYAN} Import installation configurations...............................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				fi
 			fi
-			if [[ "$bootstrap_zip_del" == "1" || -z "$bootstrap_zip_del" ]]; then
-				echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+
+			if [[ "$use_old_chain" == "1" ]]; then
+				echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
-				echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
+					echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				else
+					echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				fi
+				if [[ "$bootstrap_zip_del" == "1" || -z "$bootstrap_zip_del" ]]; then
+					echo -e "${PIN}${CYAN} Remove Flux daemon bootstrap archive file........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				else
+					echo -e "${PIN}${CYAN} Leave Flux daemon bootstrap archive file.........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+				fi
 			fi
-		fi
 
-		if [[ ! -z "$gateway_ip" && ! -z "$upnp_port" ]]; then
-			echo -e "${PIN}${CYAN} Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
-		fi
+			if [[ ! -z "$gateway_ip" && ! -z "$upnp_port" ]]; then
+				echo -e "${PIN}${CYAN} Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
+			fi
 
-		if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
-			echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		else
-			echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
-		fi
-
+			if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
+				echo -e "${PIN}${CYAN} Enable watchdog notification.....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			else
+				echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+			fi
+    fi
 	fi
 }
 function get_ip() {
@@ -528,6 +528,166 @@ function create_swap() {
 		fi
 	fi
 	sleep 2
+}
+######### EDIT FUNCTION
+function daemon_reconfiguration(){
+	echo -e "${GREEN}Module: Flux Daemon Reconfiguration${NC}"
+	echo -e "${YELLOW}================================================================${NC}"
+	if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+		echo -e "${CYAN}Please switch to the user account.${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		echo -e "${NC}"
+		exit
+	fi
+	config_veryfity
+	echo -e ""
+	echo -e "${ARROW} ${YELLOW}Fill in all the fields that you want to replace${NC}"
+	sleep 2
+	skip_change='3'
+	zelnodeprivkey="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Identity Key generated by your Zelcore" 8 72 3>&1 1>&2 2>&3)"
+	sleep 1
+	zelnodeoutpoint="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Collateral TX ID" 8 72 3>&1 1>&2 2>&3)"
+	sleep 1
+	zelnodeindex="$(whiptail --title "Flux daemon reconfiguration" --inputbox "Enter your FluxNode Output Index" 8 60 3>&1 1>&2 2>&3)"
+	sleep 1
+	if [[ "$zelnodeprivkey" == "" ]]; then
+		skip_change=$((skip_change-1))
+		echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+	fi
+	if [[ "$zelnodeoutpoint" == "" ]]; then
+		skip_change=$((skip_change-1))
+		echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
+	fi
+	if [[ "$zelnodeindex" == "" ]]; then
+	skip_change=$((skip_change-1))
+		echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
+	fi
+	if [[ "$skip_change" == "0" ]]; then
+		echo -e "${ARROW} ${YELLOW}All fields are empty changes skipped...${NC}"
+		echo
+		exit
+	fi
+	echo -e "${ARROW} ${CYAN}Stopping Flux daemon service...${NC}"
+	sudo systemctl stop $COIN_NAME  > /dev/null 2>&1 && sleep 2
+	sudo fuser -k 16125/tcp > /dev/null 2>&1
+	if [[ "$zelnodeprivkey" != "" ]]; then
+		if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+			echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+					else
+					sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
+									if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+													echo -e "${ARROW} ${CYAN}FluxNode identity key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
+									fi
+		fi
+	fi
+
+	if [[ "$zelnodeoutpoint" != "" ]]; then
+		if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+			echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
+		else
+			sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
+			if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+				echo -e "${ARROW} ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+			fi
+	 fi
+	fi
+
+	if [[ "$zelnodeindex" != "" ]]; then
+		if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+			echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
+		else
+			sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
+			if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+				echo -e "${ARROW} ${CYAN}FluxNode index replaced successful..................[${CHECK_MARK}${CYAN}]${NC}"
+			fi
+		fi
+	fi
+	pm2 restart flux > /dev/null 2>&1
+	sudo systemctl start $COIN_NAME  > /dev/null 2>&1 && sleep 2
+	NUM='35'
+	MSG1='Restarting daemon service...'
+	MSG2="${CYAN}........................[${CHECK_MARK}${CYAN}]${NC}"
+	spinning_timer
+	echo -e "" && echo -e ""
+}
+function replace_kadena {
+
+  if [[ -z "$KDA_A"  ]]; then
+		while true
+		do
+			KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+			KDA_A=$(grep -Eo "^k:[0-9a-z]{64}\b" <<< "$KDA_A")
+			if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* && "$KDA_A" = *k:*  ]]; then    
+				echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"				    
+				sleep 2
+				break
+			else	     
+				echo -e "${ARROW} ${CYAN}Kadena address is not valid.............[${X_MARK}${CYAN}]${NC}"
+				sleep 2		     
+			fi
+		done
+	fi	
+	kda_address="kadena:$KDA_A?chainid=0"
+	if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "kadena") != "" ]]; then
+		sed -i "s/$(grep -e kadena /home/$USER/zelflux/config/userconfig.js)/kadena: '$kda_address',/" /home/$USER/zelflux/config/userconfig.js
+		if [[ $(grep -w $KDA_A /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+			echo -e "${ARROW} ${CYAN}Kadena address replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
+		fi
+	else
+		insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "kadena: '$kda_address',"
+		echo -e "${ARROW} ${CYAN}Kadena address set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
+	fi
+}
+function replace_zelid() {
+	while true
+	do
+		new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
+		if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
+			string_limit_check_mark "Zel ID is valid..........................................."
+			break
+		else
+			string_limit_x_mark "Zel ID is not valid try again..........................................."
+			sleep 2
+		fi
+	done
+	if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+		echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped............................[${CHECK_MARK}${CYAN}]${NC}"
+	else
+		sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
+		if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+			echo -e "${ARROW} ${CYAN}ZEL ID replaced successful........................[${CHECK_MARK}${CYAN}]${NC}"
+		fi
+	fi
+}
+function fluxos_reconfiguration {
+ echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
+ echo -e "${YELLOW}================================================================${NC}"
+ if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+		echo -e "${CYAN}Please switch to the user account.${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		echo -e "${NC}"
+		exit
+ fi
+ if ! [[ -f /home/$USER/zelflux/config/userconfig.js ]]; then
+	 echo -e "${WORNING} ${CYAN}FluxOS userconfig.js not exist, operation aborted${NC}"
+	 echo -e ""
+	 exit
+ fi
+ CHOICE=$(
+ whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
+ "1)" "Replace ZELID"   \
+ "2)" "Add/Replace kadena address"  3>&2 2>&1 1>&3
+	)
+		case $CHOICE in
+		"1)")
+		replace_zelid
+		;;
+		"2)")
+		replace_kadena
+		;;
+	esac
 }
 ######### BOOTSTRAP SECTION ############################
 function tar_file_unpack() {
@@ -1172,6 +1332,7 @@ function log_rotate() {
 	EOF
 	sudo chown root:root /etc/logrotate.d/$2
 }
+#### UPnP
 function upnp_enable() {
 	try="0"
 	echo -e ""
@@ -1301,7 +1462,6 @@ function upnp_enable() {
 		echo -e ""
 	fi
 }
-
 #### MULTITOOLBOX OPTIONS SECTION
 function selfhosting() {
 	if [[ "$1" != "install" ]]; then
