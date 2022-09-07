@@ -22,7 +22,7 @@ function upnp_disable() {
  echo -e ""
  sudo systemctl restart zelcash  > /dev/null 2>&1
  pm2 restart flux  > /dev/null 2>&1
- sleep 200
+ sleep 10
 }
 
 	CHOICE=$(

@@ -1277,7 +1277,7 @@ function upnp_enable() {
 	fi
 	sudo systemctl restart zelcash  > /dev/null 2>&1
 	pm2 restart flux  > /dev/null 2>&1
-	sleep 200
+	sleep 150
 	echo -e "${ARROW}${CYAN} Checking FluxOS logs... ${NC}"
 	error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
 	if [[ "$error_check" == "" ]]; then
