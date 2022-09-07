@@ -460,7 +460,7 @@ function create_config() {
 	fi
 	if [[ "$skip_bootstrap" == "0" ]]; then
 		if whiptail --yesno "Would you like use Flux bootstrap from script source?" 8 65; then
-			bootstrap_url="0"
+			bootstrap_url=""
 			sleep 1
 		else
 			bootstrap_url=$(whiptail --inputbox "Enter your Flux bootstrap URL" 8 65 3>&1 1>&2 2>&3)
@@ -475,7 +475,8 @@ function create_config() {
 		fi
 	fi
 	if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
-		gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
+	  router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+		gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router: $router_ip)" 8 85 3>&1 1>&2 2>&3)
 		upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
 		"Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
 		"16127" "" ON \
