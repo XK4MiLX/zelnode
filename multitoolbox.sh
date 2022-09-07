@@ -3,10 +3,12 @@
 trap ctrl_c INT
 
 function ctrl_c() {
-	echo -e "Cleaning branch variable..."
+	echo -e ""
+	echo -e " Cleaning branch variable..."
 	echo -e ""
 	unset ROOT_BRANCH
-	unset BRANCH_ALREADY_REFERENCED
+	unset BRANCH_ALREADY_REFERENCE
+	exit
 }
 
 if ! [[ -z $1 ]]; then
