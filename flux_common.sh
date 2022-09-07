@@ -1392,8 +1392,8 @@ function multinode(){
 	echo -e "${BOOK} ${RED}If FluxOs fails to communicate with router or upnp fails it will shutdown FluxOS... ${NC}"
 	echo -e ""
 	echo -e "${YELLOW}================================================================${NC}"
-	echo -e ""
 	if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
+	  echo -e ""
 		echo -e "${WORNING} ${CYAN}First install FluxNode...${NC}"
 		echo -e "${WORNING} ${CYAN}Operation stopped...${NC}"
 		echo -e ""
