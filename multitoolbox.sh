@@ -1,5 +1,14 @@
 #!/bin/bash
 
+trap ctrl_c INT
+
+function ctrl_c() {
+	echo -e "Cleaning branch variable..."
+	echo -e ""
+	unset ROOT_BRANCH
+	unset BRANCH_ALREADY_REFERENCED
+}
+
 if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
 	export ROOT_BRANCH="$1"
