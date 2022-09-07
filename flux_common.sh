@@ -662,15 +662,26 @@ function bootstrap_new() {
 			echo -e ""
 			return 1
 		fi
+		if [[ "$Mode" != "install" ]]; then
+			stop_service
+		fi
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
 		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
 	else
+	  if [[ "$Mode" != "install" ]]; then
+			stop_service
+		fi
 		DOWNLOAD_URL="$bootstrap_url"
 		echo -e "${ARROW} ${CAYN}Downloading File: ${GREEN}$DOWNLOAD_URL ${NC}"
 		wget --tries 5 -O $BOOTSTRAP_FILE $DOWNLOAD_URL -q --show-progress
 		tar_file_unpack "/home/$USER/$BOOTSTRAP_FILE" "/home/$USER/$CONFIG_DIR"
 	fi
+
+	if [[ "$Mode" != "install" ]]; then
+		start_service
+	fi
+
 	if [[ -z "$bootstrap_zip_del" ]]; then
 		rm -rf /home/$USER/$BOOTSTRAP_FILE > /dev/null 2>&1
 	else
