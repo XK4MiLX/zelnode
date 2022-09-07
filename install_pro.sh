@@ -845,6 +845,9 @@ function status_loop() {
 	fi
 	install_watchdog
 	finalizing
+	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]]; then
+		upnp_enable
+	fi
 	display_banner
 }
 #end of functions
