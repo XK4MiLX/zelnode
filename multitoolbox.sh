@@ -342,23 +342,6 @@ function create_config() {
 			zelcash_update='0'
 			zelbench_update='0'   
 		fi
-		if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
-			gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
-			upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
-			"Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
-			"16127" "" ON \
-			"16137" "" OFF \
-			"16147" "" OFF \
-			"16157" "" OFF \
-			"16167" "" OFF \
-			"16177" "" OFF \
-			"16187" "" OFF \
-			"16197" "" OFF 3>&1 1>&2 2>&3)
-		else
-			gateway_ip=""
-			upnp_port=""
-		fi
-		
 		if whiptail --yesno "Would you like enable alert notification?" 8 65; then
 			whiptail --msgbox "Info: to select/deselect item use 'space' ...to switch to OK/Cancel use 'tab' " 10 60
 			sleep 1
@@ -490,6 +473,22 @@ function create_config() {
 			bootstrap_zip_del='1'
 			sleep 1
 		fi
+	fi
+	if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
+		gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
+		upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
+		"Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
+		"16127" "" ON \
+		"16137" "" OFF \
+		"16147" "" OFF \
+		"16157" "" OFF \
+		"16167" "" OFF \
+		"16177" "" OFF \
+		"16187" "" OFF \
+		"16197" "" OFF 3>&1 1>&2 2>&3)
+	else
+		gateway_ip=""
+		upnp_port=""
 	fi
 	firewall_disable='1'
 	swapon='1'

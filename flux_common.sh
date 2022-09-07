@@ -1294,6 +1294,7 @@ function upnp_enable() {
 		echo -e ""
 	fi
 }
+
 #### MULTITOOLBOX OPTIONS SECTION
 function selfhosting() {
 	if [[ "$1" != "install" ]]; then
