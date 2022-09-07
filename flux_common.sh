@@ -1163,6 +1163,8 @@ function log_rotate() {
 }
 function upnp_enable() {
 	try="0"
+	echo -e ""
+	echo -e "${ARROW}${YELLOW} Creating UPnP configuration...${NC}"
 	if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then
 		echo -e "${WORNING} ${CYAN}Missing FluxOS configuration file - install/re-install Flux Node...${NC}" 
 		echo -e ""
@@ -1170,7 +1172,7 @@ function upnp_enable() {
 	fi
 	while true
 	do
-		echo -e "${ARROW}${YELLOW} Checking port validation.....${NC}"
+		echo -e "${ARROW}${CYAN} Checking port validation.....${NC}"
 		# Check if upnp_port is set
 		if [[ -z "$upnp_port" ]]; then
 			FLUX_PORT=$(whiptail --inputbox "Enter your FluxOS port (Ports allowed are: 16127, 16137, 16147, 16157, 16167, 16177, 16187, 16197)" 8 80 3>&1 1>&2 2>&3)
@@ -1208,7 +1210,7 @@ function upnp_enable() {
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
 		echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
-		echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
+		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		#API PORT
 		sudo ufw allow $FLUX_PORT > /dev/null 2>&1
 		#HOME UI PORT
@@ -1276,7 +1278,7 @@ function upnp_enable() {
 	sudo systemctl restart zelcash  > /dev/null 2>&1
 	pm2 restart flux  > /dev/null 2>&1
 	sleep 200
-	echo -e "${ARROW}${YELLOW} Checking FluxOS logs... ${NC}"
+	echo -e "${ARROW}${CYAN} Checking FluxOS logs... ${NC}"
 	error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
 	if [[ "$error_check" == "" ]]; then
 		echo -e ""
