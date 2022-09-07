@@ -55,6 +55,8 @@ function config_file() {
 		index=$(cat /home/$USER/install_conf.json | jq -r '.index')
 		zel_id=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 		kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
+    gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 
 		echo -e "${ARROW} ${YELLOW}Install config summary:"
 		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
@@ -86,11 +88,8 @@ function config_file() {
 			echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}"
 		fi
 
-
-		if [[ ! -z $enable_upnp && ! -z $gateway_ip && ! -z $upnp_port ]]; then
-			echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}"
-			echo -e "${CYAN}   UPnP Port:  ${GREEN}$upnp_port${NC}" 
-			echo -e "${CYAN}   Gateway IP: ${GREEN}$gateway_ip${NC}" 
+		if [[ ! -z $gateway_ip && ! -z $upnp_port ]]; then
+			echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
 		fi
 	fi
 }
@@ -344,7 +343,6 @@ function create_config() {
 			zelbench_update='0'   
 		fi
 		if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
-			enable_upnp='1'
 			gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router)" 8 85 3>&1 1>&2 2>&3)
 			upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
 			"Use the UP/DOWN arrows to highlight the port you want. Press Spacebar on the port you want to select, THEN press ENTER." 17 50 8 \
@@ -357,7 +355,6 @@ function create_config() {
 			"16187" "" OFF \
 			"16197" "" OFF 3>&1 1>&2 2>&3)
 		else
-			enable_upnp="0"
 			gateway_ip=""
 			upnp_port=""
 		fi
