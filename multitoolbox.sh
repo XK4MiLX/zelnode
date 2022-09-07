@@ -79,7 +79,7 @@ function config_file() {
 		fi
 
 		if [[ "$use_old_chain" == "1" ]]; then
-			echo -e "${PIN}${CYAN}Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}"
+			echo -e "${PIN}${CYAN}During re-installation old chain will be used....................[${CHECK_MARK}${CYAN}]${NC}"
 		else
 			if [[ "$bootstrap_url" == "" || "$bootstrap_url" == "0" ]]; then
 				echo -e "${PIN}${CYAN}Use Flux Bootstrap from source build in scripts..................[${CHECK_MARK}${CYAN}]${NC}"
