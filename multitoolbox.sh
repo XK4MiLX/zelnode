@@ -917,7 +917,7 @@ function node_reconfiguration() {
 			flux_daemon_conf_create
 			reset=0
 		fi
-		if [[ -d /home/$USER/watchdog ]]l; then
+		if [[ -d /home/$USER/watchdog ]]; then
 						echo -e "${ARROW} ${CYAN}Creating Watchdog config file...${NC}"
 			sudo rm -rf /home/$USER/watchdog/config.js > /dev/null 2>&1
   		watchdog_conf_create
