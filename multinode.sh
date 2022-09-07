@@ -8,17 +8,18 @@ function upnp_disable() {
 		exit
  fi
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
- echo -e "${ARROW} ${CYAN}Removing FluxOS UPnP configuration.....${NC}"
+ echo -e ""
+ echo -e "${ARROW} ${YELLOW}Removing FluxOS UPnP configuration.....${NC}"
  sudo rm -rf /home/$USER/.fluxbenchmark/fluxbench.conf
  else
-	 echo -e "${ARROW} ${YELLOW}UPnP Mode is already disabled...${NC}"
+	 echo -e "${ARROW} ${CYAN}UPnP Mode is already disabled...${NC}"
 	 echo -e ""
 	 exit
  fi
  if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep 'apiport' | wc -l) == "1" ]]; then
 	cat /home/$USER/zelflux/config/userconfig.js | sed '/apiport/d' | sudo tee "/home/$USER/zelflux/config/userconfig.js" > /dev/null
  fi
- echo -e "${ARROW} ${YELLOW}Restarting FluxOS and Benchmark.....${NC}"
+ echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
  echo -e ""
  sudo systemctl restart zelcash  > /dev/null 2>&1
  pm2 restart flux  > /dev/null 2>&1
