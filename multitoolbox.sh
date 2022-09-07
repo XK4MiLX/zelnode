@@ -701,7 +701,7 @@ function flux_daemon_bootstrap() {
 	cd
 	echo -e "${NC}"
 	config_veryfity
-	bootstrap
+	bootstrap_new
 }
 function install_node(){
 	echo -e "${GREEN}Module: Install FluxNode${NC}"

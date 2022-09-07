@@ -622,7 +622,7 @@ function cdn_speedtest() {
 	fi
    #echo -e "${CHECK_MARK} ${GREEN}Fastest Server: ${YELLOW}$DOWNLOAD_URL${NC}"
 }
-function bootstrap() {
+function bootstrap_new() {
 	echo -e "${ARROW} ${YELLOW}Restore daemon chain from bootstrap${NC}"
 	if ! wget --version > /dev/null 2>&1 ; then
 		sudo apt install -y wget > /dev/null 2>&1 && sleep 2

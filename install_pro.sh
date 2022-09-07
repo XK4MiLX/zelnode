@@ -861,7 +861,7 @@ create_conf
 install_daemon
 zk_params
 if [[ "$BOOTSTRAP_SKIP" == "0" ]]; then
-	bootstrap "install"
+	bootstrap_new "install"
 fi
 create_service_scripts
 create_service "install"
