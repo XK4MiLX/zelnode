@@ -25,6 +25,12 @@ failed_counter="0"
 network_url_1="explorer.zelcash.online"
 network_url_2="explorer.runonflux.io"
 network_url_3="blockbook.zel.network"
+#Wallet variable
+COIN_NAME='flux'
+CONFIG_DIR='.flux'
+CONFIG_FILE='flux.conf'
+#FluxOS variablu
+FLUX_DIR='zelflux'
 #Ports
 RPCPORT=16124
 PORT=16125
