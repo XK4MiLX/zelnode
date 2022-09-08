@@ -905,17 +905,24 @@ function node_reconfiguration() {
 	if [[ -f /home/$USER/install_conf.json ]]; then
 		import_config_file "silent"
 		get_ip
-		if [[ -d /home/$USER/zelflux ]]; then
-			echo -e "${ARROW} ${CYAN}Creating FluxOS config file...${NC}"
-		  sudo rm -rf /home/$USER/zelflux/config/userconfig.js > /dev/null 2>&1
-			fluxos_conf_create
-			reset=0
+		if [[ -d /home/$USER/zelflux ]]; then	  
+			if [[ "$KDA_A" != "" && "$ZELID" != "" ]]; then
+				echo -e "${ARROW} ${CYAN}Creating FluxOS config file...${NC}"
+				sudo rm -rf /home/$USER/zelflux/config/userconfig.js > /dev/null 2>&1
+				fluxos_conf_create
+				reset=0
+			fi
 		fi
 		if [[ -d /home/$USER/.flux ]]; then
-			echo -e "${ARROW} ${CYAN}Creating Daemon config file...${NC}"
-		  sudo rm -rf /home/$USER/.flux/flux.conf > /dev/null 2>&1
-			flux_daemon_conf_create
-			reset=0
+      if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]]; then
+				zelnodeprivkey="$prvkey"
+				zelnodeoutpoint="$outpoint"
+				zelnodeindex="$index"
+				echo -e "${ARROW} ${CYAN}Creating Daemon config file...${NC}"
+				sudo rm -rf /home/$USER/.flux/flux.conf > /dev/null 2>&1
+				flux_daemon_conf_create
+				reset=0
+			fi
 		fi
 		if [[ -d /home/$USER/watchdog ]]; then
 						echo -e "${ARROW} ${CYAN}Creating Watchdog config file...${NC}"

@@ -353,14 +353,17 @@ function integration_check() {
 function import_config_file() {
 	if [[ -f /home/$USER/install_conf.json ]]; then
 		import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
+		#Daemon
 		bootstrap_url=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_url')
 		bootstrap_zip_del=$(cat /home/$USER/install_conf.json | jq -r '.bootstrap_zip_del')
 		use_old_chain=$(cat /home/$USER/install_conf.json | jq -r '.use_old_chain')
 		prvkey=$(cat /home/$USER/install_conf.json | jq -r '.prvkey')
 		outpoint=$(cat /home/$USER/install_conf.json | jq -r '.outpoint')
 		index=$(cat /home/$USER/install_conf.json | jq -r '.index')
+		#FluxOS
 		ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 		KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+		#WatchDog
 		fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
 		flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
 		daemon_update=$(cat /home/$USER/install_conf.json | jq -r '.zelcash_update')
@@ -372,6 +375,7 @@ function import_config_file() {
 		telegram_alert=$(cat /home/$USER/install_conf.json | jq -r '.telegram_alert')
 		telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
 		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
+		#UPnP
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
 		gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 		if [[ "$1" != "silent" ]]; then
