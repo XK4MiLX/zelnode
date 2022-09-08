@@ -25,6 +25,9 @@ failed_counter="0"
 network_url_1="explorer.zelcash.online"
 network_url_2="explorer.runonflux.io"
 network_url_3="blockbook.zel.network"
+#Ports
+RPCPORT=16124
+PORT=16125
 #dialog color
 export NEWT_COLORS='
 title=black,
@@ -70,6 +73,8 @@ function fluxos_conf_create(){
 	EOF
 }
 function flux_daemon_conf_create() {
+	RPCUSER=$(pwgen -1 8 -n)
+	PASSWORD=$(pwgen -1 20 -n)
 	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 	cat <<- EOF > /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 	rpcuser=$RPCUSER
