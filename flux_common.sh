@@ -29,7 +29,7 @@ network_url_3="blockbook.zel.network"
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
 CONFIG_FILE='flux.conf'
-#FluxOS variablu
+#FluxOS variable
 FLUX_DIR='zelflux'
 #Ports
 RPCPORT=16124
