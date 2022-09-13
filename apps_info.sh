@@ -12,6 +12,17 @@ else
 	export ROOT_BRANCH='master'
 fi
 
+function max(){
+	m="0"
+	for n in "$@"
+	do        
+		if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
+			[ "$n" -gt "$m" ] && m="$n"
+		fi
+	done
+	echo "$m"
+}
+
 network_url_1="explorer.zelcash.online"
 network_url_2="explorer.runonflux.io"
 
