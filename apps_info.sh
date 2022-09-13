@@ -26,6 +26,7 @@ function max(){
 network_url_1="explorer.zelcash.online"
 network_url_2="explorer.runonflux.io"
 
+apps_info=$(curl -SsL -m 10 https://api.runonflux.io/apps/globalappsspecifications)
 name=($(jq -r .data[].name <<< "$apps_info"))
 height=($(jq -r .data[].height <<< "$apps_info"))
 network_height_01=$(curl -sk -m 5 https://$network_url_1/api/status?q=getInfo | jq '.info.blocks')
