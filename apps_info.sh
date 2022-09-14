@@ -12,9 +12,21 @@ else
 	export ROOT_BRANCH='master'
 fi
 
+function max(){
+	m="0"
+	for n in "$@"
+	do        
+		if egrep -o "^[0-9]+$" <<< "$n" &>/dev/null; then
+			[ "$n" -gt "$m" ] && m="$n"
+		fi
+	done
+	echo "$m"
+}
+
 network_url_1="explorer.zelcash.online"
 network_url_2="explorer.runonflux.io"
 
+apps_info=$(curl -SsL -m 10 https://api.runonflux.io/apps/globalappsspecifications)
 name=($(jq -r .data[].name <<< "$apps_info"))
 height=($(jq -r .data[].height <<< "$apps_info"))
 network_height_01=$(curl -sk -m 5 https://$network_url_1/api/status?q=getInfo | jq '.info.blocks')
