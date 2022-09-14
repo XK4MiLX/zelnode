@@ -333,9 +333,10 @@ function create_config() {
 		while true
 		do
 			KDA_A=$(whiptail --inputbox "Please enter your Kadena address from Zelcore" 8 85 3>&1 1>&2 2>&3)
+			KDA_A=$(grep -Eo "^k:[0-9a-z]{64}\b" <<< "$KDA_A")
 			if [[ "$KDA_A" != "" && "$KDA_A" != *kadena* && "$KDA_A" = *k:*  ]]; then    
 				echo -e "${ARROW} ${CYAN}Kadena address is valid.................[${CHECK_MARK}${CYAN}]${NC}"	
-				KDA_A="kadena:$KDA_A?chainid=0"			    
+				kda_address="kadena:$KDA_A?chainid=0"		    
 				sleep 2
 				break
 			else	     
