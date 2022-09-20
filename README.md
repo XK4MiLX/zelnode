@@ -3,6 +3,9 @@
 <b>1) HOW RUN SCRIPT</b>  
 ```bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```  
 
+Note: If you are having difficulties, try fastgit.org provider
+```bash -i <(curl -s https://raw.fastgit.org/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```
+
 <b>2) MENU:</b>    
 ![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/development.jpg) 
 
