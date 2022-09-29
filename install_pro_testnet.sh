@@ -1402,7 +1402,7 @@ else
    # bootstrap
    # fi
     create_service_scripts
-    create_service
+    create_service "install"
     
  #   if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
      # echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
