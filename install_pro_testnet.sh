@@ -726,7 +726,6 @@ else
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    else
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    fi
    
    
