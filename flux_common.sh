@@ -1389,7 +1389,7 @@ function upnp_enable() {
 		insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "apiport: '$FLUX_PORT',"
 		echo -e "${ARROW} ${CYAN}FluxOS port set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
 	fi
-	if [[ -d /home/$USER/.fluxbenchmark ]]; then
+	if [[ ! -d /home/$USER/.fluxbenchmark ]]; then
 		sudo mkdir -p /home/$USER/.fluxbenchmark 2>/dev/null
 		echo "fluxport=$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
 	else
