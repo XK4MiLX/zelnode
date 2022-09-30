@@ -1509,7 +1509,6 @@ function selfhosting_creator(){
 					fi 
 					echo "$(jq -r --arg value "$device_setup" '.device_name=$value' device_conf.json)" > device_conf.json
 					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup"
-					echo -e ""
 				fi
 				selfhosting
 			;;
