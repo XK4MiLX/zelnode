@@ -1494,21 +1494,41 @@ function selfhosting_creator(){
 	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 	CHOICE=$(
 	whiptail --title "FluxOS Selfhosting Configuration" --menu "Make your choice" 15 40 6 \
-	"1)" "Auto detection (Recommended)"   \
-	"2)" "Device - create config"  3>&2 2>&1 1>&3
+	"1)" "Auto Detection (Recommended)"   \
+	"2)" "Manual Configuration (Advance)"  3>&2 2>&1 1>&3
 		)
 			case $CHOICE in
 			"1)")
 				selfhosting
 			;;
 			"2)")
-				device_setup=$(whiptail --inputbox "Enter your device name" 8 60 3>&1 1>&2 2>&3)
+				#device_setup=$(whiptail --inputbox "Enter your device name" 8 60 3>&1 1>&2 2>&3)
+				deviceList=($(route -n |  awk '{ if ($8 != "" && $8 != "Iface" && $8 != "docker0" ) printf("%s\n", $8); }'))
+				elements=${#deviceList[@]}
+				choices=();
+				for (( i=0;i<$elements;i++)); do
+					if [[ "$i"  == "0" ]]; then
+						choices+=("${deviceList[i]}" "" "ON");
+					else
+						choices+=("${deviceList[i]}" "" "OFF");
+					fi
+				done;
+				device_setup=$(
+						whiptail --title " SELECT YOUR DEVICE INTERFACE "         \
+										--radiolist " \n Use the UP/DOWN arrows to highlight the device name you want. Press Spacebar on the device name you want to select, THEN press ENTER." 20 50 10 \
+										"${choices[@]}" \
+										3>&2 2>&1 1>&3
+				);
 				if [[ "$device_setup" != "" ]]; then
 					if [[ ! -f /home/$USER/device_conf.json ]]; then 
 						echo "{}" > device_conf.json 
 					fi 
 					echo "$(jq -r --arg value "$device_setup" '.device_name=$value' device_conf.json)" > device_conf.json
-					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup"
+					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup ${NC}"
+				else
+					echo -e "${ARROW} ${CYAN}Operation aborted, device interface was not selected...${NC}"
+					echo -e ""
+					exit
 				fi
 				selfhosting
 			;;
