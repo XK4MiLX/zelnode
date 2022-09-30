@@ -1538,7 +1538,7 @@ function selfhosting() {
 		echo -e ""
 		return 1
 	fi
-	echo -e "${ARROW} ${CYAN}Creating ip check script...${NC}" && sleep 1
+	echo -e "${ARROW} ${CYAN}Creating IP check script...${NC}" && sleep 1
 	sudo rm /home/$USER/ip_check.sh > /dev/null 2>&1
 	sudo touch /home/$USER/ip_check.sh
 	sudo chown $USER:$USER /home/$USER/ip_check.sh
@@ -1554,19 +1554,21 @@ function selfhosting() {
 	  WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
 	fi
 	}
-   
+
+	function get_device_name(){
+		if [[ -f /home/$USER/device_conf.json ]]; then
+			device_name=$(jq -r .device_name /home/$USER/device_conf.json)
+			echo -e "Device from config, name: $device_name" >> /home/$USER/ip_history.log
+		else
+			device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+			echo -e "Device auto detection, name $device_name" >> /home/$USER/ip_history.log
+		fi
+	}
 	get_ip
-	if [[ -f /home/$USER/device_conf.json ]]; then
-	 	device_name=$(jq -r .device_name /home/$USER/device_conf.json)
-		echo -e "Device from config, name: $device_name" >> /home/$USER/ip_history.log
-	else
-		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-		echo -e "Device auto detection, name $device_name" >> /home/$USER/ip_history.log
-	fi
-	
 	if [[ $1 == "restart" ]]; then
 	  #give 3min to connect with internet
 	  sleep 180
+		get_device_name
 	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 		date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 		echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
@@ -1574,6 +1576,7 @@ function selfhosting() {
 	  fi
 	fi
 	if [[ $1 == "ip_check" ]]; then
+	  get_device_name
 	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
 	  if [[ "$api_port" == "" ]]; then
 		api_port="16127"
