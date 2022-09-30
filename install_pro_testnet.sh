@@ -697,7 +697,8 @@ function install_daemon() {
    
 if [[ "$(lsb_release -cs)" == "xenial" ]]; then
    
-     echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1  
+     echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+		 echo 'deb https://runonflux.github.io/aptrepo/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
      gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
      gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
      
@@ -722,8 +723,10 @@ else
    
    if [[ "$(lsb_release -cs)" == "impish" ]]; then
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    else
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    fi
    
    
