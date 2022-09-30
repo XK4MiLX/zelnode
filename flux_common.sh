@@ -1478,26 +1478,62 @@ function upnp_enable() {
 	fi
 }
 #### MULTITOOLBOX OPTIONS SECTION
-function selfhosting() {
-	if [[ "$1" != "install" ]]; then
-		echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+function selfhosting_creator(){
+
+	echo -e "${GREEN}Module: Self-hosting ip cron service${NC}"
+	echo -e "${YELLOW}================================================================${NC}"
+	echo -e ""
+	if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+		echo -e "${CYAN}Please switch to the user account.${NC}"
 		echo -e "${YELLOW}================================================================${NC}"
-		if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
-			echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
-			echo -e "${CYAN}Please switch to the user account.${NC}"
-			echo -e "${YELLOW}================================================================${NC}"
-			echo -e "${NC}"
-			exit
-		fi
-	 fi 
+		echo -e "${NC}"
+		exit
+	fi
+
 	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
+	CHOICE=$(
+	whiptail --title "FluxOS Selfhosting Configuration" --menu "Make your choice" 15 40 6 \
+	"1)" "Auto detection (Recommended)"   \
+	"2)" "Device - create config"  3>&2 2>&1 1>&3
+		)
+			case $CHOICE in
+			"1)")
+				selfhosting
+			;;
+			"2)")
+				device_setup=$(whiptail --inputbox "Enter your device name" 8 60 3>&1 1>&2 2>&3)
+				if [[ "$device_setup" != "" ]]; then
+					if [[ ! -f /home/$USER/device_conf.json ]]; then 
+						echo "{}" > device_conf.json 
+					fi 
+					echo "$(jq -r --arg value "$device_setup" 'device_name=$value' device_conf.json)" > device_conf.json
+					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup"
+					echo -e ""
+				fi
+				selfhosting
+			;;
+		esac
+}
+
+function selfhosting() {
+	if [[ "$1" == "install" ]]; then
+		echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
+	fi
+	
 	echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
 	if [[ "$1" != "install" ]]; then
 		get_ip
 	fi
-	device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+
+	if [[ -z "$device_setup" ]]; then
+		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+	else
+    device_name="$device_setup"
+	fi
+
 	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-		sudo ip addr add $WANIP dev $device_name:0  > /dev/null 2>&1
+		sudo ip addr add $WANIP dev $device_name  > /dev/null 2>&1
 	else
 		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
 		echo -e ""
@@ -1509,6 +1545,7 @@ function selfhosting() {
 	sudo chown $USER:$USER /home/$USER/ip_check.sh
 	cat <<-'EOF' > /home/$USER/ip_check.sh
 	#!/bin/bash
+
 	function get_ip(){
 	WANIP=$(curl --silent -m 10 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
 	if [[ "$WANIP" == "" || "$WANIP" = *html* ]]; then
@@ -1518,20 +1555,26 @@ function selfhosting() {
 	  WANIP=$(curl --silent -m 10 https://api.ipify.org | tr -dc '[:alnum:].')
 	fi
 	}
+   
+	get_ip
+	if [[ -f /home/$USER/device_conf.json ]]; then
+	 	device_name=$(jq -r .device_name /home/$USER/device_conf.json)
+		echo -e "Device from config, name: $device_name" >> /home/$USER/ip_history.log
+	else
+		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+		echo -e "Device auto detection, name $device_name" >> /home/$USER/ip_history.log
+	fi
+	
 	if [[ $1 == "restart" ]]; then
 	  #give 3min to connect with internet
 	  sleep 180
-	  get_ip
-	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 		date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 		echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-		sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+		sudo ip addr add $WANIP dev $device_name && sleep 2
 	  fi
 	fi
 	if [[ $1 == "ip_check" ]]; then
-	  get_ip
-	  device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
 	  if [[ "$api_port" == "" ]]; then
 		api_port="16127"
@@ -1541,7 +1584,7 @@ function selfhosting() {
 		 if [[ "$WANIP" != "$confirmed_ip" ]]; then
 			date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 			echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
-			sudo ip addr add $WANIP dev $device_name:0 && sleep 2
+			sudo ip addr add $WANIP dev $device_name && sleep 2
 		 fi
 	  fi
 	fi
