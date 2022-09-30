@@ -1515,7 +1515,7 @@ function selfhosting_creator(){
 				done;
 				device_setup=$(
 						whiptail --title " SELECT YOUR DEVICE INTERFACE "         \
-										--radiolist " \n Use the UP/DOWN arrows to highlight the device name you want. Press Spacebar on the device name you want to select, THEN press ENTER." 20 50 10 \
+										--radiolist " \n Use the UP/DOWN arrows to highlight the device name you want. Press Spacebar on the device name you want to select, THEN press ENTER." 25 55 10 \
 										"${choices[@]}" \
 										3>&2 2>&1 1>&3
 				);
