@@ -1507,7 +1507,7 @@ function selfhosting_creator(){
 					if [[ ! -f /home/$USER/device_conf.json ]]; then 
 						echo "{}" > device_conf.json 
 					fi 
-					echo "$(jq -r --arg value "$device_setup" 'device_name=$value' device_conf.json)" > device_conf.json
+					echo "$(jq -r --arg value "$device_setup" '.device_name=$value' device_conf.json)" > device_conf.json
 					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup"
 					echo -e ""
 				fi
@@ -1520,7 +1520,7 @@ function selfhosting() {
 	if [[ "$1" == "install" ]]; then
 		echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 	fi
-	
+
 	echo -e "${ARROW} ${CYAN}Adding IP for device...${NC}" && sleep 1
 	if [[ "$1" != "install" ]]; then
 		get_ip
