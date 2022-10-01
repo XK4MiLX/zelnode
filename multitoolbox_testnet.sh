@@ -4,7 +4,7 @@ if ! [[ -z $1 ]]; then
     if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
         export ROOT_BRANCH="$1"
         export BRANCH_ALREADY_REFERENCED='1'
-        bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox_testnet.sh) $ROOT_BRANCH
+        bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/multitoolbox_testnet.sh) $ROOT_BRANCH
         unset ROOT_BRANCH
         unset BRANCH_ALREADY_REFERENCED
         exit
@@ -13,7 +13,7 @@ else
     export ROOT_BRANCH='master'
 fi
 
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
 
 
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
@@ -538,7 +538,7 @@ sudo rm -rf /home/$USER/watchdog  > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
@@ -925,8 +925,8 @@ exit
 fi
 
 
-# bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/install_pro.sh)
-bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/install_pro_testnet.sh)
+# bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/install_pro.sh)
+bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/install_pro_testnet.sh)
 
 
 }

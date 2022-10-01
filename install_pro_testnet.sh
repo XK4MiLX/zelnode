@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
@@ -147,7 +147,7 @@ WATCHDOG_INSTALL="1"
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
@@ -726,7 +726,7 @@ else
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    else
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+      #echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    fi
    
    
@@ -1403,7 +1403,7 @@ else
    # bootstrap
    # fi
     create_service_scripts
-    create_service
+    create_service "install"
     
  #   if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
      # echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"

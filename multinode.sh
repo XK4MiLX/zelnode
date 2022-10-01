@@ -1,5 +1,5 @@
 #!/bin/bash
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 function upnp_disable() {
  if [[ ! -f /home/$USER/zelflux/config/userconfig.js ]]; then

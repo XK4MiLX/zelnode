@@ -15,7 +15,7 @@ if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
 	export ROOT_BRANCH="$1"
 	export BRANCH_ALREADY_REFERENCED='1'
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
+	bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
 	unset ROOT_BRANCH
 	unset BRANCH_ALREADY_REFERENCED
 	exit
@@ -23,7 +23,7 @@ if ! [[ -z $1 ]]; then
 else
 	export ROOT_BRANCH='master'
 fi
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
 if [[ -d /home/$USER/.zelcash ]]; then
 	CONFIG_DIR='.zelcash'
 	CONFIG_FILE='zelcash.conf'
@@ -534,7 +534,7 @@ function install_watchdog() {
 	echo -e "${ARROW} ${CYAN}Downloading...${NC}"
 	cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 	echo -e "${ARROW} ${CYAN}Installing git hooks....${NC}"
-	wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
+	wget https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 	mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 	sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 	echo -e "${ARROW} ${CYAN}Installing watchdog module....${NC}"
@@ -743,7 +743,7 @@ function install_node(){
 		echo -e "${WORNING}${CYAN}Docker is not working correct or is not installed.${NC}"
 		exit
 	fi
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/install_pro.sh)
+	bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/install_pro.sh)
 }
 function install_docker(){
 	echo -e "${GREEN}Module: Install Docker${NC}"
@@ -972,8 +972,8 @@ if ! whiptail -v > /dev/null 2>&1; then
 fi
 
 if [[ $(cat /etc/bash.bashrc | grep 'multitoolbox' | wc -l) == "0" ]]; then
-	echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
-	echo "alias multitoolbox_testnet='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox_testnet.sh)'" | sudo tee -a /etc/bash.bashrc
+	echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/master/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
+	echo "alias multitoolbox_testnet='bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/master/multitoolbox_testnet.sh)'" | sudo tee -a /etc/bash.bashrc
 	source /etc/bash.bashrc
 fi
 

@@ -1,17 +1,17 @@
 #!/bin/bash
 #
 #   Usage:
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "<test_time_in_s>" "<file_name>" "<array_url_list_via_export>" 
+#   bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/development/cdn-speedtest.sh) "<test_time_in_s>" "<file_name>" "<array_url_list_via_export>" 
 #
 #   Example 1 ( for testing custom servers ):
 #   export list=("http://cdn-11.runonflux.io/apps/fluxshare/getfile/" "http://cdn-11.runonflux.io/apps/fluxshare/getfile/")
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "6" "flux_explorer_bootstrap.tar.gz" "${list[@]}"
+#   bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/development/cdn-speedtest.sh) "6" "flux_explorer_bootstrap.tar.gz" "${list[@]}"
 #
 #   Example 2 ( for testing cdn with 6s download test of each server )
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh) "6"
+#   bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/development/cdn-speedtest.sh) "6"
 #
 #   Example 3 ( for testing cdn with default settings )
-#   bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/development/cdn-speedtest.sh)
+#   bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/development/cdn-speedtest.sh)
 #
 #
 #color codes
