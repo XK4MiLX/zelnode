@@ -722,11 +722,11 @@ else
    sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
    
    if [[ "$(lsb_release -cs)" == "impish" ]]; then
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+		#echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    else
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+		#echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://runonflux.github.io/aptrepo/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
    fi
    
    
@@ -1403,7 +1403,7 @@ else
    # bootstrap
    # fi
     create_service_scripts
-    create_service
+    create_service "install"
     
  #   if whiptail --yesno "Is the fluxnode being installed on a vps?" 8 60; then   
      # echo -e "${ARROW} ${YELLOW}Cron service for rotate ip skipped...${NC}"
