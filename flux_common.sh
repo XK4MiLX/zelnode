@@ -1477,6 +1477,36 @@ function upnp_enable() {
 		echo -e ""
 	fi
 }
+#### TESTNET
+
+
+function testnet_binary(){
+	sudo rm -rf  /tmp/*lux* 2>&1 && sleep 2
+	if [[ $(dpkg --print-architecture) = *amd* ]]; then
+	  #DAEMON
+		sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
+		sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
+		sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+		sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+    #BENCHMARK
+		sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
+		sudo tar xzvf /tmp/Fluxbench-Linux-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
+		sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+		sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+	else
+		#DAEMON
+		sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz -P /tmp > /dev/null 2>&1
+		sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
+		sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
+		sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
+		#BENCHMARK
+		sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
+		sudo tar xzvf /tmp/Fluxbench-arm-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
+		sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
+		sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+	fi
+	sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
+}
 #### MULTITOOLBOX OPTIONS SECTION
 function selfhosting_creator(){
 
@@ -1547,6 +1577,7 @@ function selfhosting() {
 
 	if [[ -z "$device_setup" ]]; then
 		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
+		echo -e "Device auto detection, name: $device_name"
 	else
     device_name="$device_setup"
 	fi
