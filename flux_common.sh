@@ -1529,6 +1529,9 @@ function selfhosting_creator(){
 		)
 			case $CHOICE in
 			"1)")
+			  if [[ -f /home/$USER/device_conf.json ]]; then
+					echo -e "${ARROW} ${CYAN}Removing config file, path: ${GREEN}/home/$USER/device_conf.json${NC}"	
+				fi
 				selfhosting
 			;;
 			"2)")
