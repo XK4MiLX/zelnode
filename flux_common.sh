@@ -1579,7 +1579,7 @@ function selfhosting() {
 		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
 		echo -e "Device auto detection, name: $device_name"
 	else
-    device_name="$device_setup"
+   		 device_name="$device_setup"
 	fi
 
 	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
