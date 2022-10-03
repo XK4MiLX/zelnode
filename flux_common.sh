@@ -1554,7 +1554,7 @@ function selfhosting_creator(){
 						echo "{}" > device_conf.json 
 					fi 
 					echo "$(jq -r --arg value "$device_setup" '.device_name=$value' device_conf.json)" > device_conf.json
-					echo -e "${ARROW} ${CYAN}Config created successful, path: ${SEA}/home/$USER/device_conf.json${CYAN}, device name: ${GREE}$device_setup${NC}"
+					echo -e "${ARROW} ${CYAN}Config created successful, path: ${SEA}/home/$USER/device_conf.json${CYAN}, device name: ${GREEN}$device_setup${NC}"
 				else
 					echo -e "${ARROW} ${CYAN}Operation aborted, device interface was not selected...${NC}"
 					echo -e ""
