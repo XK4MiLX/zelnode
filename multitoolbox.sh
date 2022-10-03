@@ -1059,7 +1059,7 @@ case "$REPLY" in
 	10)
 	clear
 	sleep 1
-	selfhosting
+	selfhosting_creator
  ;;
 	11)
 	clear
