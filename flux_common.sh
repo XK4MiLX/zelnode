@@ -475,7 +475,7 @@ function display_banner() {
 	echo
 	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
 	echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info flux${NC}"
-	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 logs flux${NC}"
 	echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop flux${NC}"
 	echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start flux${NC}"
 	echo -e ""
@@ -485,7 +485,7 @@ function display_banner() {
 		echo -e "${PIN} ${CYAN}Start watchdog: ${SEA}pm2 start watchdog --watch${NC}"
 		echo -e "${PIN} ${CYAN}Restart watchdog: ${SEA}pm2 reload watchdog --watch${NC}"
 		echo -e "${PIN} ${CYAN}Error logs: ${SEA}~/watchdog/watchdog_error.log${NC}"
-		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 logs watchdog${NC}"
 		echo
 		echo -e "${PIN} ${RED}IMPORTANT: After installation check ${SEA}'pm2 list'${RED} if not work, type ${SEA}'source /home/$USER/.bashrc'${NC}"
 		echo -e ""
