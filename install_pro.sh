@@ -74,6 +74,12 @@ function import_date() {
 					if [[ "$KDA_A" != "" ]]; then
 						echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
 					fi
+					upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+					if [[ "$upnp_port" != "" ]]; then
+						gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+						echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+						echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
+					fi
 				fi
 				if [[ -f /home/$USER/watchdog/config.js ]]; then
 					echo -e ""
@@ -153,7 +159,13 @@ function import_date() {
 					KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 					if [[ "$KDA_A" != "" ]]; then
 						echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
-					fi               
+					fi   
+					upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+					if [[ "$upnp_port" != "" ]]; then
+						gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+						echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+						echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
+					fi            
 				fi
 				if [[ -f /home/$USER/watchdog/config.js ]]; then
 					echo -e ""
