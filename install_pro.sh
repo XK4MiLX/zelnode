@@ -690,13 +690,8 @@ function install_process() {
 	echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
 	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
 	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
-#	if [[ $(lsb_release -cs) = *jammy* ]]; then    
-	  curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-#	else
-#	  curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-#	fi
-
-
+  
+	curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
 	if [[ $(lsb_release -d) = *Debian* ]]; then 
 		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian buster/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
 	elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
