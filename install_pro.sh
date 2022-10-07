@@ -1,5 +1,5 @@
 #!/bin/bash
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 #wallet information
 COIN_NAME='flux'
 CONFIG_DIR='.flux'
@@ -219,7 +219,7 @@ function install_watchdog() {
 	if pm2 -v > /dev/null 2>&1; then
 		WATCHDOG_INSTALL="1"
 		cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
-		wget https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
+		wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 		mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 		sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 		cd watchdog && npm install > /dev/null 2>&1

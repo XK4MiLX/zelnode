@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
+source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/${ROOT_BRANCH}/flux_common.sh)"
 
 # Bootstrap settings
 BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
@@ -147,7 +147,7 @@ WATCHDOG_INSTALL="1"
 echo -e "${ARROW} ${YELLOW}Downloading...${NC}"
 cd && git clone https://github.com/RunOnFlux/fluxnode-watchdog.git watchdog > /dev/null 2>&1
 echo -e "${ARROW} ${YELLOW}Installing git hooks....${NC}"
-wget https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
+wget https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/post-merge > /dev/null 2>&1
 mv post-merge /home/$USER/watchdog/.git/hooks/post-merge
 sudo chmod +x /home/$USER/watchdog/.git/hooks/post-merge
 echo -e "${ARROW} ${YELLOW}Installing watchdog module....${NC}"
