@@ -634,12 +634,12 @@ function start_daemon() {
 		MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
 		MSG2=''
 		spinning_timer 
-		chain_check=$($COIN_CLI getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
+		chain_check=$($COIN_CLI $1 getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
 		if [[ "$chain_check" == "1" ]]; then
 			echo -e ""
 			echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting increased for next 5min${NC}"
 		fi
-		if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+		if [[ "$($COIN_CLI $1 getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
 			break
 		fi
 		if [[ "$x" -gt 6 ]]; then
@@ -648,15 +648,15 @@ function start_daemon() {
 		fi
 		x=$(( $x + 1 ))   
 	done
-	if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then  
+	if [[ "$($COIN_CLI $1 getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then  
 		NUM='2'
 		MSG1='Getting info...'
 		MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
 		spinning_timer
 		echo && echo
-		daemon_version=$($COIN_CLI getinfo | jq -r '.version')
+		daemon_version=$($COIN_CLI $1 getinfo | jq -r '.version')
 		string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
-		bench_version=$($BENCH_CLI getinfo | jq -r '.version')
+		bench_version=$($BENCH_CLI $1 getinfo | jq -r '.version')
 		string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 		echo
 		pm2_install
@@ -764,75 +764,7 @@ function install_flux() {
 		echo -e ""
 	fi
 }
-function status_loop() {
-	network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-	network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-	
-	EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-	if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks' 2> /dev/null) ]]; then
-		echo -e ""
-		echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
-		LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-		CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-		LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-		NUM='2'
-		MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
-		MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
-		spinning_timer
-		echo && echo
-	else
-		echo -e ""
-		echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
-		f=0
-		start_sync=`date +%s`
-		while true
-		do
-			network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-			network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-			EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-			LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-			CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-			LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-			if [[ "$LEFT" == "0" ]]; then	
-				time_break='5'
-			else
-				time_break='20'
-			fi
-			if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then  
-				f=$((f+1))
-				LOCAL_BLOCK_HIGHT="N/A"
-				LEFT="N/A"
-				CONNECTIONS="N/A"
-				sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
-				sudo systemctl start zelcash > /dev/null 2>&1
-				NUM='60'
-				MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-				MSG2=''
-				spinning_timer
-				network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-				network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-				EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-				LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
-				CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
-				LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-			fi
-				NUM="$time_break"
-				MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-				MSG2=''
-				spinning_timer
-			if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-				echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-				break
-			fi
-		done
-	fi
-	install_watchdog
-	finalizing
-	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]]; then
-		upnp_enable
-	fi
-	display_banner
-}
+
 #end of functions
 start_install
 wipe_clean
@@ -857,3 +789,9 @@ log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
 log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"
 basic_security
 status_loop
+install_watchdog
+finalizing
+if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]]; then
+	upnp_enable
+fi
+display_banner
