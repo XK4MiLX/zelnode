@@ -74,6 +74,12 @@ function import_date() {
 					if [[ "$KDA_A" != "" ]]; then
 						echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
 					fi
+					upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+					if [[ "$upnp_port" != "" ]]; then
+						gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+						echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+						echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
+					fi
 				fi
 				if [[ -f /home/$USER/watchdog/config.js ]]; then
 					echo -e ""
@@ -153,7 +159,13 @@ function import_date() {
 					KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
 					if [[ "$KDA_A" != "" ]]; then
 						echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
-					fi               
+					fi   
+					upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+					if [[ "$upnp_port" != "" ]]; then
+						gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
+						echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+						echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
+					fi            
 				fi
 				if [[ -f /home/$USER/watchdog/config.js ]]; then
 					echo -e ""
@@ -561,7 +573,6 @@ function install_daemon() {
    sudo chown -R $USER:$USER /home/$USER/.gnupg > /dev/null 2>&1
 	if [[ "$(lsb_release -cs)" == "xenial" ]]; then
 		echo 'deb https://apt.fluxos.network/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
-		#echo 'deb https://runonflux.github.io/aptrepo/ '$(lsb_release -cs)' main' | sudo tee --append /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
 		gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
 		gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
 		if ! gpg --list-keys Zel > /dev/null; then    
@@ -623,12 +634,12 @@ function start_daemon() {
 		MSG1='Starting daemon & syncing with chain please be patient this will take about 5 min...'
 		MSG2=''
 		spinning_timer 
-		chain_check=$($COIN_CLI getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
+		chain_check=$($COIN_CLI $1 getinfo  2>&1 >/dev/null | grep "Activating" | wc -l)   
 		if [[ "$chain_check" == "1" ]]; then
 			echo -e ""
 			echo -e "${ARROW} ${CYAN}Activating best chain detected....Awaiting increased for next 5min${NC}"
 		fi
-		if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
+		if [[ "$($COIN_CLI $1 getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then
 			break
 		fi
 		if [[ "$x" -gt 6 ]]; then
@@ -637,15 +648,15 @@ function start_daemon() {
 		fi
 		x=$(( $x + 1 ))   
 	done
-	if [[ "$($COIN_CLI  getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then  
+	if [[ "$($COIN_CLI $1 getinfo 2>/dev/null  | jq -r '.version' 2>/dev/null)" != "" ]]; then  
 		NUM='2'
 		MSG1='Getting info...'
 		MSG2="${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
 		spinning_timer
 		echo && echo
-		daemon_version=$($COIN_CLI getinfo | jq -r '.version')
+		daemon_version=$($COIN_CLI $1 getinfo | jq -r '.version')
 		string_limit_check_mark "Flux daemon v$daemon_version installed................................." "Flux daemon ${GREEN}v$daemon_version${CYAN} installed................................."
-		bench_version=$($BENCH_CLI getinfo | jq -r '.version')
+		bench_version=$($BENCH_CLI $1 getinfo | jq -r '.version')
 		string_limit_check_mark "Flux benchmark v$bench_version installed................................." "Flux benchmark ${GREEN}v$bench_version${CYAN} installed................................."
 		echo
 		pm2_install
@@ -679,25 +690,12 @@ function install_process() {
 	echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
 	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
 	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
-	if [[ $(lsb_release -cs) = *jammy* ]]; then    
-	  curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-	else
-	  curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-	fi
+  
+	curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
 	if [[ $(lsb_release -d) = *Debian* ]]; then 
-		if [[ $(lsb_release -cs) = *stretch* || $(lsb_release -cs) = *buster* ]]; then
-		   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1        
-		else
-	   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1	
-		fi
+		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian buster/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
 	elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
-		if [[ $(lsb_release -cs) = *focal* || $(lsb_release -cs) = *bionic* || $(lsb_release -cs) = *xenial* ]]; then
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1       
-		elif [[ $(lsb_release -cs) = *jammy* ]]; then
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list > /dev/null 2>&1  
-		else
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] http://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" 2> /dev/null | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1  
-		fi
+		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
 	else
 	  echo -e "${WORNING} ${RED}OS type not supported..${NC}"
 	  echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
@@ -766,75 +764,7 @@ function install_flux() {
 		echo -e ""
 	fi
 }
-function status_loop() {
-	network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-	network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-	
-	EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-	if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} getinfo | jq '.blocks' 2> /dev/null) ]]; then
-		echo -e ""
-		echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
-		LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-		CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-		LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-		NUM='2'
-		MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
-		MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
-		spinning_timer
-		echo && echo
-	else
-		echo -e ""
-		echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
-		f=0
-		start_sync=`date +%s`
-		while true
-		do
-			network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-			network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-			EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-			LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
-			CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
-			LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-			if [[ "$LEFT" == "0" ]]; then	
-				time_break='5'
-			else
-				time_break='20'
-			fi
-			if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then  
-				f=$((f+1))
-				LOCAL_BLOCK_HIGHT="N/A"
-				LEFT="N/A"
-				CONNECTIONS="N/A"
-				sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
-				sudo systemctl start zelcash > /dev/null 2>&1
-				NUM='60'
-				MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-				MSG2=''
-				spinning_timer
-				network_height_01=$(curl -sk -m 10 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
-				network_height_02=$(curl -sk -m 10 https://$network_url_3/api/status?q=getInfo 2> /dev/null | jq '.backend.blocks' 2> /dev/null)
-				EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
-				LOCAL_BLOCK_HIGHT=$(${COIN_CLI} getinfo 2> /dev/null | jq '.blocks')
-				CONNECTIONS=$(${COIN_CLI} getinfo 2> /dev/null | jq '.connections')
-				LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
-			fi
-				NUM="$time_break"
-				MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
-				MSG2=''
-				spinning_timer
-			if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
-				echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
-				break
-			fi
-		done
-	fi
-	install_watchdog
-	finalizing
-	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]]; then
-		upnp_enable
-	fi
-	display_banner
-}
+
 #end of functions
 start_install
 wipe_clean
@@ -859,3 +789,9 @@ log_rotate "MongoDB" "mongod_debug_log" "/var/log/mongodb/*.log" "daily" "14"
 log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "daily" "7"
 basic_security
 status_loop
+install_watchdog
+finalizing
+if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]]; then
+	upnp_enable
+fi
+display_banner

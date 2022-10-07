@@ -350,6 +350,75 @@ function integration_check() {
 	fi	
 	
 }
+
+function flux_block_height() {
+	if [[ "$1" != "-testnet" ]]; then
+		network_height_01=$(curl -sk -m 8 https://$network_url_1/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+		network_height_02=$(curl -sk -m 8 https://$network_url_2/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+	else
+		network_height_01=$(curl -sk -m 8 https://testnet.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+		network_height_02=$(curl -sk -m 8 https://testnet.runonflux.io/api/status?q=getInfo 2> /dev/null | jq '.info.blocks' 2> /dev/null)
+	fi
+	EXPLORER_BLOCK_HIGHT=$(max "$network_height_01" "$network_height_02")
+}
+
+function status_loop() {
+	flux_block_height "$1"
+	if [[ "$EXPLORER_BLOCK_HIGHT" == $(${COIN_CLI} $1 getinfo | jq '.blocks' 2> /dev/null) ]]; then
+		echo -e ""
+		echo -e "${CLOCK}${GREEN} FLUX DAEMON SYNCING...${NC}"
+		LOCAL_BLOCK_HIGHT=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
+		CONNECTIONS=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
+		LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+		NUM='2'
+		MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN}"
+		MSG2="${CYAN} ................[${CHECK_MARK}${CYAN}]${NC}"
+		spinning_timer
+		echo && echo
+	else
+		echo -e ""
+		echo -e "${CLOCK}${GREEN}FLUX DAEMON SYNCING...${NC}"
+		f=0
+		start_sync=`date +%s`
+		while true
+		do
+	    flux_block_height "$1"
+			LOCAL_BLOCK_HIGHT=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.blocks' 2> /dev/null)
+			CONNECTIONS=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.connections' 2> /dev/null)
+			LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+			if [[ "$LEFT" == "0" ]]; then	
+				time_break='5'
+			else
+				time_break='20'
+			fi
+			if [[ $LOCAL_BLOCK_HIGHT == "" ]]; then  
+				f=$((f+1))
+				LOCAL_BLOCK_HIGHT="N/A"
+				LEFT="N/A"
+				CONNECTIONS="N/A"
+				sudo systemctl stop zelcash > /dev/null 2>&1 && sleep 2
+				sudo systemctl start zelcash > /dev/null 2>&1
+				NUM='60'
+				MSG1="Syncing progress => Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+				MSG2=''
+				spinning_timer
+        flux_block_height "$1"
+				LOCAL_BLOCK_HIGHT=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.blocks')
+				CONNECTIONS=$(${COIN_CLI} $1 getinfo 2> /dev/null | jq '.connections')
+				LEFT=$((EXPLORER_BLOCK_HIGHT-LOCAL_BLOCK_HIGHT))
+			fi
+				NUM="$time_break"
+				MSG1="Syncing progress >> Local block height: ${GREEN}$LOCAL_BLOCK_HIGHT${CYAN} Explorer block height: ${RED}$EXPLORER_BLOCK_HIGHT${CYAN} Left: ${YELLOW}$LEFT${CYAN} blocks, Connections: ${YELLOW}$CONNECTIONS${CYAN} Failed: ${RED}$f${NC}"
+				MSG2=''
+				spinning_timer
+			if [[ "$EXPLORER_BLOCK_HIGHT" == "$LOCAL_BLOCK_HIGHT" ]]; then	
+				echo -e "${GREEN} Duration: $((($(date +%s)-$start_sync)/60)) min. $((($(date +%s)-$start_sync) % 60)) sec. ${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
+				break
+			fi
+		done
+	fi
+}
+
 function import_config_file() {
 	if [[ -f /home/$USER/install_conf.json ]]; then
 		import_settings=$(cat /home/$USER/install_conf.json | jq -r '.import_settings')
@@ -475,7 +544,7 @@ function display_banner() {
 	echo
 	echo -e "${ARROW}${YELLOW}  COMMANDS TO MANAGE FLUX.${NC}"
 	echo -e "${PIN} ${CYAN}Summary info: ${SEA}pm2 info flux${NC}"
-	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+	echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 logs flux${NC}"
 	echo -e "${PIN} ${CYAN}Stop Flux: ${SEA}pm2 stop flux${NC}"
 	echo -e "${PIN} ${CYAN}Start Flux: ${SEA}pm2 start flux${NC}"
 	echo -e ""
@@ -485,7 +554,7 @@ function display_banner() {
 		echo -e "${PIN} ${CYAN}Start watchdog: ${SEA}pm2 start watchdog --watch${NC}"
 		echo -e "${PIN} ${CYAN}Restart watchdog: ${SEA}pm2 reload watchdog --watch${NC}"
 		echo -e "${PIN} ${CYAN}Error logs: ${SEA}~/watchdog/watchdog_error.log${NC}"
-		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 monit${NC}"
+		echo -e "${PIN} ${CYAN}Logs in real time: ${SEA}pm2 logs watchdog${NC}"
 		echo
 		echo -e "${PIN} ${RED}IMPORTANT: After installation check ${SEA}'pm2 list'${RED} if not work, type ${SEA}'source /home/$USER/.bashrc'${NC}"
 		echo -e ""
@@ -1143,7 +1212,7 @@ function pm2_install(){
 }
 function finalizing() {
 	cd
-	pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=30000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+	pm2 start /home/$USER/$FLUX_DIR/start.sh --max_memory_restart 2G --restart-delay 30000 --max-restarts 40 --name flux --time  > /dev/null 2>&1
 	pm2 save > /dev/null 2>&1
 	#sleep 120
 	#cd /home/$USER/zelflux
@@ -1478,8 +1547,6 @@ function upnp_enable() {
 	fi
 }
 #### TESTNET
-
-
 function testnet_binary(){
 	sudo rm -rf  /tmp/*lux* 2>&1 && sleep 2
 	if [[ $(dpkg --print-architecture) = *amd* ]]; then
@@ -1529,6 +1596,10 @@ function selfhosting_creator(){
 		)
 			case $CHOICE in
 			"1)")
+			  if [[ -f /home/$USER/device_conf.json ]]; then
+				  sudo rm -rf /home/$USER/device_conf.json
+					echo -e "${ARROW} ${CYAN}Removing config file, path: ${GREEN}/home/$USER/device_conf.json${NC}"	
+				fi
 				selfhosting
 			;;
 			"2)")
@@ -1554,7 +1625,7 @@ function selfhosting_creator(){
 						echo "{}" > device_conf.json 
 					fi 
 					echo "$(jq -r --arg value "$device_setup" '.device_name=$value' device_conf.json)" > device_conf.json
-					echo -e "${ARROW} ${CYAN}Config created successful, path: /home/$USER/device_conf.json, device name: $device_setup ${NC}"
+					echo -e "${ARROW} ${CYAN}Config created successful, path: ${SEA}/home/$USER/device_conf.json${CYAN}, device name: ${GREEN}$device_setup${NC}"
 				else
 					echo -e "${ARROW} ${CYAN}Operation aborted, device interface was not selected...${NC}"
 					echo -e ""
@@ -1577,13 +1648,16 @@ function selfhosting() {
 
 	if [[ -z "$device_setup" ]]; then
 		device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-		echo -e "Device auto detection, name: $device_name"
+		if [[ "$device_name" != "" ]]; then
+			echo -e "${ARROW} ${CYAN}Device auto detection, name: ${GREEN}$device_name ${NC}"
+		fi
 	else
    		 device_name="$device_setup"
 	fi
 
 	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
-		sudo ip addr add $WANIP dev $device_name  > /dev/null 2>&1
+	  echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ${NC}"
+		sudo ip addr add $WANIP dev $device_name
 	else
 		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
 		echo -e ""
@@ -1615,10 +1689,11 @@ function selfhosting() {
 			echo -e "Device auto detection, name $device_name" >> /home/$USER/ip_history.log
 		fi
 	}
-	get_ip
+
 	if [[ $1 == "restart" ]]; then
 	  #give 3min to connect with internet
 	  sleep 180
+		get_ip
 		get_device_name
 	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 		date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
@@ -1627,6 +1702,7 @@ function selfhosting() {
 	  fi
 	fi
 	if [[ $1 == "ip_check" ]]; then
+	  get_ip
 	  get_device_name
 	  api_port=$(grep -w apiport /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
 	  if [[ "$api_port" == "" ]]; then
@@ -1650,7 +1726,8 @@ function selfhosting() {
 		(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * /home/$USER/ip_check.sh ip_check") | crontab -
 		echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
 	else 
-		echo -e "${ARROW} ${CYAN}Script installed! ${NC}"
+		echo -e "${ARROW} ${CYAN}Cron jobs already exists, skipped... ${NC}"
+		echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
 	fi
 	echo -e "" 
 }
@@ -1733,5 +1810,3 @@ function analyzer_and_fixer(){
 	fi
 	bash -i <(curl -s https://raw.githubusercontent.com/JKTUNING/fluxnode-multitool/${ROOT_BRANCH}/nodeanalizerandfixer.sh)
 }
-
-
