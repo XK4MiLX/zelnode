@@ -690,10 +690,8 @@ function install_process() {
 	echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
 	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
 	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
-  
-		# check to see if cpu supports avx
-	avx_check=$(grep avx /proc/cpuinfo)
-
+	# check to see if cpu supports avx
+	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
 	# AVX instruction flag not found - so install 4.4
 	# else install newest version 6.0
 	if [[ avx_check == "" ]]; then
