@@ -917,7 +917,7 @@ function mongod_db_fix() {
 			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
 			sudo systemctl stop mongod 
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
-			sudo apt-get purge mongodb-org > /dev/null 2>&1
+			sudo apt-get purge mongodb-org -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
 			sudo rm -r /var/log/mongodb > /dev/null 2>&1
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
