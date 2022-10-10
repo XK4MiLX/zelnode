@@ -893,8 +893,8 @@ function mongod_db_fix() {
 
 	 CHOICE=$(
  whiptail --title "MongoDB fix action" --menu "Make your choice" 15 65 8 \
- "1)" "Soft repair - mongod repair (database will stay)"   \
- "2)" "Hard repair - complit reinstall (database will be removed)"  3>&2 2>&1 1>&3
+ "1)" "Soft repair - mongod repair"   \
+ "2)" "Hard repair - complit reinstall"  3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -914,11 +914,11 @@ function mongod_db_fix() {
 		"2)")
 			echo -e ""  
 			echo -e "${ARROW} ${YELLOW}Hard repair starting... ${NC}" 
-			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
+			echo -e "${ARROW} ${CYAN}Stopping mongod service...${NC}" 
 			sudo systemctl stop mongod 
-			sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
-			echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
-      mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			#sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			#echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
+      #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
 			sudo apt-get purge mongodb-org -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
@@ -932,8 +932,8 @@ function mongod_db_fix() {
 			sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-		  echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
-			mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
+			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
 			echo -e ""
