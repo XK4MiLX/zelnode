@@ -938,7 +938,7 @@ function mongod_db_fix() {
 			sudo systemctl start mongod
 			if mongod --version > /dev/null 2>&1; then
 				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
-				echo -e "${ARROW} ${CYAN}Service status:${YELLOW}$(sudo systemctl status mongod | grep 'Active') ${NC}" 
+				echo -e "${ARROW} ${CYAN}Service status:${SEA} $(sudo systemctl status mongod | grep -w 'Active' | sed -e 's/^[ \t]*//')${NC}" 
 			else
 				string_limit_x_mark "MongoDB was not installed................................."
 			fi
