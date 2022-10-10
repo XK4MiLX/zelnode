@@ -916,6 +916,9 @@ function mongod_db_fix() {
 			echo -e "${ARROW} ${YELLOW}Hard repair starting... ${NC}" 
 			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
 			sudo systemctl stop mongod 
+			sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
+      mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
 			sudo apt-get purge mongodb-org -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
@@ -929,6 +932,8 @@ function mongod_db_fix() {
 			sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+		  echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
+			mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
 			echo -e ""
