@@ -889,6 +889,48 @@ function mongod_db_fix() {
 		echo -e "${NC}"
 		exit
 	fi 
+
+
+	 CHOICE=$(
+ whiptail --title "MongoDB FiXER" --menu "Make your choice" 15 40 6 \
+ "1)" "Soft repair - mongod repair (database will stay)"   \
+ "2)" "Hard repair - complit reinstall (database will be removed)"  3>&2 2>&1 1>&3
+	)
+		case $CHOICE in
+		"1)")
+			echo -e ""  
+			echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" 
+			sudo systemctl stop mongod
+			echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}"
+			sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
+			echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" 
+			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+			echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" 
+			sudo systemctl start mongod
+			echo -e ""
+		;;
+		"2)")
+			echo -e ""  
+			echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" 
+			sudo systemctl stop mongod 
+			echo -e "${WORNING} ${CYAN}Removing MongoDB... ${NC}" 
+			sudo apt-get purge mongodb* > /dev/null 2>&1
+			echo -e "${WORNING} ${CYAN}Removing Database... ${NC}"
+			sudo rm -r /var/log/mongodb > /dev/null 2>&1
+			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
+			echo -e "${WORNING} ${CYAN}Installing MongoDB... ${NC}"
+			sudo apt install mongodb-org -y > /dev/null 2>&1
+			echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}"
+			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+			echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}"
+			sudo systemctl start mongod
+			echo -e ""
+		;;
+	esac
+
+
 	echo -e ""  
 	echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" && sleep 1
 	sudo systemctl stop mongod
@@ -900,6 +942,9 @@ function mongod_db_fix() {
 	echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
 	sudo systemctl start mongod
 	echo -e ""
+	sudo rm -r /var/log/mongodb
+	sudo rm -r /var/lib/mongodb
+
 }
 function node_reconfiguration() {
 	reset=""
