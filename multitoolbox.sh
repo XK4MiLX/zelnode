@@ -899,32 +899,37 @@ function mongod_db_fix() {
 		case $CHOICE in
 		"1)")
 			echo -e ""  
-			echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" 
+			echo -e "${ARROW} ${YELLOW}Soft repair starting... ${NC}" 
+			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
 			sudo systemctl stop mongod
-			echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}"
+			echo -e "${ARROW} ${CYAN}Fix for corrupted DB ${NC}"
 			sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
-			echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" 
+			echo -e "${ARROW} ${CYAN}Fix for bad privilege ${NC}" 
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-			echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" 
+			echo -e "${ARROW} ${CYAN}Starting mongod service ${NC}" 
 			sudo systemctl start mongod
 			echo -e ""
 		;;
 		"2)")
 			echo -e ""  
-			echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" 
+			echo -e "${ARROW} ${YELLOW}Hard repair starting... ${NC}" 
+			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
 			sudo systemctl stop mongod 
-			echo -e "${WORNING} ${CYAN}Removing MongoDB... ${NC}" 
-			sudo apt-get purge mongodb* > /dev/null 2>&1
-			echo -e "${WORNING} ${CYAN}Removing Database... ${NC}"
+			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
+			sudo apt-get purge mongodb-org > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
 			sudo rm -r /var/log/mongodb > /dev/null 2>&1
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
-			echo -e "${WORNING} ${CYAN}Installing MongoDB... ${NC}"
+			echo -e "${ARROW} ${CYAN}Installing MongoDB... ${NC}"
 			sudo apt install mongodb-org -y > /dev/null 2>&1
-			echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}"
+			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
+			sudo mkdir -p /var/lib/mongodb > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Settings privilege... ${NC}"
+			sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-			echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}"
+			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
 			echo -e ""
 		;;
