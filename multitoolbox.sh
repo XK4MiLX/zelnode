@@ -892,7 +892,7 @@ function mongod_db_fix() {
 
 
 	 CHOICE=$(
- whiptail --title "MongoDB FiXER" --menu "Make your choice" 15 40 6 \
+ whiptail --title "MongoDB FiXER" --menu "Make your choice" 15 65 8 \
  "1)" "Soft repair - mongod repair (database will stay)"   \
  "2)" "Hard repair - complit reinstall (database will be removed)"  3>&2 2>&1 1>&3
 	)
