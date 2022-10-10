@@ -930,21 +930,6 @@ function mongod_db_fix() {
 		;;
 	esac
 
-
-	echo -e ""  
-	echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" && sleep 1
-	sudo systemctl stop mongod
-	echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}" && sleep 1
-	sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
-	echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" && sleep 1
-	sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
-	sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-	echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
-	sudo systemctl start mongod
-	echo -e ""
-	sudo rm -r /var/log/mongodb
-	sudo rm -r /var/lib/mongodb
-
 }
 function node_reconfiguration() {
 	reset=""
