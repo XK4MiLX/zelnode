@@ -903,7 +903,7 @@ function mongod_db_fix() {
 			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
 			sudo systemctl stop mongod
 			echo -e "${ARROW} ${CYAN}Fix for corrupted DB ${NC}"
-			sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
+			sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Fix for bad privilege ${NC}" 
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
@@ -936,6 +936,12 @@ function mongod_db_fix() {
 			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
+			if mongod --version > /dev/null 2>&1; then
+				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+				echo -e "${ARROW} ${CYAN}Service status:${YELLOW}$(sudo systemctl status mongod | grep 'Active') ${NC}" 
+			else
+				string_limit_x_mark "MongoDB was not installed................................."
+			fi
 			echo -e ""
 		;;
 	esac
