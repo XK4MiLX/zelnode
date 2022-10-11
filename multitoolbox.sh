@@ -880,7 +880,7 @@ function install_watchtower(){
  
 }
 function mongod_db_fix() {
-	echo -e "${GREEN}Module: MongoDB fix action${NC}"
+	echo -e "${GREEN}Module: MongoDB FiX action${NC}"
 	echo -e "${YELLOW}================================================================${NC}"
  if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
 		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -892,9 +892,9 @@ function mongod_db_fix() {
 
 
 	 CHOICE=$(
- whiptail --title "MongoDB fix action" --menu "Make your choice" 15 65 8 \
- "1)" "Soft repair - mongod repair"   \
- "2)" "Hard repair - complit reinstall"  3>&2 2>&1 1>&3
+ whiptail --title "MongoDB FiX action" --menu "Make your choice" 15 65 8 \
+ "1)" "Soft repair - MongoDB database repair"   \
+ "2)" "Hard repair - MongoDB re-install"  3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1049,7 +1049,7 @@ echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}11 - FluxOS reconfiguration ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
-echo -e "${CYAN}13 - MongoDB fix action${NC}"
+echo -e "${CYAN}13 - MongoDB FiX action${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
 echo -e "${CYAN}15 - Node reconfiguration from install config${NC}"
 echo -e "${YELLOW}================================================================${NC}"
