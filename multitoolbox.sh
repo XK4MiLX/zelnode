@@ -880,7 +880,7 @@ function install_watchtower(){
  
 }
 function mongod_db_fix() {
-	echo -e "${GREEN}Module: Recover corrupted MongoDB database${NC}"
+	echo -e "${GREEN}Module: MongoDB FiX action${NC}"
 	echo -e "${YELLOW}================================================================${NC}"
  if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
 		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
@@ -889,17 +889,63 @@ function mongod_db_fix() {
 		echo -e "${NC}"
 		exit
 	fi 
-	echo -e ""  
-	echo -e "${WORNING} ${CYAN}Stopping mongod service ${NC}" && sleep 1
-	sudo systemctl stop mongod
-	echo -e "${WORNING} ${CYAN}Fix for corrupted DB ${NC}" && sleep 1
-	sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair
-	echo -e "${WORNING} ${CYAN}Fix for bad privilege ${NC}" && sleep 1
-	sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
-	sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-	echo -e "${WORNING} ${CYAN}Starting mongod service ${NC}" && sleep 1
-	sudo systemctl start mongod
-	echo -e ""
+
+
+	 CHOICE=$(
+ whiptail --title "MongoDB FiX action" --menu "Make your choice" 15 65 8 \
+ "1)" "Soft repair - MongoDB database repair"   \
+ "2)" "Hard repair - MongoDB re-install"  3>&2 2>&1 1>&3
+	)
+		case $CHOICE in
+		"1)")
+			echo -e ""  
+			echo -e "${ARROW} ${YELLOW}Soft repair starting... ${NC}" 
+			echo -e "${ARROW} ${CYAN}Stopping mongod service ${NC}" 
+			sudo systemctl stop mongod
+			echo -e "${ARROW} ${CYAN}Fix for corrupted DB ${NC}"
+			sudo -u mongodb mongod --dbpath /var/lib/mongodb --repair > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Fix for bad privilege ${NC}" 
+			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Starting mongod service ${NC}" 
+			sudo systemctl start mongod
+			echo -e ""
+		;;
+		"2)")
+			echo -e ""  
+			echo -e "${ARROW} ${YELLOW}Hard repair starting... ${NC}" 
+			echo -e "${ARROW} ${CYAN}Stopping mongod service...${NC}" 
+			sudo systemctl stop mongod 
+			#sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			#echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
+      #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
+			sudo apt-get purge mongodb-org -y > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
+			sudo rm -r /var/log/mongodb > /dev/null 2>&1
+			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Installing MongoDB... ${NC}"
+			sudo apt install mongodb-org -y > /dev/null 2>&1
+			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
+			sudo mkdir -p /var/lib/mongodb > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Settings privilege... ${NC}"
+			sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1
+			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
+		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
+			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
+			sudo systemctl start mongod
+			if mongod --version > /dev/null 2>&1; then
+				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+				echo -e "${ARROW} ${CYAN}Service status:${SEA} $(sudo systemctl status mongod | grep -w 'Active' | sed -e 's/^[ \t]*//')${NC}" 
+			else
+				string_limit_x_mark "MongoDB was not installed................................."
+			fi
+			echo -e ""
+		;;
+	esac
+
 }
 function node_reconfiguration() {
 	reset=""
@@ -1003,7 +1049,7 @@ echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
 echo -e "${CYAN}11 - FluxOS reconfiguration ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
-echo -e "${CYAN}13 - Recover corrupted MongoDB database${NC}"
+echo -e "${CYAN}13 - MongoDB FiX action${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
 echo -e "${CYAN}15 - Node reconfiguration from install config${NC}"
 echo -e "${YELLOW}================================================================${NC}"
