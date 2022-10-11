@@ -585,16 +585,28 @@ function install_daemon() {
 		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
 		# downloading key && save it as keyring  
 		gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-		if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
-			echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
+		key_counter=0
+		until [ $key_counter -gt 5 ]
+		do
+			if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+				break
+			fi
+			echo -e "${CYAN}Retrieve keys failed will try again...${NC}"
+			sleep 5
 			sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-			gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-		fi
-		if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
-			echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-			sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-			gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-		fi
+			gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+			((key_counter++))
+		done
+		#if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+			#echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
+			#sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+			#gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+		#fi
+		#if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+			#echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
+			#sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+			#gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+		#fi
 		if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
 			flux_package && sleep 2 
 		else   
