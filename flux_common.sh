@@ -1588,7 +1588,6 @@ function selfhosting_creator(){
 		exit
 	fi
 
-	echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 	CHOICE=$(
 	whiptail --title "FluxOS Selfhosting Configuration" --menu "Make your choice" 15 40 6 \
 	"1)" "Auto Detection (Recommended)"   \
@@ -1596,6 +1595,7 @@ function selfhosting_creator(){
 		)
 			case $CHOICE in
 			"1)")
+			  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 			  if [[ -f /home/$USER/device_conf.json ]]; then
 				  sudo rm -rf /home/$USER/device_conf.json
 					echo -e "${ARROW} ${CYAN}Removing config file, path: ${GREEN}/home/$USER/device_conf.json${NC}"	
@@ -1603,6 +1603,7 @@ function selfhosting_creator(){
 				selfhosting
 			;;
 			"2)")
+			  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
 				#device_setup=$(whiptail --inputbox "Enter your device name" 8 60 3>&1 1>&2 2>&3)
 				deviceList=($(route -n |  awk '{ if ($8 != "" && $8 != "Iface" && $8 != "docker0" ) printf("%s\n", $8); }'))
 				elements=${#deviceList[@]}
@@ -1633,6 +1634,14 @@ function selfhosting_creator(){
 				fi
 				selfhosting
 			;;
+			"3)")
+			echo -e "${ARROW} ${YELLOW}Disabling cron service for IP rotate...${NC}"
+			echo -e "${ARROW} ${CYAN}Removing cron jobs...${NC}"
+			crontab -u $USER -l | grep -v 'ip_check'  | crontab -u $USER -
+			echo -e "${ARROW} ${CYAN}Removing of files related to IP rotation...${NC}"
+			rm -rf /home/$USER/device_conf.json > /dev/null 2>&1
+			rm -rf /home/$USER/ip_check.sh > /dev/null 2>&1
+			echo -e ""
 		esac
 }
 
