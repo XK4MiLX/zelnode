@@ -1591,7 +1591,8 @@ function selfhosting_creator(){
 	CHOICE=$(
 	whiptail --title "FluxOS Selfhosting Configuration" --menu "Make your choice" 15 40 6 \
 	"1)" "Auto Detection (Recommended)"   \
-	"2)" "Manual Configuration (Advance)"  3>&2 2>&1 1>&3
+	"2)" "Manual Configuration (Advance)"   \
+	"3)" "Removing service"  3>&2 2>&1 1>&3
 		)
 			case $CHOICE in
 			"1)")
