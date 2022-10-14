@@ -1,7 +1,9 @@
 #!/bin/bash
 
 trap ctrl_c INT
+trap toolbox_close EXIT
 
+# could possibly remove the cleaning branch and put it all in exit function since it should get called
 function ctrl_c() {
 	echo -e ""
 	echo -e " Cleaning branch variable..."
@@ -10,6 +12,21 @@ function ctrl_c() {
 	unset BRANCH_ALREADY_REFERENCE
 	exit
 }
+
+function toolbox_close(){
+	echo -e ""
+	echo -e " Cleaning branch variable..."
+	echo -e ""
+	unset ROOT_BRANCH
+	unset BRANCH_ALREADY_REFERENCE
+	echo -e ""
+	echo -e " Enabling history"
+	echo -e ""
+	set -o history
+}
+
+#disable bash history
+set +o history
 
 if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
