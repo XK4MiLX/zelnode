@@ -1,4 +1,6 @@
 #!/bin/bash
+#disable bash history
+set +o history
 
 trap ctrl_c INT
 # could possibly remove the cleaning branch and put it all in exit function since it should get called
@@ -18,6 +20,7 @@ if ! [[ -z $1 ]]; then
 	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
 	unset ROOT_BRANCH
 	unset BRANCH_ALREADY_REFERENCED
+	set -o history
 	exit
 	fi
 else
