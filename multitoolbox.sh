@@ -2,17 +2,6 @@
 #disable bash history
 set +o history
 
-trap ctrl_c INT
-# could possibly remove the cleaning branch and put it all in exit function since it should get called
-function ctrl_c() {
-	echo -e ""
-	echo -e " Cleaning branch variable..."
-	echo -e ""
-	unset ROOT_BRANCH
-	unset BRANCH_ALREADY_REFERENCE
-	exit
-}
-
 if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
 	export ROOT_BRANCH="$1"
