@@ -1,4 +1,24 @@
 #!/bin/bash
+#disable bash history
+set +o history
+#trap EXIT call and unset vars and enable history
+trap toolbox_close EXIT
+function toolbox_close(){
+	echo -e ""
+	echo -e " Cleaning branch variable..."
+	echo -e ""
+	unset ROOT_BRANCH
+	unset BRANCH_ALREADY_REFERENCE
+	echo -e ""
+	echo -e " Enabling history"
+	echo -e ""
+	set -o history
+}
+trap ctrl_c INT
+# exit on ctl_c and call toolbox close from EXIT trap
+function ctrl_c() {
+	exit
+}
 # Collection of common vars and functions used throughout multitoolbox.
 #color codes
 RED='\033[1;31m'
