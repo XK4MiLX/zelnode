@@ -1,18 +1,14 @@
 #!/bin/bash
 #disable bash history
 set +o history
-#trap EXIT call and unset vars and enable history
+#trap EXIT call and unset vars and enable history if history if off
 trap toolbox_close EXIT
 function toolbox_close(){
-	echo -e ""
-	echo -e " Cleaning branch variable..."
-	echo -e ""
 	unset ROOT_BRANCH
 	unset BRANCH_ALREADY_REFERENCE
-	echo -e ""
-	echo -e " Enabling history"
-	echo -e ""
-	set -o history
+	 if [[ $(set -o | grep history) == *"off"* ]]; then
+    set -o history
+  fi
 }
 trap ctrl_c INT
 # exit on ctl_c and call toolbox close from EXIT trap
