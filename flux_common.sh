@@ -1,4 +1,20 @@
 #!/bin/bash
+#disable bash history
+set +o history
+#trap EXIT call and unset vars and enable history if history if off
+trap toolbox_close EXIT
+function toolbox_close(){
+	unset ROOT_BRANCH
+	unset BRANCH_ALREADY_REFERENCE
+	 if [[ $(set -o | grep history) == *"off"* ]]; then
+    set -o history
+  fi
+}
+trap ctrl_c INT
+# exit on ctl_c and call toolbox close from EXIT trap
+function ctrl_c() {
+	exit
+}
 # Collection of common vars and functions used throughout multitoolbox.
 #color codes
 RED='\033[1;31m'

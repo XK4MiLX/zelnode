@@ -1,15 +1,6 @@
 #!/bin/bash
-
-trap ctrl_c INT
-
-function ctrl_c() {
-	echo -e ""
-	echo -e " Cleaning branch variable..."
-	echo -e ""
-	unset ROOT_BRANCH
-	unset BRANCH_ALREADY_REFERENCE
-	exit
-}
+#disable bash history
+set +o history
 
 if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
@@ -18,6 +9,7 @@ if ! [[ -z $1 ]]; then
 	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
 	unset ROOT_BRANCH
 	unset BRANCH_ALREADY_REFERENCED
+	set -o history
 	exit
 	fi
 else
@@ -1020,6 +1012,8 @@ fi
 if [[ $(cat /etc/bash.bashrc | grep 'multitoolbox' | wc -l) == "0" ]]; then
 	echo "alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'" | sudo tee -a /etc/bash.bashrc
 	echo "alias multitoolbox_testnet='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox_testnet.sh)'" | sudo tee -a /etc/bash.bashrc
+	alias multitoolbox='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)'
+	alias multitoolbox_testnet='bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/multitoolbox_testnet.sh)'
 	source /etc/bash.bashrc
 fi
 
