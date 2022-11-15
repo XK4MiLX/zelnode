@@ -36,7 +36,7 @@ FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
 
-dversion="v6.0"
+dversion="v6.1"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
