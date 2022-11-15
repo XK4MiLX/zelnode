@@ -653,15 +653,15 @@ function daemon_reconfiguration(){
 	sleep 1
 	if [[ "$zelnodeprivkey" == "" ]]; then
 		skip_change=$((skip_change-1))
-		echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+		echo -e "${ARROW} ${CYAN}Replace FluxNode Identity Key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
 	fi
 	if [[ "$zelnodeoutpoint" == "" ]]; then
 		skip_change=$((skip_change-1))
-		echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
+		echo -e "${ARROW} ${CYAN}Replace FluxNode Collateral TX ID skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
 	fi
 	if [[ "$zelnodeindex" == "" ]]; then
 	skip_change=$((skip_change-1))
-		echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
+		echo -e "${ARROW} ${CYAN}Replace FluxNode Output Index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
 	fi
 	if [[ "$skip_change" == "0" ]]; then
 		echo -e "${ARROW} ${YELLOW}All fields are empty changes skipped...${NC}"
@@ -673,33 +673,33 @@ function daemon_reconfiguration(){
 	sudo fuser -k 16125/tcp > /dev/null 2>&1
 	if [[ "$zelnodeprivkey" != "" ]]; then
 		if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-			echo -e "${ARROW} ${CYAN}Replace FluxNode identity key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
+			echo -e "${ARROW} ${CYAN}Replace FluxNode Identity Key skipped....................[${CHECK_MARK}${CYAN}]${NC}"
 					else
 					sed -i "s/$(grep -e zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeprivkey=$zelnodeprivkey/" ~/$CONFIG_DIR/$CONFIG_FILE
 									if [[ "zelnodeprivkey=$zelnodeprivkey" == $(grep -w zelnodeprivkey ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-													echo -e "${ARROW} ${CYAN}FluxNode identity key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
+													echo -e "${ARROW} ${CYAN}FluxNode Identity Key replaced successful................[${CHECK_MARK}${CYAN}]${NC}"			
 									fi
 		fi
 	fi
 
 	if [[ "$zelnodeoutpoint" != "" ]]; then
 		if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-			echo -e "${ARROW} ${CYAN}Replace FluxNode outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
+			echo -e "${ARROW} ${CYAN}Replace FluxNode Collateral TX ID outpoint skipped ..................[${CHECK_MARK}${CYAN}]${NC}"
 		else
 			sed -i "s/$(grep -e zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeoutpoint=$zelnodeoutpoint/" ~/$CONFIG_DIR/$CONFIG_FILE
 			if [[ "zelnodeoutpoint=$zelnodeoutpoint" == $(grep -w zelnodeoutpoint ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-				echo -e "${ARROW} ${CYAN}FluxNode outpoint replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
+				echo -e "${ARROW} ${CYAN}FluxNode Collateral TX ID replaced successful...............[${CHECK_MARK}${CYAN}]${NC}"
 			fi
 	 fi
 	fi
 
 	if [[ "$zelnodeindex" != "" ]]; then
 		if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-			echo -e "${ARROW} ${CYAN}Replace FluxNode index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
+			echo -e "${ARROW} ${CYAN}Replace FluxNode Output Index skipped......................[${CHECK_MARK}${CYAN}]${NC}"
 		else
 			sed -i "s/$(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE)/zelnodeindex=$zelnodeindex/" ~/$CONFIG_DIR/$CONFIG_FILE
 			if [[ "zelnodeindex=$zelnodeindex" == $(grep -w zelnodeindex ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-				echo -e "${ARROW} ${CYAN}FluxNode index replaced successful..................[${CHECK_MARK}${CYAN}]${NC}"
+				echo -e "${ARROW} ${CYAN}FluxNode Output Index replaced successful..................[${CHECK_MARK}${CYAN}]${NC}"
 			fi
 		fi
 	fi
@@ -1555,7 +1555,8 @@ function upnp_enable() {
 	if [[ "$error_check" == "" ]]; then
 		echo -e ""
 		LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
-		echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${LOCAL_IP}:$(($FLUX_PORT-1))${NC}"
+		ZELFRONTPORT=$(($FLUX_PORT-1))
+		echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${LOCAL_IP}:$ZELFRONTPORT${NC}"
 		echo -e ""
 	else
 		echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
