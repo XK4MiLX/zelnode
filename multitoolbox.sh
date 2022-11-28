@@ -905,6 +905,10 @@ function mongod_db_fix() {
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service ${NC}" 
 			sudo systemctl start mongod
+			if mongod --version > /dev/null 2>&1; then
+				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+				echo -e "${ARROW} ${CYAN}Service status:${SEA} $(sudo systemctl status mongod | grep -w 'Active' | sed -e 's/^[ \t]*//')${NC}" 
+			fi
 			echo -e ""
 		;;
 		"2)")
