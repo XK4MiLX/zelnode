@@ -256,6 +256,157 @@ function install_conf_create(){
 	}
 	EOF
 }
+
+
+###### SMART CONFIG
+function padding() {
+msg="$1"
+padding=".................................................................................................................."
+echo -e "$(printf "%s%s %s\n" "$msg" "${CYAN}${padding:${#msg}}" "${CYAN}[$2${CYAN}]${NC}")"
+}
+
+function insert() {
+  local file="$1" line="$2" newText="$3"
+  sudo sed -i -e "/$line/i"$'\\\n'"$newText"$'\n' "$file"
+}
+
+
+function config_builder() {
+
+  if [[ "$4" == "fluxos" ]]; then
+
+     if [[ "$1" == ""  || "$2" == "" ]]; then
+       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+       return
+     fi
+
+     key="$1"
+     value="$2"
+     if [[ "$1" == "kadena" ]]; then
+       if [[ $( grep "chainid" <<< "$2") == "" ]]; then
+         value="kadena:$2?chainid=0"
+       fi
+     fi
+
+     if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
+       insert "/home/$USER/$FLUX_DIR//config/userconfig.js" "testnet" "  $key: '$value',"
+       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
+       return
+     fi
+
+     if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: '$value'") != "" ]]; then
+       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+       return
+     fi
+
+     if [[ $(cat /home/$USER/$FLUX_DIR//config/userconfig.js | grep "$key") != "" ]]; then
+        sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
+        if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 replaced successfully${NC}" "${CHECK_MARK}"
+        fi
+     fi
+  fi
+  if [[ "$4" == "daemon" ]]; then
+    if [[ "$1" == ""  || "$2" == "" ]]; then
+       padding "${ARROW}${GREEN} [Daemon] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+       return
+    fi
+
+    if [[ "$1=$2" == $(grep -w $1 ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+        padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+    else
+       sed -i "s/$(grep -e $1 ~/$CONFIG_DIR/$CONFIG_FILE)/$1=$2/" ~/$CONFIG_DIR/$CONFIG_FILE
+       if [[ "$1=$2" == $(grep -w $1 ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 replaced successful${NC}" "${CHECK_MARK}"
+       fi
+    fi
+
+  fi
+
+  if [[ "$4" == "watchdog" ]]; then
+
+   if [[ "$1" == ""  || "$2" == "" ]]; then
+       padding "${ARROW}${GREEN} [Daemon] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+       return
+    fi
+
+    if [[ $(cat /home/$USER/watchdog/config.js | grep "$1: '$2'") != "" ]]; then
+       padding "${ARROW}${GREEN} [WatchD] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+       return
+    fi
+    if [[ $(cat /home/$USER/watchdog/config.js | grep "$1") != "" ]]; then
+      sed -i "s/$(grep -e $1 /home/$USER/watchdog/config.js)/  $1: '$2',/" /home/$USER/watchdog/config.js
+      if [[ $(grep -w $2 /home/$USER/watchdog/config.js) != "" ]]; then
+        padding "${ARROW}${GREEN} [WatchD] ${CYAN}$3 replaced successfully${NC}" "${CHECK_MARK}"
+      fi
+    fi
+  fi
+}
+
+
+function smart_reconfiguration(){
+
+watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
+fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress")
+daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
+
+config_list=$(cat <<-END
+    {
+        "prvkey": [{"key": "zelnodeprivkey", "label": "Identity key"}],
+        "outpoint": [{"key": "zelnodeoutpoint", "label": "Collateral TX ID"}],
+        "index": [{"key": "zelnodeindex", "label": "Output Index"}],
+        "node_label": [{"key": "label", "label": "Node Label"}],
+        "kda_address": [{"key": "kadena", "label": "Kadena Address"}],
+        "upnp_port": [{"key": "apiport", "label": "UPnP Port"}]
+    }
+END
+)
+
+install_settings=($(jq -r 'keys | @sh' install_conf.json))
+for i in "${install_settings[@]}"
+do
+
+install_key=$(echo $i | tr -d "'")
+key=$(jq -r .$install_key[].key 2> /dev/null  <<< "$config_list")
+if [[ "$key" == "" ]]; then
+key=$install_key
+fi
+
+label=$(jq -r .$install_key[].label 2> /dev/null <<< "$config_list")
+if [[ "$label" == "" ]]; then
+label=${install_key^}
+fi
+
+if [[ $(echo ${daemon_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+  config="daemon"
+  value=$(jq -r .$install_key install_conf.json)
+  config_builder "$key" "$value" "$label" "$config"
+fi
+
+if [[ $(echo ${fluxos_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+  config="fluxos"
+  value=$(jq -r .$install_key install_conf.json)
+  config_builder "$key" "$value" "$label" "$config"
+fi
+
+if [[ $(echo ${watchdog_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+  config="watchdog"
+  value=$(jq -r .$install_key install_conf.json)
+  config_builder "$key" "$value" "$label" "$config"
+fi
+
+done
+
+}
+
+function smart_install_conf(){
+        if [[ ! -f /home/$USER/install_conf.json ]]; then
+                echo "{}" > install_conf.json
+        fi
+        echo "$(jq -r --arg key "$key"--arg value "$value" '.[$key]=$value' install_conf.json)" > install_conf.json
+}
+
+
 ###### HELPERS SECTION
 function round() {
 	printf "%.${2}f" "${1}"
