@@ -428,7 +428,7 @@ function config_smart_create() {
                 smart_install_conf "index" "$zelnodeindex"
         fi
         #fluxOS
-        if [[ -f ~/$FLUX_DIR/config/userconfig.js ]]; then
+        if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
                 echo -e ""
                 echo -e "${ARROW} ${YELLOW}Imported fluxOS settings:${NC}"
                 ZELID=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
