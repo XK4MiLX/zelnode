@@ -562,7 +562,7 @@ function  fluxos_clean(){
      done
    fi
    if [[ -d /home/$USER/zelflux/ZelApps ]]; then
-     echo -e "${ARROW} ${CYAN}Removing FluxApps directory...${NC}" && sleep 1
+     echo -e "${ARROW} ${CYAN}Cleaning FluxOS Apps directory...${NC}" && sleep 1
      APPS_LIST=($(find /home/$USER/zelflux/ZelApps -maxdepth 1 -mindepth 1 -type d -printf '%P\n'))
      LENGTH=${#APPS_LIST[@]}
      for (( j=0; j<${LENGTH}; j++ ));
