@@ -1550,7 +1550,7 @@ function pm2_install(){
 }
 function finalizing() {
 	cd
-	pm2 start /home/$USER/$FLUX_DIR/start.sh --max_memory_restart 2G --restart-delay 30000 --max-restarts 40 --name flux --time  > /dev/null 2>&1
+	pm2 start /home/$USER/$FLUX_DIR/start.sh --max-memory-restart 2G --restart-delay 30000 --max-restarts 40 --name flux --time  > /dev/null 2>&1
 	pm2 save > /dev/null 2>&1
 	#sleep 120
 	#cd /home/$USER/zelflux
