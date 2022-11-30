@@ -565,7 +565,7 @@ function  fluxos_clean(){
        sudo umount -l $line && sleep 1
      done
    fi
-   if [[ -d /home/$USER/zelflux/ZelApps ]]; then
+   if [[ -d /home/$USER/zelflux/ZelApps && $(find /home/$USER/zelflux/ZelApps -maxdepth 1 -mindepth 1 -type d | wc -l) -gt 1 ]]; then
      echo -e "${ARROW} ${CYAN}Cleaning FluxOS Apps directory...${NC}" && sleep 1
      APPS_LIST=($(find /home/$USER/zelflux/ZelApps -maxdepth 1 -mindepth 1 -type d -printf '%P\n'))
      LENGTH=${#APPS_LIST[@]}
