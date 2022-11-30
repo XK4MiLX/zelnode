@@ -473,6 +473,26 @@ function config_smart_create() {
                 echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"
                 smart_install_conf "index" "$zelnodeindex"
         fi
+	#Benchmark
+	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
+	   echo -e ""
+           echo -e "${ARROW} ${YELLOW}Imported Benchmark settings:${NC}"
+	   thunder=$(grep -Po "(?<=thunder=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
+	   if [[ "$thunder" == "1" ]]; then
+             echo -e "${PIN}${CYAN} Thunder Mode = ${GREEN}$ENABLED${NC}"
+             smart_install_conf "thunder" "$thunder"
+           fi
+	   speedtestserverid=$(grep -Po "(?<=speedtestserverid=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
+	   if [[ "$speedtestserverid" != "" ]]; then
+             echo -e "${PIN}${CYAN} SpeedTest Server ID = ${GREEN}$speedtestserverid${NC}"
+             smart_install_conf "speedtestserverid" "$speedtestserverid"
+           fi
+	   fluxport=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)  
+	   if [[ "$fluxport" != "" ]]; then
+             echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
+             smart_install_conf "fluxport" "$fluxport"
+           fi 
+	fi
         #fluxOS
         if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
                 echo -e ""
