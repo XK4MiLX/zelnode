@@ -270,16 +270,17 @@ function insert() {
   sudo sed -i -e "/$line/i"$'\\\n'"$newText"$'\n' "$file"
 }
 
-
 function config_builder() {
-
+  ########################################################
   if [[ "$4" == "fluxos" ]]; then
-
+     if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+       return
+     fi
      if [[ "$1" == ""  || "$2" == "" ]]; then
        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
        return
      fi
-
      key="$1"
      value="$2"
      if [[ "$1" == "kadena" ]]; then
@@ -287,18 +288,15 @@ function config_builder() {
          value="kadena:$2?chainid=0"
        fi
      fi
-
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
        insert "/home/$USER/$FLUX_DIR//config/userconfig.js" "testnet" "  $key: '$value',"
        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
        return
      fi
-
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: '$value'") != "" ]]; then
        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
        return
      fi
-
      if [[ $(cat /home/$USER/$FLUX_DIR//config/userconfig.js | grep "$key") != "" ]]; then
         sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
         if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
@@ -306,30 +304,73 @@ function config_builder() {
         fi
      fi
   fi
+  #####################################################
   if [[ "$4" == "daemon" ]]; then
+    if [[ ! -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+       padding "${ARROW}${GREEN} [Daemon] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+       return
+    fi
     if [[ "$1" == ""  || "$2" == "" ]]; then
        padding "${ARROW}${GREEN} [Daemon] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
        return
     fi
-
-    if [[ "$1=$2" == $(grep -w $1 ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+    if [[ ! $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) && -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
+      echo "$1=$2" >> /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+      if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+	 return
+      fi
+    fi
+    if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+	return
     else
-       sed -i "s/$(grep -e $1 ~/$CONFIG_DIR/$CONFIG_FILE)/$1=$2/" ~/$CONFIG_DIR/$CONFIG_FILE
-       if [[ "$1=$2" == $(grep -w $1 ~/$CONFIG_DIR/$CONFIG_FILE) ]]; then
+       sed -i "s/$(grep -e $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE)/$1=$2/" /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+       if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
          padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 replaced successful${NC}" "${CHECK_MARK}"
        fi
     fi
-
   fi
-
-  if [[ "$4" == "watchdog" ]]; then
-
-   if [[ "$1" == ""  || "$2" == "" ]]; then
-       padding "${ARROW}${GREEN} [Daemon] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+  ###################################################
+  if [[ "$4" == "benchmark" ]]; then
+    if [[ "$1" == ""  || "$2" == "" ]]; then
+       padding "${ARROW}${GREEN} [BenchD] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
        return
     fi
-
+    if [[ ! -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
+      mkdir -p /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
+      echo "$1=$2" >> /home/$USER/.fluxbenchmark/fluxbench.conf
+      if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+	 return
+      fi
+    fi
+    if [[ ! $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
+      echo "$1=$2" >> /home/$USER/.fluxbenchmark/fluxbench.conf
+      if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+	 return
+      fi
+    fi
+    if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
+        padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+    else
+       sed -i "s/$(grep -e $1 /home/$USER/.fluxbenchmark/fluxbench.conf)/$1=$2/" /home/$USER/.fluxbenchmark/fluxbench.conf
+       if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 replaced successful${NC}" "${CHECK_MARK}"
+       fi
+    fi
+  fi
+  ###################################################
+  if [[ "$4" == "watchdog" ]]; then
+   if [[ ! -f /home/$USER/watchdog/config.js ]]; then
+       padding "${ARROW}${GREEN} [WatchD] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+       return
+   fi
+   if [[ "$1" == ""  || "$2" == "" ]]; then
+       padding "${ARROW}${GREEN} [WatchD] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+       return
+    fi
     if [[ $(cat /home/$USER/watchdog/config.js | grep "$1: '$2'") != "" ]]; then
        padding "${ARROW}${GREEN} [WatchD] ${CYAN}$3 skipped${NC}" "${X_MARK}"
        return
@@ -343,14 +384,12 @@ function config_builder() {
   fi
 }
 
-
 function smart_reconfiguration(){
-
-watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
-fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress")
-daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
-benchmark_settings_list=("fluxport", "thunder", "speedtestserverid")
-config_list=$(cat <<-END
+ watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
+ fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress")
+ daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
+ benchmark_settings_list=("fluxport", "thunder", "speedtestserverid")
+ config_list=$(cat <<-END
 {
   "prvkey": [{"key": "zelnodeprivkey", "label": "Identity Key"}],
   "outpoint": [{"key": "zelnodeoutpoint", "label": "Collateral TX ID"}],
@@ -369,41 +408,45 @@ config_list=$(cat <<-END
 END
 )
 
-install_settings=($(jq -r 'keys | @sh' install_conf.json))
-for i in "${install_settings[@]}"
-do
+ install_settings=($(jq -r 'keys | @sh' install_conf.json))
+ for i in "${install_settings[@]}"
+ do
 
-install_key=$(echo $i | tr -d "'")
-key=$(jq -r .$install_key[].key 2> /dev/null  <<< "$config_list")
-if [[ "$key" == "" ]]; then
-key=$install_key
-fi
+   install_key=$(echo $i | tr -d "'")
+   key=$(jq -r .$install_key[].key 2> /dev/null  <<< "$config_list")
+   if [[ "$key" == "" ]]; then
+    key=$install_key
+   fi
 
-label=$(jq -r .$install_key[].label 2> /dev/null <<< "$config_list")
-if [[ "$label" == "" ]]; then
-label=${install_key^}
-fi
+   label=$(jq -r .$install_key[].label 2> /dev/null <<< "$config_list")
+   if [[ "$label" == "" ]]; then
+    label=${install_key^}
+   fi
 
-if [[ $(echo ${daemon_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
-  config="daemon"
-  value=$(jq -r .$install_key install_conf.json)
-  config_builder "$key" "$value" "$label" "$config"
-fi
+   if [[ $(echo ${daemon_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+     config="daemon"
+     value=$(jq -r .$install_key install_conf.json)
+     config_builder "$key" "$value" "$label" "$config"
+   fi
 
-if [[ $(echo ${fluxos_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
-  config="fluxos"
-  value=$(jq -r .$install_key install_conf.json)
-  config_builder "$key" "$value" "$label" "$config"
-fi
+   if [[ $(echo ${benchmark_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+     config="benchmark"
+     value=$(jq -r .$install_key install_conf.json)
+     config_builder "$key" "$value" "$label" "$config"
+   fi
 
-if [[ $(echo ${watchdog_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
-  config="watchdog"
-  value=$(jq -r .$install_key install_conf.json)
-  config_builder "$key" "$value" "$label" "$config"
-fi
+   if [[ $(echo ${fluxos_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+     config="fluxos"
+     value=$(jq -r .$install_key install_conf.json)
+     config_builder "$key" "$value" "$label" "$config"
+   fi
 
-done
-
+   if [[ $(echo ${watchdog_settings_list[@]} | grep -ow "$key" | wc -l)  == "1" ]]; then
+     config="watchdog"
+     value=$(jq -r .$install_key install_conf.json)
+     config_builder "$key" "$value" "$label" "$config"
+   fi
+ done
 }
 
 function smart_install_conf(){
