@@ -1748,8 +1748,8 @@ function selfhosting() {
 	echo -e "${ARROW} ${CYAN}Adding cron jobs...${NC}" && sleep 1
 	sudo [ -f /var/spool/cron/crontabs/$USER ] && crontab_check=$(sudo cat /var/spool/cron/crontabs/$USER | grep -o ip_check | wc -l) || crontab_check=0
 	if [[ "$crontab_check" == "0" ]]; then
-		(crontab -l -u "$USER" 2>/dev/null; echo "@reboot env USER=$LOGNAME ~/ip_check.sh restart") | crontab -
-		(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * env USER=$LOGNAME ~/ip_check.sh ip_check") | crontab -
+		(crontab -l -u "$USER" 2>/dev/null; echo "@reboot env USER=$LOGNAME $HOME/ip_check.sh restart") | crontab -
+		(crontab -l -u "$USER" 2>/dev/null; echo "*/15 * * * * env USER=$LOGNAME $HOME/ip_check.sh ip_check") | crontab -
 		echo -e "${ARROW} ${CYAN}Script installed! ${NC}" 
 	else 
 		echo -e "${ARROW} ${CYAN}Cron jobs already exists, skipped... ${NC}"
