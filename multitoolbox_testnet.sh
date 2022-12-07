@@ -36,7 +36,7 @@ FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
 
-dversion="v6.0"
+dversion="v6.1"
 
 PM2_INSTALL="0"
 zelflux_setting_import="0"
@@ -958,8 +958,12 @@ if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 
 fi
 
-usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
-usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+if [[ -z "$usernew" ]]; then
+    usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
+    usernew=$(awk '{print tolower($0)}' <<< "$usernew")
+else
+    echo -e "${PIN}${CYAN} Import docker user '$usernew' from environment variable............[${CHECK_MARK}${CYAN}]${NC}" 
+fi
 echo -e "${ARROW} ${CYAN}New User: ${GREEN}${usernew}${NC}"
 adduser --gecos "" "$usernew" 
 usermod -aG sudo "$usernew" > /dev/null 2>&1  
