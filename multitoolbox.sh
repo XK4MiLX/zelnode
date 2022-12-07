@@ -724,7 +724,7 @@ function install_node(){
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" ]]; then
+	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
 		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
 		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
@@ -756,7 +756,7 @@ function install_docker(){
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" ]]; then
+	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
 		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
 		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
