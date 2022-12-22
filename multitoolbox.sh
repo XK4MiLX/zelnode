@@ -718,13 +718,15 @@ function install_node(){
 		exit
 	fi
 	if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) not supported${NC}"
+		eecho -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
+		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 		echo
 		exit
@@ -748,13 +750,15 @@ function install_docker(){
 		exit
 	fi
 	if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) not supported${NC}"
+		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version not supported${NC}"
+	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
+		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 		echo
 		exit
@@ -901,6 +905,10 @@ function mongod_db_fix() {
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service ${NC}" 
 			sudo systemctl start mongod
+			if mongod --version > /dev/null 2>&1; then
+				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
+				echo -e "${ARROW} ${CYAN}Service status:${SEA} $(sudo systemctl status mongod | grep -w 'Active' | sed -e 's/^[ \t]*//')${NC}" 
+			fi
 			echo -e ""
 		;;
 		"2)")
@@ -910,9 +918,9 @@ function mongod_db_fix() {
 			sudo systemctl stop mongod 
 			#sudo rm -rf /home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			#echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
-      #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
+                        #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
-			sudo apt-get purge mongodb-org -y > /dev/null 2>&1
+			sudo apt-get purge mongodb-org* -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
 			sudo rm -r /var/log/mongodb > /dev/null 2>&1
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
@@ -924,7 +932,8 @@ function mongod_db_fix() {
 			sudo chown -R mongodb:mongodb /var/log/mongodb > /dev/null 2>&1
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
-		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
+			fluxos_clean
+		        #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
 			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
