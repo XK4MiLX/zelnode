@@ -2095,10 +2095,8 @@ function selfhosting() {
 	function get_device_name(){
 		if [[ -f /home/$USER/device_conf.json ]]; then
 			device_name=$(jq -r .device_name /home/$USER/device_conf.json)
-			echo -e "Device from config, name: $device_name" >> /home/$USER/ip_history.log
 		else
 			device_name=$(ip addr | grep 'BROADCAST,MULTICAST,UP,LOWER_UP' | head -n1 | awk '{print $2}' | sed 's/://' | sed 's/@/ /' | awk '{print $1}')
-			echo -e "Device auto detection, name $device_name" >> /home/$USER/ip_history.log
 		fi
 	}
 
@@ -2109,7 +2107,7 @@ function selfhosting() {
 		get_device_name
 	  if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 		date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-		echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+		echo -e "New IP detected, IP: $WANIP was added to $device_name at $date_timestamp" >> /home/$USER/ip_history.log
 		sudo ip addr add $WANIP dev $device_name && sleep 2
 	  fi
 	fi
@@ -2124,7 +2122,7 @@ function selfhosting() {
 	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
 		 if [[ "$WANIP" != "$confirmed_ip" ]]; then
 			date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-			echo -e "New IP detected, IP: $WANIP was added at $date_timestamp" >> /home/$USER/ip_history.log
+			echo -e "New IP detected, IP: $WANIP was added to $device_name at $date_timestamp" >> /home/$USER/ip_history.log
 			sudo ip addr add $WANIP dev $device_name && sleep 2
 		 fi
 	  fi
