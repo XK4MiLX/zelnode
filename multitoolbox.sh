@@ -253,9 +253,9 @@ function create_config() {
 		echo -e "${YELLOW}================================================================${NC}"
 		echo -e "${NC}"
 		exit
-	fi 
+     fi 
 
-     if jq --version > /dev/null 2>&1; then
+        if jq --version > /dev/null 2>&1; then
 		sleep 0.2
 	else
 		echo -e "${ARROW} ${YELLOW}Installing JQ....${NC}"
@@ -272,11 +272,9 @@ function create_config() {
 		fi
 	fi
 
- CHOICE=$(
- whiptail --title "Create FluxNode installation config" --menu "Make your choice" 15 65 8 \
+ CHOICE=$(whiptail --title "Create FluxNode installation config" --menu "Make your choice" 15 65 8 \
  "1)" "Manualy - fill questions list"   \
- "2)" "Auto - import exists settings"  3>&2 2>&1 1>&3
-	)
+ "2)" "Auto - import exists settings"  3>&2 2>&1 1>&3 )
 		case $CHOICE in
 		"1)")
                 manual_build
@@ -284,7 +282,7 @@ function create_config() {
 		"2)")
 		config_smart_create
 		;;
-	esac
+	        esac
 
 }
 
