@@ -607,6 +607,9 @@ function config_smart_create() {
                        smart_install_conf "action" "0"
                 fi
         fi
+	echo -e ""
+	echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json"
+	echo -e ""
 }
 
 function manual_build(){
