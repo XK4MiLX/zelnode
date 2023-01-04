@@ -608,7 +608,7 @@ function config_smart_create() {
                 fi
         fi
 	echo -e ""
-	echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json"
+	echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json${NC}"
 	echo -e ""
 }
 
