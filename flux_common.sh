@@ -1098,7 +1098,7 @@ function import_config_file() {
 			if [[ "$use_old_chain" == "1" ]]; then
 				echo -e "${PIN}${CYAN} Diuring re-installation old chain will be use....................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			else
-				if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" ]]; then
+				if [[ "$bootstrap_url" == "0" || "$bootstrap_url" == "" || $bootstrap_url == "null" ]]; then
 					echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from source build in script............[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 				else
 					echo -e "${PIN}${CYAN} Use Flux daemon bootstrap from own source........................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
@@ -1110,8 +1110,10 @@ function import_config_file() {
 				fi
 			fi
 
-			if [[ ! -z "$gateway_ip" && ! -z "$upnp_port" ]]; then
-				echo -e "${PIN}${CYAN} Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
+			if [[ ! -z "$gateway_ip" && ! -z "$upnp_port" ]]; then 
+			       if [[ $upnp_port !== "null" ]]; then
+			         echo -e "${PIN}${CYAN} Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
+			       fi
 			fi
 
 			if [[ "$discord" != "" && "$discord" != "0" ]] || [[ "$telegram_alert" == '1' ]]; then
