@@ -1536,7 +1536,7 @@ function bootstrap_new() {
 		fi
 	fi
 
-	if [[  "$bootstrap_url" == "0"  || "$bootstrap_url" == "" ]]; then
+	if [[  "$bootstrap_url" == "0"  || "$bootstrap_url" == "" || "$bootstrap_url" == "null" ]]; then
 		cdn_speedtest "0" "6"
 		if [[ "$server_offline" == "1" ]]; then
 			echo -e "${WORNING} ${CYAN}All Bootstrap server offline, operation aborted.. ${NC}" && sleep 1
