@@ -453,7 +453,7 @@ function smart_install_conf(){
         if [[ ! -f /home/$USER/install_conf.json ]]; then
                 echo "{}" > install_conf.json
         fi
-        echo "$(jq -r --arg key "$1"--arg value "$2" '.[$key]=$value' install_conf.json)" > install_conf.json
+        echo "$(jq -r --arg key "$1" --arg value "$2" '.[$key]=$value' install_conf.json)" > install_conf.json
 }
 
 function config_smart_create() {
