@@ -1111,7 +1111,7 @@ function import_config_file() {
 			fi
 
 			if [[ ! -z "$gateway_ip" && ! -z "$upnp_port" ]]; then 
-			       if [[ $upnp_port !== "null" ]]; then
+			       if [[ "$upnp_port" != "null" ]]; then
 			         echo -e "${PIN}${CYAN} Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
 			       fi
 			fi
