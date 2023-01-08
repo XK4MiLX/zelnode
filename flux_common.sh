@@ -1410,8 +1410,6 @@ function thunder_mode(){
  fi
  echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Restarting service... ${NC}"
  sudo systemctl restart zelcash > /dev/null 2>&1
- echo -e ""
- sleep 5
 }
 
 function fluxos_reconfiguration {
