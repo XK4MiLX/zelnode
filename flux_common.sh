@@ -1396,6 +1396,18 @@ function replace_zelid() {
 		fi
 	fi
 }
+
+function thunder_mode(){
+  if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
+    echo -e ""
+    config_builder "thunder" "1" "Thunder Mode Enabled" "benchmark"
+  else
+    sed -i "/$(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
+    "${ARROW}${GREEN} [BenchD] ${CYAN}Thunder mode disabled successful${NC}" "${CHECK_MARK}"
+    echo -e ""
+  fi
+}
+
 function fluxos_reconfiguration {
  echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
  echo -e "${YELLOW}================================================================${NC}"
@@ -1414,7 +1426,8 @@ function fluxos_reconfiguration {
  CHOICE=$(
  whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
  "1)" "Replace ZELID"   \
- "2)" "Add/Replace kadena address"  3>&2 2>&1 1>&3
+ "2)" "Add/Replace kadena address" \
+ "3)" "Enable/Disable thunder mode"   3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1423,6 +1436,10 @@ function fluxos_reconfiguration {
 		"2)")
 		replace_kadena
 		;;
+		"3)")
+		thunder_mode
+		;;
+		
 	esac
 }
 ######### BOOTSTRAP SECTION ############################
