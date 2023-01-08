@@ -9,7 +9,7 @@ function upnp_disable() {
  fi
  
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-   if [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]
+   if [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
      echo -e ""
      echo -e "${ARROW} ${YELLOW}Removing FluxOS UPnP configuration.....${NC}"
      sed -i "/$(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
