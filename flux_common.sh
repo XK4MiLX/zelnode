@@ -1398,14 +1398,20 @@ function replace_zelid() {
 }
 
 function thunder_mode(){
-  if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
-    echo -e ""
-    config_builder "thunder" "1" "Thunder Mode Enabled" "benchmark"
-  else
-    sed -i "/$(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
-    "${ARROW}${GREEN} [BenchD] ${CYAN}Thunder mode disabled successful${NC}" "${CHECK_MARK}"
-    echo -e ""
-  fi
+
+ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
+   echo -e ""
+   if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
+     config_builder "thunder" "1" "Thunder Mode Enabled" "benchmark"
+   else
+     sed -i "/$(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
+     "${ARROW}${GREEN} [BenchD] ${CYAN}Thunder mode disabled successful${NC}" "${CHECK_MARK}"
+   fi
+ else
+   echo -e ""
+   config_builder "thunder" "1" "Thunder Mode Enabled" "benchmark"
+ fi
+ echo -e ""
 }
 
 function fluxos_reconfiguration {
