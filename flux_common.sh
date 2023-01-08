@@ -338,7 +338,7 @@ function config_builder() {
        return
     fi
     if [[ ! -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-      mkdir -p /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
+      mkdir -p /home/$USER/.fluxbenchmark > /dev/null 2>&1
       echo "$1=$2" >> /home/$USER/.fluxbenchmark/fluxbench.conf
       if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
          padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
