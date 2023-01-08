@@ -1409,6 +1409,9 @@ function thunder_mode(){
  else
    config_builder "thunder" "1" "Thunder Mode" "benchmark"
  fi
+ sudo systemctl restart zelcash > /dev/null 2>&1
+ echo -e "${ARROW}${CYAN} Restarting Benchmark... ${NC}" "${CHECK_MARK}"
+ sleep 5
 }
 
 function fluxos_reconfiguration {
