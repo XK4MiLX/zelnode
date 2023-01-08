@@ -7,10 +7,10 @@ function upnp_disable() {
 		echo -e ""
 		exit
  fi
- if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
- echo -e ""
- echo -e "${ARROW} ${YELLOW}Removing FluxOS UPnP configuration.....${NC}"
- sudo rm -rf /home/$USER/.fluxbenchmark/fluxbench.conf
+ if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]] && [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
+  echo -e ""
+  echo -e "${ARROW} ${YELLOW}Removing FluxOS UPnP configuration.....${NC}"
+  sed -i "/$(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
  else
 	 echo -e "${ARROW} ${CYAN}UPnP Mode is already disabled...${NC}"
 	 echo -e ""
