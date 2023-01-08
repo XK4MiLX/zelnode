@@ -450,6 +450,11 @@ END
 }
 
 function smart_install_conf(){
+
+        if [[ "$3" == "import" ]]; then
+	  return
+	fi
+	
         if [[ ! -f /home/$USER/install_conf.json ]]; then
                 echo "{}" > install_conf.json
         fi
@@ -458,20 +463,22 @@ function smart_install_conf(){
 
 function config_smart_create() {
 
-        rm -rf /home/$USER/install_conf.json
+        if [[ "$1" != "import" ]]; then
+          rm -rf /home/$USER/install_conf.json
+	fi
         #daemon
         if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
                 echo -e ""
                 echo -e "${ARROW} ${YELLOW}Imported daemon settings:${NC}"
                 zelnodeprivkey=$(grep -w zelnodeprivkey /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeprivkey=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Identity Key = ${GREEN}$zelnodeprivkey${NC}"
-                smart_install_conf "prvkey" "$zelnodeprivkey"
+                smart_install_conf "prvkey" "$zelnodeprivkey" "$1"
                 zelnodeoutpoint=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Collateral TX ID = ${GREEN}$zelnodeoutpoint${NC}"
-                smart_install_conf "outpoint" "$zelnodeoutpoint"
+                smart_install_conf "outpoint" "$zelnodeoutpoint" "$1"
                 zelnodeindex=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//' | sed 's/ //g')
                 echo -e "${PIN}${CYAN} Output Index = ${GREEN}$zelnodeindex${NC}"
-                smart_install_conf "index" "$zelnodeindex"
+                smart_install_conf "index" "$zelnodeindex" "$1"
         fi
 	#Benchmark
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
@@ -480,17 +487,17 @@ function config_smart_create() {
 	   thunder=$(grep -Po "(?<=thunder=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
 	   if [[ "$thunder" == "1" ]]; then
              echo -e "${PIN}${CYAN} Thunder Mode = ${GREEN}$ENABLED${NC}"
-             smart_install_conf "thunder" "$thunder"
+             smart_install_conf "thunder" "$thunder" "$1"
            fi
 	   speedtestserverid=$(grep -Po "(?<=speedtestserverid=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
 	   if [[ "$speedtestserverid" != "" ]]; then
              echo -e "${PIN}${CYAN} SpeedTest Server ID = ${GREEN}$speedtestserverid${NC}"
-             smart_install_conf "speedtestserverid" "$speedtestserverid"
+             smart_install_conf "speedtestserverid" "$speedtestserverid" "$1"
            fi
 	   fluxport=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)  
 	   if [[ "$fluxport" != "" ]]; then
              echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
-             smart_install_conf "fluxport" "$fluxport"
+             smart_install_conf "fluxport" "$fluxport" "$1"
            fi 
 	fi
         #fluxOS
@@ -500,20 +507,20 @@ function config_smart_create() {
                 ZELID=$(grep -w zelid /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*zelid: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$ZELID" != "" ]]; then
                         echo -e "${PIN}${CYAN} Zel ID = ${GREEN}$ZELID${NC}"
-                        smart_install_conf "zelid" "$ZELID"
+                        smart_install_conf "zelid" "$ZELID" "$1"
                 fi
                 KDA_A=$(grep -w kadena /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*kadena: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$KDA_A" != "" ]]; then
                         echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
-                        smart_install_conf "kda_address" "$KDA_A"
+                        smart_install_conf "kda_address" "$KDA_A" "$1"
                 fi
                 upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$upnp_port" != "" ]]; then
                         gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
                         echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
                         echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
-                        smart_install_conf "upnp_port" "$upnp_port"
-                        smart_install_conf "gateway_ip" "$gateway_ip"
+                        smart_install_conf "upnp_port" "$upnp_port" "$1"
+                        smart_install_conf "gateway_ip" "$gateway_ip" "$1"
                 fi
         fi
         #watchdog
@@ -523,7 +530,7 @@ function config_smart_create() {
                 node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
                         echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
-                        smart_install_conf "node_label" "$node_label"
+                        smart_install_conf "node_label" "$node_label" "$1"
                 else
                         echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
                 fi
@@ -531,13 +538,13 @@ function config_smart_create() {
                 eps_limit=$(grep -w tier_eps_min /home/$USER/watchdog/config.js | sed -e 's/.*tier_eps_min: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$eps_limit" != "" && "$eps_limit" != "0" ]]; then
                         echo -e "${PIN}${CYAN} Tier_eps_min = ${GREEN}$eps_limit${NC}"
-                        smart_install_conf "eps_limit" "$eps_limit"
+                        smart_install_conf "eps_limit" "$eps_limit" "$1"
                 fi
 
                 discord=$(grep -w web_hook_url /home/$USER/watchdog/config.js | sed -e 's/.*web_hook_url: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$discord" != "" && "$discord" != "0" ]]; then
                         echo -e "${PIN}${CYAN} Discord alert = ${GREEN}Enabled${NC}"
-                        smart_install_conf "discord" "$discord"
+                        smart_install_conf "discord" "$discord" "$1"
                 else
                         echo -e "${PIN}${CYAN} Discord alert = ${RED}Disabled${NC}"
                 fi
@@ -545,7 +552,7 @@ function config_smart_create() {
                 if [[ "$ping" != "" && "$ping" != "0" ]]; then
                         if [[ "$discord" != "" && "$discord" != "0" ]]; then
                                 echo -e "${PIN}${CYAN} Discord nick ping = ${GREEN}Enabled${NC}"
-                                smart_install_conf "ping" "$ping"
+                                smart_install_conf "ping" "$ping" "$1"
                         else
                                 echo -e "${PIN}${CYAN} Discord nick ping = ${RED}Disabled${NC}"
                         fi
@@ -553,63 +560,66 @@ function config_smart_create() {
                 telegram_alert=$(grep -w telegram_alert /home/$USER/watchdog/config.js | sed -e 's/.*telegram_alert: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$telegram_alert" != "" && "$telegram_alert" != "0" ]]; then
                         echo -e "${PIN}${CYAN} Telegram alert = ${GREEN}Enabled${NC}"
-                        smart_install_conf "telegram_alert" "$telegram_alert"
+                        smart_install_conf "telegram_alert" "$telegram_alert" "$1"
                 else
                         echo -e "${PIN}${CYAN} Telegram alert = ${RED}Disabled${NC}"
-                        smart_install_conf "telegram_alert" "0"
+                        smart_install_conf "telegram_alert" "0" "$1"
                 fi
 
                 telegram_bot_token=$(grep -w telegram_bot_token /home/$USER/watchdog/config.js | sed -e 's/.*telegram_bot_token: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$telegram_alert" == "1" ]]; then
                         echo -e "${PIN}${CYAN} Telegram bot token = ${GREEN}$telegram_bot_token${NC}"
-                        smart_install_conf "telegram_bot_token" "$telegram_bot_token"
+                        smart_install_conf "telegram_bot_token" "$telegram_bot_token" "$1"
                 fi
 
                 telegram_chat_id=$(grep -w telegram_chat_id /home/$USER/watchdog/config.js | sed -e 's/.*telegram_chat_id: .//' | sed -e 's/.\{1\}$//')
                 if [[ "$telegram_alert" == "1" ]]; then
                         echo -e "${PIN}${CYAN} Telegram chat id = ${GREEN}$telegram_chat_id${NC}"
-                        smart_install_conf "telegram_chat_id" "$telegram_chat_id"
+                        smart_install_conf "telegram_chat_id" "$telegram_chat_id" "$1"
                 fi
 
                 zelflux_update=$(grep -w zelflux_update /home/$USER/watchdog/config.js | sed -e 's/.*zelflux_update: .//' | egrep -o '[0-9]')
                 if [[ "$zelflux_update" == "1" ]]; then
                         echo -e "${PIN}${CYAN} FluxOS auto update = ${GREEN}Enabled${NC}"
-                        smart_install_conf "zelflux_update" "1"
+                        smart_install_conf "zelflux_update" "1" "$1"
                 else
                        echo -e "${PIN}${CYAN} FluxOS auto update = ${GREEN}Disabled${NC}"
-                       smart_install_conf "zelflux_update" "0"
+                       smart_install_conf "zelflux_update" "0" "$1"
                 fi
 
                 zelcash_update=$(grep -w zelcash_update /home/$USER/watchdog/config.js | sed -e 's/.*zelcash_update: .//' | egrep -o '[0-9]')
                 if [[ "$zelcash_update" == "1" ]]; then
                         echo -e "${PIN}${CYAN} Daemon auto update = ${GREEN}Enabled${NC}"
-                        smart_install_conf "zelcash_update" "1"
+                        smart_install_conf "zelcash_update" "1" "$1"
                 else
                        echo -e "${PIN}${CYAN} Daemon auto update = ${GREEN}Disabled${NC}"
-                       smart_install_conf "zelcash_update" "0"
+                       smart_install_conf "zelcash_update" "0" "$1"
                 fi
 
                 zelbench_update=$(grep -w zelbench_update /home/$USER/watchdog/config.js | sed -e 's/.*zelbench_update: .//' | egrep -o '[0-9]')
                 if [[ "$zelbench_update" == "1" ]]; then
                         echo -e "${PIN}${CYAN} Benchmark auto update = ${GREEN}Enabled${NC}"
-                        smart_install_conf "zelbench_update" "1"
+                        smart_install_conf "zelbench_update" "1" "$1"
                 else
                        echo -e "${PIN}${CYAN} Benchmark auto update = ${GREEN}Disabled${NC}"
-                       smart_install_conf "zelbench_update" "0"
+                       smart_install_conf "zelbench_update" "0" "$1"
                 fi
 
                 action=$(grep -w action /home/$USER/watchdog/config.js | sed -e 's/.*action: .//' | egrep -o '[0-9]')
                 if [[ "$action" == "1" ]]; then
                         echo -e "${PIN}${CYAN} Fix action = ${GREEN}Enabled${NC}"
-                        smart_install_conf "action" "1"
+                        smart_install_conf "action" "1" "$1"
                 else
                        echo -e "${PIN}${CYAN} Fix action  = ${GREEN}Disabled${NC}"
-                       smart_install_conf "action" "0"
+                       smart_install_conf "action" "0" "$1"
                 fi
         fi
+
 	echo -e ""
-	echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json${NC}"
-	echo -e ""
+	if [[ "$1" != "import"]]; then
+	  echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json${NC}"
+	  echo -e ""
+	fi
 }
 
 function manual_build(){
