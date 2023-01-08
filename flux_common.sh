@@ -1404,11 +1404,11 @@ function thunder_mode(){
    else
      sed -i "/$(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf)/d" /home/$USER/.fluxbenchmark/fluxbench.conf > /dev/null 2>&1
      echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Thunder Mode disabled successful${NC}" "${CHECK_MARK}"
+     echo -e ""
    fi
  else
    config_builder "thunder" "1" "Thunder Mode" "benchmark"
  fi
- echo -e ""
 }
 
 function fluxos_reconfiguration {
