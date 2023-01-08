@@ -616,7 +616,7 @@ function config_smart_create() {
         fi
 
 	echo -e ""
-	if [[ "$1" != "import"]]; then
+	if [[ "$1" != "import" ]]; then
 	  echo -e "${HOT}${CYAN} Config file created, path: ${GREEN}/home/$USER/install_conf.json${NC}"
 	  echo -e ""
 	fi
