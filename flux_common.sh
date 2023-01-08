@@ -486,7 +486,7 @@ function config_smart_create() {
            echo -e "${ARROW} ${YELLOW}Imported Benchmark settings:${NC}"
 	   thunder=$(grep -Po "(?<=thunder=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
 	   if [[ "$thunder" == "1" ]]; then
-             echo -e "${PIN}${CYAN} Thunder Mode = ${GREEN}$ENABLED${NC}"
+             echo -e "${PIN}${CYAN} Thunder Mode = ${GREEN}ENABLED${NC}"
              smart_install_conf "thunder" "$thunder" "$1"
            fi
 	   speedtestserverid=$(grep -Po "(?<=speedtestserverid=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)
