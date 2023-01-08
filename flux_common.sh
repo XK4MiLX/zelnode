@@ -400,9 +400,9 @@ function smart_reconfiguration(){
   "zelflux_update": [{"key": "zelflux_update", "label": "FluxOS Auto Update"}],
   "zelcash_update": [{"key": "zelcash_update", "label": "Daemon Auto Update"}],
   "zelbench_update": [{"key": "zelbench_update", "label": "Benchmark Auto Update"}],
-  "fluxport": [{"key": "zelbench_update", "label": "Multi Node Port"}],
-  "thunder": [{"key": "zelbench_update", "label": "Thunder Mode"}],
-  "speedtestserverid": [{"key": "zelbench_update", "label": "Speed Test Server ID"}],
+  "fluxport": [{"key": "fluxport", "label": "Multi Node Port"}],
+  "thunder": [{"key": "thunder", "label": "Thunder Mode"}],
+  "speedtestserverid": [{"key": "speedtestserverid", "label": "Speed Test Server ID"}],
   "upnp_port": [{"key": "apiport", "label": "UPnP Port"}]
  }
 END
