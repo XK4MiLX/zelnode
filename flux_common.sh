@@ -2102,9 +2102,9 @@ function upnp_enable() {
 	fi
 	if [[ ! -d /home/$USER/.fluxbenchmark ]]; then
 		sudo mkdir -p /home/$USER/.fluxbenchmark 2>/dev/null
-		echo "fluxport=$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
+		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
 	else
-		echo "fluxport=$FLUX_PORT" | sudo tee "/home/$USER/.fluxbenchmark/fluxbench.conf" > /dev/null
+		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
 		echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
