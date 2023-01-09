@@ -2341,7 +2341,7 @@ function selfhosting() {
 
 	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 	  echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ${NC}"
-		sudo ip addr add $WANIP dev $device_name
+		sudo ip addr add $WANIP dev $device_name > /dev/null 2>&1
 	else
 		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
 		echo -e ""
