@@ -1398,6 +1398,9 @@ function replace_zelid() {
 }
 
 function thunder_mode(){
+ if [[ -d $HOME/.fluxbenchmark ]]; then
+   sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+ fi
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
    if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) == "" ]]; then
      config_builder "thunder" "1" "Thunder Mode" "benchmark"
