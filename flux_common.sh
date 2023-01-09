@@ -290,7 +290,7 @@ function config_builder() {
      fi
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
        insert "/home/$USER/$FLUX_DIR//config/userconfig.js" "testnet" "  $key: '$value',"
-       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
+       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
        return
      fi
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: '$value'") != "" ]]; then
@@ -300,7 +300,7 @@ function config_builder() {
      if [[ $(cat /home/$USER/$FLUX_DIR//config/userconfig.js | grep "$key") != "" ]]; then
         sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
         if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 replaced successfully${NC}" "${CHECK_MARK}"
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
         fi
      fi
   fi
@@ -317,7 +317,7 @@ function config_builder() {
     if [[ ! $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) && -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
       echo "$1=$2" >> /home/$USER/$CONFIG_DIR/$CONFIG_FILE
       if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
 	 return
       fi
     fi
@@ -327,7 +327,7 @@ function config_builder() {
     else
        sed -i "s/$(grep -e $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE)/$1=$2/" /home/$USER/$CONFIG_DIR/$CONFIG_FILE
        if [[ "$1=$2" == $(grep -w $1 /home/$USER/$CONFIG_DIR/$CONFIG_FILE) ]]; then
-         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 replaced successful${NC}" "${CHECK_MARK}"
+         padding "${ARROW}${GREEN} [Daemon] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
        fi
     fi
   fi
@@ -341,14 +341,14 @@ function config_builder() {
       mkdir -p /home/$USER/.fluxbenchmark > /dev/null 2>&1
       echo "$1=$2" >> /home/$USER/.fluxbenchmark/fluxbench.conf
       if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
-         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 was added successful${NC}" "${CHECK_MARK}"
 	 return
       fi
     fi
     if [[ ! $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
       echo "$1=$2" >> /home/$USER/.fluxbenchmark/fluxbench.conf
       if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
-         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 added successful${NC}" "${CHECK_MARK}"
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
 	 return
       fi
     fi
@@ -357,7 +357,7 @@ function config_builder() {
     else
        sed -i "s/$(grep -e $1 /home/$USER/.fluxbenchmark/fluxbench.conf)/$1=$2/" /home/$USER/.fluxbenchmark/fluxbench.conf
        if [[ "$1=$2" == $(grep -w $1 /home/$USER/.fluxbenchmark/fluxbench.conf) ]]; then
-         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 replaced successful${NC}" "${CHECK_MARK}"
+         padding "${ARROW}${GREEN} [BenchD] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
        fi
     fi
   fi
@@ -378,7 +378,7 @@ function config_builder() {
     if [[ $(cat /home/$USER/watchdog/config.js | grep "$1") != "" ]]; then
       sed -i "s/$(grep -e $1 /home/$USER/watchdog/config.js)/  $1: '$2',/" /home/$USER/watchdog/config.js
       if [[ $(grep -w $2 /home/$USER/watchdog/config.js) != "" ]]; then
-        padding "${ARROW}${GREEN} [WatchD] ${CYAN}$3 replaced successfully${NC}" "${CHECK_MARK}"
+        padding "${ARROW}${GREEN} [WatchD] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
       fi
     fi
   fi
@@ -2125,23 +2125,23 @@ function upnp_enable() {
 			fi
 		fi
 	done
-	if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "apiport") != "" ]]; then
-		sed -i "s/$(grep -e apiport /home/$USER/zelflux/config/userconfig.js)/apiport: '$FLUX_PORT',/" /home/$USER/zelflux/config/userconfig.js
-		if [[ $(grep -w $FLUX_PORT /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-			echo -e "${ARROW} ${CYAN}FluxOS port replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
-		fi
-	else
-		insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "apiport: '$FLUX_PORT',"
-		echo -e "${ARROW} ${CYAN}FluxOS port set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
-	fi
+	#if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "apiport") != "" ]]; then
+		#sed -i "s/$(grep -e apiport /home/$USER/zelflux/config/userconfig.js)/apiport: '$FLUX_PORT',/" /home/$USER/zelflux/config/userconfig.js
+		#if [[ $(grep -w $FLUX_PORT /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+			#echo -e "${ARROW} ${CYAN}FluxOS port replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
+		#fi
+	#else
+		#insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "apiport: '$FLUX_PORT',"
+		#echo -e "${ARROW} ${CYAN}FluxOS port set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
+	#fi
+	config_builder "apiport" "$FLUX_PORT" "MultiPort Mode" "fluxos"
 	if [[ ! -d /home/$USER/.fluxbenchmark ]]; then
 		sudo mkdir -p /home/$USER/.fluxbenchmark 2>/dev/null
-		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
+		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	else
-		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
+		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-		echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
 		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		#API PORT
 		sudo ufw allow $FLUX_PORT > /dev/null 2>&1
