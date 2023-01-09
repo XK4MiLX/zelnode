@@ -1398,6 +1398,9 @@ function replace_zelid() {
 }
 
 function thunder_mode(){
+ if [[ -d $HOME/.fluxbenchmark ]]; then
+   sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+ fi
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
    if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) == "" ]]; then
      config_builder "thunder" "1" "Thunder Mode" "benchmark"
@@ -2341,7 +2344,7 @@ function selfhosting() {
 
 	if [[ "$device_name" != "" && "$WANIP" != "" ]]; then
 	  echo -e "${ARROW} ${CYAN}Detected IP: ${GREEN}$WANIP ${NC}"
-		sudo ip addr add $WANIP dev $device_name
+		sudo ip addr add $WANIP dev $device_name > /dev/null 2>&1
 	else
 		echo -e "${WORNING} ${CYAN}Problem detected operation aborted! ${NC}" && sleep 1
 		echo -e ""
