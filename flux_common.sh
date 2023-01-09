@@ -2136,12 +2136,11 @@ function upnp_enable() {
 	fi
 	if [[ ! -d /home/$USER/.fluxbenchmark ]]; then
 		sudo mkdir -p /home/$USER/.fluxbenchmark 2>/dev/null
-		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
+		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	else
-		echo "fluxport=$FLUX_PORT" >> "/home/$USER/.fluxbenchmark/fluxbench.conf"
+		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-		echo -e "${ARROW} ${CYAN}Fluxbench port set successfully.....................[${CHECK_MARK}${CYAN}]${NC}"
 		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		#API PORT
 		sudo ufw allow $FLUX_PORT > /dev/null 2>&1
