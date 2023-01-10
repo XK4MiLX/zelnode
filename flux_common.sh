@@ -2094,6 +2094,9 @@ function log_rotate() {
 }
 #### UPnP
 function upnp_enable() {
+        if [[ -d $HOME/.fluxbenchmark ]]; then
+          sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+        fi
 	try="0"
 	echo -e ""
 	echo -e "${ARROW}${YELLOW} Creating UPnP configuration...${NC}"
