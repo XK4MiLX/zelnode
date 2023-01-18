@@ -89,6 +89,8 @@ function fluxos_conf_create(){
 	  ipaddress: '${WANIP}',
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
+	  development: false,
+          decryptionkey: '',
 	  testnet: $testnet
 	  }
 	}
