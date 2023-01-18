@@ -388,7 +388,7 @@ function config_builder() {
 
 function smart_reconfiguration(){
  watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
- fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress")
+ fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress", "development", "decryptionkey")
  daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
  benchmark_settings_list=("fluxport", "thunder", "speedtestserverid")
  config_list=$(cat <<-END
@@ -405,7 +405,9 @@ function smart_reconfiguration(){
   "fluxport": [{"key": "fluxport", "label": "Multi Node Port"}],
   "thunder": [{"key": "thunder", "label": "Thunder Mode"}],
   "speedtestserverid": [{"key": "speedtestserverid", "label": "Speed Test Server ID"}],
-  "upnp_port": [{"key": "apiport", "label": "UPnP Port"}]
+  "upnp_port": [{"key": "apiport", "label": "UPnP Port"}],
+  "development": [{"key": "development", "label": "Development Mode"}],
+  "decryptionkey": [{"key": "decryptionkey", "label": "Encryption Mode"}]
  }
 END
 )
