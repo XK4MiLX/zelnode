@@ -1422,11 +1422,11 @@ function thunder_mode(){
 
 function development_mode(){
   if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: 'false'") != "" ]] || [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: false") ]]; then
-    "${ARROW}${GREEN} [FluxOS] ${CYAN}Enabling development mode... ${NC}"
+    echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Enabling development mode... ${NC}"
     config_builder "development" "true" "Development Mode" "fluxos"
   else
-   "${ARROW}${GREEN} [FluxOS] ${CYAN}Disabling development mode... ${NC}"
-   config_builder "development" "false" "Development Mode" "fluxos"
+    echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Disabling development mode... ${NC}"
+    config_builder "development" "false" "Development Mode" "fluxos"
   fi
 }
 
