@@ -872,6 +872,25 @@ function manual_build(){
 	echo -e    
 }
 ###### HELPERS SECTION
+function os_check(){
+  BLACK_LIST=( "kinetic" )
+  avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+  if [[ "$avx_check" == "" ]]; then 
+    BLACK_LIST+=( "jammy" )
+  fi
+  LIST_LENGTH=${#BLACK_LIST[@]}
+  for (( p=0; p<${LIST_LENGTH}; p++ ));
+  do
+    if [[ $(lsb_release -cs) == ${BLACK_LIST[$p]} ]]; then 
+        echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+	echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation"
+	echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+	echo
+	exit      
+    fi
+  done 
+}
+
 function  fluxos_clean(){
    docker_check=$(docker container ls -a | egrep 'zelcash|flux' | grep -Eo "^[0-9a-z]{8,}\b" | wc -l)
    resource_check=$(df | egrep 'flux' | awk '{ print $1}' | wc -l)
