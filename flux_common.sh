@@ -302,7 +302,7 @@ function config_builder() {
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") != "" ]]; then
         sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
         if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was changed successfully${NC}" "${CHECK_MARK}"
         fi
      fi
   fi
@@ -1419,6 +1419,17 @@ function thunder_mode(){
  sudo systemctl restart zelcash > /dev/null 2>&1
 }
 
+
+function development_mode(){
+  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: 'false'") != "" ]] || [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: false") ]]; then
+    "${ARROW}${GREEN} [FluxOS] ${CYAN}Enabling development mode... ${NC}"
+    config_builder "development" "true" "Development Mode" "fluxos"
+  else
+   "${ARROW}${GREEN} [FluxOS] ${CYAN}Disabling development mode... ${NC}"
+   config_builder "development" "false" "Development Mode" "fluxos"
+  fi
+}
+
 function fluxos_reconfiguration {
  echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
  echo -e "${YELLOW}================================================================${NC}"
@@ -1438,7 +1449,8 @@ function fluxos_reconfiguration {
  whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
  "1)" "Replace ZELID"   \
  "2)" "Add/Replace kadena address" \
- "3)" "Enable/Disable thunder mode"   3>&2 2>&1 1>&3
+ "3)" "Enable/Disable thunder mode" \
+ "4)" "Enable/Disable development mode"   3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1449,6 +1461,9 @@ function fluxos_reconfiguration {
 		;;
 		"3)")
 		thunder_mode
+		;;
+	        "4)")
+		development_mode
 		;;
 		
 	esac
