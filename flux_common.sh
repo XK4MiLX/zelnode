@@ -1584,7 +1584,7 @@ function bootstrap_new() {
 	else
 		if [[ ! -f /home/$USER/install_conf.json ]]; then
 			bootstrap_manual
-			if [[ "$Mode" != "install" && "$Server_offline" == "0" ]]; then
+			if [[ "$Mode" != "install" && "$server_offline" == "0" ]]; then
 				start_service
 				if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
 					sudo rm -rf $FILE_PATH /dev/null 2>&1 && sleep 2
