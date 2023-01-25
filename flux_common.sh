@@ -291,16 +291,26 @@ function config_builder() {
        fi
      fi
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
-       insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: '$value',"
-       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
-       return
+       if [[ "$value" == "false" || "$value" == "true" ]]; then
+          insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
+	  return
+        else
+          insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: '$value',"
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was added successfully${NC}" "${CHECK_MARK}"
+          return
+	fi
      fi
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: '$value'") != "" ]]; then
        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
        return
      fi
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") != "" ]]; then
-        sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
+        if [[ "$value" == "false" || "$value" == "true" ]]; then
+	  sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: $value,/" /home/$USER/$FLUX_DIR/config/userconfig.js
+	else
+          sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
+	fi
         if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
           padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was changed successfully${NC}" "${CHECK_MARK}"
         fi
