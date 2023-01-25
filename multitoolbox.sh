@@ -6,7 +6,7 @@ if ! [[ -z $1 ]]; then
 	if [[ $BRANCH_ALREADY_REFERENCED != '1' ]]; then
 	export ROOT_BRANCH="$1"
 	export BRANCH_ALREADY_REFERENCED='1'
-	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH
+	bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/multitoolbox.sh) $ROOT_BRANCH $2
 	unset ROOT_BRANCH
 	unset BRANCH_ALREADY_REFERENCED
 	set -o history
@@ -15,6 +15,8 @@ if ! [[ -z $1 ]]; then
 else
 	export ROOT_BRANCH='master'
 fi
+
+
 source /dev/stdin <<< "$(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/flux_common.sh)"
 if [[ -d /home/$USER/.zelcash ]]; then
 	CONFIG_DIR='.zelcash'
@@ -30,6 +32,7 @@ COIN_NAME='zelcash'
 dversion="v7.4"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
+OS_FLAGE="$2"
 
 function config_veryfity(){
 	if [[ -f /home/$USER/.flux/flux.conf ]]; then
@@ -502,6 +505,7 @@ function install_node(){
 		echo -e "${NC}"
 		exit
 	fi
+	
 	if [[ $(lsb_release -d) != *Debian* && $(lsb_release -d) != *Ubuntu* ]]; then
 		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) not supported${NC}"
 		eecho -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
@@ -509,13 +513,17 @@ function install_node(){
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
+	
+	if [[ "$OS_FLAGE" == "" ]]; then
+	  if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
 		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
-		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
+		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation"
 		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
 		echo
 		exit
+	  fi
 	fi
+	
 	if sudo docker run hello-world > /dev/null 2>&1; then
 		echo -e ""
 	else

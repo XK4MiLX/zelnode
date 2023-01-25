@@ -89,6 +89,8 @@ function fluxos_conf_create(){
 	  ipaddress: '${WANIP}',
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
+	  development: false,
+          decryptionkey: '',
 	  testnet: $testnet
 	  }
 	}
@@ -300,7 +302,7 @@ function config_builder() {
      if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") != "" ]]; then
         sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
         if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was replaced successfully${NC}" "${CHECK_MARK}"
+          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 was changed successfully${NC}" "${CHECK_MARK}"
         fi
      fi
   fi
@@ -386,7 +388,7 @@ function config_builder() {
 
 function smart_reconfiguration(){
  watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
- fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress")
+ fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress", "development", "decryptionkey")
  daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
  benchmark_settings_list=("fluxport", "thunder", "speedtestserverid")
  config_list=$(cat <<-END
@@ -403,7 +405,9 @@ function smart_reconfiguration(){
   "fluxport": [{"key": "fluxport", "label": "Multi Node Port"}],
   "thunder": [{"key": "thunder", "label": "Thunder Mode"}],
   "speedtestserverid": [{"key": "speedtestserverid", "label": "Speed Test Server ID"}],
-  "upnp_port": [{"key": "apiport", "label": "UPnP Port"}]
+  "upnp_port": [{"key": "apiport", "label": "UPnP Port"}],
+  "development": [{"key": "development", "label": "Development Mode"}],
+  "decryptionkey": [{"key": "decryptionkey", "label": "Encryption Mode"}]
  }
 END
 )
@@ -1415,6 +1419,17 @@ function thunder_mode(){
  sudo systemctl restart zelcash > /dev/null 2>&1
 }
 
+
+function development_mode(){
+  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: 'false'") != "" ]] || [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: false") ]]; then
+    echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Enabling development mode... ${NC}"
+    config_builder "development" "true" "Development Mode" "fluxos"
+  else
+    echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Disabling development mode... ${NC}"
+    config_builder "development" "false" "Development Mode" "fluxos"
+  fi
+}
+
 function fluxos_reconfiguration {
  echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
  echo -e "${YELLOW}================================================================${NC}"
@@ -1434,7 +1449,8 @@ function fluxos_reconfiguration {
  whiptail --title "FluxOS Configuration" --menu "Make your choice" 15 40 6 \
  "1)" "Replace ZELID"   \
  "2)" "Add/Replace kadena address" \
- "3)" "Enable/Disable thunder mode"   3>&2 2>&1 1>&3
+ "3)" "Enable/Disable thunder mode" \
+ "4)" "Enable/Disable development mode"   3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1445,6 +1461,9 @@ function fluxos_reconfiguration {
 		;;
 		"3)")
 		thunder_mode
+		;;
+	        "4)")
+		development_mode
 		;;
 		
 	esac
@@ -1565,7 +1584,7 @@ function bootstrap_new() {
 	else
 		if [[ ! -f /home/$USER/install_conf.json ]]; then
 			bootstrap_manual
-			if [[ "$Mode" != "install" && "$Server_offline" == "0" ]]; then
+			if [[ "$Mode" != "install" && "$server_offline" == "0" ]]; then
 				start_service
 				if whiptail --yesno "Would you like remove bootstrap archive file?" 8 60; then
 					sudo rm -rf $FILE_PATH /dev/null 2>&1 && sleep 2
