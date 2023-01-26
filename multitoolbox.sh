@@ -515,13 +515,7 @@ function install_node(){
 	fi
 	
 	if [[ "$OS_FLAGE" == "" ]]; then
-	  if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
-		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation"
-		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-		echo
-		exit
-	  fi
+          os_check
 	fi
 	
 	if sudo docker run hello-world > /dev/null 2>&1; then
@@ -549,13 +543,11 @@ function install_docker(){
 		echo
 		exit
 	fi
-	if [[ $(lsb_release -cs) == "jammy" || $(lsb_release -cs) == "kinetic" ]]; then
-		echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
-		echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version .. please re-image and retry installation"
-		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-		echo
-		exit
+	
+	if [[ "$OS_FLAGE" == "" ]]; then
+          os_check
 	fi
+	
 	if [[ -z "$usernew" ]]; then
 		usernew="$(whiptail --title "MULTITOOLBOX $dversion" --inputbox "Enter your username" 8 72 3>&1 1>&2 2>&3)"
 		usernew=$(awk '{print tolower($0)}' <<< "$usernew")
