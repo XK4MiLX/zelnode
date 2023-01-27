@@ -886,7 +886,7 @@ function os_check(){
       if [[ "$avx_check" == "" && $(lsb_release -cs) == "jammy" ]]; then
         echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
       fi
-      echo -e "${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation"
+      echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
       echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
       echo
       exit      
