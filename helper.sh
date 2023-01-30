@@ -1021,10 +1021,10 @@ function create_kda_bootstrap {
         if [[ "$docker_check" != "" && "$docker_check" != "0" ]]; then
 
             echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-            docker stop fluxkadenachainwebnode > /dev/null 2>&1
+            docker stop fluxkadenachainwebnode_KadenaNode > /dev/null 2>&1
 
             #echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-            cd /home/$USER/kadena/node/chainweb-db/0  	    
+            cd /home/$USER/zelflux/ZelApps/fluxkadenachainwebnode_KadenaNode/appdata/chainweb-db/0  	    
             #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
 	    tar_file_pack "rocksDb  sqlite" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
             cd
@@ -1045,7 +1045,7 @@ EOF
             fi
 
             echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
-            docker start fluxkadenachainwebnode > /dev/null 2>&1
+            docker start fluxkadenachainwebnode_KadenaNode > /dev/null 2>&1
 
         fi
 	
