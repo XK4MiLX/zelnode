@@ -921,7 +921,7 @@ function  fluxos_clean(){
      do
        if [[ "${APPS_LIST[$j]}" != "ZelShare" && "${APPS_LIST[$j]}" != "" ]]; then
          echo -e "${ARROW} ${CYAN}Apps directory removed, path: ${GREEN}/home/$USER/zelflux/ZelApps/${APPS_LIST[$j]}${NC}"
-         rm -rf /home/$USER/zelflux/ZelApps/${APPS_LIST[$j]}
+         sudo rm -rf /home/$USER/zelflux/ZelApps/${APPS_LIST[$j]}
        fi
      done
    fi
