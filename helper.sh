@@ -980,7 +980,7 @@ function create_kda_bootstrap {
     	 fi
     fi
     
-    if [ ! -d /home/$USER/kadena/chainweb-db ]; then
+    if [ ! -d /home/$USER/zelflux/ZelApps/fluxkadenachainwebnode_KadenaNode/appdata/chainweb-db ]; then
         echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
         echo
         exit
