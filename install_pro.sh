@@ -670,6 +670,9 @@ log_rotate "Docker" "docker_debug_log" "/var/lib/docker/containers/*/*.log" "dai
 basic_security
 status_loop
 install_watchdog
+if [[ "$thunder" == "1" ]]; then
+	thunder_mode "install"
+fi
 finalizing
 if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]] && [[ "$upnp_port" != "null" ]] ; then
 	upnp_enable
