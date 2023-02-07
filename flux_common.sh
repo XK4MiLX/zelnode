@@ -1119,6 +1119,8 @@ function import_config_file() {
 		#FluxOS
 		ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 		KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+		#Benchmark
+		thunder=$(cat /home/$USER/install_conf.json | jq -r '.thunder')
 		#WatchDog
 		fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
 		flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
