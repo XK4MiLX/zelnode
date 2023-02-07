@@ -867,6 +867,11 @@ function manual_build(){
 	fi
 	firewall_disable='1'
 	swapon='1'
+	
+	if whiptail --yesno "Would you like enable thunder mode?" 8 60; then
+	     thunder='1'
+        fi
+	
 	rm /home/$USER/install_conf.json > /dev/null 2>&1
 	install_conf_create
 	config_file
