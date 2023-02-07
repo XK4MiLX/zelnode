@@ -254,7 +254,8 @@ function install_conf_create(){
 	  "telegram_chat_id": "${telegram_chat_id}",
 	  "eps_limit": "${eps_limit}",
 	  "upnp_port": "${upnp_port}",
-	  "gateway_ip": "${gateway_ip}"
+	  "gateway_ip": "${gateway_ip}",
+	  "thunder": "${thunder:-0}"
 	}
 	EOF
 }
@@ -1434,9 +1435,13 @@ function replace_zelid() {
 }
 
 function thunder_mode(){
+
  if [[ -d $HOME/.fluxbenchmark ]]; then
    sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+ else
+   mkdir -p $HOME/.fluxbenchmark > /dev/null 2>&1
  fi
+ 
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
    if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) == "" ]]; then
      config_builder "thunder" "1" "Thunder Mode" "benchmark"
@@ -1447,8 +1452,11 @@ function thunder_mode(){
  else
    config_builder "thunder" "1" "Thunder Mode" "benchmark"
  fi
- echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Restarting service... ${NC}"
- sudo systemctl restart zelcash > /dev/null 2>&1
+ if [[ "$1" == "" ]]; then
+   echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Restarting service... ${NC}"
+   sudo systemctl restart zelcash > /dev/null 2>&1
+ fi
+ 
 }
 
 
