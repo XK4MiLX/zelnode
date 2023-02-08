@@ -1178,8 +1178,12 @@ function import_config_file() {
 			else
 				echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
+			
+			if [[ "$thunder" == "1" ]]; then
+                                echo -e "${PIN}${CYAN} Enable thunder mode..............................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+                        fi
+                 fi
     fi
-	fi
 }
 function get_ip() {
 	WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
