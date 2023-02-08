@@ -544,7 +544,7 @@ function config_smart_create() {
                 echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
                 node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
-                        echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
+                        echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}"
                         smart_install_conf "node_label" "$node_label" "$1"
                 else
                         echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
