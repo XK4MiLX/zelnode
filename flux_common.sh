@@ -254,7 +254,8 @@ function install_conf_create(){
 	  "telegram_chat_id": "${telegram_chat_id}",
 	  "eps_limit": "${eps_limit}",
 	  "upnp_port": "${upnp_port}",
-	  "gateway_ip": "${gateway_ip}"
+	  "gateway_ip": "${gateway_ip}",
+	  "thunder": "${thunder:-0}"
 	}
 	EOF
 }
@@ -543,7 +544,7 @@ function config_smart_create() {
                 echo -e "${ARROW} ${YELLOW}Imported watchdog settings:${NC}"
                 node_label=$(grep -w label /home/$USER/watchdog/config.js | sed -e 's/.*label: .//' | sed -e 's/.\{2\}$//')
                 if [[ "$node_label" != "" && "$node_label" != "0" ]]; then
-                        echo -e "${PIN}${CYAN} Label = ${GREEN}Enabled${NC}"
+                        echo -e "${PIN}${CYAN} Label = ${GREEN}$node_label${NC}"
                         smart_install_conf "node_label" "$node_label" "$1"
                 else
                         echo -e "${PIN}${CYAN} Label = ${RED}Disabled${NC}"
@@ -866,6 +867,11 @@ function manual_build(){
 	fi
 	firewall_disable='1'
 	swapon='1'
+	
+	if whiptail --yesno "Would you like enable thunder mode?" 8 60; then
+	     thunder='1'
+        fi
+	
 	rm /home/$USER/install_conf.json > /dev/null 2>&1
 	install_conf_create
 	config_file
@@ -1118,6 +1124,8 @@ function import_config_file() {
 		#FluxOS
 		ZELID=$(cat /home/$USER/install_conf.json | jq -r '.zelid')
 		KDA_A=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
+		#Benchmark
+		thunder=$(cat /home/$USER/install_conf.json | jq -r '.thunder')
 		#WatchDog
 		fix_action=$(cat /home/$USER/install_conf.json | jq -r '.action')
 		flux_update=$(cat /home/$USER/install_conf.json | jq -r '.zelflux_update')
@@ -1170,8 +1178,12 @@ function import_config_file() {
 			else
 				echo -e "${PIN}${CYAN} Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
 			fi
+			
+			if [[ "$thunder" == "1" ]]; then
+                                echo -e "${PIN}${CYAN} Enable thunder mode..............................................[${CHECK_MARK}${CYAN}]${NC}" && sleep 1
+                        fi
+                 fi
     fi
-	fi
 }
 function get_ip() {
 	WANIP=$(curl --silent -m 15 https://api4.my-ip.io/ip | tr -dc '[:alnum:].')
@@ -1434,9 +1446,13 @@ function replace_zelid() {
 }
 
 function thunder_mode(){
+
  if [[ -d $HOME/.fluxbenchmark ]]; then
    sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+ else
+   mkdir -p $HOME/.fluxbenchmark > /dev/null 2>&1
  fi
+ 
  if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
    if [[ $(grep -e "thunder" /home/$USER/.fluxbenchmark/fluxbench.conf) == "" ]]; then
      config_builder "thunder" "1" "Thunder Mode" "benchmark"
@@ -1447,8 +1463,11 @@ function thunder_mode(){
  else
    config_builder "thunder" "1" "Thunder Mode" "benchmark"
  fi
- echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Restarting service... ${NC}"
- sudo systemctl restart zelcash > /dev/null 2>&1
+ if [[ "$1" == "" ]]; then
+   echo -e "${ARROW}${GREEN} [BenchD] ${CYAN}Restarting service... ${NC}"
+   sudo systemctl restart zelcash > /dev/null 2>&1
+ fi
+ 
 }
 
 
