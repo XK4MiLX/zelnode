@@ -2354,9 +2354,9 @@ function selfhosting_creator(){
 				selfhosting
 			;;
 			"2)")
-			  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate...${NC}"
+			  echo -e "${ARROW} ${YELLOW}Creating cron service for ip rotate.....${NC}"
 				#device_setup=$(whiptail --inputbox "Enter your device name" 8 60 3>&1 1>&2 2>&3)
-				deviceList=($(sudo route -n |  awk '{ if ($8 != "" && $8 != "Iface" && $8 != "docker0" ) printf("%s\n", $8); }' | sort | uniq))
+				deviceList=($(sudo route -n |  awk '{ if ($8 != "" && $8 != "Iface" && $8 != "docker0" ) printf("%s\n", $8); }' | uniq))
 				elements=${#deviceList[@]}
 				choices=();
 				for (( i=0;i<$elements;i++)); do
