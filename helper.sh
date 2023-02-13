@@ -969,6 +969,8 @@ function unlock_flux_resouce()
 function create_kda_bootstrap {
 
     kda_bootstrap_daemon="0"
+    kadena_path={$1:-kadena}
+    kadena_docker_name={$2:-fluxkadenachainwebnode}
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
@@ -980,7 +982,7 @@ function create_kda_bootstrap {
     	 fi
     fi
     
-    if [ ! -d /home/$USER/zelflux/ZelApps/fluxkadenachainwebnode_KadenaNode/appdata/chainweb-db ]; then
+    if [ ! -d /home/$USER/$kadena_path/chainweb-db ]; then
         echo -e "${ARROW} ${CYAN}Kadena Node chain directory does not exist, operation stopped...${NC}"
         echo
         exit
@@ -1021,10 +1023,10 @@ function create_kda_bootstrap {
         if [[ "$docker_check" != "" && "$docker_check" != "0" ]]; then
 
             echo -e "${ARROW} ${CYAN}Stopping Kadena Node...${NC}"
-            docker stop fluxkadenachainwebnode_KadenaNode > /dev/null 2>&1
+            docker stop $kadena_docker_name > /dev/null 2>&1
 
             #echo -e "${ARROW} ${CYAN}Bootstrap file creating...${NC}"
-            cd /home/$USER/zelflux/ZelApps/fluxkadenachainwebnode_KadenaNode/appdata/chainweb-db/0  	    
+            cd /home/$USER/$kadena_path/chainweb-db/0  	    
             #zip /home/$USER/$KDA_BOOTSTRAP_ZIPFILE -r chainweb-db
 	    tar_file_pack "rocksDb  sqlite" "/home/$USER/$KDA_BOOTSTRAP_ZIPFILE"
             cd
@@ -1045,7 +1047,7 @@ EOF
             fi
 
             echo -e "${ARROW} ${CYAN}Starting Kadena Node...${NC}"
-            docker start fluxkadenachainwebnode_KadenaNode > /dev/null 2>&1
+            docker start $kadena_docker_name > /dev/null 2>&1
 
         fi
 	
