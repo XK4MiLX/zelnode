@@ -969,8 +969,8 @@ function unlock_flux_resouce()
 function create_kda_bootstrap {
 
     kda_bootstrap_daemon="0"
-    kadena_path={$1:-kadena}
-    kadena_docker_name={$2:-fluxkadenachainwebnode}
+    kadena_path={$2:-kadena}
+    kadena_docker_name={$3:-fluxkadenachainwebnode}
 
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
