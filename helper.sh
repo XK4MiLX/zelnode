@@ -971,7 +971,9 @@ function create_kda_bootstrap {
     kda_bootstrap_daemon="0"
     kadena_path={$2:-kadena}
     kadena_docker_name={$3:-fluxkadenachainwebnode}
-
+    echo -e "${ARROW} ${CYAN}APPS LOCATION: ${GREEN}/home/$USER/$kadena_path/chainweb-db${NC}"
+    echo -e "${ARROW} ${CYAN}DOCKER APPS: ${GREEN}$kadena_docker_name${NC}"
+    echo -e ""
     WANIP=$(wget --timeout=3 --tries=2 http://ipecho.net/plain -O - -q) 
     if [[ "$WANIP" == "" ]]; then
         WANIP=$(curl -s -m 3 ifconfig.me)     
@@ -1320,7 +1322,7 @@ fi
 
         "create_kda_bootstrap")
             echo	
-            create_kda_bootstrap
+            create_kda_bootstrap $2 $3
             echo
         ;;
            
