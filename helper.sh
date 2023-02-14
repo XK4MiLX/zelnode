@@ -969,8 +969,8 @@ function unlock_flux_resouce()
 function create_kda_bootstrap {
 
     kda_bootstrap_daemon="0"
-    kadena_path={$2:-kadena}
-    kadena_docker_name={$3:-fluxkadenachainwebnode}
+    kadena_path=${$2:-kadena}
+    kadena_docker_name=${$3:-fluxkadenachainwebnode}
     echo -e "${ARROW} ${CYAN}APPS LOCATION: ${GREEN}/home/$USER/$kadena_path/chainweb-db${NC}"
     echo -e "${ARROW} ${CYAN}DOCKER APPS: ${GREEN}$kadena_docker_name${NC}"
     echo -e ""
