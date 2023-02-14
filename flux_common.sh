@@ -2466,8 +2466,8 @@ function selfhosting() {
 	  if [[ "$api_port" == "" ]]; then
 		api_port="16127"
 	  fi
-	  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info | jq -r .data.node.status.ip | sed -r 's/:.+//')
-	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" ]]; then
+	  confirmed_ip=$(curl -SsL -m 10 http://localhost:$api_port/flux/info 2>/dev/null | jq -r .data.node.status.ip | sed -r 's/:.+//')
+	  if [[ "$WANIP" != "" && "$confirmed_ip" != "" && "$confirmed_ip" != "null" ]]; then
 		 if [[ "$WANIP" != "$confirmed_ip" ]]; then
 			date_timestamp=$(date '+%Y-%m-%d %H:%M:%S')
 			echo -e "New IP detected, IP: $WANIP was added to $device_name at $date_timestamp" >> /home/$USER/ip_history.log
