@@ -160,7 +160,7 @@ function install_flux() {
 		
 		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
 		if [[ "$upnp_port" != "" ]]; then
-                        echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+                        echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
                 fi
 		
 		echo -e ""
