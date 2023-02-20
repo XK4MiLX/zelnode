@@ -157,6 +157,12 @@ function install_flux() {
 			echo -e "${PIN}${CYAN}Kadena address = ${GREEN}$KDA_A${NC}"
 		fi
 		echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}"  
+		
+		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+		if [[ "$upnp_port" != "" ]]; then
+                        echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
+                fi
+		
 		echo -e ""
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
@@ -216,7 +222,10 @@ function install_flux() {
 		done	 
 	fi
 	fluxos_conf_create
-	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then	
+	        if [[ "$upnp_port" != "" ]]; then
+                  config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
+		fi
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
 		string_limit_x_mark "FluxOS installation failed, missing config file..........................................."
