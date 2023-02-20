@@ -158,7 +158,7 @@ function install_flux() {
 		fi
 		echo -e "${PIN}${CYAN}IP = ${GREEN}$WANIP${NC}"  
 		
-		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | egrep -o '[0-9]+')
+		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
 		if [[ "$upnp_port" != "" ]]; then
                         echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
                 fi
