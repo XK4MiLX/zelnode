@@ -132,7 +132,7 @@ function install_watchdog() {
 						discord=$(whiptail --inputbox "Enter your discord server webhook url" 8 65 3>&1 1>&2 2>&3)
 						sleep 1
 						if whiptail --yesno "Would you like enable nick ping on discord?" 8 60; then
-
+							try="0"
 							while true
 							do
 								ping=$(whiptail --inputbox "Enter your discord user id" 8 60 3>&1 1>&2 2>&3)
@@ -142,6 +142,13 @@ function install_watchdog() {
 								else
 									string_limit_x_mark "UserID is not valid try again............................."
 									sleep 1
+									try=$(($try+1))
+									if [[ "$try" -gt "3" ]]; then
+										echo -e "${WORNING} ${CYAN}You have reached the maximum number of attempts...${NC}" 
+										echo -e "${WORNING} ${CYAN}Disabling ping but continue watchdog install ...${NC}"
+										ping=0;
+										break
+									fi
 								fi
 							done
 							sleep 1
