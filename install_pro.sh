@@ -563,7 +563,7 @@ function install_process() {
 	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
 	# AVX instruction flag not found - so install 4.4
 	# else install newest version 6.0
-	if [[ "$avx_check" == "" ]]; then
+	if [[ "$avx_check" == "" || "$(dpkg --print-architecture)" = *arm* ]]; then
 		curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
 		if [[ $(lsb_release -d) = *Debian* ]]; then 
 			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
