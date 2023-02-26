@@ -881,7 +881,7 @@ function manual_build(){
 function os_check(){
   BLACK_LIST=( "kinetic" )
   avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-  if [[ "$avx_check" == "" ]]; then 
+  if [[ "$avx_check" == "" || "$(dpkg --print-architecture)" = *arm* ]]; then 
     BLACK_LIST+=( "jammy" )
   fi
   LIST_LENGTH=${#BLACK_LIST[@]}
