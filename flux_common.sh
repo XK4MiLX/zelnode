@@ -881,7 +881,7 @@ function manual_build(){
 function os_check(){
   BLACK_LIST=( "kinetic" )
   avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-  if [[ "$avx_check" == "" || "$(dpkg --print-architecture)" = *arm* ]]; then 
+  if [[ "$avx_check" == "" ]]; then 
     BLACK_LIST+=( "jammy" )
   fi
   LIST_LENGTH=${#BLACK_LIST[@]}
@@ -1776,7 +1776,17 @@ function install_mongod() {
 	sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
 	echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
 	sudo apt-get update -y > /dev/null 2>&1
-	sudo apt-get install mongodb-org -y > /dev/null 2>&1 && sleep 2
+	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+        if [[ "$avx_check" == "" ]]; then
+	  sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
+	  echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1
+          echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+          echo "mongodb-org-shell hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+          echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+          echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+	else
+	  sudo apt install -y mongodb-org > /dev/null 2>&1 
+	fi
 	sudo systemctl enable mongod > /dev/null 2>&1
 	sudo systemctl start  mongod > /dev/null 2>&1
 	if mongod --version > /dev/null 2>&1; then
