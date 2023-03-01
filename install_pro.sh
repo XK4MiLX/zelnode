@@ -682,8 +682,8 @@ if [[ "$thunder" == "1" ]]; then
 	echo -e "${ARROW} ${YELLOW}Thunder Mode configuration...${NC}"
 	thunder_mode "install"
 fi
-finalizing
 if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]] && [[ "$upnp_port" != "null" ]] ; then
-	upnp_enable
+	upnp_enable "install"
 fi
+finalizing
 display_banner
