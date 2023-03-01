@@ -1967,6 +1967,15 @@ function finalizing() {
 	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 	echo && spinning_timer
 	echo 
+	
+	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]] && [[ "$upnp_port" != "null" ]] ; then
+	  error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
+          if [[ "$error_check" == "" ]]; then
+	    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
+	    echo -e ""
+	  fi
+	fi
+	
 	$BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
 	NUM='300'
 	MSG1='Restarting benchmark...'
