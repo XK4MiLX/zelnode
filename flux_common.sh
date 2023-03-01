@@ -2220,7 +2220,6 @@ function upnp_enable() {
 		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		#API PORT
 		sudo ufw allow $FLUX_PORT > /dev/null 2>&1
 		#HOME UI PORT
@@ -2286,6 +2285,7 @@ function upnp_enable() {
 		fi
 	fi
 	if [[ "$1" != "install" ]]; then
+		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		sudo systemctl restart zelcash  > /dev/null 2>&1
 		pm2 restart flux  > /dev/null 2>&1
 		sleep 150
