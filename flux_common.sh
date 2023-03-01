@@ -1007,20 +1007,6 @@ function string_limit_check_mark() {
 	fi
 	echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
-function spinning_timer() {
-	animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-	end=$((SECONDS+NUM))
-	while [ $SECONDS -lt $end ];
-	do
-		for i in "${animation[@]}";
-		do
-		echo -e ""
-			echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-			sleep 0.1
-		done
-	done
-	echo -ne "${MSG2}"
-}
 function integration_check() {
 	FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
 	ELEMENTS=${#FILE_ARRAY[@]}
