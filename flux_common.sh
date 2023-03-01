@@ -1970,7 +1970,7 @@ function finalizing() {
 	
 	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]] && [[ "$upnp_port" != "null" ]] ; then
 	  error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
-          if [[ "$error_check" == "" ]]; then
+          if [[ "$error_check" != "" ]]; then
 	    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
 	    echo -e ""
 	  fi
