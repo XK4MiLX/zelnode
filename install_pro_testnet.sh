@@ -688,72 +688,75 @@ EOF
 }
 
 function install_daemon() {
-
    sudo rm /etc/apt/sources.list.d/zelcash.list > /dev/null 2>&1
    sudo rm /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
-   
    echo -e "${ARROW} ${YELLOW}Configuring daemon repository and importing public GPG Key${NC}" 
    sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
-   
-if [[ "$(lsb_release -cs)" == "xenial" ]]; then
-   
-     echo 'deb https://apt.fluxos.network/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
-     gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
-     gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
-     
-     if ! gpg --list-keys Zel > /dev/null; then    
-         gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-         gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1   
-     fi     
-     flux_package && sleep 2    
-else
-   # cleaning 
-   sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-	 sudo rm /usr/share/keyrings/zelcash-archive-keyring.gpg > /dev/null 2>&1
-	 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-   # downloading key && save it as keyring  
-   gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
-      echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
-      sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-      gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://na.pool.sks-keyservers.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-   fi
-   if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
-      echo -e "${YELLOW}Last keyserver also failed will try one last keyserver.${NC}"
-      sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-      gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
-   fi
-   if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
-    flux_package && sleep 2
+   sudo chown -R $USER:$USER /home/$USER/.gnupg > /dev/null 2>&1
+   if [[ "$(lsb_release -cs)" == "xenial" ]]; then
+	echo 'deb https://apt.fluxos.network/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+	gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
+	gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
+	if ! gpg --list-keys Zel > /dev/null; then    
+		gpg --keyserver hkp://keys.gnupg.net:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+		gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1   
+	fi 
+		flux_package && sleep 2    
    else
-     echo
-     echo -e "${WORNING} ${RED}Importing public GPG Key failed...${NC}"
-     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-     echo
-     exit
-   fi 
-fi
+	sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee --append /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+	# downloading key && save it as keyring  
+	gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+	key_counter=0
+	until [ $key_counter -gt 5 ]
+	do
+	  if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+	    break
+	  fi
+	  echo -e "${CYAN}Retrieve keys failed will try again...${NC}"
+	  sleep 5
+	  sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+	  gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
+	  ((key_counter++))
+	done
+		
+	if gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
+		flux_package && sleep 2 
+	else   
+		echo -e ""
+		echo -e "${WORNING} ${RED}Importing public GPG Key failed...${NC}"
+		echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+		echo -e ""
+		exit
+	fi
+  fi
 sudo rm -rf  /tmp/*lux* 2>&1 && sleep 2
 if [[ $(dpkg --print-architecture) = *amd* ]]; then
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-Linux-halving.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Flux-Linux-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  echo -e "${ARROW} ${CYAN}Downloading testnet file...${NC}" 
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/Testnet/Flux-amd64-v6.2.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Flux-amd64-v6.2.0.tar.gz -C /tmp  > /dev/null 2>&1
   sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-Linux-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-Linux-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/Testnet/Fluxbench-Linux-v3.9.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-Linux-v3.9.0.tar.gz -C /tmp > /dev/null 2>&1
   sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+  sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
+  sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
 else
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Flux-arm64-halving.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Flux-arm64-halving.tar.gz -C /tmp  > /dev/null 2>&1
+  echo -e "${ARROW} ${CYAN}Downloading testnet file...${NC}" 
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/Testnet/Flux-arm-6.2.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Flux-arm-6.2.0.tar.gz -C /tmp  > /dev/null 2>&1
   sudo mv /tmp/fluxd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/flux-cli /usr/local/bin > /dev/null 2>&1
-  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/halving-test-2/Fluxbench-arm-v3.3.0.tar.gz -P /tmp > /dev/null 2>&1
-  sudo tar xzvf /tmp/Fluxbench-arm-v3.3.0.tar.gz -C /tmp > /dev/null 2>&1
+  sudo wget https://github.com/RunOnFlux/fluxd/releases/download/Testnet/Fluxbench-arm-v3.9.0.tar.gz -P /tmp > /dev/null 2>&1
+  sudo tar xzvf /tmp/Fluxbench-arm-v3.9.0.tar.gz -C /tmp > /dev/null 2>&1
   sudo mv /tmp/fluxbenchd /usr/local/bin > /dev/null 2>&1
   sudo mv /tmp/fluxbench-cli /usr/local/bin > /dev/null 2>&1
+  sudo rm -rf  /tmp/flux* 2>&1 && sleep 2
+  sudo rm -rf  /tmp/Flux* 2>&1 && sleep 2
 fi
-
 sudo chmod 755 $COIN_PATH/* > /dev/null 2>&1 && sleep 2
 }
 
