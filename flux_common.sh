@@ -1007,20 +1007,6 @@ function string_limit_check_mark() {
 	fi
 	echo -e "${ARROW} ${CYAN}$string[${CHECK_MARK}${CYAN}]${NC}"
 }
-function spinning_timer() {
-	animation=( ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏ )
-	end=$((SECONDS+NUM))
-	while [ $SECONDS -lt $end ];
-	do
-		for i in "${animation[@]}";
-		do
-		echo -e ""
-			echo -ne "${RED}\r\033[1A\033[0K$i ${CYAN}${MSG1}${NC}"
-			sleep 0.1
-		done
-	done
-	echo -ne "${MSG2}"
-}
 function integration_check() {
 	FILE_ARRAY=( 'fluxbench-cli' 'fluxbenchd' 'flux-cli' 'fluxd' 'flux-fetch-params.sh' 'flux-tx' )
 	ELEMENTS=${#FILE_ARRAY[@]}
@@ -1981,6 +1967,15 @@ function finalizing() {
 	MSG2="${CYAN}.............[${CHECK_MARK}${CYAN}]${NC}"
 	echo && spinning_timer
 	echo 
+	
+	if [[ "$gateway_ip" != "" && "$upnp_port" != "" ]] && [[ "$upnp_port" != "null" ]] ; then
+	  error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
+          if [[ "$error_check" != "" ]]; then
+	    echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
+	    echo -e ""
+	  fi
+	fi
+	
 	$BENCH_CLI restartnodebenchmarks  > /dev/null 2>&1
 	NUM='300'
 	MSG1='Restarting benchmark...'
@@ -2225,7 +2220,6 @@ function upnp_enable() {
 		config_builder "fluxport" "$FLUX_PORT" "MultiPort Mode" "benchmark"
 	fi
 	if [[ -f /home/$USER/.fluxbenchmark/fluxbench.conf ]]; then
-		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
 		#API PORT
 		sudo ufw allow $FLUX_PORT > /dev/null 2>&1
 		#HOME UI PORT
@@ -2290,20 +2284,26 @@ function upnp_enable() {
 			sudo ufw allow from $router_ip to any proto udp > /dev/null 2>&1
 		fi
 	fi
-	sudo systemctl restart zelcash  > /dev/null 2>&1
-	pm2 restart flux  > /dev/null 2>&1
-	sleep 150
-	echo -e "${ARROW}${CYAN} Checking FluxOS logs... ${NC}"
-	error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
-	if [[ "$error_check" == "" ]]; then
-		echo -e ""
-		LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
-		ZELFRONTPORT=$(($FLUX_PORT-1))
-		echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${LOCAL_IP}:$ZELFRONTPORT${NC}"
-		echo -e ""
+	if [[ "$1" != "install" ]]; then
+		echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
+		sudo systemctl restart zelcash  > /dev/null 2>&1
+		pm2 restart flux  > /dev/null 2>&1
+		sleep 150
+		echo -e "${ARROW}${CYAN} Checking FluxOS logs... ${NC}"
+		error_check=$(tail -n10 /home/$USER/.pm2/logs/flux-out.log | grep "UPnP failed")
+		if [[ "$error_check" == "" ]]; then
+			echo -e ""
+			LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+			ZELFRONTPORT=$(($FLUX_PORT-1))
+			echo -e "${PIN} ${CYAN}To access your FluxOS use this url: ${SEA}http://${LOCAL_IP}:$ZELFRONTPORT${NC}"
+			echo -e ""
+		else
+			echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
+			echo -e ""
+		fi
 	else
-		echo -e "${WORNING} ${RED}Problem with UPnP detected, FluxOS Shutting down...${NC}"
-		echo -e ""
+			LOCAL_IP=$(ip -o route get to 8.8.8.8 | sed -n 's/.*src \([0-9.]\+\).*/\1/p')
+			ZELFRONTPORT=$(($FLUX_PORT-1))
 	fi
 }
 #### TESTNET
