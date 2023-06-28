@@ -1,0 +1,23 @@
+# Top-most EditorConfig file
+root = true
+
+# Unix-style end-of-line characters
+[*]
+end_of_line = LF
+
+# Use UTF-8 encoding
+[*.{sh,bash}]
+charset = utf-8
+
+# Indentation settings
+[*.{sh,bash}]
+indent_style = space
+indent_size = 2
+
+# Trailing whitespace
+[*.{sh,bash}]
+trim_trailing_whitespace = true
+
+# Insert final newline
+[*.{sh,bash}]
+insert_final_newline = true
