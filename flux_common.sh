@@ -90,7 +90,6 @@ function fluxos_conf_create(){
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
 	  development: false,
-	  decryptionkey: '',
 	  testnet: $testnet
 	  }
 	}
@@ -399,7 +398,7 @@ function config_builder() {
 
 function smart_reconfiguration(){
  watchdog_settings_list=("label", "tier_eps_min", "zelflux_update", "zelcash_update", "zelbench_update", "action", "ping", "web_hook_url", "telegram_alert", "telegram_bot_token", "telegram_chat_id")
- fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress", "development", "decryptionkey")
+ fluxos_settings_list=("kadena", "zelid", "apiport", "ipaddress", "development")
  daemon_settings_list=("zelnodeprivkey", "zelnodeoutpoint", "zelnodeindex")
  benchmark_settings_list=("fluxport", "thunder", "speedtestserverid")
  config_list=$(cat <<-END
@@ -417,8 +416,7 @@ function smart_reconfiguration(){
   "thunder": [{"key": "thunder", "label": "Thunder Mode"}],
   "speedtestserverid": [{"key": "speedtestserverid", "label": "Speed Test Server ID"}],
   "upnp_port": [{"key": "apiport", "label": "UPnP Port"}],
-  "development": [{"key": "development", "label": "Development Mode"}],
-  "decryptionkey": [{"key": "decryptionkey", "label": "Encryption Mode"}]
+  "development": [{"key": "development", "label": "Development Mode"}]
  }
 END
 )
@@ -683,7 +681,7 @@ function manual_build(){
 		while true
 		do
 			zel_id=$(whiptail --title "Flux Configuration" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)
-			if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ]; then
+			if [ $(printf "%s" "$zel_id" | wc -c) -eq "34" ] || [ $(printf "%s" "$zel_id" | wc -c) -eq "33" ] || [ $(grep -Eo "^0x[a-fA-F0-9]{40}$" <<< "$zel_id") ]; then
 				echo -e "${ARROW} ${CYAN}Zel ID is valid${CYAN}.........................[${CHECK_MARK}${CYAN}]${NC}"
 				break
 			else
@@ -1413,7 +1411,7 @@ function replace_zelid() {
 	while true
 	do
 		new_zelid="$(whiptail --title "MULTITOOLBOX" --inputbox "Enter your ZEL ID from ZelCore (Apps -> Zel ID (CLICK QR CODE)) " 8 72 3>&1 1>&2 2>&3)"
-		if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ]; then
+		if [ $(printf "%s" "$new_zelid" | wc -c) -eq "34" ] || [ $(printf "%s" "$new_zelid" | wc -c) -eq "33" ] || [ $(grep -Eo "^0x[a-fA-F0-9]{40}$" <<< "$new_zelid") ]; then
 			string_limit_check_mark "Zel ID is valid..........................................."
 			break
 		else
