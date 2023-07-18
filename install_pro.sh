@@ -486,7 +486,7 @@ function basic_security() {
 	sudo ufw allow out to any port 53 > /dev/null 2>&1
 	#FluxOS communication
 	sudo ufw allow 16100:16199/tcp > /dev/null 2>&1
-	sudo ufw default deny outgoing > /dev/null 2>&1
+	#sudo ufw default deny outgoing > /dev/null 2>&1
 	sudo ufw limit OpenSSH > /dev/null 2>&1
 	echo "y" | sudo ufw enable > /dev/null 2>&1
 	sudo ufw reload > /dev/null 2>&1
