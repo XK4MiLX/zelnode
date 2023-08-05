@@ -859,6 +859,7 @@ echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - MongoDB FiX action${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
 echo -e "${CYAN}15 - Node reconfiguration from install config${NC}"
+echo -e "${CYAN}16 - Hardware benchmark${NC}"
 echo -e "${YELLOW}================================================================${NC}"
 
 read -rp "Pick an option and hit ENTER: "
@@ -952,6 +953,20 @@ case "$REPLY" in
 	fi
 	node_reconfiguration
 	echo -e ""
+ ;;
+  16)
+	clear
+	sleep 1
+	echo -e "${GREEN}Module: Hardware benchmark${NC}"
+	echo -e "${YELLOW}================================================================${NC}"
+	if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then    
+		echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+		echo -e "${CYAN}Please switch to the user account.${NC}"
+		echo -e "${YELLOW}================================================================${NC}"
+		echo -e "${NC}"
+		exit
+	fi
+  bash -i <(curl -s https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/$ROOT_BRANCH/hardwarebench.sh)
  ;;
 esac
 # USED FOR CLEANUP AT END OF SCRIPT
