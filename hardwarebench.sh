@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 SSD=0
 HDD=0
-LC_ALL="en_US.UTF-8"
-LC_NUMERIC="en_US.UTF-8"
-LANG="en_US.UTF-8"
-LANGUAGE="en_US:en"
-##########
 command_exists()
 {
     command -v "$@" > /dev/null 2>&1
@@ -122,7 +117,7 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
 
   lvm_mount=""
   raid_list=()
-  disc__array=($(cd $HOME && LC_ALL=C lsblk -o NAME,SIZE,TYPE -b -n | grep ' disk' | awk '{ if ($2 > 2147483648 && $1 != "mmcblk0" && $1 != "mmcblk0p1") print                                         $1}'))
+  disc__array=($(cd $HOME && LC_ALL=C lsblk -o NAME,SIZE,TYPE -b -n | grep ' disk' | awk '{ if ($2 > 2147483648 && $1 != "mmcblk0" && $1 != "mmcblk0p1") print $1}'))
   for((i=0;i<${#disc__array[@]};i++));
   do
 
@@ -162,10 +157,10 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
 
       lvm_mount=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' lvm| dm' |  tail -n1 | awk '{ print $7 }' )
       if [[ "$lvm_mount" != "" ]]; then
-        partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' lvm| dm' |  tail -n1 | awk '{print $1 " " $4/(1024*10                                        24*1024) }')
+        partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' lvm| dm' |  tail -n1 | awk '{print $1 " " $4/(1024*1024*1024) }')
       else
         #checking if disk partition type is LVM2_member
-        part_type_check=$(cd $HOME && LC_ALL=C lsblk -o NAME,TYPE,FSTYPE,SIZE -b -n /dev/${disc__array[i]} --sort SIZE | egrep ' part' | egrep 'LVM2_member' |                                          tail -n1 | wc -l)
+        part_type_check=$(cd $HOME && LC_ALL=C lsblk -o NAME,TYPE,FSTYPE,SIZE -b -n /dev/${disc__array[i]} --sort SIZE | egrep ' part' | egrep 'LVM2_member' | tail -n1 | wc -l)
         if [[  "$part_type_check" != "0" ]]; then
           #skipp disk
           partition_name=$(awk '{print $1}' <<< $part_type_check)
@@ -176,11 +171,11 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
         fi
 
         #checking raid
-        partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' raid' |  tail -n1 | awk '{print $1 " " $4/(1024*1024*                                        1024) }')
+        partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' raid' |  tail -n1 | awk '{print $1 " " $4/(1024*1024*1024) }')
         if  [[ "$partition_output"  == "" ]]; then
           #checking  part ( when not lvm and raid )
           #echo -e "Checking partition on device: /dev/${disc__array[i]}"
-          partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' part' |  tail -n1 | awk '{print $1 " " $4/(1024*102                                        4*1024) }')
+          partition_output=$(cd $HOME && LC_ALL=C lsblk -l -b /dev/${disc__array[i]} --sort SIZE | egrep ' part' |  tail -n1 | awk '{print $1 " " $4/(1024*1024*1024) }')
           #echo -e "$partition_output"
           #echo -e "-----------------------------"
         else
@@ -218,9 +213,9 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
         sudo mkdir /.benchmark_test
       fi
       sudo mount /dev/$partition_name /.benchmark_test
-      available_space=$(LC_ALL=C df /dev/$partition_name | grep $partition_name | tail -n1 | awk '{ if ($4 > 2097152) printf("%.2f",$4/(1024*1024)); else prin                                        t "null"}')
+      available_space=$(LC_ALL=C df /dev/$partition_name | grep $partition_name | tail -n1 | awk '{ if ($4 > 2097152) printf("%.2f",$4/(1024*1024)); else print "null"}')
     else
-      available_space=$(LC_ALL=C df /dev/mapper/$partition_name | grep $partition_name | tail -n1 | awk '{ if ($4 > 2097152) printf("%.2f",$4/(1024*1024)); el                                        se print "null"}')
+      available_space=$(LC_ALL=C df /dev/mapper/$partition_name | grep $partition_name | tail -n1 | awk '{ if ($4 > 2097152) printf("%.2f",$4/(1024*1024)); else print "null"}')
     fi
 
     if [[ "$available_space" != "null" &&  "$available_space" != "" ]]; then
@@ -289,7 +284,7 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
 
   if [[ "$outputdiskbench" == "Disks Bench:" ]]; then
     # lsblk failed checking direct mount from df
-    df_direct_mount=$(LC_ALL=C df --output=source,fstype,size,avail,target | grep 'dev' | awk '{ if ($5 == "/") printf("%s %.2f %.2f\n", $1,$3/(1024*1024),$4/                                        (1024*1024))}')
+    df_direct_mount=$(LC_ALL=C df --output=source,fstype,size,avail,target | grep 'dev' | awk '{ if ($5 == "/") printf("%s %.2f %.2f\n", $1,$3/(1024*1024),$4/(1024*1024))}')
     if [[ df_direct_mount != "" ]]; then
       device_name=$(awk '{print $1}' <<< $df_direct_mount)
       partition_size=$(awk '{print $2}' <<< $df_direct_mount)
