@@ -59,28 +59,28 @@ if [[ "$(sysbench --version)" == "" ]]; then
 fi
 
 vcore=$(getconf _NPROCESSORS_ONLN)
-ram=$(LC_ALL=C free -b 2> /dev/null | awk 'NR==2 {print $2}' | grep -Eo '[0-9]+'| printf "%.2fGB\n" $(awk '{ print $1/1024/1024/1024 }'))
+ram=$(LC_ALL=C free -b 2> /dev/null | awk 'NR==2 {print $2}' | grep -Eo '[0-9]+'| printf "%.0f\n" $(awk '{ print $1/1024/1024/1024 }'))
 core=$(awk -F: '/cpu cores/ {name=$2} END {print name}' /proc/cpuinfo | sed 's/^[ \\t]*//;s/[ \\t]*$//')
 
 echo -e ""
 echo -e "-------------------------"
 echo -e "| MEMORY BENCHMARK"
 echo -e "-------------------------"
-echo -e "| RAM: $ram"
+echo -e "| RAM: ${ram}GB"
 echo -e "-------------------------"
 echo -e "| CPU BENCHMARK"
 echo -e "-------------------------"
 eps=$(LC_ALL=C sysbench cpu --cpu-max-prime=60000 --time=20 run 2> /dev/null | grep 'events per second' | awk -v cpu=$vcore '{print $4*cpu}')
 
-if [[ "${ram%%.*}" -ge  7 ]] && [[ "$core" -ge  2 ]] && [[ "$vcore" -ge 4 ]] &&  [[ "${eps%%.*}" -ge 240 ]]; then
+if [[ "$ram" -ge  7 ]] && [[ "$core" -ge  2 ]] && [[ "$vcore" -ge 4 ]] &&  [[ "${eps%%.*}" -ge 240 ]]; then
   status="CUMULUS"
 fi
 
-if [[ "${ram%%.*}" -ge  31 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
+if [[ "$ram" -ge  31 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
   status="NIMBUS"
 fi
 
-if [[ "${ram%%.*}" -ge  62 ]] && [[ "$core" -ge 8 ]]  && [[ "$vcore" -ge 16 ]] && [[ "${eps%%.*}" -ge  1520 ]]; then
+if [[ "$ram" -ge  62 ]] && [[ "$core" -ge 8 ]]  && [[ "$vcore" -ge 16 ]] && [[ "${eps%%.*}" -ge  1520 ]]; then
   status="STRATUS"
 fi
 
