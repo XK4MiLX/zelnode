@@ -71,7 +71,7 @@ fi
 if [[ "$ram" -ge  31 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
   status="NIMBUS"
 fi
-if [[ "$ram" -ge  62 ]] && [[ "$core" -ge 8 ]]  && [[ "$vcore" -ge 16 ]] && [[ "${eps%%.*}" -ge  1520 ]]; then
+if [[ "$ram" -ge  61 ]] && [[ "$core" -ge 8 ]]  && [[ "$vcore" -ge 16 ]] && [[ "${eps%%.*}" -ge  1520 ]]; then
   status="STRATUS"
 fi
 if [[ "$status" == "" ]]; then
