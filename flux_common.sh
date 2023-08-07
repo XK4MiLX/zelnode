@@ -90,6 +90,7 @@ function fluxos_conf_create(){
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
 	  development: false,
+    blockedPorts: [],
 	  testnet: $testnet,
 	  }
 	}
