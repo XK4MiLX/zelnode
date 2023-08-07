@@ -4,6 +4,7 @@ HDD=0
 SCORE=0
 GREEN='\033[1;32m'
 NC='\033[0m'
+CYAN='\033[1;36m'
 command_exists()
 {
     command -v "$@" > /dev/null 2>&1
@@ -59,7 +60,7 @@ echo -e ""
 echo -e "-------------------------"
 echo -e "| MEMORY BENCHMARK"
 echo -e "-------------------------"
-echo -e "| RAM: ${ram}GB"
+echo -e "| RAM: ${CYAN}${ram}GB${NC}"
 echo -e "-------------------------"
 echo -e "| CPU BENCHMARK"
 echo -e "-------------------------"
@@ -76,9 +77,9 @@ fi
 if [[ "$status" == "" ]]; then
   status="FAILED"
 fi
-echo -e "| CPU vcores: $vcore"
-echo -e "| CPU cores: $core"
-echo -e "| EPS: $eps"
+echo -e "| CPU vcores: ${CYAN}${vcore}${NC}"
+echo -e "| CPU cores: ${CYAN}${core}${NC}"
+echo -e "| EPS: ${CYAN}${eps}${NC}"
 outputdiskbench="Disks Bench:";
 #checking loop for lxc only if mount == '/'
 loop_mount=$(cd $HOME && LC_ALL=C lsblk -l -b -n | grep ' loop' | awk '{ if ($7 == "/") printf("%.2f\n", $4/(1024*1024*1024))}')
@@ -280,10 +281,10 @@ if [[ $outputdiskbench == "Disks Bench:" ]]; then
   fi
 fi
 echo -e "-------------------------"
-echo -e "| DISK INFO"
+echo -e "| DISK BENCHMARK"
 echo -e "-------------------------"
-echo -e "| SSD: $SSD"
-echo -e "| HDD: $HDD"
+echo -e "| SSD: ${CYAN}${SSD}${NC}"
+echo -e "| HDD: ${CYAN}${HDD}${NC}"
 echo -e "-------------------------"
 if [[ $status == "CUMULUS" ]]; then
   SCORE=1
