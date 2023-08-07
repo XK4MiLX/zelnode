@@ -68,7 +68,7 @@ eps=$(LC_ALL=C sysbench cpu --cpu-max-prime=60000 --time=20 run 2> /dev/null | g
 if [[ "$ram" -ge  7 ]] && [[ "$core" -ge  2 ]] && [[ "$vcore" -ge 4 ]] &&  [[ "${eps%%.*}" -ge 240 ]]; then
   status="CUMULUS"
 fi
-if [[ "$ram" -ge  31 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
+if [[ "$ram" -ge  30 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
   status="NIMBUS"
 fi
 if [[ "$ram" -ge  61 ]] && [[ "$core" -ge 8 ]]  && [[ "$vcore" -ge 16 ]] && [[ "${eps%%.*}" -ge  1520 ]]; then
