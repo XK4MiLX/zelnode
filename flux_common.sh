@@ -1486,6 +1486,11 @@ function builBlockedList() {
 
 function CreateBlockedList() {
   ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
   NumberCheck=$(sed 's/,/1/g' <<< $ADD)
   ADD=$(sed 's/,/ /g' <<< $ADD)
   if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
@@ -1506,6 +1511,11 @@ function AddBlockedPorts() {
   delimiter=","
   declare -a array=($(echo $string | tr "$delimiter" " "))
   ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
   NumberCheck=$(sed 's/,/1/g' <<< $ADD)
   ADD=$(sed 's/,/ /g' <<< $ADD)
   if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
