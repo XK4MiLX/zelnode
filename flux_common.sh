@@ -90,7 +90,8 @@ function fluxos_conf_create(){
 	  zelid: '${ZELID}',
 	  kadena: '${KDA_A}',
 	  development: false,
-	  testnet: $testnet
+    blockedPorts: [],
+	  testnet: $testnet,
 	  }
 	}
 	EOF
@@ -1465,6 +1466,107 @@ function development_mode(){
   fi
 }
 
+function builBlockedList() {
+  if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+   exit
+  fi
+  if [[ "$1" == ""  || "$2" == "" ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+   exit
+  fi
+  key="$1"
+  value="$2"
+  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
+      insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3${NC}" "${CHECK_MARK}"
+      return
+  fi
+}
+
+function CreateBlockedList() {
+  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
+    exit
+  fi
+  array=($ADD)
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  if [[ "${joined%,}" != "" ]]; then
+    string="\[${joined%,}\]"
+    display="${joined%,}"
+  fi
+}
+
+function AddBlockedPorts() {
+  string=$(grep "blockedPorts" $HOME/zelflux/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  delimiter=","
+  declare -a array=($(echo $string | tr "$delimiter" " "))
+  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
+    exit
+  fi
+  array+=($ADD)
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  string="\[${joined%,}\]"
+  display="${joined%,}"
+
+}
+
+function ClearBlockedPortsList() {
+  string="\[\]"
+  display=""
+}
+
+function RemoveLine(){
+  sed -i "/$1/d" /home/$USER/zelflux/config/userconfig.js
+}
+
+function blocked_ports(){
+  CHOICE=$(
+    whiptail --title "FluxOS Blocked Ports Management" --menu "Make your choice" 15 40 6 \
+     "1)" "Create new list"   \
+     "2)" "Add ports" \
+     "3)" "Clear list" 3>&2 2>&1 1>&3 )
+     
+  case $CHOICE in
+  "1)")
+    CreateBlockedList
+    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
+    RemoveLine "blockedPorts"
+    builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+  ;;
+  "2)")
+    AddBlockedPorts
+    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
+    RemoveLine "blockedPorts"
+    builBlockedList "  blockedPorts" "$string" "Blocked ports list updated successful!" "fluxos"
+  ;;
+  "3)")
+    ClearBlockedPortsList
+    RemoveLine "blockedPorts"
+    builBlockedList "  blockedPorts" "$string" "Blocked ports list cleared successful!" "fluxos"
+  ;;
+  esac
+}
+
 function fluxos_reconfiguration {
  echo -e "${GREEN}Module: FluxOS reconfiguration${NC}"
  echo -e "${YELLOW}================================================================${NC}"
@@ -1485,7 +1587,8 @@ function fluxos_reconfiguration {
  "1)" "Replace ZELID"   \
  "2)" "Add/Replace kadena address" \
  "3)" "Enable/Disable thunder mode" \
- "4)" "Enable/Disable development mode"   3>&2 2>&1 1>&3
+ "4)" "Enable/Disable development mode" \
+ "5)" "Blocked Ports Management" 3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1497,10 +1600,12 @@ function fluxos_reconfiguration {
 		"3)")
 		thunder_mode
 		;;
-	        "4)")
+	  "4)")
 		development_mode
 		;;
-		
+	  "5)")
+		blocked_ports
+		;;	
 	esac
 }
 ######### BOOTSTRAP SECTION ############################
