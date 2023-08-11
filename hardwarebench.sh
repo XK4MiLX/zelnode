@@ -65,7 +65,14 @@ echo -e "-------------------------"
 echo -e "| CPU BENCHMARK"
 echo -e "-------------------------"
 eps=$(LC_ALL=C sysbench cpu --cpu-max-prime=60000 --time=20 run 2> /dev/null | grep 'events per second' | awk -v cpu=$vcore '{print $4*cpu}')
-if [[ "$ram" -ge  7 ]] && [[ "$core" -ge  2 ]] && [[ "$vcore" -ge 4 ]] &&  [[ "${eps%%.*}" -ge 240 ]]; then
+
+if [[ "$(dpkg --print-architecture)" = *"Jetson"* ]]; then
+ cumulus_ram=3
+else
+ cumulus_ram=7
+fi
+
+if [[ "$ram" -ge  "$cumulus_ram" ]] && [[ "$core" -ge  2 ]] && [[ "$vcore" -ge 4 ]] &&  [[ "${eps%%.*}" -ge 240 ]]; then
   status="CUMULUS"
 fi
 if [[ "$ram" -ge  30 ]] && [[ "$core" -ge  4 ]] && [[ "$vcore" -ge 8 ]] && [[ "${eps%%.*}" -ge  640 ]]; then
@@ -295,11 +302,16 @@ fi
 if [[ $status == "STRATUS" ]]; then
   SCORE=3
 fi
+
+
 if [[ "$SSD" -lt 220 ]] || [[ "$SCORE" == 0 ]] ; then
   status="FAILED"
 fi
 if [[ "$SSD" -ge 220 ]] && [[ "$SCORE" -ge 1 ]]; then
   status="${GREEN}CUMULUS${NC}"
+fi
+if [[ "$HDD" -ge 9200 ]] && [[ "$SCORE" -ge 1 ]]; then
+  status="${GREEN}THUNDER${NC}"
 fi
 if [[ "$SSD" -ge 440 ]] && [[ "$SCORE" -ge 2 ]]; then
   status="${GREEN}NIMBUS${NC}"
