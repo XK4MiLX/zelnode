@@ -2345,6 +2345,8 @@ function upnp_enable() {
 				is_correct="0"
 			fi
 			if [[ "$is_correct" == "0" ]]; then
+        RemoveLine "routerIP"
+        builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
 				sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 				sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 				sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
@@ -2364,6 +2366,8 @@ function upnp_enable() {
 					fi
 			
 				done
+        RemoveLine "routerIP"
+        builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
 				sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 				sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 				sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
@@ -2381,6 +2385,8 @@ function upnp_enable() {
 						sleep 1
 					fi
 			done
+      RemoveLine "routerIP"
+      builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
 			sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 			sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 			sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
