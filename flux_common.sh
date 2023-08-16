@@ -281,11 +281,12 @@ function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
     key="$1"
-    if [[ "$value" == "false" || "$value" == "true" || "$value" =~ "^[0-9]+$" ]]; then 
+    if [[ "$2" == "false" || "$2" == "true" || "$2" =~ "^[0-9]+$" ]]; then 
      value=$2
      echo -e "IS NUMBER"
     else
      value="\'$2\'"
+     echo -e "IS NOT NUMBER"
     fi
     if [[ "$1" == "kadena" ]]; then
      if [[ $( grep "chainid" <<< "$2") == "" ]]; then
