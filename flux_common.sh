@@ -281,7 +281,7 @@ function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
     key="$1"
-    if [[ "$2" == "false" || "$2" == "true" || "$2" =~ "^[0-9]+$" ]]; then 
+    if [[ "$2" == "false" || "$2" == "true" || "$2" =~ ^[0-9]+$ ]]; then 
      value=$2
      echo -e "IS NUMBER"
     else
