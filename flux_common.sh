@@ -283,10 +283,8 @@ function config_builder() {
     key="$1"
     if [[ "$2" == "false" || "$2" == "true" || "$2" =~ ^[0-9]+$ ]]; then 
      value=$2
-     echo -e "IS NUMBER"
     else
      value="\'$2\'"
-     echo -e "IS NOT NUMBER"
     fi
     if [[ "$1" == "kadena" ]]; then
      if [[ $( grep "chainid" <<< "$2") == "" ]]; then
@@ -1398,13 +1396,9 @@ function replace_kadena {
 	fi	
 	kda_address="kadena:$KDA_A?chainid=0"
 	if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep "kadena") != "" ]]; then
-		sed -i "s/$(grep -e kadena /home/$USER/zelflux/config/userconfig.js)/kadena: '$kda_address',/" /home/$USER/zelflux/config/userconfig.js
-		if [[ $(grep -w $KDA_A /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-			echo -e "${ARROW} ${CYAN}Kadena address replaced successfully...................[${CHECK_MARK}${CYAN}]${NC}"
-		fi
-	else
-		insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "kadena: '$kda_address',"
-		echo -e "${ARROW} ${CYAN}Kadena address set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
+    config_builder "kadena" "$kda_address" "Kadena address" "fluxos"
+		##insertAfter "/home/$USER/zelflux/config/userconfig.js" "zelid" "    kadena: '$kda_address',"
+		##echo -e "${ARROW} ${CYAN}Kadena address set successfully........................[${CHECK_MARK}${CYAN}]${NC}"
 	fi
 }
 function replace_zelid() {
@@ -1419,13 +1413,15 @@ function replace_zelid() {
 			sleep 2
 		fi
 	done
+
+ 
 	if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
 		echo -e "${ARROW} ${CYAN}Replace ZEL ID skipped............................[${CHECK_MARK}${CYAN}]${NC}"
 	else
-		sed -i "s/$(grep -e zelid /home/$USER/zelflux/config/userconfig.js)/zelid:'$new_zelid',/" /home/$USER/zelflux/config/userconfig.js
-		if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
-			echo -e "${ARROW} ${CYAN}ZEL ID replaced successful........................[${CHECK_MARK}${CYAN}]${NC}"
-		fi
+		config_builder "zelid" "$new_zelid" "ZEL ID" "fluxos"
+		#if [[ $(grep -w $new_zelid /home/$USER/zelflux/config/userconfig.js) != "" ]]; then
+			#echo -e "${ARROW} ${CYAN}ZEL ID replaced successful........................[${CHECK_MARK}${CYAN}]${NC}"
+		#fi
 	fi
 }
 
