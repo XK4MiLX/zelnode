@@ -281,7 +281,7 @@ function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
     key="$1"
-    if [[ "$value" == "false" || "$value" == "true" || "$value" =~ "^[0-9]+$" ]]; 
+    if [[ "$value" == "false" || "$value" == "true" || "$value" =~ "^[0-9]+$" ]]; then 
      value="$2"
     else
      value="\'$2\'"
