@@ -160,9 +160,14 @@ function install_flux() {
 		
 		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
 		if [[ "$upnp_port" != "" ]]; then
-                        echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
-                fi
-		
+      echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
+    fi
+
+    router_ip=$(grep -w routerIP /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*routerIP: .//' | sed -e 's/.\{2\}$//')
+		if [[ "$router_ip" != "" ]]; then
+      echo -e "${PIN}${CYAN}Router IP = ${GREEN}$router_ip${NC}"
+    fi
+    
 		echo -e ""
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
@@ -223,8 +228,11 @@ function install_flux() {
 	fi
 	fluxos_conf_create
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then	
-	        if [[ "$upnp_port" != "" ]]; then
-                  config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
+	  if [[ "$upnp_port" != "" ]]; then
+      config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
+		fi
+    if [[ "$router_ip" != "" ]]; then
+      config_builder "routerIP" "$router_ip" "Router IP" "fluxos"
 		fi
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
