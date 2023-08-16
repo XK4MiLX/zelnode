@@ -273,49 +273,46 @@ function insert() {
   sudo sed -i -e "/$line/i"$'\\\n'"$newText"$'\n' "$file"
 }
 
+function RemoveLine(){
+  sed -i "/$1/d" /home/$USER/zelflux/config/userconfig.js
+}
+
 function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
-     if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
-       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
-       return
-     fi
-     if [[ "$1" == ""  || "$2" == "" ]]; then
-       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
-       return
-     fi
-     key="$1"
+    key="$1"
+    if [[ "$value" == "false" || "$value" == "true" || "$value" =~ "^[0-9]+$" ]]; 
      value="$2"
-     if [[ "$1" == "kadena" ]]; then
-       if [[ $( grep "chainid" <<< "$2") == "" ]]; then
-         value="kadena:$2?chainid=0"
-       fi
+    else
+     value="\'$2\'"
+    fi
+    if [[ "$1" == "kadena" ]]; then
+     if [[ $( grep "chainid" <<< "$2") == "" ]]; then
+       value="\'kadena:$2?chainid=0\'"
      fi
-     if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
-       if [[ "$value" == "false" || "$value" == "true" ]]; then
-          insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
-	  return
-        else
-          insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: '$value',"
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
-          return
-	fi
-     fi
-     if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: '$value'") != "" ]]; then
-       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
-       return
-     fi
-     if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") != "" ]]; then
-        if [[ "$value" == "false" || "$value" == "true" ]]; then
-	  sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: $value,/" /home/$USER/$FLUX_DIR/config/userconfig.js
-	else
-          sed -i "s/$(grep -e $key /home/$USER/$FLUX_DIR/config/userconfig.js)/  $key: '$value',/" /home/$USER/$FLUX_DIR/config/userconfig.js
-	fi
-        if [[ $(grep -w $value /home/$USER/$FLUX_DIR/config/userconfig.js) != "" ]]; then
-          padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 changed successfully${NC}" "${CHECK_MARK}"
-        fi
-     fi
+    fi
+    if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+     return
+    fi
+    if [[ "$1" == ""  || "$2" == "" ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+     return
+    fi
+    if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
+        insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "    $key: $value,"
+        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
+        return
+    fi
+    if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: $value") != "" ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
+     return
+    fi
+    if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") != "" ]]; then
+      RemoveLine "$key"
+      insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "    $key: $value,"
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 changed successfully${NC}" "${CHECK_MARK}"
+    fi
   fi
   #####################################################
   if [[ "$4" == "daemon" ]]; then
@@ -1535,10 +1532,6 @@ function ClearBlockedPortsList() {
   display=""
 }
 
-function RemoveLine(){
-  sed -i "/$1/d" /home/$USER/zelflux/config/userconfig.js
-}
-
 function blocked_ports(){
   CHOICE=$(
     whiptail --title "FluxOS Blocked Ports Management" --menu "Make your choice" 15 40 6 \
@@ -2272,9 +2265,9 @@ function log_rotate() {
 }
 #### UPnP
 function upnp_enable() {
-        if [[ -d $HOME/.fluxbenchmark ]]; then
-          sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
-        fi
+  if [[ -d $HOME/.fluxbenchmark ]]; then
+    sudo chown -R $USER:$USER $HOME/.fluxbenchmark > /dev/null 2>&1
+  fi
 	try="0"
 	echo -e ""
 	echo -e "${ARROW}${YELLOW} Creating UPnP configuration...${NC}"
@@ -2345,8 +2338,7 @@ function upnp_enable() {
 				is_correct="0"
 			fi
 			if [[ "$is_correct" == "0" ]]; then
-        RemoveLine "routerIP"
-        builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
+        config_builder "routerIP" "$router_ip" "RouterIP" "fluxos"
 				sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 				sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 				sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
@@ -2366,8 +2358,7 @@ function upnp_enable() {
 					fi
 			
 				done
-        RemoveLine "routerIP"
-        builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
+        config_builder "routerIP" "$router_ip" "RouterIP" "fluxos"
 				sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 				sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 				sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
@@ -2385,8 +2376,7 @@ function upnp_enable() {
 						sleep 1
 					fi
 			done
-      RemoveLine "routerIP"
-      builBlockedList "  routerIP" "\'$router_ip\'" "RouterIP added successful!" "fluxos"
+      config_builder "routerIP" "$router_ip" "RouterIP" "fluxos"
 			sudo ufw allow out from any to 239.255.255.250 port 1900 proto udp > /dev/null 2>&1
 			sudo ufw allow from $router_ip port 1900 to any proto udp > /dev/null 2>&1
 			sudo ufw allow out from any to $router_ip proto tcp > /dev/null 2>&1
