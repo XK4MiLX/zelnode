@@ -283,6 +283,7 @@ function config_builder() {
     key="$1"
     if [[ "$value" == "false" || "$value" == "true" || "$value" =~ "^[0-9]+$" ]]; then 
      value=$2
+     echo -e "IS NUMBER"
     else
      value="\'$2\'"
     fi
