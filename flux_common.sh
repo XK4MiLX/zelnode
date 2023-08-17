@@ -84,17 +84,17 @@ function fluxos_conf_create(){
 	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
 	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
-	module.exports = {
-	  initial: {
-      ipaddress: '${WANIP}',
-      zelid: '${ZELID}',
-      kadena: '${KDA_A}',
-      development: false,
-      blockedPorts: [],
-      testnet: $testnet,
-	  }
+module.exports = {
+  initial: {
+    ipaddress: '${WANIP}',
+    zelid: '${ZELID}',
+    kadena: '${KDA_A}',
+    development: false,
+    blockedPorts: [],
+    testnet: $testnet,
 	}
-	EOF
+}
+EOF
 }
 function flux_daemon_conf_create() {
 	RPCUSER=$(pwgen -1 8 -n)
