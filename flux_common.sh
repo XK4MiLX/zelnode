@@ -847,6 +847,7 @@ function manual_build(){
 		fi
 	fi
 	if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
+    upnp_enable=true
 	  router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
 		gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router: $router_ip)" 8 85 3>&1 1>&2 2>&3)
 		upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
@@ -860,6 +861,7 @@ function manual_build(){
 		"16187" "" OFF \
 		"16197" "" OFF 3>&1 1>&2 2>&3)
 	else
+    upnp_enable=""
 		gateway_ip=""
 		upnp_port=""
 	fi
