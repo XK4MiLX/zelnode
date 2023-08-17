@@ -278,6 +278,85 @@ function RemoveLine(){
   sed -i "/$1/d" /home/$USER/zelflux/config/userconfig.js
 }
 
+function builBlockedList() {
+  if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+   exit
+  fi
+  if [[ "$1" == ""  || "$2" == "" ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+   exit
+  fi
+  key="$1"
+  value="$2"
+  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
+      insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3${NC}" "${CHECK_MARK}"
+      return
+  fi
+}
+
+function CreateBlockedList() {
+  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
+    exit
+  fi
+  array=($ADD)
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  if [[ "${joined%,}" != "" ]]; then
+    string="\[${joined%,}\]"
+    display="${joined%,}"
+  fi
+}
+
+function AddBlockedPorts() {
+  string=$(grep "blockedPorts" $HOME/zelflux/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  delimiter=","
+  declare -a array=($(echo $string | tr "$delimiter" " "))
+  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
+    exit
+  fi
+  array+=($ADD)
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  string="\[${joined%,}\]"
+  display="${joined%,}"
+
+}
+
+function ClearBlockedPortsList() {
+  string="\[\]"
+  display=""
+}
+
+function ImportBlockedPorts(){
+  array=(grep -w blockedPorts /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  if [[ "${joined%,}" != "" ]]; then
+    string="\[${joined%,}\]"
+    display="${joined%,}"
+  fi
+}
+
 function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
@@ -536,6 +615,14 @@ function config_smart_create() {
                         smart_install_conf "upnp_port" "$upnp_port" "$1"
                         smart_install_conf "gateway_ip" "$gateway_ip" "$1"
                 fi
+
+                ImportBlockedPorts
+                if [[ "$string" != "" ]]; then
+                  echo -e "${PIN}${CYAN} BlockedPorts: [$display]${NC}"
+                  RemoveLine "blockedPorts"
+                  builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+                fi
+                
         fi
         #watchdog
         if [[ -f /home/$USER/watchdog/config.js ]]; then
@@ -1471,74 +1558,6 @@ function development_mode(){
   fi
 }
 
-function builBlockedList() {
-  if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
-   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
-   exit
-  fi
-  if [[ "$1" == ""  || "$2" == "" ]]; then
-   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
-   exit
-  fi
-  key="$1"
-  value="$2"
-  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
-      insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
-      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3${NC}" "${CHECK_MARK}"
-      return
-  fi
-}
-
-function CreateBlockedList() {
-  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
-  if [[ $? == 1 ]]; then
-     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
-     echo -e ""
-     exit
-  fi
-  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
-  ADD=$(sed 's/,/ /g' <<< $ADD)
-  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
-    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
-    exit
-  fi
-  array=($ADD)
-  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-  printf -v joined '%s,' "${sorted_unique_ids[@]}"
-  if [[ "${joined%,}" != "" ]]; then
-    string="\[${joined%,}\]"
-    display="${joined%,}"
-  fi
-}
-
-function AddBlockedPorts() {
-  string=$(grep "blockedPorts" $HOME/zelflux/config/userconfig.js |  awk -F'[][]' '{print $2}' )
-  delimiter=","
-  declare -a array=($(echo $string | tr "$delimiter" " "))
-  ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
-  if [[ $? == 1 ]]; then
-     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
-     echo -e ""
-     exit
-  fi
-  NumberCheck=$(sed 's/,/1/g' <<< $ADD)
-  ADD=$(sed 's/,/ /g' <<< $ADD)
-  if ! [[ "$NumberCheck" =~ ^[0-9]+$ ]]; then
-    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Input contains non numerical value${NC}" "${X_MARK}"
-    exit
-  fi
-  array+=($ADD)
-  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-  printf -v joined '%s,' "${sorted_unique_ids[@]}"
-  string="\[${joined%,}\]"
-  display="${joined%,}"
-
-}
-
-function ClearBlockedPortsList() {
-  string="\[\]"
-  display=""
-}
 
 function blocked_ports(){
   CHOICE=$(
