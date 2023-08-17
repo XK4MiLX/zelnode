@@ -511,7 +511,8 @@ function config_smart_create() {
              upnp_enable=true
              echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
              smart_install_conf "fluxport" "$fluxport" "$1"
-           fi 
+             smart_install_conf "upnp_enable" "$upnp_enable" "$1"
+      fi 
 	fi
         #fluxOS
         if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
