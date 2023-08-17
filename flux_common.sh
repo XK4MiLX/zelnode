@@ -92,7 +92,7 @@ module.exports = {
     development: false,
     blockedPorts: [],
     testnet: $testnet,
-	}
+  }
 }
 EOF
 }
