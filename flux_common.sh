@@ -255,6 +255,7 @@ function install_conf_create(){
 	  "eps_limit": "${eps_limit}",
 	  "upnp_port": "${upnp_port}",
 	  "gateway_ip": "${gateway_ip}",
+    "upnp_enable": "${upnp_enable}"
 	  "thunder": "${thunder:-0}"
 	}
 	EOF
@@ -507,6 +508,7 @@ function config_smart_create() {
            fi
 	   fluxport=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)  
 	   if [[ "$fluxport" != "" ]]; then
+             upnp_enable=true
              echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
              smart_install_conf "fluxport" "$fluxport" "$1"
            fi 
