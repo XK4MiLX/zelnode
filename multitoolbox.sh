@@ -241,7 +241,7 @@ function install_flux() {
 		fi
     if [[ "$blockedPortsList" != "" ]]; then
       RemoveLine "blockedPorts"
-      builBlockedList "  blockedPorts" "$blockedPortsList" "Blocked ports list crated successful!" "fluxos"
+      builBlockedList "  blockedPorts" "$blockedPortsList" "Blocked ports list created successfully!" "fluxos"
     fi
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
