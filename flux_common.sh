@@ -90,7 +90,7 @@ module.exports = {
     zelid: '${ZELID}',
     kadena: '${KDA_A}',
     development: false,
-    blockedPorts: [$string],
+    blockedPorts: [],
     testnet: $testnet,
   }
 }
