@@ -86,12 +86,12 @@ function fluxos_conf_create(){
 	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
 	module.exports = {
 	  initial: {
-	    ipaddress: '${WANIP}',
-	    zelid: '${ZELID}',
-	    kadena: '${KDA_A}',
-	    development: false,
+      ipaddress: '${WANIP}',
+      zelid: '${ZELID}',
+      kadena: '${KDA_A}',
+      development: false,
       blockedPorts: [],
-	    testnet: $testnet,
+      testnet: $testnet,
 	  }
 	}
 	EOF
