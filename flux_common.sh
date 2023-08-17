@@ -348,7 +348,7 @@ function ClearBlockedPortsList() {
 }
 
 function ImportBlockedPorts(){
-  array=(grep -w blockedPorts /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*')
+  array=($(grep -w blockedPorts /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*'))
   sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   printf -v joined '%s,' "${sorted_unique_ids[@]}"
   if [[ "${joined%,}" != "" ]]; then
