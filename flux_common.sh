@@ -352,7 +352,7 @@ function ImportBlockedPorts(){
   sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   printf -v joined '%s,' "${sorted_unique_ids[@]}"
   if [[ "${joined%,}" != "" ]]; then
-    string="\[${joined%,}\]"
+    blockedPortsList="\[${joined%,}\]"
     display="${joined%,}"
   fi
 }
