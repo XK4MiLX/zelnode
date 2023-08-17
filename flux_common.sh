@@ -532,7 +532,7 @@ function config_smart_create() {
                 if [[ "$upnp_port" != "" ]]; then
                         gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
                         echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
-                        echo -e "${PIN}${CYAN} Gateway IP = ${GREEN}$gateway_ip${NC}"
+                        echo -e "${PIN}${CYAN} Router IP = ${GREEN}$gateway_ip${NC}"
                         smart_install_conf "upnp_port" "$upnp_port" "$1"
                         smart_install_conf "gateway_ip" "$gateway_ip" "$1"
                 fi
