@@ -615,13 +615,6 @@ function config_smart_create() {
                         smart_install_conf "upnp_port" "$upnp_port" "$1"
                         smart_install_conf "gateway_ip" "$gateway_ip" "$1"
                 fi
-
-                ImportBlockedPorts
-                if [[ "$string" != "" ]]; then
-                  echo -e "${PIN}${CYAN} BlockedPorts: [$display]${NC}"
-                  RemoveLine "blockedPorts"
-                  builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
-                fi
                 
         fi
         #watchdog
