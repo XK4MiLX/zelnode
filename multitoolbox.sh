@@ -239,6 +239,11 @@ function install_flux() {
     if [[ "$router_ip" != "" ]]; then
       config_builder "routerIP" "$router_ip" "Router IP" "fluxos"
 		fi
+    if [[ "$string" != "" ]]; then
+      RemoveLine "blockedPorts"
+      builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+    fi
+  
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
 		string_limit_x_mark "FluxOS installation failed, missing config file..........................................."
