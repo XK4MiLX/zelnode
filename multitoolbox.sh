@@ -170,7 +170,7 @@ function install_flux() {
 
     ImportBlockedPorts
     if [[ "$blockedPortsList" != "" ]]; then
-      echo -e "${PIN}${CYAN} BlockedPorts: [$display]${NC}"
+      echo -e "${PIN}${CYAN}BlockedPorts: [$display]${NC}"
     fi
     
 		echo -e ""
