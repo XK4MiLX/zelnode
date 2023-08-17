@@ -255,7 +255,7 @@ function install_conf_create(){
 	  "eps_limit": "${eps_limit}",
 	  "upnp_port": "${upnp_port}",
 	  "gateway_ip": "${gateway_ip}",
-    "upnp_enable": "${upnp_enable}"
+    "upnp_enable": "${upnp_enable}",
 	  "thunder": "${thunder:-0}"
 	}
 	EOF
