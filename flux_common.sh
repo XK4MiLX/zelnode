@@ -525,7 +525,7 @@ function config_smart_create() {
                         echo -e "${PIN}${CYAN} KDA address = ${GREEN}$KDA_A${NC}"
                         smart_install_conf "kda_address" "$KDA_A" "$1"
                 fi
-                upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*apiport: .//' | sed -e 's/.\{2\}$//')
+                upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | grep -o '[[:digit:]]*')
                 if [[ "$upnp_port" != "" ]]; then
                         gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
                         echo -e "${PIN}${CYAN} UPnP port = ${GREEN}$upnp_port${NC}"
