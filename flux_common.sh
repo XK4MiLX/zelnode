@@ -1121,6 +1121,11 @@ function import_config_file() {
 		telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
 		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 		#UPnP
+    if [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
+      upnp_enable=true
+    else
+      upnp_enable=false
+    fi
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
 		gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 		if [[ "$1" != "silent" ]]; then
