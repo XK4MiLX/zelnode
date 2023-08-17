@@ -167,6 +167,11 @@ function install_flux() {
 		if [[ "$router_ip" != "" ]]; then
       echo -e "${PIN}${CYAN}Router IP = ${GREEN}$router_ip${NC}"
     fi
+
+    ImportBlockedPorts
+    if [[ "$string" != "" ]]; then
+      echo -e "${PIN}${CYAN} BlockedPorts: [$display]${NC}"
+    fi
     
 		echo -e ""
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
