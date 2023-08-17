@@ -217,17 +217,17 @@ function install_watchdog() {
 		if [[ -f /home/$USER/$CONFIG_DIR/$CONFIG_FILE ]]; then
 			index_from_file=$(grep -w zelnodeindex /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeindex=//')
 			tx_from_file=$(grep -w zelnodeoutpoint /home/$USER/$CONFIG_DIR/$CONFIG_FILE | sed -e 's/zelnodeoutpoint=//')
-			stak_info=$(curl -s -m 5 https://$network_url_1/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
+			stak_info=$(curl -s -m 5 https://$network_url_1/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2> /dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 			if [[ "$stak_info" == "" ]]; then
-			stak_info=$(curl -s -m 5 https://$network_url_2/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
+			stak_info=$(curl -s -m 5 https://$network_url_2/api/tx/$tx_from_file | jq -r ".vout[$index_from_file] | .value,.n,.scriptPubKey.addresses[0],.spentTxId" 2> /dev/null | paste - - - - | awk '{printf "%0.f %d %s %s\n",$1,$2,$3,$4}' | grep 'null' | egrep -o '1000|12500|40000')
 			fi	   
 		fi
 		if [[ $stak_info == ?(-)+([0-9]) ]]; then
 
 			case $stak_info in
-				"1000") eps_limit=90 ;;
-				"12500")  eps_limit=180 ;;
-				"40000") eps_limit=300 ;;
+				"1000") eps_limit=240 ;;
+				"12500")  eps_limit=640 ;;
+				"40000") eps_limit=1520 ;;
 			esac
 		else
 			eps_limit=0;
