@@ -169,7 +169,7 @@ function install_flux() {
     fi
 
     ImportBlockedPorts
-    if [[ "$string" != "" ]]; then
+    if [[ "$blockedPortsList" != "" ]]; then
       echo -e "${PIN}${CYAN} BlockedPorts: [$display]${NC}"
     fi
     
@@ -239,11 +239,10 @@ function install_flux() {
     if [[ "$router_ip" != "" ]]; then
       config_builder "routerIP" "$router_ip" "Router IP" "fluxos"
 		fi
-    if [[ "$string" != "" ]]; then
+    if [[ "$blockedPortsList" != "" ]]; then
       RemoveLine "blockedPorts"
-      builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+      builBlockedList "  blockedPorts" "$blockedPortsList" "Blocked ports list crated successful!" "fluxos"
     fi
-  
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
 		string_limit_x_mark "FluxOS installation failed, missing config file..........................................."
