@@ -1655,10 +1655,10 @@ function fluxos_reconfiguration {
 		blocked_ports
 		;;	
   	"6)")
-		blocked_ports
+		fluxosConfigBackup
 		;;	
   	"7)")
-		blocked_ports
+		fluxosConfigRestore
 		;;	
 	esac
 }
