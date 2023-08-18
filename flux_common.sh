@@ -385,6 +385,7 @@ function config_builder() {
   ########################################################
   if [[ "$4" == "fluxos" ]]; then
     key="$1"
+    value_check=$2
     if [[ "$2" == "false" || "$2" == "true" || "$2" =~ ^[0-9]+$ ]]; then 
      value=$2
     else
@@ -408,7 +409,7 @@ function config_builder() {
         padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 added successfully${NC}" "${CHECK_MARK}"
         return
     fi
-    if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key: $value") != "" ]]; then
+    if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key" | grep "$value_check") != "" ]]; then
      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3 skipped${NC}" "${X_MARK}"
      return
     fi
