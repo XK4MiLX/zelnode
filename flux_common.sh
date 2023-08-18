@@ -261,7 +261,6 @@ function install_conf_create(){
 	EOF
 }
 
-
 ###### SMART CONFIG
 function padding() {
 msg="$1"
@@ -319,7 +318,7 @@ function CreateBlockedList() {
 }
 
 function AddBlockedPorts() {
-  string=$(grep "blockedPorts" $HOME/zelflux/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  string=$(grep "blockedPorts" $HOME/$FLUX_DIR/config/userconfig.js |  awk -F'[][]' '{print $2}' )
   delimiter=","
   declare -a array=($(echo $string | tr "$delimiter" " "))
   ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
@@ -348,12 +347,37 @@ function ClearBlockedPortsList() {
 }
 
 function ImportBlockedPorts(){
-  array=($(grep -w blockedPorts /home/$USER/zelflux/config/userconfig.js | grep -o '[[:digit:]]*'))
+  array=($(grep -w blockedPorts /home/$USER/$FLUX_DIR/config/userconfig.js | grep -o '[[:digit:]]*'))
   sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   printf -v joined '%s,' "${sorted_unique_ids[@]}"
   if [[ "${joined%,}" != "" ]]; then
     blockedPortsList="\[${joined%,}\]"
     display="${joined%,}"
+  fi
+}
+
+
+function fluxosConfigBackup(){
+  ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
+  if [[ -f $ConfigFile ]]; then
+    cp -nf ConfigFile $HOME/userconfig.js.backup
+    if [[ -f $HOME/userconfig.js.backup ]]; then
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js backup successfully${NC}" "${CHECK_MARK}"
+    else
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js backup failed${NC}" "${X_MARK}"
+    fi
+  fi
+}
+
+function fluxosConfigRestore(){
+  ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
+  if [[ -f $HOME/userconfig.js.backup ][; then 
+    cp -nf $HOME/userconfig.js.backup $ConfigFile
+    if [[ -f $ConfigFile ]]; then
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored successfully${NC}" "${CHECK_MARK}"
+    else
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored failed${NC}" "${X_MARK}"
+    fi
   fi
 }
 
