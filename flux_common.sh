@@ -360,7 +360,7 @@ function ImportBlockedPorts(){
 function fluxosConfigBackup(){
   ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
   if [[ -f $ConfigFile ]]; then
-    cp -nf ConfigFile $HOME/userconfig.js.backup
+    cp -nf $ConfigFile $HOME/userconfig.js.backup
     if [[ -f $HOME/userconfig.js.backup ]]; then
       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js backup successfully${NC}" "${CHECK_MARK}"
     else
