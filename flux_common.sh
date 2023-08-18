@@ -371,7 +371,7 @@ function fluxosConfigBackup(){
 
 function fluxosConfigRestore(){
   ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
-  if [[ -f $HOME/userconfig.js.backup ][; then 
+  if [[ -f $HOME/userconfig.js.backup ]]; then 
     cp -nf $HOME/userconfig.js.backup $ConfigFile
     if [[ -f $ConfigFile ]]; then
       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored successfully${NC}" "${CHECK_MARK}"
