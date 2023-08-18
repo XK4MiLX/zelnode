@@ -366,18 +366,26 @@ function fluxosConfigBackup(){
     else
       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js backup failed${NC}" "${X_MARK}"
     fi
+  else
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js file not exists${NC}" "${X_MARK}"
   fi
 }
 
 function fluxosConfigRestore(){
   ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
-  if [[ -f $HOME/userconfig.js.backup ]]; then 
-    cp -nf $HOME/userconfig.js.backup $ConfigFile
-    if [[ -f $ConfigFile ]]; then
-      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored successfully${NC}" "${CHECK_MARK}"
+  if [[ -d /home/$USER/$FLUX_DIR ]]; then
+    if [[ -f $HOME/userconfig.js.backup ]]; then 
+      cp -nf $HOME/userconfig.js.backup $ConfigFile
+      if [[ -f $ConfigFile ]]; then
+        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored successfully${NC}" "${CHECK_MARK}"
+      else
+        padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored failed${NC}" "${X_MARK}"
+      fi
     else
-      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js restored failed${NC}" "${X_MARK}"
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs userconfig.js backup not exists${NC}" "${X_MARK}"
     fi
+  else
+    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}FluxOs not installed${NC}" "${X_MARK}"
   fi
 }
 
@@ -1626,7 +1634,9 @@ function fluxos_reconfiguration {
  "2)" "Add/Replace kadena address" \
  "3)" "Enable/Disable thunder mode" \
  "4)" "Enable/Disable development mode" \
- "5)" "Blocked Ports Management" 3>&2 2>&1 1>&3
+ "5)" "Blocked Ports Management" \
+ "6)" "FluxOS config backup" \
+ "7)" "FluxOS config restore" 3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1642,6 +1652,12 @@ function fluxos_reconfiguration {
 		development_mode
 		;;
 	  "5)")
+		blocked_ports
+		;;	
+  	"6)")
+		blocked_ports
+		;;	
+  	"7)")
 		blocked_ports
 		;;	
 	esac
