@@ -63,7 +63,7 @@ function config_file() {
 		kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
     gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
-    upnp_enable=$(cat /home/$USER/install_conf.json | jq -r '.upnp_enable')
+    upnp_enabled=$(cat /home/$USER/install_conf.json | jq -r '.upnp_enabled')
     thunder=$(cat /home/$USER/install_conf.json | jq -r '.thunder')
 
 		echo -e "${ARROW} ${YELLOW}Install config summary:"
@@ -96,7 +96,7 @@ function config_file() {
 			echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}"
 		fi
 
-		if [[ ! -z $gateway_ip && ! -z $upnp_port ]] &&  [[ "$upnp_enable" == "true" ]] ; then
+		if [[ ! -z $gateway_ip && ! -z $upnp_port ]] &&  [[ "$upnp_enabled" == "true" ]] ; then
 			echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
 		fi
 	fi
