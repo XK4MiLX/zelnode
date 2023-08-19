@@ -623,7 +623,7 @@ function config_smart_create() {
              upnp_enabled=true
              echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
              smart_install_conf "fluxport" "$fluxport" "$1"
-             smart_install_conf "upnp_enabled" "$upnp_enable" "$1"
+             smart_install_conf "upnp_enabled" "$upnp_enabled" "$1"
       fi 
 	fi
         #fluxOS
