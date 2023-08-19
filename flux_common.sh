@@ -255,7 +255,7 @@ function install_conf_create(){
 	  "eps_limit": "${eps_limit}",
 	  "upnp_port": "${upnp_port}",
 	  "gateway_ip": "${gateway_ip}",
-    "upnp_enable": "${upnp_enable}",
+    "upnp_enabled": "${upnp_enabled}",
 	  "thunder": "${thunder:-0}"
 	}
 	EOF
@@ -620,10 +620,10 @@ function config_smart_create() {
            fi
 	   fluxport=$(grep -Po "(?<=fluxport=)\d+" /home/$USER/.fluxbenchmark/fluxbench.conf)  
 	   if [[ "$fluxport" != "" ]]; then
-             upnp_enable=true
+             upnp_enabled=true
              echo -e "${PIN}${CYAN} Flux Port = ${GREEN}$fluxport${NC}"
              smart_install_conf "fluxport" "$fluxport" "$1"
-             smart_install_conf "upnp_enable" "$upnp_enable" "$1"
+             smart_install_conf "upnp_enabled" "$upnp_enable" "$1"
       fi 
 	fi
         #fluxOS
@@ -961,7 +961,7 @@ function manual_build(){
 		fi
 	fi
 	if whiptail --yesno "Would you like to enable UPnP for this node?" 8 65; then
-    upnp_enable=true
+    upnp_enabled=true
 	  router_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
 		gateway_ip=$(whiptail --inputbox "Enter your UPnP Gateway IP: (This is usually your router: $router_ip)" 8 85 3>&1 1>&2 2>&3)
 		upnp_port=$(whiptail --title "Enter your FluxOS UPnP Port" --radiolist \
@@ -975,7 +975,7 @@ function manual_build(){
 		"16187" "" OFF \
 		"16197" "" OFF 3>&1 1>&2 2>&3)
 	else
-    upnp_enable=""
+    upnp_enabled=""
 		gateway_ip=""
 		upnp_port=""
 	fi
@@ -1239,11 +1239,7 @@ function import_config_file() {
 		telegram_bot_token=$(cat /home/$USER/install_conf.json | jq -r '.telegram_bot_token')
 		telegram_chat_id=$(cat /home/$USER/install_conf.json | jq -r '.telegram_chat_id')
 		#UPnP
-    if [[ $(grep -e "fluxport" /home/$USER/.fluxbenchmark/fluxbench.conf) != "" ]]; then
-      upnp_enable=true
-    else
-      upnp_enable=false
-    fi
+    upnp_enabled=$(cat /home/$USER/install_conf.json | jq -r '.upnp_enabled')
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
 		gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
 		if [[ "$1" != "silent" ]]; then
