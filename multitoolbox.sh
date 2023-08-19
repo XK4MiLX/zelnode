@@ -850,7 +850,6 @@ fi
 if ! wget --version > /dev/null 2>&1 ; then
 	sudo apt install -y wget > /dev/null 2>&1 && sleep 2
 fi
-sleep 5
 clear
 sleep 1
 echo -e "${BLUE}"
