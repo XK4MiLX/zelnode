@@ -25,7 +25,8 @@ function upnp_disable() {
  fi
  
  if [[ $(cat /home/$USER/zelflux/config/userconfig.js | grep 'apiport' | wc -l) == "1" ]]; then
-	cat /home/$USER/zelflux/config/userconfig.js | sed '/apiport/d' | sudo tee "/home/$USER/zelflux/config/userconfig.js" > /dev/null
+   RemoveLine "routerIP"
+   RemoveLine "apiport"
  fi
  echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark.....${NC}"
  echo -e ""

@@ -29,7 +29,7 @@ fi
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
-dversion="v7.5"
+dversion="v7.6"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
 OS_FLAGE="$2"
@@ -63,6 +63,8 @@ function config_file() {
 		kda_address=$(cat /home/$USER/install_conf.json | jq -r '.kda_address')
 		upnp_port=$(cat /home/$USER/install_conf.json | jq -r '.upnp_port')
     gateway_ip=$(cat /home/$USER/install_conf.json | jq -r '.gateway_ip')
+    upnp_enabled=$(cat /home/$USER/install_conf.json | jq -r '.upnp_enabled')
+    thunder=$(cat /home/$USER/install_conf.json | jq -r '.thunder')
 
 		echo -e "${ARROW} ${YELLOW}Install config summary:"
 		if [[ "$prvkey" != "" && "$outpoint" != "" && "$index" != "" ]];then
@@ -94,7 +96,7 @@ function config_file() {
 			echo -e "${PIN}${CYAN}Disable watchdog notification....................................[${CHECK_MARK}${CYAN}]${NC}"
 		fi
 
-		if [[ ! -z $gateway_ip && ! -z $upnp_port ]]; then
+		if [[ ! -z $gateway_ip && ! -z $upnp_port ]] &&  [[ "$upnp_enabled" == "true" ]] ; then
 			echo -e "${PIN}${CYAN}Enable UPnP configuration........................................[${CHECK_MARK}${CYAN}]${NC}" 
 		fi
 	fi
@@ -160,9 +162,19 @@ function install_flux() {
 		
 		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
 		if [[ "$upnp_port" != "" ]]; then
-                        echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
-                fi
-		
+      echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
+    fi
+
+    router_ip=$(grep -w routerIP /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*routerIP: .//' | sed -e 's/.\{2\}$//')
+		if [[ "$router_ip" != "" ]]; then
+      echo -e "${PIN}${CYAN}Router IP = ${GREEN}$router_ip${NC}"
+    fi
+
+    ImportBlockedPorts
+    if [[ "$blockedPortsList" != "" ]]; then
+      echo -e "${PIN}${CYAN}BlockedPorts: [$display]${NC}"
+    fi
+    
 		echo -e ""
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
 		sudo rm -rf $FLUX_DIR  > /dev/null 2>&1 && sleep 1
@@ -223,9 +235,16 @@ function install_flux() {
 	fi
 	fluxos_conf_create
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then	
-	        if [[ "$upnp_port" != "" ]]; then
-                  config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
+	  if [[ "$upnp_port" != "" ]]; then
+      config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
 		fi
+    if [[ "$router_ip" != "" ]]; then
+      config_builder "routerIP" "$router_ip" "Router IP" "fluxos"
+		fi
+    if [[ "$blockedPortsList" != "" ]]; then
+      RemoveLine "blockedPorts"
+      builBlockedList "  blockedPorts" "$blockedPortsList" "Blocked ports list created successfully!" "fluxos"
+    fi
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
 		string_limit_x_mark "FluxOS installation failed, missing config file..........................................."
@@ -854,7 +873,7 @@ echo -e "${CYAN}7  - Re-install FluxOS${NC}"
 echo -e "${CYAN}8  - Flux Daemon Reconfiguration${NC}"
 echo -e "${CYAN}9  - Create Flux daemon service ( for old nodes )${NC}"
 echo -e "${CYAN}10 - Create Self-hosting cron ip service ${NC}"
-echo -e "${CYAN}11 - FluxOS reconfiguration ${NC}"
+echo -e "${CYAN}11 - FluxOS config management ${NC}"
 echo -e "${CYAN}12 - Install fluxwatchtower for docker images autoupdate${NC}"
 echo -e "${CYAN}13 - MongoDB FiX action${NC}"
 echo -e "${CYAN}14 - Multinode configuration with UPNP communication (Needs Router with UPNP support)  ${NC}"
