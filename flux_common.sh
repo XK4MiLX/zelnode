@@ -1909,23 +1909,66 @@ function start_service() {
 function install_mongod() {
 	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
-	sudo systemctl stop mongod > /dev/null 2>&1 && sleep 1
-	sudo apt remove mongod* -y > /dev/null 2>&1 && sleep 1
-	sudo apt purge mongod* -y > /dev/null 2>&1 && sleep 1
-	sudo apt autoremove -y > /dev/null 2>&1 && sleep 1
+	sudo systemctl stop mongod > /dev/null 2>&1 
+	sudo apt remove mongod* -y > /dev/null 2>&1 
+	sudo apt purge mongod* -y > /dev/null 2>&1 
+	sudo apt autoremove -y > /dev/null 2>&1 
+ 	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
+	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
 	echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
+	# check to see if cpu supports avx
+	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+	# AVX instruction flag not found - so install 4.4
+	# else install newest version 6.0
+	if [[ "$avx_check" == "" ]]; then
+		curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+		if [[ $(lsb_release -d) = *Debian* ]]; then 
+			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
+			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+		else
+			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
+			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+			echo
+			exit    
+		fi
+	else
+		if [[ $(lsb_release -d) = *Debian* ]]; then 
+      if [[ "$(lsb_release -c)" == "bullseye" ]]; then
+        curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+			  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1
+      else
+        curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
+      fi
+		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then
+      if [[ "$(lsb_release -c)" == "jammy" || "$(lsb_release -c)" == "focal" ]]; then
+       curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+			 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1 
+      else
+       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1 
+      fi
+		else
+			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
+			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+			echo
+			exit    
+		fi
+	fi
 	sudo apt-get update -y > /dev/null 2>&1
 	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-        if [[ "$avx_check" == "" ]]; then
+  if [[ "$avx_check" == "" ]]; then
 	  sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
 	  echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1
-          echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-          echo "mongodb-org-shell hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-          echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-          echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+    echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+    echo "mongodb-org-shell hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+    echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+    echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
 	else
-	  sudo apt install -y mongodb-org > /dev/null 2>&1 
+	  DEBIAN_FRONTEND=noninteractive apt-get --yes install mongodb-org > /dev/null 2>&1 
 	fi
+  sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
+  sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
 	sudo systemctl enable mongod > /dev/null 2>&1
 	sudo systemctl start  mongod > /dev/null 2>&1
 	if mongod --version > /dev/null 2>&1; then
