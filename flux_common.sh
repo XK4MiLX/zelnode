@@ -1957,7 +1957,6 @@ function install_mongod() {
 		fi
 	fi
 	sudo apt-get update -y > /dev/null 2>&1
-	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
   if [[ "$avx_check" == "" ]]; then
 	  sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
 	  echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1
