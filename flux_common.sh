@@ -996,16 +996,14 @@ function os_check(){
   BLACK_LIST=( "kinetic" )
   avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
   if [[ "$avx_check" == "" ]]; then 
-    BLACK_LIST+=( "jammy" )
+    BLACK_LIST+=( "jammy" "bullseye" )
   fi
   LIST_LENGTH=${#BLACK_LIST[@]}
   for (( p=0; p<${LIST_LENGTH}; p++ ));
   do
     if [[ $(lsb_release -cs) == ${BLACK_LIST[$p]} ]]; then 
       echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
-      if [[ "$avx_check" == "" && $(lsb_release -cs) == "jammy" ]]; then
-        echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
-      fi
+      echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
       echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
       echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
       echo
