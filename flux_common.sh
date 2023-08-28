@@ -994,7 +994,7 @@ function manual_build(){
 ###### HELPERS SECTION
 function os_check(){
   BLACK_LIST=( "kinetic" )
-  avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+  avx_check=$(grep -o avx /proc/cpuinfo | head -n1)
   if [[ "$avx_check" == "" ]]; then 
     BLACK_LIST+=( "jammy" "bullseye" )
   fi
