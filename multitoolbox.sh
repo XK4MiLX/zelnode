@@ -747,7 +747,7 @@ function mongod_db_fix() {
         echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
         echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
       else
-        DEBIAN_FRONTEND=noninteractive apt-get --yes install mongodb-org > /dev/null 2>&1 
+        DEBIAN_FRONTEND=noninteractive sudo apt-get --yes install mongodb-org > /dev/null 2>&1 
       fi
 			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
 			sudo mkdir -p /var/lib/mongodb > /dev/null 2>&1
