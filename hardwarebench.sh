@@ -50,7 +50,7 @@ if ! command_exists dd; then
   exit 1
 fi
 if [[ "$(sysbench --version)" == "" ]]; then
-  curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash > /dev/null 2>&1
+  curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sed 's/dist=${dist}/dist=focal/g' | sudo bash > /dev/null 2>&1
   sudo apt -y install sysbench  > /dev/null 2>&1
 fi
 vcore=$(getconf _NPROCESSORS_ONLN)
