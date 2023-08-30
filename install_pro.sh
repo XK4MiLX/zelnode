@@ -563,7 +563,8 @@ function install_process() {
 	if ! sysbench --version > /dev/null 2>&1; then
 		echo -e ""
 		echo -e "${ARROW} ${YELLOW}Sysbench installing...${NC}"
-		curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
+		#curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh 2> /dev/null | sudo bash > /dev/null 2>&1
+    curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sed 's/dist=${dist}/dist=focal/g' | sudo bash > /dev/null 2>&1
 		sudo apt -y install sysbench > /dev/null 2>&1
 	 if sysbench --version > /dev/null 2>&1; then
 	   string_limit_check_mark "Sysbench $(sysbench --version | awk '{print $2}') installed................................." "Sysbench ${GREEN}$(sysbench --version | awk '{print $2}')${CYAN} installed................................."   
