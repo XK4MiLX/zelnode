@@ -52,10 +52,24 @@ fi
 if [[ "$(sysbench --version)" == "" ]]; then
   curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sed 's/dist=${dist}/dist=focal/g' | sudo bash > /dev/null 2>&1
   sudo apt -y install sysbench  > /dev/null 2>&1
+  if [[ "$(sysbench --version)" == "" ]]; then
+    echo -e ""
+    echo -e "-------------------------------------------"
+    echo -e "| HARDWARE BENCHMARK"
+    echo -e "-------------------------------------------"
+    echo -e "| Benchmark: FAILED"
+    echo -e "| Error: Sysbench installation failed..."
+    echo -e "-------------------------------------------"
+    echo -e ""
+    exit
+  fi
 fi
 vcore=$(getconf _NPROCESSORS_ONLN)
 ram=$(LC_ALL=C free -b 2> /dev/null | awk 'NR==2 {print $2}' | grep -Eo '[0-9]+'| printf "%.0f\n" $(awk '{ print $1/1024/1024/1024 }') 2> /dev/null )
 core=$(awk -F: '/cpu cores/ {name=$2} END {print name}' /proc/cpuinfo | sed 's/^[ \\t]*//;s/[ \\t]*$//')
+if [[ "$core" == "" ]]; then
+  core=$(grep 'processor' /proc/cpuinfo | wc -l)
+fi
 echo -e ""
 echo -e "-------------------------"
 echo -e "| MEMORY BENCHMARK"
