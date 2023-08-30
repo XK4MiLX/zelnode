@@ -29,7 +29,7 @@ fi
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
-dversion="v7.6"
+dversion="v7.7"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
 OS_FLAGE="$2"
@@ -738,17 +738,17 @@ function mongod_db_fix() {
 			sudo rm -r /var/log/mongodb > /dev/null 2>&1
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Installing MongoDB... ${NC}"
-		        avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-                        if [[ "$avx_check" == "" ]]; then
-	                  sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
-	                  echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1 && sleep 2
-                          echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-                          echo "mongodb-org-shell hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-                          echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-                          echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
-	                else
-	                  sudo apt install -y mongodb-org > /dev/null 2>&1 
-	                fi
+      avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+      if [[ "$avx_check" == "" ]]; then
+        sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
+        echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1 && sleep 2
+        echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+        echo "mongodb-org-shell hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+        echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+        echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
+      else
+        DEBIAN_FRONTEND=noninteractive sudo apt-get --yes install mongodb-org > /dev/null 2>&1 
+      fi
 			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
 			sudo mkdir -p /var/lib/mongodb > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Settings privilege... ${NC}"

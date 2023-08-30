@@ -428,7 +428,7 @@ function install_daemon() {
    sudo chown -R $USER:$USER /usr/share/keyrings > /dev/null 2>&1
    sudo chown -R $USER:$USER /home/$USER/.gnupg > /dev/null 2>&1
 	if [[ "$(lsb_release -cs)" == "xenial" ]]; then
-		echo 'deb https://apt.fluxos.network/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
+		echo 'deb https://apt.runonflux.io/ '$(lsb_release -cs)' main' | sudo tee /etc/apt/sources.list.d/flux.list > /dev/null 2>&1
 		gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv 4B69CA27A986265D > /dev/null 2>&1
 		gpg --export 4B69CA27A986265D | sudo apt-key add - > /dev/null 2>&1    
 		if ! gpg --list-keys Zel > /dev/null; then    
@@ -438,8 +438,12 @@ function install_daemon() {
 		flux_package && sleep 2    
 	else
 		sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
-		echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
-                echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee --append /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+    server_check=$(curl -s -m 20 https://apt.runonflux.io/pool/main/f/flux/ | grep -o '[0-9].[0-9].[0-9]' | head -n1)
+    if [[ $server_check == "" ]]; then
+		  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.fluxos.network/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+    else
+      echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/flux-archive-keyring.gpg] https://apt.runonflux.io/ focal main" | sudo tee /etc/apt/sources.list.d/flux.list  > /dev/null 2>&1
+    fi
 		# downloading key && save it as keyring  
 		gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
 		key_counter=0
@@ -556,39 +560,6 @@ function install_process() {
 	sudo ufw allow $ZELFRONTPORT/tcp > /dev/null 2>&1
 	sudo ufw allow $LOCPORT/tcp > /dev/null 2>&1
 	sudo ufw allow $ZELNODEPORT/tcp > /dev/null 2>&1
-	echo -e "${ARROW} ${YELLOW}Configuring service repositories...${NC}"
-	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
-	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
-	# check to see if cpu supports avx
-	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-	# AVX instruction flag not found - so install 4.4
-	# else install newest version 6.0
-	if [[ "$avx_check" == "" ]]; then
-		curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-		if [[ $(lsb_release -d) = *Debian* ]]; then 
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-		else
-			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
-			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-			echo
-			exit    
-		fi
-	else
-		curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-		if [[ $(lsb_release -d) = *Debian* ]]; then 
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
-		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
-		else
-			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
-			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-			echo
-			exit    
-		fi
-	fi
-	
 	if ! sysbench --version > /dev/null 2>&1; then
 		echo -e ""
 		echo -e "${ARROW} ${YELLOW}Sysbench installing...${NC}"
