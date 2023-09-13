@@ -722,7 +722,11 @@ function mongod_db_fix() {
 				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
 				echo -e "${ARROW} ${CYAN}Service status:${SEA} $(sudo systemctl status mongod | grep -w 'Active' | sed -e 's/^[ \t]*//')${NC}" 
 			fi
-			echo -e ""
+      echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark...${NC}"
+			sudo systemctl restart zelcash > /dev/null 2>&1
+			pm2 restart flux > /dev/null 2>&1
+			sleep 5
+      echo -e ""
 		;;
 		"2)")
 			echo -e ""  
@@ -756,7 +760,7 @@ function mongod_db_fix() {
 			sudo chown -R mongodb:mongodb /var/lib/mongodb > /dev/null 2>&1
 			sudo chown mongodb:mongodb /tmp/mongodb-27017.sock > /dev/null 2>&1
 			fluxos_clean
-		        #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
+		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
 			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
 			sudo systemctl start mongod
@@ -766,6 +770,10 @@ function mongod_db_fix() {
 			else
 				string_limit_x_mark "MongoDB was not installed................................."
 			fi
+      echo -e "${ARROW} ${CYAN}Restarting FluxOS and Benchmark...${NC}"
+			sudo systemctl restart zelcash > /dev/null 2>&1
+			pm2 restart flux > /dev/null 2>&1
+			sleep 5
 			echo -e ""
 		;;
 	esac
