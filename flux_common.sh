@@ -277,7 +277,12 @@ function RemoveLine(){
   sed -i "/$1/d" /home/$USER/zelflux/config/userconfig.js
 }
 
-function builBlockedList() {
+function ClearList() {
+  string="\[\]"
+  display=""
+}
+
+function buildBlockedList() {
   if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
    exit
@@ -341,11 +346,6 @@ function AddBlockedPorts() {
 
 }
 
-function ClearBlockedPortsList() {
-  string="\[\]"
-  display=""
-}
-
 function ImportBlockedPorts(){
   array=($(grep -w blockedPorts /home/$USER/$FLUX_DIR/config/userconfig.js | grep -o '[[:digit:]]*'))
   sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
@@ -356,6 +356,122 @@ function ImportBlockedPorts(){
   fi
 }
 
+function blocked_ports(){
+  CHOICE=$(
+    whiptail --title "FluxOS Blocked Ports Management" --menu "Make your choice" 15 40 6 \
+     "1)" "Create new list"   \
+     "2)" "Add ports" \
+     "3)" "Clear list" 3>&2 2>&1 1>&3 )
+     
+  case $CHOICE in
+  "1)")
+    CreateBlockedList
+    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
+    RemoveLine "blockedPorts"
+    buildBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+  ;;
+  "2)")
+    AddBlockedPorts
+    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
+    RemoveLine "blockedPorts"
+    buildBlockedList "  blockedPorts" "$string" "Blocked ports list updated successful!" "fluxos"
+  ;;
+  "3)")
+    ClearList
+    RemoveLine "blockedPorts"
+    buildBlockedList "  blockedPorts" "$string" "Blocked ports list cleared successful!" "fluxos"
+  ;;
+  esac
+}
+
+function CreateBlockedRepositoryList() {
+  ADD=$(whiptail --inputbox "Enter the repositories to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  temp_array=($ADD)
+  for i in ${temp_array[@]}
+  do
+    array+=("'$i'")
+  done
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  if [[ "${joined%,}" != "" ]]; then
+    string="\[${joined%,}\]"
+    display="${joined%,}"
+  fi
+}
+
+function AddBlockedRepository() {
+  string=$(grep "" $HOME/$FLUX_DIR/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  delimiter=","
+  declare -a array=($(echo $string | tr "$delimiter" " "))
+  ADD=$(whiptail --inputbox "Enter the repositories to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
+  if [[ $? == 1 ]]; then
+     padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
+     echo -e ""
+     exit
+  fi
+  ADD=$(sed 's/,/ /g' <<< $ADD)
+  temp_array=($ADD)
+  for i in ${temp_array[@]}
+  do
+    array+=("'$i'")
+  done
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  string="\[${joined%,}\]"
+  display="${joined%,}"
+}
+
+function buildBlockedRepositoryList() {
+  if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
+   exit
+  fi
+  if [[ "$1" == ""  || "$2" == "" ]]; then
+   padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Empty key/value skipped${NC}" "${X_MARK}"
+   exit
+  fi
+  key="$1"
+  value="$2"
+  if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "$key") == "" ]]; then
+      insert "/home/$USER/$FLUX_DIR/config/userconfig.js" "testnet" "  $key: $value,"
+      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3${NC}" "${CHECK_MARK}"
+      return
+  fi
+}
+
+function blocked_repositories(){
+  CHOICE=$(
+    whiptail --title "FluxOS Blocked Repositories Management" --menu "Make your choice" 15 40 6 \
+     "1)" "Create new list"   \
+     "2)" "Add Repositories" \
+     "3)" "Clear list" 3>&2 2>&1 1>&3 )
+
+  case $CHOICE in
+  "1)")
+    CreateBlockedRepositoryList
+    echo -e "${ARROW}${GREEN} BlockedRepositories: [$display]${NC}"
+    RemoveLine "blockedRepositories"
+    buildBlockedRepositoryList "  blockedRepositories" "$string" "Blocked repositories list crated successful!" "fluxos"
+  ;;
+  "2)")
+    AddBlockedRepository
+    echo -e "${ARROW}${GREEN} BlockedRepositories: [$display]${NC}"
+    RemoveLine "blockedRepositories"
+    buildBlockedRepositoryList "  blockedRepositories" "$string" "Blocked repositories list updated successful!" "fluxos"
+  ;;
+  "3)")
+    ClearList
+    RemoveLine "blockedRepositories"
+    buildBlockedRepositoryList "  blockedRepositories" "$string" "Blocked repositories list cleared successful!" "fluxos"
+  ;;
+  esac
+}
 
 function fluxosConfigBackup(){
   ConfigFile="/home/$USER/$FLUX_DIR/config/userconfig.js"
@@ -1567,44 +1683,20 @@ function thunder_mode(){
  
 }
 
-
 function development_mode(){
   if [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: 'false'") != "" ]] || [[ $(cat /home/$USER/$FLUX_DIR/config/userconfig.js | grep "development: false") ]]; then
     echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Enabling development mode... ${NC}"
     config_builder "development" "true" "Development Mode" "fluxos"
+    cd $HOME/$FLUX_DIR
+    git checkout development > /dev/null 2>&1
+    pm2 restart flux > /dev/null 2>&1
   else
     echo -e "${ARROW}${GREEN} [FluxOS] ${CYAN}Disabling development mode... ${NC}"
     config_builder "development" "false" "Development Mode" "fluxos"
+    cd $HOME/$FLUX_DIR
+    git checkout master > /dev/null 2>&1
+    pm2 restart flux > /dev/null 2>&1
   fi
-}
-
-
-function blocked_ports(){
-  CHOICE=$(
-    whiptail --title "FluxOS Blocked Ports Management" --menu "Make your choice" 15 40 6 \
-     "1)" "Create new list"   \
-     "2)" "Add ports" \
-     "3)" "Clear list" 3>&2 2>&1 1>&3 )
-     
-  case $CHOICE in
-  "1)")
-    CreateBlockedList
-    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
-    RemoveLine "blockedPorts"
-    builBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
-  ;;
-  "2)")
-    AddBlockedPorts
-    echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
-    RemoveLine "blockedPorts"
-    builBlockedList "  blockedPorts" "$string" "Blocked ports list updated successful!" "fluxos"
-  ;;
-  "3)")
-    ClearBlockedPortsList
-    RemoveLine "blockedPorts"
-    builBlockedList "  blockedPorts" "$string" "Blocked ports list cleared successful!" "fluxos"
-  ;;
-  esac
 }
 
 function fluxos_reconfiguration {
@@ -1629,8 +1721,9 @@ function fluxos_reconfiguration {
  "3)" "Enable/Disable thunder mode" \
  "4)" "Enable/Disable development mode" \
  "5)" "Blocked Ports Management" \
- "6)" "FluxOS config backup" \
- "7)" "FluxOS config restore" 3>&2 2>&1 1>&3
+ "6)" "Blocked Repositories Management" \
+ "7)" "FluxOS config backup" \
+ "8)" "FluxOS config restore" 3>&2 2>&1 1>&3
 	)
 		case $CHOICE in
 		"1)")
@@ -1647,11 +1740,14 @@ function fluxos_reconfiguration {
 		;;
 	  "5)")
 		blocked_ports
-		;;	
-  	"6)")
+		;;
+    "6)")
+		blocked_repositories
+		;;
+  	"7)")
 		fluxosConfigBackup
 		;;	
-  	"7)")
+  	"8)")
 		fluxosConfigRestore
 		;;	
 	esac
