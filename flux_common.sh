@@ -451,8 +451,10 @@ function ImportBlockedRepository() {
   declare -a array=($(echo $string | tr "$delimiter" " "))
   sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
   printf -v joined '%s,' "${sorted_unique_ids[@]}"
-  string="\[${joined%,}\]"
-  display="${joined%,}"
+  if [[ "${joined%,}" != "" ]]; then
+    blockedRepositoryList="\[${joined%,}\]"
+    display="${joined%,}"
+  fi
 }
 
 function blocked_repositories(){
