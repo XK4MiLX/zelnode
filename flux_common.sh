@@ -300,7 +300,7 @@ function buildBlockedList() {
   fi
 }
 
-function CreateBlockedList() {
+function CreateBlockedPortsList() {
   ADD=$(whiptail --inputbox "Enter the ports to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
   if [[ $? == 1 ]]; then
      padding "${ARROW}${GREEN} [FluxOS] ${CYAN}The operation was canceled${NC}" "${X_MARK}"
@@ -365,7 +365,7 @@ function blocked_ports(){
      
   case $CHOICE in
   "1)")
-    CreateBlockedList
+    CreateBlockedPortsList
     echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
     RemoveLine "blockedPorts"
     buildBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
