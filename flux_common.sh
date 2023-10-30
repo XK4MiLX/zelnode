@@ -406,7 +406,7 @@ function CreateBlockedRepositoryList() {
 }
 
 function AddBlockedRepository() {
-  string=$(grep "" $HOME/$FLUX_DIR/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  string=$(grep "blockedRepositories" $HOME/$FLUX_DIR/config/userconfig.js |  awk -F'[][]' '{print $2}' )
   delimiter=","
   declare -a array=($(echo $string | tr "$delimiter" " "))
   ADD=$(whiptail --inputbox "Enter the repositories to the blocked list, separated by commas" 8 85 3>&1 1>&2 2>&3)
@@ -443,6 +443,16 @@ function buildBlockedRepositoryList() {
       padding "${ARROW}${GREEN} [FluxOS] ${CYAN}$3${NC}" "${CHECK_MARK}"
       return
   fi
+}
+
+function ImportBlockedRepository() {
+  string=$(grep "blockedRepositories" $HOME/$FLUX_DIR/config/userconfig.js |  awk -F'[][]' '{print $2}' )
+  delimiter=","
+  declare -a array=($(echo $string | tr "$delimiter" " "))
+  sorted_unique_ids=($(echo "${array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+  printf -v joined '%s,' "${sorted_unique_ids[@]}"
+  string="\[${joined%,}\]"
+  display="${joined%,}"
 }
 
 function blocked_repositories(){
