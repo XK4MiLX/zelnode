@@ -282,7 +282,7 @@ function ClearList() {
   display=""
 }
 
-function buildBlockedList() {
+function buildBlockedPortsList() {
   if [[ ! -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then
    padding "${ARROW}${GREEN} [FluxOS] ${CYAN}Config file does not exist...${NC}" "${X_MARK}"
    exit
@@ -368,18 +368,18 @@ function blocked_ports(){
     CreateBlockedPortsList
     echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
     RemoveLine "blockedPorts"
-    buildBlockedList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
+    buildBlockedPortsList "  blockedPorts" "$string" "Blocked ports list crated successful!" "fluxos"
   ;;
   "2)")
     AddBlockedPorts
     echo -e "${ARROW}${GREEN} BlockedPorts: [$display]${NC}"
     RemoveLine "blockedPorts"
-    buildBlockedList "  blockedPorts" "$string" "Blocked ports list updated successful!" "fluxos"
+    buildBlockedPortsList "  blockedPorts" "$string" "Blocked ports list updated successful!" "fluxos"
   ;;
   "3)")
     ClearList
     RemoveLine "blockedPorts"
-    buildBlockedList "  blockedPorts" "$string" "Blocked ports list cleared successful!" "fluxos"
+    buildBlockedPortsList "  blockedPorts" "$string" "Blocked ports list cleared successful!" "fluxos"
   ;;
   esac
 }
