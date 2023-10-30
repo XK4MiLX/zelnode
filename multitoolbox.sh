@@ -174,6 +174,11 @@ function install_flux() {
     if [[ "$blockedPortsList" != "" ]]; then
       echo -e "${PIN}${CYAN}BlockedPorts: [$display]${NC}"
     fi
+
+    ImportBlockedRepository
+    if [[ "$blockedRepositoryList" != "" ]]; then
+      echo -e "${PIN}${CYAN}BlockedRepositories: [$display]${NC}"
+    fi
     
 		echo -e ""
 		echo -e "${ARROW} ${CYAN}Removing any instances of FluxOS....${NC}"
@@ -243,7 +248,11 @@ function install_flux() {
 		fi
     if [[ "$blockedPortsList" != "" ]]; then
       RemoveLine "blockedPorts"
-      builBlockedList "  blockedPorts" "$blockedPortsList" "Blocked ports list created successfully!" "fluxos"
+      buildBlockedPortsList "  blockedPorts" "$blockedPortsList" "Blocked ports list created successfully!" "fluxos"
+    fi
+    if [[ "$blockedRepositoryList" != "" ]]; then
+      RemoveLine "blockedRepositories"
+      buildBlockedRepositoryList "  blockedRepositories" "$blockedRepositoryList" "Blocked repositories list created successfully!" "fluxos"
     fi
 		string_limit_check_mark "FluxOS configuration successfull..........................................."
 	else
