@@ -61,7 +61,7 @@ body:
           required: true
         - label: You've checked that this [issue hasn't already been raised](https://github.com/RunOnFlux/fluxnode-multitool/issues?q=is%3Aissue)
           required: true
-        - label: You've checked the official [RunOnFlux Discord](https://discord.io/runonflux) Pinned messages and FAQ ![important](https://img.shields.io/badge/Important!-F6094E)
+        - label: You've checked the official [RunOnFlux Discord](https://discord.gg/runonflux) Pinned messages and FAQ ![important](https://img.shields.io/badge/Important!-F6094E)
           required: true
         - label: You agree to the [code of conduct](https://github.com/RunOnFlux/fluxnode-multitool/blob/master/.github/CODE_OF_CONDUCT.md)
           required: true
