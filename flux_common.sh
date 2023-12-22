@@ -2018,8 +2018,8 @@ function install_mongod() {
 	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 	sudo systemctl stop mongod > /dev/null 2>&1 
-	sudo apt remove mongod* -y > /dev/null 2>&1 
-	sudo apt purge mongod* -y > /dev/null 2>&1 
+	sudo apt remove -f mongod* -y > /dev/null 2>&1 
+	sudo apt purge --allow-change-held-packages mongod* -y > /dev/null 2>&1 
 	sudo apt autoremove -y > /dev/null 2>&1 
  	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
 	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
