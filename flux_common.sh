@@ -772,7 +772,7 @@ function config_smart_create() {
                 if [[ "$upnp_port" != "" ]]; then
                         gateway_ip=$(ip rout | head -n1 | awk '{print $3}' 2>/dev/null)
                         echo -e "${PIN}${CYAN} API Port = ${GREEN}$upnp_port${NC}"
-                        if [[ "$upnp_enabled" === "true" ]]; then
+                        if [[ "$upnp_enabled" == "true" ]]; then
                           echo -e "${PIN}${CYAN} Router IP = ${GREEN}$gateway_ip${NC}"
                         fi
                         smart_install_conf "upnp_port" "$upnp_port" "$1"
