@@ -746,7 +746,9 @@ function mongod_db_fix() {
 			#echo -e "${ARROW} ${CYAN}Backuping Database... ${NC}"
                         #mongodump --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing MongoDB... ${NC}" 
-			sudo apt-get purge mongodb-org* -y > /dev/null 2>&1
+      sudo apt-get remove -f mongodb-org* -y > /dev/null 2>&1
+			sudo apt-get purge --allow-change-held-packages mongodb-org* -y > /dev/null 2>&1
+      sudo apt autoremove -y > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Removing Database... ${NC}"
 			sudo rm -r /var/log/mongodb > /dev/null 2>&1
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
