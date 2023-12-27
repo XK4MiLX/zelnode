@@ -1123,23 +1123,49 @@ function manual_build(){
 }
 ###### HELPERS SECTION
 function os_check(){
-  BLACK_LIST=( "kinetic" )
-  avx_check=$(grep -o avx /proc/cpuinfo | head -n1)
-  if [[ "$avx_check" == "" ]]; then 
-    BLACK_LIST+=( "jammy" )
+  passed=0
+  avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+  os_version=$(lsb_release -rs | tr -d '.')
+  architecture=$(dpkg --print-architecture)
+
+  if [[ $(lsb_release -d) = *Debian* ]]; then
+    if [[ "$os_version" -le "9" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "10" && "$architecture" == "amd64"  &&  "$avx_check" != "" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "12" && "$architecture" == "arm64" ]]; then
+      passed=1
+    fi
   fi
-  LIST_LENGTH=${#BLACK_LIST[@]}
-  for (( p=0; p<${LIST_LENGTH}; p++ ));
-  do
-    if [[ $(lsb_release -cs) == ${BLACK_LIST[$p]} ]]; then 
-      echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+  
+  if [[ $(lsb_release -d) = *Ubuntu* ]]; then
+    if [[ "$os_version" -le "2010" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "2204" && "$architecture" == "amd64"  &&  "$avx_check" != "" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "2310" && "$architecture" == "arm64" ]]; then
+      passed=1
+    fi     
+  fi
+
+  if [[ "$passed" == "0" ]]; then 
+    echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+    if [[ "$architecture" == "amd64" ]]; then
       echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
       echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
-      echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-      echo
-      exit      
     fi
-  done 
+    if [[ "$architecture" == "arm64" ]]; then
+      echo -e "${WORNING} ${CYNA}ARMv8.2-A or later microarchitecture is required to use MongoDB on $(lsb_release -cs)${NC}"
+      echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
+    fi
+    echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+    echo
+    exit      
+  fi
 }
 
 function  fluxos_clean(){
