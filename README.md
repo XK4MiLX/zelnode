@@ -8,7 +8,7 @@ Note: If you are having difficulties, try fastgit.org provider
 ```bash -i <(curl -s https://raw.fastgit.org/RunOnFlux/fluxnode-multitool/master/multitoolbox.sh)```
 
 <b>2) MENU:</b>    
-![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/development.jpg) 
+![screen1](https://raw.githubusercontent.com/RunOnFlux/fluxnode-multitool/master/image/main.jpg) 
 
 <b>3) HOW USE MULTITOOLBOX TO SETUP FLUXNODE:</b>  
  https://medium.com/zelinsights/zelnode-setup-the-easy-peasy-lemon-squeezy-way-fd89706ea03c <br>
