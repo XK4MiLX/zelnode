@@ -16,6 +16,9 @@ Note: If you are having difficulties, try fastgit.org provider
  
  <b>4) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
 https://fluxnodeservice.com
+
+ <b>5) HARDWARE REQUIREMENTS DEPEND ON MongoDB</b>  
+ https://www.mongodb.com/docs/manual/administration/production-notes/#std-label-prod-notes-supported-platforms
  
 <br>
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
