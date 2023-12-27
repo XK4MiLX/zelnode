@@ -2059,7 +2059,7 @@ function install_mongod() {
    os_name="Debian"
   fi
 
-  if [[ $(lsb_release -d) = *Debian* ]]; then
+  if [[ $(lsb_release -d) = *Ubuntu* ]]; then
    os_name="Ubuntu"
   fi
   #Ubuntu MongoDB 4.4
