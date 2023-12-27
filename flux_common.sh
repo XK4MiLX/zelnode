@@ -2078,7 +2078,7 @@ function install_mongod() {
   if [[ "$architecture" == "arm64" ]]; then
     if [[ "$os_name" == "Debian" && "$os_version" -ge "12" ]]; then
       curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-		  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1
+		  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1 1
       source_set=1
     fi
     if [[ "$os_name" == "Ubuntu" && "$os_version" -ge "2304" ]]; then
