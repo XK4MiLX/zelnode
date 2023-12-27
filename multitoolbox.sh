@@ -755,6 +755,7 @@ function mongod_db_fix() {
 			echo -e "${ARROW} ${CYAN}Installing MongoDB... ${NC}"
       avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
       if [[ "$avx_check" == "" ]]; then
+        sudo apt update -y > /dev/null 2>&1
         sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
         echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1 && sleep 2
         echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
@@ -762,6 +763,7 @@ function mongod_db_fix() {
         echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
         echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
       else
+        sudo apt update -y > /dev/null 2>&1
         DEBIAN_FRONTEND=noninteractive sudo apt-get --yes install mongodb-org > /dev/null 2>&1 
       fi
 			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
@@ -774,6 +776,7 @@ function mongod_db_fix() {
 		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
 			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
+      sudo systemctl enable mongod
 			sudo systemctl start mongod
 			if mongod --version > /dev/null 2>&1; then
 				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
