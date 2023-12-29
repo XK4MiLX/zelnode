@@ -58,7 +58,7 @@ title=black,
 function watchdog_conf_create(){
 	sudo touch /home/$USER/watchdog/config.js
 	sudo chown $USER:$USER /home/$USER/watchdog/config.js
-	cat <<- EOF >  /home/$USER/watchdog/config.js
+	cat <<- EOF >|  /home/$USER/watchdog/config.js
   module.exports = {
 	  label: '${node_label}',
 	  tier_eps_min: '${eps_limit}',
@@ -83,7 +83,7 @@ function fluxos_conf_create(){
 	fi
 	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
-	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
+	cat <<- EOF >| /home/$USER/$FLUX_DIR/config/userconfig.js
 module.exports = {
   initial: {
     ipaddress: '${WANIP}',
@@ -100,7 +100,7 @@ function flux_daemon_conf_create() {
 	RPCUSER=$(pwgen -1 8 -n)
 	PASSWORD=$(pwgen -1 20 -n)
 	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	cat <<- EOF > /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+	cat <<- EOF >| /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 	rpcuser=$RPCUSER
 	rpcpassword=$PASSWORD
 	rpcallowip=127.0.0.1
@@ -230,7 +230,7 @@ function flux_daemon_conf_create() {
 function install_conf_create(){
 	sudo touch /home/$USER/install_conf.json
 	sudo chown $USER:$USER /home/$USER/install_conf.json
-	cat <<- EOF > /home/$USER/install_conf.json
+	cat <<- EOF >| /home/$USER/install_conf.json
 	{
 	  "import_settings": "${import_settings}",
 	  "prvkey": "${prvkey}",
@@ -708,9 +708,9 @@ function smart_install_conf(){
 	fi
 	
         if [[ ! -f /home/$USER/install_conf.json ]]; then
-                echo "{}" > install_conf.json
+                echo "{}" >| install_conf.json
         fi
-        echo "$(jq -r --arg key "$1" --arg value "$2" '.[$key]=$value' install_conf.json)" > install_conf.json
+        echo "$(jq -r --arg key "$1" --arg value "$2" '.[$key]=$value' install_conf.json)" >| install_conf.json
 }
 
 function config_smart_create() {
