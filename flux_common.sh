@@ -1156,11 +1156,11 @@ function os_check(){
     echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
     if [[ "$architecture" == "amd64" ]]; then
       echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
-      echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
+      echo -e "${WORNING} ${CYNA}The last version supporting CPUs without AVX is Ubuntu 20.04 LTS. Please re-image and retry installation.${NC}"
     fi
     if [[ "$architecture" == "arm64" ]]; then
       echo -e "${WORNING} ${CYNA}ARMv8.2-A or later microarchitecture is required to use MongoDB on $(lsb_release -cs)${NC}"
-      echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
+      echo -e "${WORNING} ${CYNA}If you're using ARM architecture older than ARMv8.2-A, it's recommended to use Ubuntu 20.04 LTS. Please re-image and retry installation.${NC}"
     fi
     echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
     echo
