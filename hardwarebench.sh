@@ -78,7 +78,7 @@ echo -e "| RAM: ${CYAN}${ram}${NC}"
 echo -e "-------------------------"
 echo -e "| CPU BENCHMARK"
 echo -e "-------------------------"
-eps=$(LC_ALL=C sysbench cpu --cpu-max-prime=60000 --time=20 run 2> /dev/null | grep 'events per second' | awk -v cpu=$vcore '{print $4*cpu}')
+eps=$(LC_ALL=C sysbench cpu --cpu-max-prime=60000 --time=20 run 2> /dev/null | grep 'events per second' | awk -v cpu=$core '{print $4*cpu}')
 
 if [[ "$(dpkg --print-architecture)" = *"Jetson"* ]]; then
  cumulus_ram=3
