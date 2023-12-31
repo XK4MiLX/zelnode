@@ -58,7 +58,7 @@ title=black,
 function watchdog_conf_create(){
 	sudo touch /home/$USER/watchdog/config.js
 	sudo chown $USER:$USER /home/$USER/watchdog/config.js
-	cat <<- EOF >  /home/$USER/watchdog/config.js
+	cat <<- EOF >|  /home/$USER/watchdog/config.js
   module.exports = {
 	  label: '${node_label}',
 	  tier_eps_min: '${eps_limit}',
@@ -83,7 +83,7 @@ function fluxos_conf_create(){
 	fi
 	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
-	cat <<- EOF > /home/$USER/$FLUX_DIR/config/userconfig.js
+	cat <<- EOF >| /home/$USER/$FLUX_DIR/config/userconfig.js
 module.exports = {
   initial: {
     ipaddress: '${WANIP}',
@@ -100,7 +100,7 @@ function flux_daemon_conf_create() {
 	RPCUSER=$(pwgen -1 8 -n)
 	PASSWORD=$(pwgen -1 20 -n)
 	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	cat <<- EOF > /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+	cat <<- EOF >| /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 	rpcuser=$RPCUSER
 	rpcpassword=$PASSWORD
 	rpcallowip=127.0.0.1
@@ -230,7 +230,7 @@ function flux_daemon_conf_create() {
 function install_conf_create(){
 	sudo touch /home/$USER/install_conf.json
 	sudo chown $USER:$USER /home/$USER/install_conf.json
-	cat <<- EOF > /home/$USER/install_conf.json
+	cat <<- EOF >| /home/$USER/install_conf.json
 	{
 	  "import_settings": "${import_settings}",
 	  "prvkey": "${prvkey}",
@@ -708,9 +708,9 @@ function smart_install_conf(){
 	fi
 	
         if [[ ! -f /home/$USER/install_conf.json ]]; then
-                echo "{}" > install_conf.json
+                echo "{}" >| install_conf.json
         fi
-        echo "$(jq -r --arg key "$1" --arg value "$2" '.[$key]=$value' install_conf.json)" > install_conf.json
+        echo "$(jq -r --arg key "$1" --arg value "$2" '.[$key]=$value' install_conf.json)" >| install_conf.json
 }
 
 function config_smart_create() {
@@ -1123,23 +1123,49 @@ function manual_build(){
 }
 ###### HELPERS SECTION
 function os_check(){
-  BLACK_LIST=( "kinetic" )
-  avx_check=$(grep -o avx /proc/cpuinfo | head -n1)
-  if [[ "$avx_check" == "" ]]; then 
-    BLACK_LIST+=( "jammy" )
-  fi
-  LIST_LENGTH=${#BLACK_LIST[@]}
-  for (( p=0; p<${LIST_LENGTH}; p++ ));
-  do
-    if [[ $(lsb_release -cs) == ${BLACK_LIST[$p]} ]]; then 
-      echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
-      echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
-      echo -e "${WORNING} ${CYNA}Ubuntu 20.04 LTS is the recommended OS version... please re-image and retry installation${NC}"
-      echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-      echo
-      exit      
+  passed=0
+  avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
+  os_version=$(lsb_release -rs | tr -d '.')
+  architecture=$(dpkg --print-architecture)
+
+  if [[ $(lsb_release -d) = *Debian* ]]; then
+    if [[ "$os_version" -le "9" ]]; then
+      passed=1
     fi
-  done 
+    if [[ "$os_version" -ge "10" && "$architecture" == "amd64"  &&  "$avx_check" != "" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "12" && "$architecture" == "arm64" ]]; then
+      passed=1
+    fi
+  fi
+  
+  if [[ $(lsb_release -d) = *Ubuntu* ]]; then
+    if [[ "$os_version" -le "2010" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "2204" && "$architecture" == "amd64"  &&  "$avx_check" != "" ]]; then
+      passed=1
+    fi
+    if [[ "$os_version" -ge "2310" && "$architecture" == "arm64" ]]; then
+      passed=1
+    fi     
+  fi
+
+  if [[ "$passed" == "0" ]]; then 
+    echo -e "${WORNING} ${CYAN}ERROR: ${RED}OS version $(lsb_release -si) - $(lsb_release -cs) not supported${NC}"
+    if [[ "$architecture" == "amd64" ]]; then
+      echo -e "${WORNING} ${CYNA}AVX CPU instruction set not found and is required to use MongoDB on $(lsb_release -cs)${NC}"
+      echo -e "${WORNING} ${CYNA}The last version supporting CPUs without AVX is Ubuntu 20.04 LTS. Please re-image and retry installation.${NC}"
+    fi
+    if [[ "$architecture" == "arm64" ]]; then
+      echo -e "${WORNING} ${CYNA}ARMv8.2-A or later microarchitecture is required to use MongoDB on $(lsb_release -cs)${NC}"
+      echo -e "${WORNING} ${CYNA}If you're using ARM architecture older than ARMv8.2-A, it's recommended to use Ubuntu 20.04 LTS. Please re-image and retry installation.${NC}"
+    fi
+    echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+    echo
+    exit      
+  fi
 }
 
 function  fluxos_clean(){
@@ -2015,6 +2041,7 @@ function start_service() {
 }
 ######### INSTALLATION SECTION ############################
 function install_mongod() {
+  source_set=0
 	echo -e ""
 	echo -e "${ARROW} ${YELLOW}Removing any instances of Mongodb...${NC}"
 	sudo systemctl stop mongod > /dev/null 2>&1 
@@ -2024,48 +2051,80 @@ function install_mongod() {
  	sudo rm /etc/apt/sources.list.d/mongodb*.list > /dev/null 2>&1
 	sudo rm /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1 
 	echo -e "${ARROW} ${YELLOW}Mongodb installing...${NC}"
-	# check to see if cpu supports avx
 	avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-	# AVX instruction flag not found - so install 4.4
-	# else install newest version 6.0
-	if [[ "$avx_check" == "" ]]; then
-		curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-		if [[ $(lsb_release -d) = *Debian* ]]; then 
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then 
-			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
-		else
-			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
-			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-			echo
-			exit    
-		fi
-	else
-		if [[ $(lsb_release -d) = *Debian* ]]; then 
-      if [[ "$(lsb_release -c)" == "bullseye" ]]; then
-        curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-			  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1
+  os_version=$(lsb_release -rs | tr -d '.')
+  architecture=$(dpkg --print-architecture)
+
+  if [[ $(lsb_release -d) = *Debian* ]]; then
+   os_name="Debian"
+  fi
+
+  if [[ $(lsb_release -d) = *Ubuntu* ]]; then
+   os_name="Ubuntu"
+  fi
+  #Ubuntu MongoDB 4.4
+  if [[ "$avx_check" == ""  && "$os_name" == "Ubuntu"  && "$architecture" == "amd64" && "$os_version" -le "2010" ]] || [[ "$os_name" == "Ubuntu"  && "$architecture" == "arm64" && "$os_version" -le "2010" ]]; then
+    curl -fsSL https://pgp.mongodb.com/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+    source_set=2
+  fi
+  #Debian MongoDB 4.4
+  if [[ "$avx_check" == ""  && "$os_name" == "Debian"  && "$architecture" == "amd64" && "$os_version" -le "9" ]] || [[ "$os_name" == "Debian"  && "$architecture" == "arm64" && "$os_version" -le "9" ]]; then
+    curl -fsSL https://pgp.mongodb.com/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list > /dev/null 2>&1
+    source_set=2
+  fi
+  #ARM MongoDB 7.0
+  if [[ "$architecture" == "arm64" ]]; then
+    if [[ "$os_name" == "Debian" && "$os_version" -ge "12" ]]; then
+      curl -fsSL https://pgp.mongodb.com/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+		  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1
+      source_set=1
+    fi
+    if [[ "$os_name" == "Ubuntu" && "$os_version" -ge "2304" ]]; then
+      curl -fsSL https://pgp.mongodb.com/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+			echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1 
+      source_set=1
+    fi
+  fi
+  #AVX with AMD64
+  if [[ "$avx_check" != ""  && "$architecture" == "amd64" ]]; then
+    if [[ "$os_name" == "Ubuntu" ]]; then
+      if [[ "$os_version" -ge "2004" ]]; then
+         if [[ "$os_version" == "2004" ]]; then
+           codename="focal"
+         else
+           codename="jammy"
+         fi
+         curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu ${codename}/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1 
+         source_set=1
       else
-        curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
+         curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1 
+         source_set=1
       fi
-		elif [[ $(lsb_release -d) = *Ubuntu* ]]; then
-      if [[ "$(lsb_release -c)" == "jammy" || "$(lsb_release -c)" == "focal" ]]; then
-       curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-			 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1 
+    fi
+    if [[ "$os_name" == "Debian" ]]; then
+      if [[ "$os_version" -le "9" ]]; then
+         curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/6.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1
+         source_set=1
       else
-       curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
-       echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list > /dev/null 2>&1 
+         curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor | sudo tee /usr/share/keyrings/mongodb-archive-keyring.gpg > /dev/null 2>&1
+         echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg] https://repo.mongodb.org/apt/debian $(lsb_release -cs)/mongodb-org/7.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list > /dev/null 2>&1
+         source_set=1
       fi
-		else
-			echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
-			echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
-			echo
-			exit    
-		fi
-	fi
+    fi 
+  fi
+  if [[ "$source_set" == "0" ]]; then
+    echo -e "${WORNING} ${RED}OS type $(lsb_release -si) not supported..${NC}"
+    echo -e "${WORNING} ${CYAN}Installation stopped...${NC}"
+    echo
+    exit    
+  fi
 	sudo apt-get update -y > /dev/null 2>&1
-  if [[ "$avx_check" == "" ]]; then
+  if [[ "$source_set" == "2" ]]; then
 	  sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
 	  echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1
     echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 

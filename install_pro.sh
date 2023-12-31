@@ -282,8 +282,9 @@ function wipe_clean() {
 	echo -e "${ARROW} ${CYAN}Removing others files and scripts...${NC}"
 	sudo rm -rf watchgod > /dev/null 2>&1 && sleep 1
 	sudo rm -rf $BENCH_DIR_LOG && sleep 1
-	sudo rm -rf /etc/logrotate.d/mongolog > /dev/null 2>&1
-	sudo rm -rf /etc/logrotate.d/zeldebuglog > /dev/null 2>&1
+	sudo rm -rf /etc/logrotate.d/bench_debug_log > /dev/null 2>&1
+	sudo rm -rf /etc/logrotate.d/daemon_debug_log > /dev/null 2>&1
+  sudo rm -rf /etc/logrotate.d/docker_debug_log > /dev/null 2>&1
 	rm update.sh > /dev/null 2>&1
 	rm restart_zelflux.sh > /dev/null 2>&1
 	rm zelnodeupdate.sh > /dev/null 2>&1

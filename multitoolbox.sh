@@ -29,7 +29,7 @@ fi
 FLUX_DIR='zelflux'
 FLUX_APPS_DIR='ZelApps'
 COIN_NAME='zelcash'
-dversion="v7.7"
+dversion="v7.8"
 PM2_INSTALL="0"
 zelflux_setting_import="0"
 OS_FLAGE="$2"
@@ -754,7 +754,25 @@ function mongod_db_fix() {
 			sudo rm -r /var/lib/mongodb > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Installing MongoDB... ${NC}"
       avx_check=$(cat /proc/cpuinfo | grep -o avx | head -n1)
-      if [[ "$avx_check" == "" ]]; then
+      os_version=$(lsb_release -rs | tr -d '.')
+      architecture=$(dpkg --print-architecture)
+
+      if [[ $(lsb_release -d) = *Debian* ]]; then
+        os_name="Debian"
+      fi  
+      if [[ $(lsb_release -d) = *Ubuntu* ]]; then
+        os_name="Ubuntu"
+      fi
+      #Ubuntu MongoDB 4.4
+      if [[ "$avx_check" == ""  && "$os_name" == "Ubuntu"  && "$architecture" == "amd64" && "$os_version" -le "2010" ]] || [[ "$os_name" == "Ubuntu"  && "$architecture" == "arm64" && "$os_version" -le "2010" ]]; then
+       install_mongod="4.4"
+      fi
+      #Debian MongoDB 4.4
+      if [[ "$avx_check" == ""  && "$os_name" == "Debian"  && "$architecture" == "amd64" && "$os_version" -le "9" ]] || [[ "$os_name" == "Debian"  && "$architecture" == "arm64" && "$os_version" -le "9" ]]; then
+        install_mongod="4.4"
+      fi
+      if [[ "$install_mongod" == "4.4" ]]; then
+        sudo apt update -y > /dev/null 2>&1
         sudo apt install -y mongodb-org=4.4.18 mongodb-org-server=4.4.18 mongodb-org-shell=4.4.18 mongodb-org-mongos=4.4.18 mongodb-org-tools=4.4.18 > /dev/null 2>&1 && sleep 2
         echo "mongodb-org hold" | sudo dpkg --set-selections > /dev/null 2>&1 && sleep 2
         echo "mongodb-org-server hold" | sudo dpkg --set-selections > /dev/null 2>&1 
@@ -762,6 +780,7 @@ function mongod_db_fix() {
         echo "mongodb-org-mongos hold" | sudo dpkg --set-selections > /dev/null 2>&1 
         echo "mongodb-org-tools hold" | sudo dpkg --set-selections > /dev/null 2>&1 
       else
+        sudo apt update -y > /dev/null 2>&1
         DEBIAN_FRONTEND=noninteractive sudo apt-get --yes install mongodb-org > /dev/null 2>&1 
       fi
 			sudo mkdir -p /var/log/mongodb > /dev/null 2>&1
@@ -774,6 +793,7 @@ function mongod_db_fix() {
 		  #echo -e "${ARROW} ${CYAN}Restoring Database... ${NC}"
 			#mongorestore --drop --archive=/home/$USER/mongoDB_backup.gz > /dev/null 2>&1
 			echo -e "${ARROW} ${CYAN}Starting mongod service... ${NC}"
+      sudo systemctl enable mongod
 			sudo systemctl start mongod
 			if mongod --version > /dev/null 2>&1; then
 				string_limit_check_mark "MongoDB $(mongod --version | grep 'db version' | sed 's/db version.//') installed................................." "MongoDB ${GREEN}$(mongod --version | grep 'db version' | sed 's/db version.//')${CYAN} installed................................."
