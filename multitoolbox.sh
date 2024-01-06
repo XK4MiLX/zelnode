@@ -162,7 +162,7 @@ function install_flux() {
 		
 		upnp_port=$(grep -w apiport /home/$USER/$FLUX_DIR/config/userconfig.js | egrep -o '[0-9]+')
 		if [[ "$upnp_port" != "" ]]; then
-      echo -e "${PIN}${CYAN}UPnP port = ${GREEN}$upnp_port${NC}"
+      echo -e "${PIN}${CYAN}API port = ${GREEN}$upnp_port${NC}"
     fi
 
     router_ip=$(grep -w routerIP /home/$USER/$FLUX_DIR/config/userconfig.js | sed -e 's/.*routerIP: .//' | sed -e 's/.\{2\}$//')
@@ -241,7 +241,7 @@ function install_flux() {
 	fluxos_conf_create
 	if [[ -f /home/$USER/$FLUX_DIR/config/userconfig.js ]]; then	
 	  if [[ "$upnp_port" != "" ]]; then
-      config_builder "apiport" "$upnp_port" "UPnP Port" "fluxos"
+      config_builder "apiport" "$upnp_port" "API Port" "fluxos"
 		fi
     if [[ "$router_ip" != "" ]]; then
       config_builder "routerIP" "$router_ip" "Router IP" "fluxos"
@@ -269,7 +269,7 @@ function install_flux() {
 		echo -e "${ARROW} ${CYAN}Starting FluxOS....${NC}"
 		echo -e "${ARROW} ${CYAN}FluxOS loading will take 2-3min....${NC}"
 		echo -e ""
-		pm2 start /home/$USER/$FLUX_DIR/start.sh --restart-delay=60000 --max-restarts=40 --name flux --time  > /dev/null 2>&1
+    pm2 start /home/$USER/$FLUX_DIR/start.sh --max-memory-restart 1500M --restart-delay 30000 --max-restarts 40 --name flux --time  > /dev/null 2>&1
 		pm2 save > /dev/null 2>&1
 		pm2 list
 	else
