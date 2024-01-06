@@ -147,7 +147,7 @@ if [[ "$loop_mount" != "" ]]; then
       ioavg=$( awk 'BEGIN{printf("%.0f", ('"$io1"' + '"$io2"')/2)}' | Bps_to_MiBps )
     fi
 
-   echo -e "-----------------------------"
+   #echo -e "-----------------------------"
    outputdiskbench+=" loop $loop_mount $ioavg"
     if [[ "${ioavg%%.*}" -ge "180" ]]; then
         SSD=$(awk 'BEGIN{printf("%d",'"$SSD"'+'"$loop_mount"')}')
@@ -173,9 +173,9 @@ do
      #checking if disk structure is accessable
      cd $HOME && ./lsblk -l -b -n /dev/${disc__array[i]} > /dev/null 2>&1
      if [ $? != 0 ]; then
-       echo -e "Disk name: ${disc__array[i]}"
-       echo -e "Error: Can't grab device stucture... device skipped!"
-       echo -e "-----------------------------"
+       #echo -e "Disk name: ${disc__array[i]}"
+       #echo -e "Error: Can't grab device stucture... device skipped!"
+       #echo -e "-----------------------------"
        continue
      fi
     #checking direct mount
@@ -190,9 +190,9 @@ do
          if [[ "$count" == "0" ]]; then
            mount_list+=("$lvm_mount")
          else
-           echo -e "Disk name: ${disc__array[i]}"
-           echo -e "Error: Mount point already checked... device skipped!"
-           echo -e "-----------------------------"
+           #echo -e "Disk name: ${disc__array[i]}"
+           #echo -e "Error: Mount point already checked... device skipped!"
+           #echo -e "-----------------------------"
            continue
          fi
        fi
@@ -216,9 +216,9 @@ do
          if [[  "$part_type_check" != "0" ]]; then
            #skipp disk
            partition_name=$(awk '{print $1}' <<< $part_type_check)
-           echo -e "Disk name: ${disc__array[i]}"
-           echo -e "Error: LVM2_member partition detected... device skipped!"
-           echo -e "-----------------------------"
+           #echo -e "Disk name: ${disc__array[i]}"
+           #echo -e "Error: LVM2_member partition detected... device skipped!"
+           #echo -e "-----------------------------"
            continue
          fi
 
@@ -236,9 +236,9 @@ do
                 raid_list+=("$partition_name")
             else
                  #skipped raid already tested
-                 echo -e "Disk name: ${disc__array[i]}"
-                 echo -e "Info: Disk skipped - raid already tested!"
-                 echo -e "-----------------------------"
+                 #echo -e "Disk name: ${disc__array[i]}"
+                 #echo -e "Info: Disk skipped - raid already tested!"
+                 #echo -e "-----------------------------"
                  continue
             fi
          fi
@@ -320,8 +320,8 @@ do
     
   else
 
-    echo -e "Error: space not enough... write test skipped!"
-    echo -e "-----------------------------"
+    #echo -e "Error: space not enough... write test skipped!"
+    #echo -e "-----------------------------"
     if [[ "$lvm_mount" == "" ]]; then
 
        sudo umount /.benchmark_test
@@ -364,7 +364,7 @@ if [[ "$outputdiskbench" == "Disks Bench:" ]]; then
       ioavg=$( awk 'BEGIN{printf("%.0f", ('"$io1"' + '"$io2"')/2)}' | Bps_to_MiBps )
     fi
 
-   echo -e "-----------------------------"
+   #echo -e "-----------------------------"
    outputdiskbench+=" $device_name $partition_size $ioavg"
     if [[ "${ioavg%%.*}" -ge "180" ]]; then
         SSD=$(awk 'BEGIN{printf("%d",'"$SSD"'+'"$partition_size"')}')
@@ -423,7 +423,9 @@ fi
 if [[ "${eps%%.*}" -ge  1520 && "$status" == "STRATUS" ]]; then
   status="STRATUS"
 fi
-echo -e "| EPS: ${CYAN}${eps}${NC}"
+if  [[ "$status" != "FAILED" ]]; then
+  echo -e "| EPS: ${CYAN}${eps}${NC}"
+fi
 echo -e "-------------------------"
 echo -e "| DISK BENCHMARK"
 echo -e "-------------------------"
