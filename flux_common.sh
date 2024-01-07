@@ -96,60 +96,52 @@ module.exports = {
 }
 EOF
 }
+
 function flux_daemon_conf_create() {
-  nodes=(
-    "80.211.207.17" "95.217.12.176" "89.58.3.209" "161.97.85.103" "194.163.176.185"
-    "explorer.flux.zelcore.io" "explorer.runonflux.io" "explorer.zelcash.online" "blockbook.runonflux.io" "202.61.202.21"
-    "89.58.40.172" "37.120.176.206" "66.119.15.83" "66.94.118.208" "99.48.162.169"
-    "97.120.40.143" "99.48.162.167" "108.30.50.162" "154.12.242.89" "67.43.96.139"
-    "66.94.107.219" "66.94.110.117" "154.12.225.203" "176.9.72.41" "65.108.198.119"
-    "65.108.200.110" "46.38.251.110" "95.214.55.47" "202.61.236.202" "65.108.141.153"
-    "178.170.46.91" "66.119.15.64" "65.108.46.178" "94.130.220.41" "178.170.48.110"
-    "78.35.147.57" "66.119.15.101" "66.119.15.96" "38.88.125.25" "66.119.15.110"
-    "103.13.31.149" "212.80.212.238" "212.80.213.172" "212.80.212.228" "121.112.224.186"
-    "114.181.141.16" "167.179.115.100" "153.226.219.80" "24.79.73.50" "76.68.219.102"
-    "70.52.20.8" "184.145.181.147" "68.150.72.135" "198.27.83.181" "167.114.82.63"
-    "24.76.166.6" "173.33.170.150" "99.231.229.245" "70.82.102.140" "192.95.30.188"
-    "75.158.245.77" "142.113.239.49" "66.70.176.241" "174.93.146.224" "216.232.124.38"
-    "207.34.248.197" "76.68.219.102" "149.56.25.82" "74.57.74.166" "142.169.180.47"
-    "70.67.210.148" "86.5.78.14" "87.244.105.94" "86.132.192.193" "86.27.168.85"
-    "86.31.168.107" "84.71.79.220" "154.57.235.104" "86.13.102.145" "86.31.168.107"
-    "86.13.68.100" "151.225.136.163" "5.45.110.123" "45.142.178.251" "89.58.5.234"
-    "45.136.30.81" "202.61.255.238" "89.58.7.2" "89.58.36.46" "89.58.32.76" "89.58.39.81"
-    "89.58.39.153" "202.61.244.71" "89.58.37.172" "89.58.36.118" "31.145.161.44" "217.131.61.221"
-    "80.28.72.254" "85.49.210.36" "84.77.69.203" "51.38.1.195" "51.38.1.194"
+  explorers=(
+      "explorer.runonflux.io"
+      "explorer.zelcash.online"
+      "blockbook.runonflux.io"
+      "explorer.zelcash.online"
   )
-	RPCUSER=$(pwgen -1 8 -n)
-	PASSWORD=$(pwgen -1 20 -n)
-	touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	cat <<- EOF >| /home/$USER/$CONFIG_DIR/$CONFIG_FILE
-	rpcuser=$RPCUSER
-	rpcpassword=$PASSWORD
-	rpcallowip=127.0.0.1
-	rpcallowip=172.18.0.1
-	rpcport=$RPCPORT
-	port=$PORT
-	zelnode=1
-	zelnodeprivkey=$zelnodeprivkey
-	zelnodeoutpoint=$zelnodeoutpoint
-	zelnodeindex=$zelnodeindex
-	server=1
-	daemon=1
-	txindex=1
-	addressindex=1
-	timestampindex=1
-	spentindex=1
-	insightexplorer=1
-	experimentalfeatures=1
-	listen=1
-	externalip=$WANIP
-	bind=0.0.0.0
-	maxconnections=256
- 
-  #Addnode list
-  $(IFS=$'\n'; for nodes in "${nodes[@]}"; do echo "addnode=$nodes"; done)
-	EOF
+  selected_ips=($(curl -s -m 20 https://api.runonflux.io/apps/enterprisenodes | jq -r '.data[] | select(.score >= 2200 and .score <= 3000) | .ip' 2>/dev/null | shuf -n 25))
+  nodes=("${selected_ips[@]}" "${explorers[@]}")
+  RPCUSER=$(pwgen -1 8 -n)
+  PASSWORD=$(pwgen -1 20 -n)
+  touch /home/$USER/$CONFIG_DIR/$CONFIG_FILE
+  {
+    cat <<- EOF
+    rpcuser=$RPCUSER
+    rpcpassword=$PASSWORD
+    rpcallowip=127.0.0.1
+    rpcallowip=172.18.0.1
+    rpcport=$RPCPORT
+    port=$PORT
+    zelnode=1
+    zelnodeprivkey=$zelnodeprivkey
+    zelnodeoutpoint=$zelnodeoutpoint
+    zelnodeindex=$zelnodeindex
+    server=1
+    daemon=1
+    txindex=1
+    addressindex=1
+    timestampindex=1
+    spentindex=1
+    insightexplorer=1
+    experimentalfeatures=1
+    listen=1
+    externalip=$WANIP
+    bind=0.0.0.0
+    maxconnections=256
+    # Addnode list
+    EOF
+    IFS=$'\n'
+    for node in "${nodes[@]}"; do
+      echo "addnode=$node"
+    done
+  } | sed 's/^[[:space:]]*//' >| /home/$USER/$CONFIG_DIR/$CONFIG_FILE
 }
+
 function install_conf_create(){
 	sudo touch /home/$USER/install_conf.json
 	sudo chown $USER:$USER /home/$USER/install_conf.json
