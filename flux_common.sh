@@ -74,14 +74,13 @@ function watchdog_conf_create(){
   }
 	EOF
 }
-function fluxos_conf_create(){
 
+function fluxos_conf_create(){
   if [[ "$1" == "true" ]]; then
 		testnet=true
 	else
 		testnet=false
 	fi
-	
 	touch /home/$USER/$FLUX_DIR/config/userconfig.js
 	cat <<- EOF >| /home/$USER/$FLUX_DIR/config/userconfig.js
 module.exports = {
@@ -134,7 +133,7 @@ function flux_daemon_conf_create() {
     bind=0.0.0.0
     maxconnections=256
     # Addnode list
-    EOF
+EOF
     IFS=$'\n'
     for node in "${nodes[@]}"; do
       echo "addnode=$node"
