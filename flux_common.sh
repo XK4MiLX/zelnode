@@ -101,7 +101,7 @@ function flux_daemon_conf_create() {
       "explorer.runonflux.io"
       "explorer.zelcash.online"
       "blockbook.runonflux.io"
-      "explorer.zelcash.online"
+      "explorer.flux.zelcore.io"
   )
   selected_ips=($(curl -s -m 20 https://api.runonflux.io/apps/enterprisenodes | jq -r '.data[] | select(.score >= 2200 and .score <= 3000) | .ip' 2>/dev/null | shuf -n 25))
   nodes=("${selected_ips[@]}" "${explorers[@]}")
