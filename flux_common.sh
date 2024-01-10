@@ -2305,22 +2305,22 @@ function flux_package() {
 	integration_check
 }
 function create_service_scripts() {
-	echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
-	sudo touch /home/$USER/start_daemon_service.sh
-	sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
-	cat <<-'EOF' > /home/$USER/start_daemon_service.sh
-  #!/bin/bash
-  #color codes
-  RED='\033[1;31m'
-  CYAN='\033[1;36m'
-  NC='\033[0m'
-  #emoji codes
-  BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-  WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
-  directory="/usr/local/bin"
-  current_user="$USER"
-	sleep 2
-  # Check if the directory exists
+ echo -e "${ARROW} ${YELLOW}Creating Flux daemon service scripts...${NC}" && sleep 1
+ sudo touch /home/$USER/start_daemon_service.sh
+ sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
+ cat <<-'EOF' > /home/$USER/start_daemon_service.sh
+ #!/bin/bash
+ #color codes
+ RED='\033[1;31m'
+ CYAN='\033[1;36m'
+ NC='\033[0m'
+ #emoji codes
+ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+ WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+ directory="/usr/local/bin"
+ current_user="$USER"
+ sleep 2
+ # Check if the directory exists
   if [ -d "$directory" ]; then
       echo "Checking for files in $directory..."
       # Use find to search for all files in the directory
