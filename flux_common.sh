@@ -1116,7 +1116,7 @@ function  fluxos_clean(){
 }
 
 function round() {
-	printf "%.${2}f" "${1}"
+  LC_NUMERIC=C printf "%.${2}f" "${1}"
 }
 function insertAfter() {
 	local file="$1" line="$2" newText="$3"
