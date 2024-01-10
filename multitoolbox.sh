@@ -976,6 +976,7 @@ case "$REPLY" in
   fi 
 	create_service_scripts
 	create_service "install"
+  echo -e ""
 	;;
 	10)
 	clear
