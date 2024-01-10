@@ -965,8 +965,17 @@ case "$REPLY" in
  9)
 	clear
 	sleep 1
+  echo -e "${GREEN}Module: Flux Daemon service creator${NC}"
+  echo -e "${YELLOW}================================================================${NC}"
+  if [[ "$USER" == "root" || "$USER" == "ubuntu" || "$USER" == "admin" ]]; then
+    echo -e "${CYAN}You are currently logged in as ${GREEN}$USER${NC}"
+    echo -e "${CYAN}Please switch to the user account.${NC}"
+    echo -e "${YELLOW}================================================================${NC}"
+    echo -e "${NC}"
+    exit
+  fi 
 	create_service_scripts
-	create_service
+	create_service "install"
 	;;
 	10)
 	clear
