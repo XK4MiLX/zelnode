@@ -2317,7 +2317,33 @@ function create_service_scripts() {
 	#emoji codes
 	BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 	WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+  directory="/usr/local/bin"
+  current_user="$USER"
 	sleep 2
+  # Check if the directory exists
+  if [ -d "$directory" ]; then
+      echo "Checking for files in $directory..."
+      # Use find to search for all files in the directory
+      all_files=$(find "$directory" -maxdepth 1)
+      if [ -n "$all_files" ]; then
+          # Identify files not owned by the current user
+          non_user_files=$(find "$directory" -maxdepth 1 ! -user "$current_user")
+          if [ -n "$non_user_files" ]; then
+              echo "Files not owned by $current_user found:"
+              echo "$non_user_files"
+              # Change ownership of non-user files to the current user
+              echo "Changing ownership to $current_user..."
+              sudo chown "$current_user":"$current_user" $non_user_files
+              echo "Ownership changed successfully."
+          else
+              echo "All files are owned by $current_user."
+          fi
+      else
+          echo "No files found in $directory."
+      fi
+  else
+      echo "Directory $directory does not exist."
+  fi
 	echo -e "${BOOK} ${CYAN}Pre-start process starting...${NC}"
 	echo -e "${BOOK} ${CYAN}Checking if benchmark or daemon is running${NC}"
 	bench_status_pind=$(pgrep fluxbenchd)
