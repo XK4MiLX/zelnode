@@ -2309,14 +2309,14 @@ function create_service_scripts() {
 	sudo touch /home/$USER/start_daemon_service.sh
 	sudo chown $USER:$USER /home/$USER/start_daemon_service.sh
 	cat <<-'EOF' > /home/$USER/start_daemon_service.sh
-	#!/bin/bash
-	#color codes
-	RED='\033[1;31m'
-	CYAN='\033[1;36m'
-	NC='\033[0m'
-	#emoji codes
-	BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
-	WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
+  #!/bin/bash
+  #color codes
+  RED='\033[1;31m'
+  CYAN='\033[1;36m'
+  NC='\033[0m'
+  #emoji codes
+  BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
+  WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
   directory="/usr/local/bin"
   current_user="$USER"
 	sleep 2
@@ -2403,7 +2403,6 @@ function create_service_scripts() {
 	sudo chmod +x /home/$USER/start_daemon_service.sh
 }
 function create_service() {
-
 	if [[ "$1" != "install" ]]; then
 		echo -e "${GREEN}Module: Flux Daemon service creator${NC}"
 		echo -e "${YELLOW}================================================================${NC}"
