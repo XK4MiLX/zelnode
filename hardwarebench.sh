@@ -171,7 +171,7 @@ disc__array=($(cd $HOME && LC_ALL=C lsblk -o NAME,SIZE,TYPE -b -n | grep ' disk'
 for((i=0;i<${#disc__array[@]};i++));
 do
      #checking if disk structure is accessable
-     cd $HOME && ./lsblk -l -b -n /dev/${disc__array[i]} > /dev/null 2>&1
+     cd $HOME && lsblk -l -b -n /dev/${disc__array[i]} > /dev/null 2>&1
      if [ $? != 0 ]; then
        #echo -e "Disk name: ${disc__array[i]}"
        #echo -e "Error: Can't grab device stucture... device skipped!"
