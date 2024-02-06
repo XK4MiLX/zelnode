@@ -459,6 +459,9 @@ function install_daemon() {
 			gpg --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 4B69CA27A986265D > /dev/null 2>&1
 			((key_counter++))
 		done
+     if [[ -f /usr/share/keyrings/flux-archive-keyring.gpg ]]; then
+       curl -sSL "https://keys.openpgp.org/pks/lookup?op=get&search=0x4B69CA27A986265D" | gpg --import --no-default-keyring --keyring /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
+     fi
 		#if ! gpg -k --keyring /usr/share/keyrings/flux-archive-keyring.gpg Zel > /dev/null 2>&1; then
 			#echo -e "${YELLOW}First attempt to retrieve keys failed will try a different keyserver.${NC}"
 			#sudo rm /usr/share/keyrings/flux-archive-keyring.gpg > /dev/null 2>&1
