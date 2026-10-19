@@ -36,12 +36,12 @@ BOOK="${RED}\xF0\x9F\x93\x8B${NC}"
 HOT="${ORANGE}\xF0\x9F\x94\xA5${NC}"
 WORNING="${RED}\xF0\x9F\x9A\xA8${NC}"
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://cdn-1.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
-BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='' # no built-in MongoDB bootstrap source any more
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIP='' # no built-in KDA bootstrap source any more
 
 #dialog color
 export NEWT_COLORS='
@@ -793,8 +793,8 @@ function mongodb_bootstrap(){
     fi
     
     BLOCKHIGHT=100
-     #DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
-    DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     #DB_HIGHT=""
+    DB_HIGHT=""
     echo -e "${ARROW} ${CYAN}Bootstrap block hight: ${GREEN}$DB_HIGHT${NC}"
 
     if [[ "$BLOCKHIGHT" -gt "0" && "$BLOCKHIGHT" -lt "$DB_HIGHT" ]]; then
@@ -1110,7 +1110,7 @@ function daemon_bootstrap() {
 
             case $CHOICE in
 	    "1)")   
-	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=$(curl -s -m 3 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		 echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		 wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
@@ -1184,7 +1184,7 @@ function kda_bootstrap() {
 
             case $CHOICE in
 	    "1)")   
-	         DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=""
 		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
        		 wget -O $KDA_BOOTSTRAP_ZIPFILE $KDA_BOOTSTRAP_ZIP -q --show-progress
