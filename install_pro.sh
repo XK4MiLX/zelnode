@@ -1,8 +1,8 @@
 #!/bin/bash
 # Bootstrap settings
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://cdn-1.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
-BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='' # no built-in MongoDB bootstrap source any more
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 
 #wallet information
@@ -383,9 +383,9 @@ function mongodb_bootstrap(){
     echo -e ""
     echo -e "${ARROW} ${YELLOW}Restore mongodb datatable from bootstrap${NC}"
       
-     DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+     DB_HIGHT=""
      if [[ "$DB_HIGHT" == "" ]]; then
-         DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+         DB_HIGHT=""
      fi
     
     #BLOCKHIGHT=$(curl -s -m 6 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')
@@ -936,9 +936,9 @@ function bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		fi
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
@@ -1018,9 +1018,9 @@ function bootstrap() {
 		
             else
 	    
-	        DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 10 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		if [[ "$DB_HIGHT" == "" ]]; then
-		  DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+		  DB_HIGHT=$(curl -s -m 10 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		fi
 		
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"

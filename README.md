@@ -10,9 +10,6 @@
  https://medium.com/zelinsights/zelnode-setup-the-easy-peasy-lemon-squeezy-way-fd89706ea03c <br>
  https://www.youtube.com/watch?v=i4dS-683Dlo
  
- <b>4) BOOTSTRAP AUTODEPLOY SERVICE (ALWAYS FRESH COPY):</b>  
-https://fluxnodeservice.com
- 
 <br>
 <b>Any donations are welcomed and appreciated. Thanks.</b>  
 <p>https://x4milx.coinrequest.io</p>

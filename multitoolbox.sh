@@ -1,11 +1,11 @@
 #!/bin/bash
 
-BOOTSTRAP_ZIP='https://fluxnodeservice.com/daemon_bootstrap.tar.gz'
+BOOTSTRAP_ZIP='https://cdn-1.runonflux.io/apps/fluxshare/getfile/flux_explorer_bootstrap.tar.gz'
 BOOTSTRAP_ZIPFILE='daemon_bootstrap.tar.gz'
-BOOTSTRAP_URL_MONGOD='https://fluxnodeservice.com/mongod_bootstrap.tar.gz'
+BOOTSTRAP_URL_MONGOD='' # no built-in MongoDB bootstrap source any more
 BOOTSTRAP_ZIPFILE_MONGOD='mongod_bootstrap.tar.gz'
 KDA_BOOTSTRAP_ZIPFILE='kda_bootstrap.tar.gz'
-KDA_BOOTSTRAP_ZIP='https://fluxnodeservice.com/kda_bootstrap.tar.gz'
+KDA_BOOTSTRAP_ZIP='' # no built-in KDA bootstrap source any more
 
 
 if [[ -d /home/$USER/.zelcash ]]; then
@@ -870,9 +870,9 @@ function kda_bootstrap() {
 
             case $CHOICE in
 	    "1)")   
-	         DB_HIGHT=$(curl -s -m 15 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+	         DB_HIGHT=""
 		 if [[ "$DB_HIGHT" == "" ]]; then
-		     DB_HIGHT=$(curl -s -m 15 https://fluxnodeservice.com/kda_bootstrap.json | jq -r '.block_height')
+		     DB_HIGHT=""
 		 fi
 		 echo -e "${ARROW} ${CYAN}KDA Bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 		 echo -e "${ARROW} ${CYAN}Downloading File: ${GREEN}$KDA_BOOTSTRAP_ZIP ${NC}"
@@ -994,7 +994,7 @@ function flux_daemon_bootstrap() {
             case $CHOICE in
 	    "1)")   
 	        
-	        DB_HIGHT=$(curl -s -m 3 https://fluxnodeservice.com/daemon_bootstrap.json | jq -r '.block_height')
+	        DB_HIGHT=$(curl -s -m 3 https://cdn-seed-1.runonflux.io/flux_explorer_bootstrap.json | jq -r '.block_height')
 		echo -e "${ARROW} ${CYAN}Flux daemon bootstrap height: ${GREEN}$DB_HIGHT${NC}"
 	 	echo -e "${ARROW} ${YELLOW}Downloading File: ${GREEN}$BOOTSTRAP_ZIP ${NC}"
        		wget -O $BOOTSTRAP_ZIPFILE $BOOTSTRAP_ZIP -q --show-progress
@@ -1063,9 +1063,9 @@ fi
 
 WANIP=$(wget http://ipecho.net/plain -O - -q)
 
-DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+DB_HIGHT=""
 if [[ "$DB_HIGHT" == "" ]]; then
-   DB_HIGHT=$(curl -s -m 10 https://fluxnodeservice.com/mongodb_bootstrap.json | jq -r '.block_height')
+   DB_HIGHT=""
 fi
 
 BLOCKHIGHT=$(curl -s -m 5 http://"$WANIP":16127/explorer/scannedheight | jq '.data.generalScannedHeight')	
